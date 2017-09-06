@@ -2,6 +2,13 @@ body, html {
     height: 100%;
 }
 
+td {
+    width: 38px;
+    height: 38px;
+    background: red;
+    margin: 0px;
+}
+
 .div_menu {
     display: inline-block;
     margin: 0.4%;
@@ -45,16 +52,15 @@ body, html {
 
 .div_map {
     display: inline-block;
-    width: 74%;
-    height: 84%;
-    background-color: antiquewhite;
+    width: 75%;
+    height: 82%;
     margin: 0.4%;
 }
 
 .div_inf {
     display: inline-block;
-    width: 24%;
-    height: 84%;
+    width: 22%;
+    height: 82%;
     background-color: greenyellow;
     margin: 0.4%;
 }
