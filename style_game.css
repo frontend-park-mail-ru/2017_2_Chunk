@@ -2,6 +2,12 @@ body, html {
     height: 100%;
 }
 
+.div_menu {
+    display: inline-block;
+    margin: 0.4%;
+    height: 13%;
+}
+
 .div0 {
     width: 80%;
     height: 95%;
@@ -10,28 +16,19 @@ body, html {
 }
 
 .div1 {
-    display: inline-block;
     background-color: khaki;
     width: 19%;
     float: left;
-    margin: 0.4%;
-    height: 13%;
 }
 
 .div2 {
-    display: inline-block;
     background-color: bisque;
     width: 49%;
-    margin: 0.4%;
-    height: 13%;
 }
 
 .div3 {
-    display: inline-block;
     background-color: aquamarine;
     width: 29%;
-    margin: 0.4%;
-    height: 13%;
 }
 
 .button1 {
@@ -44,4 +41,20 @@ body, html {
     width: 50%;
     height: 50%;
     margin: auto;
+}
+
+.div_map {
+    display: inline-block;
+    width: 74%;
+    height: 84%;
+    background-color: antiquewhite;
+    margin: 0.4%;
+}
+
+.div_inf {
+    display: inline-block;
+    width: 24%;
+    height: 84%;
+    background-color: greenyellow;
+    margin: 0.4%;
 }
