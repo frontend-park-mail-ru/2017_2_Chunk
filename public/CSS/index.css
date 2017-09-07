@@ -1,0 +1,67 @@
+body {
+    background: url('../image/background-light-green.jpg');
+    background-color: greenyellow;
+    width: 98%;
+    height: 95%;
+    min-height: 600px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+}
+
+.panel {
+    background: url('../image/hello-panel.jpg');
+    width: 40%;
+    height: 95%;
+    min-height: 550px;
+    min-width: 300px;
+    margin: 2% auto;
+    border-radius:5%;
+}
+
+.panel button {
+    font-family: cursive;
+    font-size: 20pt;
+    text-shadow: darkgray  2px 2px;
+    box-shadow: 10px 5px darkgrey , 12px 7px black;
+    border-radius: 30%;
+    width: 86%;
+    height: 20%;
+    margin-left: 6%;
+    margin-top: 5%;
+    border: ridge black;
+}
+
+.panel table {
+    min-height: 400px;
+    position: absolute;
+    font-family: cursive;
+    font-size: 20pt;
+    text-shadow: darkgray  2px 2px;
+    width: 30%;
+    height: 70%;
+    border: ridge black;
+    background-color: darkgrey;
+    margin: 5% 5%;
+    padding: 2%;
+}
+
+.head_table {
+    text-align: center;
+    font-size: 40px;
+}
+
+.panel button:hover {
+    background-color: cadetblue;
+}
+
+.panel button:active {
+    margin-left: 8%;
+    margin-top: 6%;
+    box-shadow: none;
+}
+
+.panel button:focus {
+    outline: none;
+}
