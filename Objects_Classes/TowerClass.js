@@ -18,8 +18,14 @@ class BaseTower {
     }
 
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> f608f6f... Tower Class
+=======
+>>>>>>> 22546e1... White space corr
     calculateDistance(target_pos) {
         target_pos = target_pos || this.target_pos;
         return Math.sqrt(Math.pow(this.position.x_pos - target_pos.x_pos, 2) + Math.pow(this.position.y_pos - target_pos.y_pos, 2))
@@ -71,6 +77,16 @@ class BaseTower {
     }
 }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> f608f6f... Tower Class
+=======
+
+
+>>>>>>> 22546e1... White space corr
 class Tower extends BaseTower {
     constructor() {
         super(enemyArray);
