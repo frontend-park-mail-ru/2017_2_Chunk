@@ -68,7 +68,7 @@ button.forward:active {
 nav.panel img {
     position: absolute;
     height: 80%;
-    bottom: -25px;
+    bottom: -4%;
 }
 img.left_tower { left: 0; }
 img.right_tower { right: 0; }
