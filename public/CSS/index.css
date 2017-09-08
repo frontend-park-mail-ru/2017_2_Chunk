@@ -48,6 +48,22 @@ body {
     padding: 2%;
 }
 
+.div_rules {
+    min-height: 400px;
+    max-height: 80%;
+    min-width: 250px;
+    font-family: cursive;
+    font-size: 165%;
+    text-shadow: darkgray  2px 2px;
+    width: 80%;
+    height: 80%;
+    border: ridge black;
+    border-radius: 10px;
+    background-color: #b5ce79;
+    margin: 7% auto;
+    padding: 2% 5% 5% 5%;
+}
+
 .head_table {
     text-align: center;
     font-size: 40px;
