@@ -10,6 +10,7 @@ body {
     overflow: auto;
 }
 
+/*Общий стиль кнопок, оформление задней панели*/
 div.panel {
     background: url('../image/hello-panel.jpg');
 
@@ -45,6 +46,8 @@ div.panel {
     outline: none;
 }
 
+
+/*Кнопки навигации*/
 button.navigation {
     width: 15%;
     position: relative;
@@ -61,7 +64,17 @@ button.forward:active {
 }
 
 
+/*Логотип башен*/
+nav.panel img {
+    position: absolute;
+    height: 80%;
+    bottom: -25px;
+}
+img.left_tower { left: 0; }
+img.right_tower { right: 0; }
 
+
+/*Оформление передней панели*/
 .panel table {
     min-height: 400px;
     max-height: 80%;
@@ -77,7 +90,11 @@ button.forward:active {
     margin: 7% auto;
     padding: 2% 5% 5% 5%;
 }
-
+.head_table {
+    padding-bottom: 10px;
+    text-align: center;
+    font-size: 30px;
+}
 .div_rules {
     min-height: 400px;
     max-height: 80%;
@@ -94,13 +111,8 @@ button.forward:active {
     padding: 2% 5% 5% 5%;
 }
 
-.head_table {
-    padding-bottom: 10px;
-    text-align: center;
-    font-size: 30px;
-}
 
-
+/*Формы регистрации и входа*/
 table.input_form {
     width: 85%;
     margin: 16% auto;
