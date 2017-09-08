@@ -3,8 +3,8 @@ body, html {
 }
 
 td {
-    width: 380px;
-    height: 380px;
+    width: 38px;
+    height: 38px;
     background: red;
     margin: 0px;
 }
