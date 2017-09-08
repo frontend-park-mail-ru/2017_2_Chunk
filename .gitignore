@@ -78,7 +78,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-node_modules
+public/image/small.jpg
 package-lock.json
+node_modules
 .idea
 
