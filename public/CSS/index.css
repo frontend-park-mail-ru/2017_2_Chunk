@@ -10,9 +10,10 @@ body {
     overflow: auto;
 }
 
-.panel {
+div.panel {
     background: url('../image/hello-panel.jpg');
 
+    position: relative;
     width: 50%;
     height: 95%;
     min-height: 550px;
@@ -43,6 +44,22 @@ body {
 .panel button:focus, input[type=submit]:focus {
     outline: none;
 }
+
+button.navigation {
+    width: 15%;
+    position: relative;
+}
+button.back {
+    float: left;
+}
+button.forward {
+    float: right;
+    margin-right: 7%;
+}
+button.forward:active {
+    margin-right: 5%;
+}
+
 
 
 .panel table {
