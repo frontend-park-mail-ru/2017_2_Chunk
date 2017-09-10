@@ -13,7 +13,7 @@
 <nav class="panel">
     <button class="navigation back" hidden>⟸</button>
 </nav>
-<table class="panel profile auth" hidden>
+<table class="profile auth" hidden>
     <tr>
         <td><img src="image/sign_user.png"></td>
         <th>Дмитрий</th>
@@ -30,7 +30,7 @@
 </div>
 <div class="page panel sign_up" hidden>
         <form method="post" action="#">
-            <table cellspacing="0" class="input_form">
+            <table cellspacing="0" class="input_form sign_up_form">
                 <tr>
                     <td align="right"><label>Логин:</label></td>
                     <td><input type="text" name="username" placeholder="Придумайте логин"></td>
@@ -45,15 +45,14 @@
                 </tr>
 
                 <tr>
-                    <td colspan="2" align="center"><input type="submit" value="Регистрация!"></td>
+                    <td colspan="2" align="center"><input type="submit" name="sign_up_submit" value="Регистрация!"></td>
                 </tr>
             </table>
         </form>
-
     </div>
 <div class="page panel sign_in" hidden>
         <form method="post" action="#">
-            <table cellspacing="0" class="input_form">
+            <table cellspacing="0" class="input_form sign_in_form">
                 <tr>
                     <td align="right"><label>Логин:</label></td>
                     <td><input type="text" name="username" placeholder="Введите логин"></td>
@@ -64,7 +63,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" align="center">
-                        <input type="submit" value="Войти!">
+                        <input type="submit" name="sign_in_submit" value="Войти!">
                     </td>
                 </tr>
             </table>
