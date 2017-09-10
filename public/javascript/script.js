@@ -14,6 +14,7 @@ window.onload = function() {
     for (let i = 0; i < buttonsMenu.length; ++i) {
         buttonsMenu[i].addEventListener('click', event => {
             let new_page = document.getElementsByClassName(event.target.name)[0];
+            if (!new_page) return;
             buttonBack.currentPage = new_page;
             buttonBack.button.hidden = false;
             new_page.hidden = false;
@@ -21,7 +22,7 @@ window.onload = function() {
         }, false);
     }
     // Настройка перехода по кнопке "Назад"
-    buttonBack.button.addEventListener('click', function(event) {
+    buttonBack.button.addEventListener('click', event => {
         buttonBack.currentPage.hidden = true;
         buttonBack.button.hidden = true;
         pageMain.hidden = false;
