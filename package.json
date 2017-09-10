@@ -1,6 +1,11 @@
 {
+  "main": "server/script.js",
   "name": "TowerDefence",
   "version": "1.0.0",
+  "engines": {
+    "node": "8.4.0",
+    "npm": "5.3.0"
+  },
   "dependencies": {
     "body-parser": "^1.18.0",
     "cookie-parser": "^1.4.3",
