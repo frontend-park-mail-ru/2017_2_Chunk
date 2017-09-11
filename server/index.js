@@ -9,7 +9,7 @@ const app = express();
 
 
 // Middleware
-// app.use(morgan('dev'));                  // Формат выводимой инфы о запросах
+app.use(morgan('dev'));                  // Формат выводимой инфы о запросах
 app.use(express.static('./public'));        // Отдаёт статику при совпадении имён
 app.use(bodyParser.json());                 // С помощью какой-то древней магии парсит тело запроса,
 app.use(cookieParser());                    // всё то же волшебство, но уже для кук
@@ -20,21 +20,30 @@ let ids = {};
 app.get('/', (request, response) => {
     response.send("<h2><i>Unknown page</i></h2>");
 });
+app.get('/whoisit', (request, response) => {
+    const id = request.cookies['my_cookie'];
+    if (id === undefined) {
+        response.end("Cookie net, но вы держитесь");
+    }
+    response.end();
+});
 app.post('/sign_up', (request, response) => {
+
+    // request и response что за объекты?
 
     const username = request.body.username;
     const password = request.body.password;
 
     if (!username || !password) {
-        // response что за объект?
-        response.status(400).end();
-        console.log("!username || !password");
+        response.status(400).end(JSON.stringify({
+            error: "Логин и(или) пароль не указаны"
+        }));
         return;
     }
     if (users[username]) {
-        // как добавить текст в ответ?
-        response.status(400).end();
-        return;
+        return response.status(400).end(JSON.stringify({
+            error: ("Пользователь с именем '" + username + "' уже существует!")
+        }));
     }
 
     const new_id = idCreator();

@@ -8,8 +8,11 @@ function auth(username, password, callback) {
     xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return;
 
-        if (+xhr.status !== 200) { callback(xhr, null); }
-        else { callback(null, xhr); }
+        if (+xhr.status !== 200) {
+            callback(JSON.parse(xhr.responseText).error, null);
+        } else {
+            callback(null, xhr);
+        }
     };
 
     // Формирование POST запроса:
@@ -27,17 +30,32 @@ function auth(username, password, callback) {
 
 window.onload = function() {
 
+    // Получение элементов
     const pageMain = document.getElementsByClassName('page panel main')[0];
+
     const buttonsMenu = document.getElementsByClassName('button');
     const buttonBack = {
         button: document.getElementsByClassName('navigation back')[0],
         currentPage: undefined
     };
+
+    // Получение доступа к форме регистрации
+    let signUpInputs = document.getElementsByClassName('sign_up_input');
     const signUpForm = {
-        username: document.querySelector('table.sign_up_form input[name=username]'),
-        password: document.querySelector('table.sign_up_form input[name=password]'),
-        confirm: document.querySelector('table.sign_up_form input[name=confirm]')
+        message: signUpInputs[0],
+        username: signUpInputs[1],
+        password: signUpInputs[2],
+        confirm: signUpInputs[3],
+        button: signUpInputs[4],
+
+        clear: function () {
+            this.message.innerHTML = this.username.value =
+                this.password.value = this.confirm.value = "";
+            this.message.hidden = true;
+        }
     };
+    signUpInputs = undefined;
+
 
     // Настройка переходов по кнопкам меню
     for (let i = 0; i < buttonsMenu.length; ++i) {
@@ -53,6 +71,8 @@ window.onload = function() {
             pageMain.hidden = true;
         }, false);
     }
+
+
     // Настройка перехода по кнопке "Назад"
     buttonBack.button.addEventListener('click', event => {
         buttonBack.currentPage.hidden = true;
@@ -60,29 +80,33 @@ window.onload = function() {
         pageMain.hidden = false;
     }, false);
 
-    const signForm = document.querySelector('input[type=submit][name=sign_up_submit]');
-    signForm.addEventListener('click', event => {
+
+    // Регистрация пользователя
+    signUpForm.button.addEventListener('click', event => {
+
         // Отменяем отправку POST запроса от браузера
         event.preventDefault();
 
+        // Получаем данные из форм
         const username = signUpForm.username.value;
         const password = signUpForm.password.value;
         const confirm = signUpForm.confirm.value;
 
         // Валидация
         let errorMessage = function(text) {
-                alert(text);
+                signUpForm.message.innerHTML = text;
+                signUpForm.message.hidden = false;
                 signUpForm.password.value = signUpForm.confirm.value = '';
             };
         if (password !== confirm) {
                 errorMessage("Пароли не совпадают!");
                 return;
             }
-        if (password.length < 0) {
+        if (password.length < 6) {
                 errorMessage("Длина пароля должна быть не меньше 6 символов!");
                 return;
             }
-        if (username.length < 0) {
+        if (username.length < 6) {
                 errorMessage("Длина логина должна быть не меньше 6 символов!");
                 return;
             }
@@ -90,12 +114,14 @@ window.onload = function() {
         // Отправка POST запроса
         auth(username, password, function (error, response) {
             if (!response && error) {
-                errorMessage(error.status + ': ' + error.statusText);
+                errorMessage(error);
                 return;
             }
             if (response && !error) {
-                errorMessage('Вы успешно зарегистрировались!')
+                signUpForm.clear();
+                return;
             }
+            alert("Что-то пошло не так...");
         });
 
     }, false);

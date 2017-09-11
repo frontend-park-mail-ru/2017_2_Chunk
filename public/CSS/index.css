@@ -124,7 +124,7 @@ img.right_tower { right: 0; }
 /*Формы регистрации и входа*/
 table.input_form {
     width: 85%;
-    margin: 16% auto;
+    margin: 10% auto;
 }
 .input_form input {
     width: 80%;
@@ -146,4 +146,17 @@ table.input_form {
 }
 .input_form td {
     padding: 5px;
+}
+.input_form tr {
+    height: 15%;
+}
+.input_form .alert_message {
+    padding: 10px;
+    margin: 150px;
+    text-align: center;
+    box-shadow: -2px -2px red, 2px 2px red, -2px 2px red, 2px -2px red;
+    text-shadow: 1px 1px black;
+    background-color: #ffd1d1;
+    color: red;
+    border-radius: 15px;
 }
