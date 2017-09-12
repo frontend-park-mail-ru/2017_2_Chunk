@@ -58,7 +58,25 @@ function isAuth(username) {
     }
 }
 
+// Использование cookies
+function whoIsIt() {
+
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState !== 4) return;
+        if (+xhr.status !== 200) return;
+        isAuth(JSON.parse(xhr.responseText).username);
+    };
+
+    xhr.open('GET', '/whoisit', true);
+    xhr.withCredentials = true;
+    xhr.timeout = 2000;
+    xhr.send();
+}
+
 window.onload = function() {
+
+    whoIsIt(); // cookie
 
     //// Получение элементов
     // Главная страница
@@ -130,6 +148,9 @@ window.onload = function() {
                 buttonBack.currentPage.hidden = true;
                 buttonBack.button.hidden = true;
                 pageMain.hidden = false;
+                // Очистка форм
+                signUpForm.clear();
+                signInForm.clear();
             }, false);
             continue;
         }

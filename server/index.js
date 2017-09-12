@@ -9,23 +9,24 @@ const app = express();
 
 
 // Middleware
-app.use(morgan('dev'));                  // Формат выводимой инфы о запросах
+// app.use(morgan('dev'));                  // Формат выводимой инфы о запросах
 app.use(express.static('./public'));        // Отдаёт статику при совпадении имён
 app.use(bodyParser.json());                 // С помощью какой-то древней магии парсит тело запроса,
 app.use(cookieParser());                    // всё то же волшебство, но уже для кук
 
 let users = {};
 let ids = {};
+const ttl = 1000 * 60 * 5;                 // 5 мин
 
-app.get('/', (request, response) => {
-    response.send("<h2><i>Unknown page</i></h2>");
-});
 app.get('/whoisit', (request, response) => {
+
+    // Вытаскиваем нужную куку
     const id = request.cookies['my_cookie'];
-    if (id === undefined) {
-        response.send("Cookie net, но вы держитесь");
-    }
-    response.end();
+
+    // array[undefined] === undefined
+    !ids[id] ? response.status(404).end() :
+        response.status(200).send(JSON.stringify({username: ids[id]}));
+
 });
 app.post('/sign_up', (request, response) => {
 
@@ -50,7 +51,7 @@ app.post('/sign_up', (request, response) => {
 
 
     response.cookie('my_cookie', new_id, {          // Название и значение куки
-         expires: new Date(Date.now() + 60 * 5)     // Время истечения
+         expires: new Date(Date.now() + ttl)        // Время жизни куки
     });
     response.status(200).end();
 });
@@ -72,11 +73,13 @@ app.post('/sign_in', (request, response) => {
 
     const new_id = idCreator();
     ids[new_id] = username;
-    console.log("cookie: %s", new_id);
     response.cookie('my_cookie', new_id, {
-        expires: new Date(Date.now() + 60 * 5)
+        expires: new Date(Date.now() + ttl)
     });
     response.status(200).end();
+});
+app.get('*', (request, response) => {
+    response.send("<h2><i>Unknown page</i></h2>");
 });
 
 app.listen(process.env.PORT || 8080, function () {
