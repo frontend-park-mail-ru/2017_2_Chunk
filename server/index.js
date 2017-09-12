@@ -16,12 +16,15 @@ app.use(cookieParser());                    // всё то же волшебст
 
 let users = {};
 let ids = {};
-const ttl = 1000 * 60 * 5;                 // 5 мин
+const ttl = 1000 * 60 * 60 * 24;            // 1 день
 
 app.get('/whoisit', (request, response) => {
 
     // Вытаскиваем нужную куку
     const id = request.cookies['my_cookie'];
+
+    // Устанавливаем заголовки ответа
+    response.set('Content-Type', 'application/json; charset=utf8');
 
     // array[undefined] === undefined
     !ids[id] ? response.status(404).end() :
@@ -39,6 +42,9 @@ app.post('/sign_up', (request, response) => {
 
     const username = request.body.username;
     const password = request.body.password;
+
+    // Устанавливаем заголовок ответа
+    response.set('Content-Type', 'application/json; charset=utf8');
 
     if (!username || !password) {
         response.status(400).end(JSON.stringify({
@@ -66,6 +72,9 @@ app.post('/sign_in', (request, response) => {
 
     const username = request.body.username;
     const password = request.body.password;
+
+    // Устанавливаем заголовок ответа
+    response.set('Content-Type', 'application/json; charset=utf8');
 
     if (!username || !password) {
         return response.status(400).send(JSON.stringify({
