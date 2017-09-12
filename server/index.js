@@ -23,38 +23,59 @@ app.get('/', (request, response) => {
 app.get('/whoisit', (request, response) => {
     const id = request.cookies['my_cookie'];
     if (id === undefined) {
-        response.end("Cookie net, но вы держитесь");
+        response.send("Cookie net, но вы держитесь");
     }
     response.end();
 });
 app.post('/sign_up', (request, response) => {
-
-    // request и response что за объекты?
 
     const username = request.body.username;
     const password = request.body.password;
 
     if (!username || !password) {
         response.status(400).end(JSON.stringify({
-            error: "Логин и(или) пароль не указаны"
+            errorMessage: "Логин и(или) пароль не указаны"
         }));
         return;
     }
     if (users[username]) {
         return response.status(400).end(JSON.stringify({
-            error: ("Пользователь с именем '" + username + "' уже существует!")
+            errorMessage: ("Пользователь с именем '" + username + "' уже существует!")
         }));
     }
 
     const new_id = idCreator();
-    users[username] = password;      // его вроде хешировать, по хорошему, надо?
+    users[username] = password;
     ids[new_id] = username;
 
 
-    response.cookie(
-        'my_cookie', new_id,                        // Название и значение куки
-        { expires: new Date(Date.now() + 60 * 5) }  // Время истечения
-    );
+    response.cookie('my_cookie', new_id, {          // Название и значение куки
+         expires: new Date(Date.now() + 60 * 5)     // Время истечения
+    });
+    response.status(200).end();
+});
+app.post('/sign_in', (request, response) => {
+
+    const username = request.body.username;
+    const password = request.body.password;
+
+    if (!username || !password) {
+        return response.status(400).send(JSON.stringify({
+            errorMessage: "Логин и(или) пароль не указаны"
+        }))
+    }
+    if (users[username] !== password) {
+        return response.status(400).send(JSON.stringify({
+            errorMessage: "Неверные логин и(или) пароль"
+        }))
+    }
+
+    const new_id = idCreator();
+    ids[new_id] = username;
+    console.log("cookie: %s", new_id);
+    response.cookie('my_cookie', new_id, {
+        expires: new Date(Date.now() + 60 * 5)
+    });
     response.status(200).end();
 });
 

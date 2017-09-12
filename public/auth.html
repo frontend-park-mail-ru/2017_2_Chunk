@@ -11,12 +11,12 @@
 <body>
 
 <nav class="panel">
-    <button class="navigation back" hidden>⟸</button>
+    <button name="backward" class="navigation button back" hidden>⟸</button>
 </nav>
 <table class="profile auth" hidden>
     <tr>
         <td><img src="image/sign_user.png"></td>
-        <th>Дмитрий</th>
+        <th>Username</th>
     </tr>
 </table>
 
@@ -31,8 +31,8 @@
 <div class="page panel sign_up" hidden>
         <form method="post" action="#">
             <table cellspacing="10" class="input_form sign_up_form">
-                <tr>
-                    <td colspan="2" class="sign_up_input alert_message" hidden></td>
+                <tr hidden>
+                    <td colspan="2" class="sign_up_input alert_message">Report message</td>
                 </tr>
 
                 <tr>
@@ -56,18 +56,22 @@
     </div>
 <div class="page panel sign_in" hidden>
         <form method="post" action="#">
-            <table cellspacing="0" class="input_form sign_in_form">
+            <table cellspacing="10" class="input_form sign_in_form">
+                <tr hidden>
+                    <td colspan="2" class="sign_in_input alert_message">Report message</td>
+                </tr>
+
                 <tr>
                     <td align="right"><label>Логин:</label></td>
-                    <td><input type="text" name="username" placeholder="Введите логин"></td>
+                    <td><input type="text" placeholder="Введите логин" class="sign_in_input"></td>
                 </tr>
                 <tr>
                     <td align="right"><label>Пароль:</label></td>
-                    <td><input type="password" name="password" placeholder="Введите пароль"></td>
+                    <td><input type="password" placeholder="Введите пароль" class="sign_in_input"></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center">
-                        <input type="submit" name="sign_in_submit" value="Войти!">
+                        <input type="submit" value="Войти!" class="sign_in_input">
                     </td>
                 </tr>
             </table>
