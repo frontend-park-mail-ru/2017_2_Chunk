@@ -1,6 +1,6 @@
 "use strict";
 
-// Функция, формирующая POST запрос на регистрацию/авторизацию
+// Формирование POST запроса на регистрацию/авторизацию
 function sign(username, password, callback, isNew) {
 
     // Регистрация или авторизация?
@@ -58,25 +58,39 @@ function isAuth(username) {
     }
 }
 
-// Использование cookies
-function whoIsIt() {
+// Формирование GET запроса на авторизацию с помощью кук
+function whoIsIt(callback) {
 
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return;
         if (+xhr.status !== 200) return;
-        isAuth(JSON.parse(xhr.responseText).username);
+        callback(null, JSON.parse(xhr.responseText).username);
     };
 
     xhr.open('GET', '/whoisit', true);
     xhr.withCredentials = true;
-    xhr.timeout = 2000;
+    xhr.timeout = 3000;
+    xhr.send();
+}
+
+// Формирование GET запроса на удаление кук
+function exit() {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/exit', true);
+    xhr.withCredentials = true;
     xhr.send();
 }
 
 window.onload = function() {
 
-    whoIsIt(); // cookie
+    // Авторизация с помощью cookie
+    whoIsIt((error, username) => {
+        if (!error && username) {
+            isAuth(username);
+        }
+    });
 
     //// Получение элементов
     // Главная страница
@@ -138,7 +152,10 @@ window.onload = function() {
         // Настройка кнопки "Выход"
         if (buttonsMenu[i].name === 'exit') {
             // куки все равно остаются?
-            buttonsMenu[i].addEventListener('click', () => isAuth(false), false);
+            buttonsMenu[i].addEventListener('click', () => {
+                exit();
+                isAuth(false);
+            }, false);
             continue;
         }
 
@@ -211,8 +228,8 @@ window.onload = function() {
                 return;
             }
             if (response) {
-                signUpForm.clear();
                 isAuth(username);
+                buttonBack.button.click();
                 return;
             }
             alert("Что-то пошло не так...");
@@ -243,8 +260,8 @@ window.onload = function() {
                 return;
             }
             if (response) {
-                signInForm.clear();
                 isAuth(username);
+                buttonBack.button.click();
                 return;
             }
             alert("Что-то пошло не так...")

@@ -28,6 +28,13 @@ app.get('/whoisit', (request, response) => {
         response.status(200).send(JSON.stringify({username: ids[id]}));
 
 });
+app.get('/exit', (request, response) => {
+
+    response.cookie('my_cookie', null, {
+        expires: new Date(Date.now())
+    });
+    response.status(200).end();
+});
 app.post('/sign_up', (request, response) => {
 
     const username = request.body.username;
