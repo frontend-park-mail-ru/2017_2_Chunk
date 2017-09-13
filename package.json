@@ -1,6 +1,6 @@
 {
   "main": "server/script.js",
-  "name": "TowerDefence",
+  "name": "TowerDefense",
   "version": "1.0.0",
   "engines": {
     "node": "8.4.0",

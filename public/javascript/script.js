@@ -19,7 +19,7 @@ function sign(username, password, callback, isNew) {
     };
 
     // Формирование POST запроса:
-    xhr.open('POST', URL, true);     // заголовок запроса
+    xhr.open('POST', URL, true);            // заголовок запроса
     xhr.setRequestHeader('Content-Type',
         'application/json; charset=utf8');  // Content-Type для JSON
     xhr.withCredentials = true;             // Чтобы можно было получить куки
@@ -83,6 +83,19 @@ function exit() {
     xhr.send();
 }
 
+// Вывод варнинга
+function warningMessage(text) {
+    let spanMessage = document.querySelector('.warning span');
+    if (!spanMessage.parentElement.hidden && text !== undefined) {
+        // Чтобы не затирался предыдущий варнинг
+        text = spanMessage.innerHTML + '<br><br>' + text;
+        spanMessage.innerHTML = text;
+    }
+    spanMessage.innerHTML = text? text : "Что-то пошло не так...";
+    spanMessage.parentElement.hidden = false;
+}
+
+
 window.onload = function() {
 
     // Авторизация с помощью cookie
@@ -95,6 +108,9 @@ window.onload = function() {
     //// Получение элементов
     // Главная страница
     const pageMain = document.getElementsByClassName('page panel main')[0];
+
+    // Кнопка для закрытия варнинга
+    const closeWarning = document.querySelector('.warning p');
 
     // Кнопки главного меню
     const buttonsMenu = document.getElementsByClassName('button');
@@ -144,6 +160,7 @@ window.onload = function() {
         }
     };
     signInputs = undefined;
+    ////
 
 
     // Настройка переходов по кнопкам меню
@@ -174,11 +191,11 @@ window.onload = function() {
 
         // Настройка остальных кнопок в главном меню
         let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
+        if (!new_page) {
+            warningMessage("Class named '" + buttonsMenu[i].name + "' does not exist");
+            continue;
+        }
         buttonsMenu[i].addEventListener('click', event => {
-            if (!new_page) {
-                console.errorMessage("Can't find class name %s", event.target.name);
-                return;
-            }
             buttonBack.currentPage = new_page;
             buttonBack.button.hidden = false;
             new_page.hidden = false;
@@ -232,7 +249,7 @@ window.onload = function() {
                 buttonBack.button.click();
                 return;
             }
-            alert("Что-то пошло не так...");
+            warningMessage();
         }, true);
 
     }, false);
@@ -264,8 +281,14 @@ window.onload = function() {
                 buttonBack.button.click();
                 return;
             }
-            alert("Что-то пошло не так...")
+            warningMessage();
         }, false);
 
+    }, false);
+
+
+    // Закрытие варнинга
+    closeWarning.addEventListener('click', event => {
+        event.target.parentElement.hidden = true;
     }, false)
 };

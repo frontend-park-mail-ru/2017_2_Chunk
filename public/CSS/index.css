@@ -159,3 +159,38 @@ table.input_form {
     color: red;
     border-radius: 15px;
 }
+
+.warning {
+    position: fixed;
+    min-width: 15%;
+    max-width: 25%;
+    min-height: 7%;
+    padding: 0 2% 3% 2%;
+    left: 2%;
+    top: 4%;
+    text-align: center;
+    font-family: cursive;
+    font-size: x-large;
+    text-shadow: 1px 1px grey;
+    background-color: rgba(255, 0, 0, 0.95);
+    border-radius: 35px;
+    border-color: black;
+    border-style: dashed;
+    border-width: 5px;
+    z-index: 1;
+}
+.warning p {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: 0;
+    left: 50%;
+}
+.warning p:hover {
+    text-shadow: 2px 2px grey;
+}
+.warning p:active {
+    top: 1px;
+    left: 51%;
+    text-shadow: 0 0 grey;
+}
