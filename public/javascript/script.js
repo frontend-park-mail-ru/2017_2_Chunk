@@ -191,11 +191,13 @@ window.onload = function() {
 
         // Настройка остальных кнопок в главном меню
         let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
-        if (!new_page) {
-            warningMessage("Class named '" + buttonsMenu[i].name + "' does not exist");
-            continue;
-        }
         buttonsMenu[i].addEventListener('click', event => {
+            if (!new_page) {
+                warningMessage("Class named '" + buttonsMenu[i].name + "' does not exist");
+                // continue;
+                return;
+            }
+
             buttonBack.currentPage = new_page;
             buttonBack.button.hidden = false;
             new_page.hidden = false;
