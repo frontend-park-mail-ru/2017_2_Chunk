@@ -160,12 +160,14 @@ table.input_form {
     border-radius: 15px;
 }
 
+
+/*Варнинги*/
 .warning {
     position: fixed;
     min-width: 15%;
     max-width: 25%;
     min-height: 7%;
-    padding: 0 2% 3% 2%;
+    padding: 2% 2% 3% 2%;
     left: 2%;
     top: 4%;
     text-align: center;
@@ -180,17 +182,19 @@ table.input_form {
     z-index: 1;
 }
 .warning p {
-    margin: 0;
+    margin-top: -20px;
     padding: 0;
     position: relative;
+    float: right;
     top: 0;
-    left: 50%;
+    left: 0;
 }
 .warning p:hover {
     text-shadow: 2px 2px grey;
+    cursor: pointer;
 }
 .warning p:active {
-    top: 1px;
-    left: 51%;
+    top: 2px;
+    left: 2px;
     text-shadow: 0 0 grey;
 }

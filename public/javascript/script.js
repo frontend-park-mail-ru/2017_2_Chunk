@@ -25,8 +25,8 @@ function sign(username, password, callback, isNew) {
     xhr.withCredentials = true;             // Чтобы можно было получить куки
     xhr.timeout = 15000;                    // Время ожидания ответа от сервера
     xhr.send(JSON.stringify({
-        username: username,
-        password: password
+        username,
+        password
     }));                                    // Отправка запроса с телом запроса
 
 }
@@ -166,43 +166,43 @@ window.onload = function() {
     // Настройка переходов по кнопкам меню
     for (let i = 0; i < buttonsMenu.length; ++i) {
 
-        // Настройка кнопки "Выход"
-        if (buttonsMenu[i].name === 'exit') {
-            // куки все равно остаются?
-            buttonsMenu[i].addEventListener('click', () => {
-                exit();
-                isAuth(false);
-            }, false);
-            continue;
+        switch (buttonsMenu[i].name) {
+
+            // Настройка кнопки "Выход"
+            case 'exit':
+                buttonsMenu[i].addEventListener('click', () => {
+                    exit();
+                    isAuth(false);
+                }, false);
+                break;
+
+            // Настройка перехода по кнопке "Назад"
+            case 'backward':
+                buttonBack.button.addEventListener('click', event => {
+                    buttonBack.currentPage.hidden = true;
+                    buttonBack.button.hidden = true;
+                    pageMain.hidden = false;
+                    // Очистка форм
+                    signUpForm.clear();
+                    signInForm.clear();
+                }, false);
+                break;
+
+            // Настройка остальных кнопок в главном меню
+            default:
+                let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
+                buttonsMenu[i].addEventListener('click', event => {
+
+                    if (!new_page) {
+                        warningMessage("Класса '" + buttonsMenu[i].name + "' не существует!");
+                        return;
+                    }
+                    buttonBack.currentPage = new_page;
+                    buttonBack.button.hidden = false;
+                    new_page.hidden = false;
+                    pageMain.hidden = true;
+                }, false);
         }
-
-        // Настройка перехода по кнопке "Назад"
-        if (buttonsMenu[i].name === 'backward') {
-            buttonBack.button.addEventListener('click', event => {
-                buttonBack.currentPage.hidden = true;
-                buttonBack.button.hidden = true;
-                pageMain.hidden = false;
-                // Очистка форм
-                signUpForm.clear();
-                signInForm.clear();
-            }, false);
-            continue;
-        }
-
-        // Настройка остальных кнопок в главном меню
-        let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
-        buttonsMenu[i].addEventListener('click', event => {
-            if (!new_page) {
-                warningMessage("Class named '" + buttonsMenu[i].name + "' does not exist");
-                // continue;
-                return;
-            }
-
-            buttonBack.currentPage = new_page;
-            buttonBack.button.hidden = false;
-            new_page.hidden = false;
-            pageMain.hidden = true;
-        }, false);
     }
 
 
@@ -231,11 +231,11 @@ window.onload = function() {
                 return;
             }
         if (username.length < 4) {
-                signUpForm.errorMessage("Длина логина должна быть не меньше 6 символов!");
+                signUpForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
                 return;
             }
         if (username.length > 12) {
-                signUpForm.errorMessage("Длина логина должна превышать 15 символов!");
+                signUpForm.errorMessage("Длина логина должна превышать 12 символов!");
                 return;
             }
 
