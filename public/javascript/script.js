@@ -4,15 +4,16 @@
 function sign(username, password, callback, isNew) {
 
     // Регистрация или авторизация?
-    const URL = isNew ? '/sign_up' : '/sign_in';
+    const URL = isNew ? 'http://localhost:8080/sign_up' : 'http://localhost:8080/sign_in';
     let xhr = new XMLHttpRequest();
 
     // Обработчик ответа
     xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return;
-
-        if (+xhr.status !== 200) {
-            callback(JSON.parse(xhr.responseText).errorMessage, null);
+        // alert(xhr.status);
+        if (+xhr.status !== 201 && +xhr.status !== 200) {
+            // alert(xhr.status);
+            callback(xhr.responseText, null);
         } else {
             callback(null, xhr);
         }
@@ -24,9 +25,11 @@ function sign(username, password, callback, isNew) {
         'application/json; charset=utf8');  // Content-Type для JSON
     xhr.withCredentials = true;             // Чтобы можно было получить куки
     xhr.timeout = 15000;                    // Время ожидания ответа от сервера
+    var email = "trubniskov@mail.ru";
     xhr.send(JSON.stringify({
         username,
-        password
+        password,
+        email
     }));                                    // Отправка запроса с телом запроса
 
 }
@@ -226,15 +229,15 @@ window.onload = function() {
                 signUpForm.errorMessage("Логин и пароль не должны совпадать!");
                 return;
             }
-        if (password.length < 6) {
+        if (password.length < 1) {
                 signUpForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
                 return;
             }
-        if (username.length < 4) {
+        if (username.length < 1) {
                 signUpForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
                 return;
             }
-        if (username.length > 12) {
+        if (username.length > 120) {
                 signUpForm.errorMessage("Длина логина должна превышать 12 символов!");
                 return;
             }
