@@ -9,7 +9,7 @@ const app = express();
 
 
 // Middleware
-// app.use(morgan('dev'));                     // Формат выводимой инфы о запросах
+app.use(morgan('dev'));                     // Формат выводимой инфы о запросах
 app.use(express.static('./public'));        // Отдаёт статику при совпадении имён
 app.use(bodyParser.json());                 // С помощью какой-то древней магии парсит тело запроса,
 app.use(cookieParser());                    // всё то же волшебство, но уже для кук
@@ -98,6 +98,6 @@ app.get('*', (request, response) => {
     response.send("<h2><i>Unknown page</i></h2>");
 });
 
-app.listen(process.env.PORT || 8080, function () {
+app.listen(process.env.PORT || 8081, function () {
     console.log("Server run!");
 });
