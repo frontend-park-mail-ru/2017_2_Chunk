@@ -93,7 +93,7 @@ function isAuth(username) {
     // Элементы отображаемые для auth/unauth пользователей
     const unauthElements = document.getElementsByClassName('unauth');
     const authElements = document.getElementsByClassName('auth');
-    const profileName = document.querySelector('table.profile th');
+    const profileName = document.querySelector('table.b  th');
 
     if (!username) {
         for (let i = 0; i < unauthElements.length; ++i) {
@@ -125,6 +125,22 @@ function whoIsIt(callback) {
     };
 
     xhr.open('GET', 'http://localhost:8080/whoisit', true);
+    xhr.withCredentials = true;
+    xhr.timeout = 3000;
+    xhr.send();
+}
+
+// Формирование GET запроса на получение имени и email с помощью кук
+function old_data(callback) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState !== 4) return;
+        if (+xhr.status !== 200) return;
+        callback(null, JSON.parse(xhr.responseText).username, JSON.parse(xhr.responseText).email);
+    };
+
+    xhr.open('GET', 'http://localhost:8080/old_data', true);
     xhr.withCredentials = true;
     xhr.timeout = 3000;
     xhr.send();
@@ -217,7 +233,29 @@ window.onload = function() {
         }
     };
     signInputs = undefined;
-    ////
+
+
+    // Получение доступа к форме настроек
+    signInputs = document.getElementsByClassName('setting_input');
+    const settingForm = {
+        message: signInputs[0],
+        username: signInputs[1],
+        email: signInputs[2],
+        password: signInputs[3],
+        old_password: signInputs[4],
+        button: signInputs[5],
+
+        clear: function () {
+            this.message.parentElement.hidden = true;
+            this.message.innerHTML = this.username.value = this.email.value
+                = this.password.value = this.old_password.value ="";
+        },
+        errorMessage: function (text) {
+            this.old_password.value = '';
+            this.message.parentElement.hidden = false;
+            this.message.innerHTML = text;
+        }
+    };
 
 
     // Настройка переходов по кнопкам меню
@@ -242,6 +280,7 @@ window.onload = function() {
                     // Очистка форм
                     signUpForm.clear();
                     signInForm.clear();
+                    settingForm.clear();
                 }, false);
                 break;
 
@@ -284,19 +323,18 @@ window.onload = function() {
             signUpForm.errorMessage("Логин и пароль не должны совпадать!");
             return;
         }
-        if (password.length < 1) {
+        if (password.length < 6) {
             signUpForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
             return;
         }
-        if (username.length < 1) {
+        if (username.length < 4) {
             signUpForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
             return;
         }
         if (username.length > 12) {
-            signUpForm.errorMessage("Длина логина должна превышать 12 символов!");
+            signUpForm.errorMessage("Длина логина не должна превышать 12 символов!");
             return;
         }
-
 
         // Отправка POST запроса
         sign_up(username, password, email, function (error, response) {
@@ -343,6 +381,56 @@ window.onload = function() {
             }
             warningMessage();
         }, false);
+
+    }, false);
+
+    // Изменение настроек
+    settingForm.button.addEventListener('click', event => {
+
+        // Отменяем отправку POST запроса от браузера
+        event.preventDefault();
+
+        // Получаем данные из форм
+        const username = settingForm.username.value;
+        const email = settingForm.email.value;
+        const password = settingForm.password.value;
+        const old_password = settingForm.old_password.value;
+
+        //Валидация
+        if (password === username) {
+            signUpForm.errorMessage("Логин и пароль не должны совпадать!");
+            return;
+        }
+        if (password.length < 6) {
+            signUpForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
+            return;
+        }
+        if (username.length < 4) {
+            signUpForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
+            return;
+        }
+        if (username.length > 12) {
+            signUpForm.errorMessage("Длина логина не должна превышать 12 символов!");
+            return;
+        }
+        if (!old_password.length) {
+            signInForm.errorMessage("Введите старый пароль");
+            return;
+        }
+
+        // Отправка POST запроса
+        change(username, email, password, old_password, function (error, response) {
+            if (error) {
+                settingForm.errorMessage(error);
+                return;
+            }
+            if (response) {
+                isAuth(username);
+                buttonBack.button.click();
+                return;
+            }
+            warningMessage();
+        }, true);
 
     }, false);
 
