@@ -1,18 +1,17 @@
 "use strict";
 
 // Формирование POST запроса на регистрацию/авторизацию
-function sign(username, password, callback, isNew) {
+function sign_up(username, password, email, callback) {
 
     // Регистрация или авторизация?
-    const URL = isNew ? 'http://localhost:8080/sign_up' : 'http://localhost:8080/sign_in';
+    const URL = 'http://localhost:8080/sign_up';
+
     let xhr = new XMLHttpRequest();
 
     // Обработчик ответа
     xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return;
-        // alert(xhr.status);
         if (+xhr.status !== 201 && +xhr.status !== 200) {
-            // alert(xhr.status);
             callback(xhr.responseText, null);
         } else {
             callback(null, xhr);
@@ -25,13 +24,40 @@ function sign(username, password, callback, isNew) {
         'application/json; charset=utf8');  // Content-Type для JSON
     xhr.withCredentials = true;             // Чтобы можно было получить куки
     xhr.timeout = 15000;                    // Время ожидания ответа от сервера
-    var email = "trubniskov@mail.ru";
     xhr.send(JSON.stringify({
         username,
         password,
         email
     }));                                    // Отправка запроса с телом запроса
+}
 
+function sign_in(username, password, callback) {
+
+    // Регистрация или авторизация?
+    const URL = 'http://localhost:8080/sign_in';
+    let xhr = new XMLHttpRequest();
+
+    // Обработчик ответа
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState !== 4) return;
+
+        if (+xhr.status !== 201 && +xhr.status !== 200) {
+            callback(xhr.responseText, null);
+        } else {
+            callback(null, xhr);
+        }
+    };
+
+    // Формирование POST запроса:
+    xhr.open('POST', URL, true);            // заголовок запроса
+    xhr.setRequestHeader('Content-Type',
+        'application/json; charset=utf8');  // Content-Type для JSON
+    xhr.withCredentials = true;             // Чтобы можно было получить куки
+    xhr.timeout = 15000;                    // Время ожидания ответа от сервера
+    xhr.send(JSON.stringify({
+        username,
+        password,
+    }));                                    // Отправка запроса с телом запроса
 }
 
 // Переключатель страницы для auth/unauth пользователя
@@ -127,14 +153,15 @@ window.onload = function() {
     const signUpForm = {
         message: signInputs[0],
         username: signInputs[1],
-        password: signInputs[2],
-        confirm: signInputs[3],
-        button: signInputs[4],
+        email: signInputs[2],
+        password: signInputs[3],
+        confirm: signInputs[4],
+        button: signInputs[5],
 
         clear: function () {
             this.message.parentElement.hidden = true;
             this.message.innerHTML = this.username.value =
-                this.password.value = this.confirm.value = "";
+                this.password.value = this.confirm.value = this.email.value = "";
         },
         errorMessage: function (text) {
             this.password.value = this.confirm.value = '';
@@ -217,34 +244,35 @@ window.onload = function() {
 
         // Получаем данные из форм
         const username = signUpForm.username.value;
+        const email = signUpForm.email.value;
         const password = signUpForm.password.value;
         const confirm = signUpForm.confirm.value;
 
         // Валидация
         if (password !== confirm) {
-                signUpForm.errorMessage("Пароли не совпадают!");
-                return;
-            }
+            signUpForm.errorMessage("Пароли не совпадают!");
+            return;
+        }
         if (password === username) {
-                signUpForm.errorMessage("Логин и пароль не должны совпадать!");
-                return;
-            }
-        if (password.length < 1) {
-                signUpForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
-                return;
-            }
-        if (username.length < 1) {
-                signUpForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
-                return;
-            }
-        if (username.length > 120) {
-                signUpForm.errorMessage("Длина логина должна превышать 12 символов!");
-                return;
-            }
+            signUpForm.errorMessage("Логин и пароль не должны совпадать!");
+            return;
+        }
+        if (password.length < 6) {
+            signUpForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
+            return;
+        }
+        if (username.length < 4) {
+            signUpForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
+            return;
+        }
+        if (username.length > 12) {
+            signUpForm.errorMessage("Длина логина должна превышать 12 символов!");
+            return;
+        }
 
 
         // Отправка POST запроса
-        sign(username, password, function (error, response) {
+        sign_up(username, password, email, function (error, response) {
             if (error) {
                 signUpForm.errorMessage(error);
                 return;
@@ -276,7 +304,7 @@ window.onload = function() {
             return;
         }
 
-        sign(username, password, (error, response) => {
+        sign_in(username, password, (error, response) => {
             if (error) {
                 signInForm.errorMessage(error);
                 return;
@@ -297,3 +325,4 @@ window.onload = function() {
         event.target.parentElement.hidden = true;
     }, false)
 };
+
