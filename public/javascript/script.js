@@ -60,9 +60,9 @@ function sign_in(username, password, callback) {
     }));                                    // Отправка запроса с телом запроса
 }
 
-function change(username, email, password, old_password, callback) {
+function settings(username, email, password, old_password, callback) {
 
-    const URL = 'http://localhost:8080/change';
+    const URL = 'http://localhost:8080/settings';
     let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = () => {
@@ -93,7 +93,7 @@ function isAuth(username) {
     // Элементы отображаемые для auth/unauth пользователей
     const unauthElements = document.getElementsByClassName('unauth');
     const authElements = document.getElementsByClassName('auth');
-    const profileName = document.querySelector('table.b  th');
+    const profileName = document.querySelector('table.profile th');
 
     if (!username) {
         for (let i = 0; i < unauthElements.length; ++i) {
@@ -131,16 +131,19 @@ function whoIsIt(callback) {
 }
 
 // Формирование GET запроса на получение имени и email с помощью кук
-function old_data(callback) {
+function getProfile(callback) {
 
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return;
-        if (+xhr.status !== 200) return;
-        callback(null, JSON.parse(xhr.responseText).username, JSON.parse(xhr.responseText).email);
+        if (+xhr.status !== 200) {
+            callback(xhr.responseText, null);
+        } else {
+            callback(null, xhr.responseText);
+        }
     };
 
-    xhr.open('GET', 'http://localhost:8080/old_data', true);
+    xhr.open('GET', 'http://localhost:8080/settings', true);
     xhr.withCredentials = true;
     xhr.timeout = 3000;
     xhr.send();
@@ -284,6 +287,23 @@ window.onload = function() {
                 }, false);
                 break;
 
+            case 'settings':
+                buttonsMenu[i].addEventListener('click', event => {
+
+                    getProfile(() => {
+                        //TODO Andrew
+                    });
+
+                    let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
+
+                    buttonBack.currentPage = new_page;
+                    buttonBack.button.hidden = false;
+                    new_page.hidden = false;
+                    pageMain.hidden = true;
+                }, false);
+                break;
+
+
             // Настройка остальных кнопок в главном меню
             default:
                 let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
@@ -384,6 +404,7 @@ window.onload = function() {
 
     }, false);
 
+
     // Изменение настроек
     settingForm.button.addEventListener('click', event => {
 
@@ -419,7 +440,7 @@ window.onload = function() {
         }
 
         // Отправка POST запроса
-        change(username, email, password, old_password, function (error, response) {
+        settings(username, email, password, old_password, function (error, response) {
             if (error) {
                 settingForm.errorMessage(error);
                 return;
