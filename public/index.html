@@ -30,6 +30,7 @@
     <button name="sign_in" class="button unauth"> Вход </button>
     <button name="rules" class="button"> Правила </button>
     <button name="record" class="button"> Лидеры </button>
+    <button name="settings" class="button auth"> Настройки </button>
     <button name="exit" class=" button auth" hidden> Выход </button>
 </div>
 <div class="page panel sign_up" hidden>
@@ -163,6 +164,37 @@
             <td>10.</td> <td> Mike </td> <td align="right"> 1900 </td>
         </tr>
     </table>
+</div>
+<div class="page panel settings" hidden>
+    <form method="post" action="#">
+        <table cellspacing="10" class="input_form setting_form">
+            <tr hidden>
+                <td colspan="2" class="setting_input alert_message">Report message</td>
+            </tr>
+
+            <tr>
+                <td align="right"><label>Логин:</label></td>
+                <td><input type="text" placeholder="Новый логин" class="setting_input"></td>
+            </tr>
+            <tr>
+                <td align="right"><label>Email:</label></td>
+                <td><input type="email" placeholder="Новая почта" class="setting_input"></td>
+            </tr>
+            <tr>
+                <td align="right"><label>Новый:</label></td>
+                <td><input type="password" placeholder="Придумайте пароль" class="setting_input"></td>
+            </tr>
+            <tr>
+                <td align="right"><label>Старый:</label></td>
+                <td><input type="password" placeholder="Введите пароль" class="setting_input"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center"><input type="submit" value="Изменить!" class="setting_input"></td>
+            </tr>
+        </table>
+    </form>
+
 </div>
 
 <nav class="panel">

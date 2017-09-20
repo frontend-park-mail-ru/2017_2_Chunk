@@ -1,6 +1,6 @@
 "use strict";
 
-// Формирование POST запроса на регистрацию/авторизацию
+// Формирование POST запроса на регистрацию/авторизацию/изменение
 function sign_up(username, password, email, callback) {
 
     // Регистрация или авторизация?
@@ -60,6 +60,33 @@ function sign_in(username, password, callback) {
     }));                                    // Отправка запроса с телом запроса
 }
 
+function change(username, email, password, old_password, callback) {
+
+    const URL = 'http://localhost:8080/change';
+    let xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState !== 4) return;
+        if (+xhr.status !== 200) {
+            callback(JSON.parse(xhr.responseText).errorMessage, null);
+        } else {
+            callback(null, xhr);
+        }
+    };
+
+    xhr.open('POST', URL, true);
+    xhr.setRequestHeader('Content-Type',
+        'application/json; charset=utf8');
+    xhr.withCredentials = true;
+    xhr.timeout = 15000;
+    xhr.send(JSON.stringify(
+        username,
+        email,
+        password,
+        old_password
+    ));
+}
+
 // Переключатель страницы для auth/unauth пользователя
 function isAuth(username) {
 
@@ -107,7 +134,7 @@ function whoIsIt(callback) {
 function exit() {
 
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/exit', true);
+    xhr.open('GET', 'http://localhost:8080/exit', true);
     xhr.withCredentials = true;
     xhr.send();
 }
