@@ -11,7 +11,7 @@ function sign_up(username, password, email, callback) {
     // Обработчик ответа
     xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return;
-        if (+xhr.status !== 201 && +xhr.status !== 200) {
+        if (+xhr.status !== 201) {
             callback(JSON.parse(xhr.responseText).errorMessage, null);
         } else {
             callback(null, xhr);
@@ -41,10 +41,10 @@ function sign_in(username, password, callback) {
     xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return;
 
-        if (+xhr.status !== 201 && +xhr.status !== 200) {
-            callback(xhr.responseText, null);
+        if (+xhr.status !== 200) {
+            callback(JSON.parse(xhr.responseText).errorMessage, null);
         } else {
-            callback(null, xhr);
+            callback(null, JSON.parse(xhr.responseText));
         }
     };
 
@@ -79,12 +79,12 @@ function settings(username, email, password, old_password, callback) {
         'application/json; charset=utf8');
     xhr.withCredentials = true;
     xhr.timeout = 15000;
-    xhr.send(JSON.stringify(
+    xhr.send(JSON.stringify({
         username,
         email,
         password,
         old_password
-    ));
+    }));
 }
 
 // Переключатель страницы для auth/unauth пользователя
@@ -163,7 +163,7 @@ function warningMessage(text) {
     let spanMessage = document.querySelector('.warning span');
     if (!spanMessage.parentElement.hidden && text !== undefined) {
         // Чтобы не затирался предыдущий варнинг
-        text = spanMessage.innerHTML + '<br><br>' + text;
+        text = spanMessage.innerHTML + "<br><br>" + text;
         spanMessage.innerHTML = text;
     }
     spanMessage.innerHTML = text? text : "Что-то пошло не так...";
@@ -335,18 +335,6 @@ window.onload = function() {
         const confirm = signUpForm.confirm.value;
 
         // Валидация
-        if (password !== confirm) {
-            signUpForm.errorMessage("Пароли не совпадают!");
-            return;
-        }
-        if (password === username) {
-            signUpForm.errorMessage("Логин и пароль не должны совпадать!");
-            return;
-        }
-        if (password.length < 6) {
-            signUpForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
-            return;
-        }
         if (username.length < 4) {
             signUpForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
             return;
@@ -355,6 +343,19 @@ window.onload = function() {
             signUpForm.errorMessage("Длина логина не должна превышать 12 символов!");
             return;
         }
+        if (password.length < 6) {
+            signUpForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
+            return;
+        }
+        if (password !== confirm) {
+            signUpForm.errorMessage("Пароли не совпадают!");
+            return;
+        }
+        if (password === username) {
+            signUpForm.errorMessage("Логин и пароль не должны совпадать!");
+            return;
+        }
+
 
         // Отправка POST запроса
         sign_up(username, password, email, function (error, response) {
@@ -395,7 +396,7 @@ window.onload = function() {
                 return;
             }
             if (response) {
-                isAuth(username);
+                isAuth(response.username);
                 buttonBack.button.click();
                 return;
             }
@@ -418,24 +419,24 @@ window.onload = function() {
         const old_password = settingForm.old_password.value;
 
         //Валидация
-        if (password === username) {
-            signUpForm.errorMessage("Логин и пароль не должны совпадать!");
-            return;
-        }
-        if (password.length < 6) {
-            signUpForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
-            return;
-        }
         if (username.length < 4) {
-            signUpForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
+            settingForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
             return;
         }
         if (username.length > 12) {
-            signUpForm.errorMessage("Длина логина не должна превышать 12 символов!");
+            settingForm.errorMessage("Длина логина не должна превышать 12 символов!");
+            return;
+        }
+        if (password.length !== 0 && password.length < 6) {
+            settingForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
+            return;
+        }
+        if (password === username) {
+            settingForm.errorMessage("Логин и пароль не должны совпадать!");
             return;
         }
         if (!old_password.length) {
-            signInForm.errorMessage("Введите старый пароль");
+            settingForm.errorMessage("Введите старый пароль");
             return;
         }
 
