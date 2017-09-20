@@ -12,7 +12,7 @@ function sign_up(username, password, email, callback) {
     xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return;
         if (+xhr.status !== 201 && +xhr.status !== 200) {
-            callback(xhr.responseText, null);
+            callback(JSON.parse(xhr.responseText).errorMessage, null);
         } else {
             callback(null, xhr);
         }
@@ -97,7 +97,7 @@ function whoIsIt(callback) {
         callback(null, JSON.parse(xhr.responseText).username);
     };
 
-    xhr.open('GET', '/whoisit', true);
+    xhr.open('GET', 'http://localhost:8080/whoisit', true);
     xhr.withCredentials = true;
     xhr.timeout = 3000;
     xhr.send();
@@ -257,11 +257,11 @@ window.onload = function() {
             signUpForm.errorMessage("Логин и пароль не должны совпадать!");
             return;
         }
-        if (password.length < 6) {
+        if (password.length < 1) {
             signUpForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
             return;
         }
-        if (username.length < 4) {
+        if (username.length < 1) {
             signUpForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
             return;
         }
