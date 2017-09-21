@@ -34,7 +34,7 @@ function sign_up(username, password, email, callback) {
 function sign_in(login, password, callback) {
 
     // Регистрация или авторизация?
-    const URL = 'http://localhost:8080/sign_in';
+    const URL = 'http://chunkgame.herokuapp.com/sign_in';
     let xhr = new XMLHttpRequest();
 
     // Обработчик ответа
