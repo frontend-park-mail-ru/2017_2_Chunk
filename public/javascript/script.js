@@ -1,6 +1,6 @@
 "use strict";
 
-const URL_heroku = "http://chunkgame.herokuapp.com";
+const URL_heroku = "https://chunkgame.herokuapp.com";
 
 // Формирование POST запроса на регистрацию/авторизацию/изменение
 function sign_up(username, password, email, callback) {
