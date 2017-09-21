@@ -1,10 +1,12 @@
 "use strict";
 
+const URL = "http://chunkgame.herokuapp.com";
+
 // Формирование POST запроса на регистрацию/авторизацию/изменение
 function sign_up(username, password, email, callback) {
 
     // Регистрация или авторизация?
-    const URL = 'http://localhost:8080/sign_up';
+    const URL = URL + '/sign_up';
 
     let xhr = new XMLHttpRequest();
 
@@ -34,7 +36,7 @@ function sign_up(username, password, email, callback) {
 function sign_in(login, password, callback) {
 
     // Регистрация или авторизация?
-    const URL = 'http://chunkgame.herokuapp.com/sign_in';
+    const URL = URL + '/sign_in';
     let xhr = new XMLHttpRequest();
 
     // Обработчик ответа
@@ -62,7 +64,7 @@ function sign_in(login, password, callback) {
 
 function settings(username, email, password, old_password, callback) {
 
-    const URL = 'http://localhost:8080/update';
+    const URL = URL + '/update';
     let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = () => {
@@ -124,7 +126,7 @@ function whoIsIt(callback) {
         callback(null, JSON.parse(xhr.responseText).username);
     };
 
-    xhr.open('GET', 'http://localhost:8080/whoisit', true);
+    xhr.open('GET', URL + '/whoisit', true);
     xhr.withCredentials = true;
     xhr.timeout = 3000;
     xhr.send();
@@ -143,7 +145,7 @@ function getProfile(callback) {
         }
     };
 
-    xhr.open('GET', 'http://localhost:8080/whoisit', true);
+    xhr.open('GET', URL + '/whoisit', true);
     xhr.withCredentials = true;
     xhr.timeout = 3000;
     xhr.send();
@@ -153,7 +155,7 @@ function getProfile(callback) {
 function exit() {
 
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8080/exit', true);
+    xhr.open('GET', URL + '/exit', true);
     xhr.withCredentials = true;
     xhr.send();
 }
