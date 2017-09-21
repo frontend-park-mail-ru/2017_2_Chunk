@@ -31,7 +31,7 @@ function sign_up(username, password, email, callback) {
     }));                                    // Отправка запроса с телом запроса
 }
 
-function sign_in(username, password, callback) {
+function sign_in(login, password, callback) {
 
     // Регистрация или авторизация?
     const URL = 'http://localhost:8080/sign_in';
@@ -55,14 +55,14 @@ function sign_in(username, password, callback) {
     xhr.withCredentials = true;             // Чтобы можно было получить куки
     xhr.timeout = 15000;                    // Время ожидания ответа от сервера
     xhr.send(JSON.stringify({
-        username,
+        login,
         password,
     }));                                    // Отправка запроса с телом запроса
 }
 
 function settings(username, email, password, old_password, callback) {
 
-    const URL = 'http://localhost:8080/settings';
+    const URL = 'http://localhost:8080/update';
     let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = () => {
@@ -143,7 +143,7 @@ function getProfile(callback) {
         }
     };
 
-    xhr.open('GET', 'http://localhost:8080/settings', true);
+    xhr.open('GET', 'http://localhost:8080/whoisit', true);
     xhr.withCredentials = true;
     xhr.timeout = 3000;
     xhr.send();
@@ -419,7 +419,7 @@ window.onload = function() {
         const old_password = settingForm.old_password.value;
 
         //Валидация
-        if (username.length < 4) {
+        if (username.length !== 0 && username.length < 4) {
             settingForm.errorMessage("Длина логина должна быть не меньше 4 символов!");
             return;
         }
@@ -429,6 +429,10 @@ window.onload = function() {
         }
         if (password.length !== 0 && password.length < 6) {
             settingForm.errorMessage("Длина пароля должна быть не меньше 6 символов!");
+            return;
+        }
+        if (password.length === 0 && username.length === 0 && email.length === 0) {
+            settingForm.errorMessage("Введите данные, которые хотите изменить, в соответсвующее поле");
             return;
         }
         if (password === username) {
