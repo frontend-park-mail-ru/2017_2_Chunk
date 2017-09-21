@@ -137,9 +137,9 @@ function getProfile(callback) {
     xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return;
         if (+xhr.status !== 200) {
-            callback(xhr.responseText, null);
+            callback(JSON.parse(xhr.responseText).errorMessage, null);
         } else {
-            callback(null, xhr.responseText);
+            callback(null, JSON.parse(xhr.responseText));
         }
     };
 
@@ -290,8 +290,11 @@ window.onload = function() {
             case 'settings':
                 buttonsMenu[i].addEventListener('click', event => {
 
-                    getProfile(() => {
-                        //TODO Andrew
+                    getProfile((error, response) => {
+                        if (!error && response) {
+                            settingForm.username.value = response.username;
+                            settingForm.email.value = response.email;
+                        }
                     });
 
                     let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
