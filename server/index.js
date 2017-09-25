@@ -43,6 +43,8 @@ app.post('/sign_up', (request, response) => {
     const username = request.body.username;
     const password = request.body.password;
 
+    console.log(username, password);
+
     // Устанавливаем заголовок ответа
     response.set('Content-Type', 'application/json; charset=utf8');
 
@@ -61,7 +63,6 @@ app.post('/sign_up', (request, response) => {
     const new_id = idCreator();
     users[username] = password;
     ids[new_id] = username;
-
 
     response.cookie('my_cookie', new_id, {          // Название и значение куки
          expires: new Date(Date.now() + ttl)        // Время жизни куки
@@ -98,6 +99,6 @@ app.get('*', (request, response) => {
     response.send("<h2><i>Unknown page</i></h2>");
 });
 
-app.listen(process.env.PORT || 8080, function () {
+app.listen(process.env.PORT || 8082, function () {
     console.log("Server run!");
 });

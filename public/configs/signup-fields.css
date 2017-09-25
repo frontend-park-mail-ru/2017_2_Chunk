@@ -1,0 +1,28 @@
+table.input_form {
+    width: 85%;
+    margin: 10% auto;
+}
+input.sign_up_input {
+    width: 80%;
+    border-radius: 25px;
+    padding: 15px;
+    font-size: 16pt;
+}
+input.sign_up_input [type=submit] {
+    padding: 0;
+    margin-top: 6%;
+    font-family: cursive;
+    font-style: normal;
+    font-size: 120%;
+    height: 60%;
+    min-height: 60px;
+}
+input.sign_up_input :focus {
+    outline: none;
+}
+input.sign_up_input td {
+    padding: 5px;
+}
+input.sign_up_input tr {
+    height: 50%;
+}

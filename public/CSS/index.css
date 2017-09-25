@@ -9,8 +9,9 @@ body {
     left: 0;
     overflow: auto;
 }
-
 /*Общий стиль кнопок, оформление задней панели*/
+
+
 div.panel {
     background: url('../image/hello-panel.jpg');
 
