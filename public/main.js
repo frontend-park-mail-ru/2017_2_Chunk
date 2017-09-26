@@ -233,7 +233,6 @@
             xhr.open('GET', '/exit', true);
             xhr.withCredentials = true;
             xhr.send();
-
         })();
 
         openMenu();
