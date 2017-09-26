@@ -24,6 +24,7 @@
             Http.Post('/sign_up', {username, password}, callback);
         }
 
+
         /**
          * Авторизация пользователя
          * @param {string} email

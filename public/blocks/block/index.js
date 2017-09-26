@@ -38,6 +38,7 @@
             return new Block(el);
         }
 
+
         /**
          * Установить новый текст для блока
          * @param {string} text

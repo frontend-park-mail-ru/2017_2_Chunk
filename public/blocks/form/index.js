@@ -13,6 +13,7 @@
             }.bind(this));
         }
 
+
         onSubmit(callback) {
             this.el.addEventListener('submit', function (e) {
                 e.preventDefault();
