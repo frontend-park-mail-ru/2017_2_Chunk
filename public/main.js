@@ -184,7 +184,7 @@
             sections.menu.ready = true;
         }
         sections.hide();
-        // if ()
+
         if (userService.isLoggedIn()) {
             sections.menu.items.play.show();
             sections.menu.items.login.hide();
