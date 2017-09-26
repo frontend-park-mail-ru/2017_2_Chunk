@@ -2,6 +2,7 @@
     'use strict';
 
     //повесить обработчиков!
+    //сделать переадресацию при выходе
 
     const Block = window.Block;
     const Form = window.Form;
@@ -40,43 +41,42 @@
         .append(sections.scores)
         .append(sections.profile);
 
-    // function openLogin() {
-    //     if (!sections.login.ready) {
-    //         sections.login.loginform = new Form(loginFields);
-    //         sections.login.loginform.onSubmit(function (formdata) {
-    //             userService.login(formdata.email, formdata.password, function (err, resp) {
-    //                 if (err) {
-    //                     alert(`Some error ${err.status}: ${err.responseText}`);
-    //                     return;
-    //                 }
-    //
-    //                 sections.login.loginform.reset();
-    //                 userService.getData(function (err, resp) {
-    //                     if (err) {
-    //                         return;
-    //                     }
-    //                     openMenu();
-    //                 }, true);
-    //             });
-    //         });
-    //         sections.login
-    //             .append(Block.Create('h2', {}, [], 'Войдите'))
-    //             .append(sections.login.loginform);
-    //         sections.login.ready = true;
-    //     }
-    //     sections.hide();
-    //     if (userService.isLoggedIn()) {
-    //         return openMenu();
-    //     }
-    //     sections.login.show();
-    // }
-    //
+    function openLogin() {
+        if (!sections.login.ready) {
+            sections.login.loginform = new Form(loginFields);
+            sections.login.loginform.onSubmit(function (formdata) {
+                userService.login(formdata.email, formdata.password, function (err, resp) {
+                    if (err) {
+                        alert(`Some error ${err.status}: ${err.responseText}`);
+                        return;
+                    }
+
+                    sections.login.loginform.reset();
+                    userService.getData(function (err, resp) {
+                        if (err) {
+                            return;
+                        }
+                        openMenu();
+                    }, true);
+                });
+            });
+            sections.login
+                .append(Block.Create('h2', {}, [], 'Войдите'))
+                .append(sections.login.loginform);
+            sections.login.ready = true;
+        }
+        sections.hide();
+        if (userService.isLoggedIn()) {
+            return openMenu();
+        }
+        sections.login.show();
+    }
+
     function openSignup() {
         if (!sections.signup.ready) {
             sections.signup.signupform = new Form(signupFields);
             sections.signup.signupform.onSubmit(function (formdata) {
                 //нет валидации
-                alert('open menu');
                 userService.signup(formdata.email, formdata.password, function (err, resp) {
                     if (err) {
                         alert(`Some error ${err.status}: ${err.responseText}`);
@@ -84,7 +84,13 @@
                     }
                     console.log('Regist!');
                     sections.signup.signupform.reset();
-                    openMenu();
+
+                    userService.getData(function (err, resp) {
+                        if (err) {
+                            return;
+                        }
+                        openMenu();
+                    }, true);
                 });
             });
             sections.signup
@@ -148,12 +154,14 @@
     function openMenu() {
         if (!sections.menu.ready) {
             sections.menu.items = {
-                play: Block.Create('button', {'data-section': 'play'}, ['button'], 'Играть'),
-                login: Block.Create('button', {'data-section': 'signup'}, ['button'], 'Зарегистрироваться'),
-                signup: Block.Create('button', {'data-section': 'login'}, ['button'], 'Вход'),
-                settings: Block.Create('button', {'data-section': 'settings'}, ['button'], 'Настройки'),
-                rules: Block.Create('button', {'data-section': 'rules'}, ['button'], 'Правила'),
-                scores: Block.Create('button', {'data-section': 'scores'}, ['button'], 'Таблица лидеров'),
+                profile: Block.Create('div', {'data-section': 'profile'}, ['profile', 'auth'], 'dfdfgdf'),
+                play: Block.Create('button', {'data-section': 'play'}, ['button', 'auth'], 'Играть'),
+                login: Block.Create('button', {'data-section': 'signup'}, ['button', 'unauth'], 'Зарегистрироваться'),
+                signup: Block.Create('button', {'data-section': 'login'}, ['button', 'unauth'], 'Вход'),
+                settings: Block.Create('button', {'data-section': 'settings'}, ['button', 'auth'], 'Настройки'),
+                rules: Block.Create('button', {'data-section': 'rules'}, ['button', 'unauth'], 'Правила'),
+                scores: Block.Create('button', {'data-section': 'scores'}, ['button', 'unauth'], 'Таблица лидеров'),
+                exit: Block.Create('button', {'data-section': 'exit'}, ['button', 'auth'], 'Выход'),
             };
             sections.menu.on('click', function (event) {
                 event.preventDefault();
@@ -172,45 +180,73 @@
                     case 'profile':
                         openProfile();
                         break;
+                    case 'exit':
+                        delCookie();
+                        break;
                 }
             });
             sections.menu
+                .append(sections.menu.items.profile)
                 .append(sections.menu.items.play)
                 .append(sections.menu.items.login)
                 .append(sections.menu.items.signup)
                 .append(sections.menu.items.settings)
                 .append(sections.menu.items.rules)
-                .append(sections.menu.items.scores);
+                .append(sections.menu.items.scores)
+                .append(sections.menu.items.exit);
             sections.menu.ready = true;
         }
         sections.hide();
 
+
+
+
         if (userService.isLoggedIn()) {
+            console.log('is logget in');
+            userService.getData(function (err, resp) {
+                sections.menu.items.profile.setText(resp);
+            });
+            sections.menu.items.profile.show();
             sections.menu.items.play.show();
             sections.menu.items.login.hide();
             sections.menu.items.signup.hide();
             sections.menu.items.settings.show();
             sections.menu.items.rules.show();
             sections.menu.items.scores.show();
+            sections.menu.items.exit.show();
         } else {
+            sections.menu.items.profile.hide();
             sections.menu.items.play.hide();
             sections.menu.items.login.show();
             sections.menu.items.signup.show();
             sections.menu.items.settings.hide();
             sections.menu.items.rules.show();
             sections.menu.items.scores.show();
+            sections.menu.items.exit.hide();
         }
         sections.menu.show();
+    }
+
+    function delCookie() {
+        (function() {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', '/exit', true);
+            xhr.withCredentials = true;
+            xhr.send();
+
+        })();
+
+        openMenu();
     }
 
     title.on('click', openMenu);
     openMenu();
 
-    // userService.getData(function (err, resp) {
-    //     if (err) {
-    //         return;
-    //     }
-    //     openMenu();
-    // }, true);
+    userService.getData(function (err, resp) {
+        if (err) {
+            return;
+        }
+        openMenu();
+    }, true);
 
 })();

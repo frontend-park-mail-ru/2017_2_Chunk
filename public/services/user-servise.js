@@ -20,12 +20,7 @@
          * @param {Function} callback
          */
         signup(username, password, callback) {
-            this.user = {
-                'username': username,
-                'password': password,
-            };
             // console.log(this.user.email);
-            this.users.push(this.user);
             Http.Post('/sign_up', {username, password}, callback);
         }
 
@@ -44,7 +39,8 @@
          * @return {boolean}
          */
         isLoggedIn() {
-            return !!this.user;
+            // this.getData();
+            return !!this.user;//как эта хрень работает?
         }
 
         /**
@@ -57,12 +53,12 @@
                 return callback(null, this.user);
             }
 
-            Http.Get('/me', function (err, userdata) {
+            Http.Get('/whoisit', function (err, userdata) {
                 if (err) {
                     return callback(err, userdata);
                 }
 
-                this.user = userdata;
+                this.user = userdata.username;
                 callback(null, userdata);
             }.bind(this));
         }

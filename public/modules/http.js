@@ -24,7 +24,9 @@
                 }
 
                 // const response = JSON.parse(xhr.responseText).errorMessage;
-                callback(null, response);
+                console.log(xhr.responseText);
+                console.log(JSON.parse(xhr.responseText));
+                callback(null, JSON.parse(xhr.responseText));
             };
 
             xhr.send();

@@ -9,7 +9,7 @@ const app = express();
 
 
 // Middleware
-// app.use(morgan('dev'));                  // Формат выводимой инфы о запросах
+app.use(morgan('dev'));                     // Формат выводимой инфы о запросах
 app.use(express.static('./public'));        // Отдаёт статику при совпадении имён
 app.use(bodyParser.json());                 // С помощью какой-то древней магии парсит тело запроса,
 app.use(cookieParser());                    // всё то же волшебство, но уже для кук
@@ -22,6 +22,7 @@ app.get('/whoisit', (request, response) => {
 
     // Вытаскиваем нужную куку
     const id = request.cookies['my_cookie'];
+    console.log('my id: ', id);
 
     // Устанавливаем заголовки ответа
     response.set('Content-Type', 'application/json; charset=utf8');
@@ -31,6 +32,7 @@ app.get('/whoisit', (request, response) => {
         response.status(200).send(JSON.stringify({username: ids[id]}));
 
 });
+
 app.get('/exit', (request, response) => {
 
     response.cookie('my_cookie', null, {
@@ -38,6 +40,7 @@ app.get('/exit', (request, response) => {
     });
     response.status(200).end();
 });
+
 app.post('/sign_up', (request, response) => {
 
     const username = request.body.username;
@@ -69,6 +72,8 @@ app.post('/sign_up', (request, response) => {
     });
     response.status(200).end();
 });
+
+
 app.post('/sign_in', (request, response) => {
 
     const username = request.body.username;
