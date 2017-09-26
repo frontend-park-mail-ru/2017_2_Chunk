@@ -58,10 +58,16 @@
                 if (err) {
                     return callback(err, userdata);
                 }
-
                 this.user = userdata.username;
                 callback(null, userdata);
             }.bind(this));
+        }
+
+        logout() {
+            if (this.isLoggedIn()) {
+                this.user = null;
+                this.users = [];
+            }
         }
 
         /**

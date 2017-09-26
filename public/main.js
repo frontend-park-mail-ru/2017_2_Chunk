@@ -17,12 +17,14 @@
     const title = Block.Create('a', {}, ['application-header'], 'Tower Defence');
 
     const sections = {
+        back: Block.Create('section', {}, ['back-section', 'section']),
         menu: Block.Create('section', {}, ['menu-section', 'section']),
         login: Block.Create('section', {}, ['login-section', 'section']),
         signup: Block.Create('section', {}, ['signup-section', 'section']),
         scores: Block.Create('section', {}, ['scores-section', 'section']),
         profile: Block.Create('section', {}, ['profile-section', 'section']),
         hide() {
+            this.back.hide();
             this.menu.hide();
             this.login.hide();
             this.signup.hide();
@@ -35,6 +37,7 @@
 
     app
         .append(title)
+        .append(sections.back)
         .append(sections.menu)
         .append(sections.login)
         .append(sections.signup)
@@ -66,6 +69,7 @@
             sections.login.ready = true;
         }
         sections.hide();
+        backToPrevPage('signup');
         if (userService.isLoggedIn()) {
             return openMenu();
         }
@@ -74,6 +78,11 @@
 
     function openSignup() {
         if (!sections.signup.ready) {
+            sections.back.on('click', function (event) {
+                event.preventDefault();
+                const target = event.target;
+                const section = target.getAttribute('data-section');
+            });
             sections.signup.signupform = new Form(signupFields);
             sections.signup.signupform.onSubmit(function (formdata) {
                 //нет валидации
@@ -98,13 +107,50 @@
                 .append(sections.signup.signupform);
             sections.signup.ready = true;
         }
-
         sections.hide();
+        backToPrevPage('signup');
+
         if (userService.isLoggedIn()) {
-        // if (0) {
             return openMenu();
         }
         sections.signup.show();
+    }
+
+    function backToPrevPage (current_page) {
+        if (!sections.back.ready) {
+            sections.back.items = {
+                back: Block.Create('button', {'data-section': 'back'}, ['button'], 'Назад'),
+            };
+            sections.back.on('click', function (event) {
+                event.preventDefault();
+                const target = event.target;
+                const section = target.getAttribute('data-section');
+                if (section === 'back') {
+                    switch (current_page) {
+                        case 'signup':
+                        {
+                            openMenu();
+                            break;
+                        }
+                        case 'login':
+                        {
+                            openMenu();
+                            break;
+                        }
+                    }
+                }
+            });
+            sections.back
+                .append(sections.back.items.back);
+            sections.back.ready = true;
+        }
+        sections.back.hide();
+
+        console.log(current_page);
+        if (current_page === 'signup' || current_page === 'login') {
+            sections.back.show();
+        }
+
     }
     //
     // function openScores() {
@@ -156,13 +202,14 @@
             sections.menu.items = {
                 profile: Block.Create('div', {'data-section': 'profile'}, ['profile', 'auth'], 'dfdfgdf'),
                 play: Block.Create('button', {'data-section': 'play'}, ['button', 'auth'], 'Играть'),
-                login: Block.Create('button', {'data-section': 'signup'}, ['button', 'unauth'], 'Зарегистрироваться'),
-                signup: Block.Create('button', {'data-section': 'login'}, ['button', 'unauth'], 'Вход'),
+                signup: Block.Create('button', {'data-section': 'signup'}, ['button', 'unauth'], 'Зарегистрироваться'),
+                login: Block.Create('button', {'data-section': 'login'}, ['button', 'unauth'], 'Вход'),
                 settings: Block.Create('button', {'data-section': 'settings'}, ['button', 'auth'], 'Настройки'),
                 rules: Block.Create('button', {'data-section': 'rules'}, ['button', 'unauth'], 'Правила'),
                 scores: Block.Create('button', {'data-section': 'scores'}, ['button', 'unauth'], 'Таблица лидеров'),
                 exit: Block.Create('button', {'data-section': 'exit'}, ['button', 'auth'], 'Выход'),
             };
+
             sections.menu.on('click', function (event) {
                 event.preventDefault();
                 const target = event.target;
@@ -188,8 +235,8 @@
             sections.menu
                 .append(sections.menu.items.profile)
                 .append(sections.menu.items.play)
-                .append(sections.menu.items.login)
                 .append(sections.menu.items.signup)
+                .append(sections.menu.items.login)
                 .append(sections.menu.items.settings)
                 .append(sections.menu.items.rules)
                 .append(sections.menu.items.scores)
@@ -197,8 +244,6 @@
             sections.menu.ready = true;
         }
         sections.hide();
-
-
 
 
         if (userService.isLoggedIn()) {
@@ -234,7 +279,7 @@
             xhr.withCredentials = true;
             xhr.send();
         })();
-
+        userService.logout();
         openMenu();
     }
 

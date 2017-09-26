@@ -34,7 +34,7 @@ app.get('/whoisit', (request, response) => {
 });
 
 app.get('/exit', (request, response) => {
-
+    console.log('URL = /exit');
     response.cookie('my_cookie', null, {
         expires: new Date(Date.now())
     });
@@ -76,8 +76,9 @@ app.post('/sign_up', (request, response) => {
 
 app.post('/sign_in', (request, response) => {
 
-    const username = request.body.username;
+    const username = request.body.email;
     const password = request.body.password;
+    console.log(username, password);
 
     // Устанавливаем заголовок ответа
     response.set('Content-Type', 'application/json; charset=utf8');
