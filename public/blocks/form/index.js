@@ -15,8 +15,8 @@
 
 
         onSubmit(callback) {
-            this.el.addEventListener('submit', function (e) {
-                e.preventDefault();
+            this.el.addEventListener('submit', (event) => {
+                event.preventDefault();
                 const formdata = {};
                 const elements = this.el.elements;
                 //запись элементов формы в formdata
@@ -25,7 +25,7 @@
                 }
 
                 callback(formdata);
-            }.bind(this));
+            });
         }
 
         // errorMessage (text) {

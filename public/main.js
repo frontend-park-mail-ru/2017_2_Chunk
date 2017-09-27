@@ -6,6 +6,7 @@
 
     const Block = window.Block;
     const Form = window.Form;
+    const Message = window.Message;
     // const Scoreboard = window.Scoreboard;
     // const Profile = window.Profile;
     // const loginFields = window.loginFields;
@@ -13,7 +14,7 @@
     const UserService = window.UserService;
     const userService = new UserService();
 
-    const app = new Block(document.getElementById('application'));
+    const app = new Block(document.body);
     const title = Block.Create('a', {}, ['application-header'], 'Tower Defence');
 
     const sections = {
@@ -44,19 +45,27 @@
         .append(sections.scores)
         .append(sections.profile);
 
+
     function openLogin() {
         if (!sections.login.ready) {
             sections.login.loginform = new Form(loginFields);
+            sections.signup.message = new Message();
             sections.login.loginform.onSubmit(function (formdata) {
+                sections.signup.message.clear();
+                sections.signup.message.hide();
                 userService.login(formdata.email, formdata.password, function (err, resp) {
                     if (err) {
-                        alert(`Some error ${err.status}: ${err.responseText}`);
+                        sections.signup.message.setText(err);
+                        sections.signup.message.show();
+                        // alert(`Some error ${err.status}: ${err.responseText}`);заменить на дивчик
                         return;
                     }
 
                     sections.login.loginform.reset();
                     userService.getData(function (err, resp) {
                         if (err) {
+                            sections.signup.message.setText(err);
+                            sections.signup.message.show();
                             return;
                         }
                         openMenu();
@@ -64,8 +73,10 @@
                 });
             });
             sections.login
-                .append(Block.Create('h2', {}, [], 'Войдите'))
+                .append(sections.signup.message)
+                .append(Block.Create('h2', {}, ['section_title'], 'Войдите'))
                 .append(sections.login.loginform);
+            sections.signup.message.hide();
             sections.login.ready = true;
         }
         sections.hide();
@@ -84,18 +95,25 @@
                 const section = target.getAttribute('data-section');
             });
             sections.signup.signupform = new Form(signupFields);
+            sections.signup.message = new Message();//в случае ошибки block.show()text = err_message
             sections.signup.signupform.onSubmit(function (formdata) {
+                sections.signup.message.clear();
+                sections.signup.message.hide();
                 //нет валидации
-                userService.signup(formdata.email, formdata.password, function (err, resp) {
+                userService.signup(formdata.email, formdata.password, formdata.confirm, function (err, resp) {
                     if (err) {
-                        alert(`Some error ${err.status}: ${err.responseText}`);
+                        sections.signup.message.setText(err);
+                        sections.signup.message.show();
+                        // alert(`Some error ${err.status}: ${err.responseText}`);заменить на дивчик
                         return;
                     }
-                    console.log('Regist!');
+
                     sections.signup.signupform.reset();
 
                     userService.getData(function (err, resp) {
                         if (err) {
+                            sections.signup.message.setText(err);
+                            sections.signup.message.show();
                             return;
                         }
                         openMenu();
@@ -103,8 +121,10 @@
                 });
             });
             sections.signup
-                .append(Block.Create('h2', {}, [], 'Зарегистрируйтесь'))
+                .append(sections.signup.message)
+                .append(Block.Create('h2', {}, ['section_title'], 'Зарегистрируйтесь'))
                 .append(sections.signup.signupform);
+            sections.signup.message.hide();
             sections.signup.ready = true;
         }
         sections.hide();
@@ -119,7 +139,7 @@
     function backToPrevPage (current_page) {
         if (!sections.back.ready) {
             sections.back.items = {
-                back: Block.Create('button', {'data-section': 'back'}, ['button'], 'Назад'),
+                back: Block.Create('button', {'data-section': 'back'}, ['button', 'back'], 'Назад'),
             };
             sections.back.on('click', function (event) {
                 event.preventDefault();
@@ -129,6 +149,7 @@
                     switch (current_page) {
                         case 'signup':
                         {
+
                             openMenu();
                             break;
                         }
@@ -146,7 +167,6 @@
         }
         sections.back.hide();
 
-        console.log(current_page);
         if (current_page === 'signup' || current_page === 'login') {
             sections.back.show();
         }
@@ -228,7 +248,8 @@
                         openProfile();
                         break;
                     case 'exit':
-                        delCookie();
+                        userService.logout();
+                        openMenu();
                         break;
                 }
             });
@@ -247,7 +268,6 @@
 
 
         if (userService.isLoggedIn()) {
-            console.log('is logget in');
             userService.getData(function (err, resp) {
                 sections.menu.items.profile.setText(resp);
             });
@@ -272,16 +292,6 @@
         sections.menu.show();
     }
 
-    function delCookie() {
-        (function() {
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', '/exit', true);
-            xhr.withCredentials = true;
-            xhr.send();
-        })();
-        userService.logout();
-        openMenu();
-    }
 
     title.on('click', openMenu);
     openMenu();

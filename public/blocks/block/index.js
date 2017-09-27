@@ -86,9 +86,9 @@
          */
         on(event, callback) {
             this.el.addEventListener(event, callback);
-            return function () {
+            return () => {
                 this.el.removeEventListener(event, callback);
-            }.bind(this);
+            };
         }
     }
 

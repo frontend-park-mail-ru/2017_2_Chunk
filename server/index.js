@@ -43,7 +43,7 @@ app.get('/exit', (request, response) => {
 
 app.post('/sign_up', (request, response) => {
 
-    const username = request.body.username;
+    const username = request.body.email;
     const password = request.body.password;
 
     console.log(username, password);

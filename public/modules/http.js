@@ -21,6 +21,7 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== 4) return;
                 if (+xhr.status >= 400) {
+                    console.log('где-то уже распарсил', xhr);
                     return callback(xhr, null);
                 }
 
@@ -49,7 +50,7 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== 4) return;
                 if (+xhr.status >= 400) {
-                    return callback(xhr, null);
+                    return callback(JSON.parse(xhr.responseText).errorMessage, null);
                 }
                 // const response = JSON.parse(xhr.responseText);
                 // console.log(response);

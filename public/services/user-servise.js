@@ -18,10 +18,32 @@
          * @param {string} email
          * @param {string} password
          * @param {Function} callback
+         * @param {Function} confirm
          */
-        signup(username, password, callback) {
+        signup(email, password, confirm, callback) {
             // console.log(this.user.email);
-            Http.Post('/sign_up', {username, password}, callback);
+            //validation
+            if (email.length < 4) {
+                callback("Длина логина должна быть не меньше 4 символов!", null);
+                return;
+            }
+            if (email.length > 12) {
+                callback("Длина логина не должна превышать 12 символов!", null);
+                return;
+            }
+            if (password.length < 6) {
+                callback("Длина пароля должна быть не меньше 6 символов!", null);
+                return;
+            }
+            if (password !== confirm) {
+                callback("Пароли не совпадают!", null);
+                return;
+            }
+            if (password === email) {
+                callback("Логин и пароль не должны совпадать!", null);
+                return;
+            }
+            Http.Post('/sign_up', {email, password}, callback);
         }
 
 
@@ -32,6 +54,23 @@
          * @param {Function} callback
          */
         login(email, password, callback) {
+            console.log('login');
+            if (email.length < 4) {
+                callback("Длина логина должна быть не меньше 4 символов!", null);
+                return;
+            }
+            if (email.length > 12) {
+                callback("Длина логина не должна превышать 12 символов!", null);
+                return;
+            }
+            if (password.length < 6) {
+                callback("Длина пароля должна быть не меньше 6 символов!", null);
+                return;
+            }
+            if (password === email) {
+                callback("Логин и пароль не могут совпадать!", null);
+                return;
+            }
             Http.Post('/sign_in', {email, password}, callback);
         }
 
@@ -67,7 +106,17 @@
             if (this.isLoggedIn()) {
                 this.user = null;
                 this.users = [];
+                this.delCookie();
             }
+        }
+
+        delCookie() {
+            (function() {
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', '/exit', true);
+                xhr.withCredentials = true;
+                xhr.send();
+            })();
         }
 
         /**

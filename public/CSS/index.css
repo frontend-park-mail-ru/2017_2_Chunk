@@ -12,18 +12,18 @@ body {
 /*Общий стиль кнопок, оформление задней панели*/
 
 
-div.panel {
-    background: url('../image/hello-panel.jpg');
+/*div.panel {*/
+    /*background: url('../image/hello-panel.jpg');*/
 
-    position: relative;
-    width: 50%;
-    min-width: 300px;
-    margin: 1.5% auto;
-    border-radius:5%;
-    border: ridge black;
-    padding-top: 1%;
-    padding-bottom: 2%;
-}
+    /*position: relative;*/
+    /*width: 50%;*/
+    /*min-width: 300px;*/
+    /*margin: 1.5% auto;*/
+    /*border-radius:5%;*/
+    /*border: ridge black;*/
+    /*padding-top: 1%;*/
+    /*padding-bottom: 2%;*/
+/*}*/
 .panel button, input[type=submit] {
     font-family: cursive;
     font-size: 250%;
