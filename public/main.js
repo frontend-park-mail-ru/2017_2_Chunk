@@ -4,12 +4,13 @@
     //повесить обработчиков!
     //сделать переадресацию при выходе
 
+
     const Block = window.Block;
     const Form = window.Form;
     const Message = window.Message;
-    // const Scoreboard = window.Scoreboard;
+    const Scoreboard = window.ScoreboardTemplates;
     // const Profile = window.Profile;
-    // const loginFields = window.loginFields;
+    const loginFields = window.loginFields;
     const signupFields = window.signupFields;
     const UserService = window.UserService;
     const userService = new UserService();
@@ -172,16 +173,20 @@
         }
 
     }
-    //
+
     // function openScores() {
     //     if (!sections.scores.ready) {
-    //         sections.scores.scoreboard = new Scoreboard();
+    //         sections.scores.scoreboard = Scoreboard.Create();
     //         sections.scores
     //             .append(Block.Create('h2', {}, [], 'Список лидеров'))
     //             .append(sections.scores.scoreboard);
     //         sections.scores.ready = true;
     //     }
     //     sections.hide();
+    //     backToPrevPage('signup');
+    //     sections.scores.scoreboard.update();
+    //     sections.scores.show();
+    //     sections.scores.scoreboard.show();
     //     userService.loadUsersList(function (err, users) {
     //         if (err) {
     //             alert(`Some error ${err.status}: ${err.responseText}`);
@@ -192,7 +197,7 @@
     //         sections.scores.show();
     //     }, true);
     // }
-    //
+
     // function openProfile() {
     //     if (!sections.profile.ready) {
     //         sections.profile.profile = new Profile();
