@@ -1,17 +1,18 @@
 (function (users) {
-    'use strict';
-    //
-    //
-    const Block = window.Block;
-    // const ScoreboardTemplate = window.scoreboardTemplate;
+	'use strict';
+	//
+	//
+	const Block = window.Block;
 
-    class Scoreboard extends Block {
-        constructor() {
-            console.log('scoreboard constructor');
-            const el = document.createElement('table');
-            super(el);
+	// const ScoreboardTemplate = window.scoreboardTemplate;
 
-        }
+	class Scoreboard extends Block {
+		constructor() {
+			console.log('scoreboard constructor');
+			const el = document.createElement('table');
+			super(el);
+
+		}
 
 // Compile the source code
 
@@ -20,19 +21,20 @@
 //     console.log(compiledFunction({
 //         users
 //     }));
-        update(users = [{name: 'Igor'}, {name: 'Evgenii'}]) {
-            this.clear();
-            this.el.innerHTML = compile_pug({users});
-        }
-    }
-    //     update(users = [{name: 'Igor'}, {name: 'Evgenii'}]) {
-    //         const pug = require('pug');
-    //         this.clear();
-    //         this.compiledFunction = pug.compileFile('scoreboard.pug');
-    //         this.el.innerHTML = this.compiledFunction({users});
-    //     }
-    // }
+		update(users = [{name: 'Igor'}, {name: 'Evgenii'}]) {
+			this.clear();
+			this.el.innerHTML = compile_pug({users});
+		}
+	}
 
-    // window.Scoreboard = Scoreboard;
+	//     update(users = [{name: 'Igor'}, {name: 'Evgenii'}]) {
+	//         const pug = require('pug');
+	//         this.clear();
+	//         this.compiledFunction = pug.compileFile('scoreboard.pug');
+	//         this.el.innerHTML = this.compiledFunction({users});
+	//     }
+	// }
+
+	// window.Scoreboard = Scoreboard;
 
 })();
