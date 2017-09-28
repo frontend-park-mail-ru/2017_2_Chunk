@@ -8,6 +8,13 @@ const idCreator = require('uuid/v4');           // Создает уникаль
 const app = express();
 
 
+// const {pug_escape, template} = require("./recordList");
+//
+// console.log(template({name: 'Igor'}));
+// console.log(template({name: 'Igor'}));
+
+
+
 // Middleware
 app.use(morgan('dev'));                     // Формат выводимой инфы о запросах
 app.use(express.static('./public'));        // Отдаёт статику при совпадении имён
@@ -106,6 +113,6 @@ app.get('*', (request, response) => {
 });
 
 
-app.listen(process.env.PORT || 8080, function () {
+app.listen(process.env.PORT || 8082, function () {
 	console.log("Server run!");
 });

@@ -6,9 +6,11 @@
 
 
 	const Block = window.Block;
+	const Scoreboard = window.Scoreboard;
+	console.log(Scoreboard);
 	const Form = window.Form;
 	const Message = window.Message;
-	const Scoreboard = window.ScoreboardTemplates;
+	// const Scoreboard = window.ScoreboardTemplates;
 	// const Profile = window.Profile;
 	const loginFields = window.loginFields;
 	const signupFields = window.signupFields;
@@ -172,7 +174,17 @@
 
 	}
 
-	// function openScores() {
+	function openScores() {
+		sections.hide();
+		sections.scores.scoreboard = new Scoreboard();
+		sections.scores.scoreboard.update([{name: 'Igor', score: '100'}, {name: 'Nikita', score: '120'}]);
+		sections.scores
+			.append(Block.Create('h2', {}, [], 'Список лидеров'))
+			.append(sections.scores.scoreboard);
+
+		sections.scores.show();
+	}
+
 	//     if (!sections.scores.ready) {
 	//         sections.scores.scoreboard = Scoreboard.Create();
 	//         sections.scores

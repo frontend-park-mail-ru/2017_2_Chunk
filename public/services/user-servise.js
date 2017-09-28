@@ -21,7 +21,6 @@
 		 * @param {Function} confirm
 		 */
 		signup(email, password, confirm, callback) {
-			// console.log(this.user.email);
 			//validation
 			if (email.length < 4) {
 				callback("Длина логина должна быть не меньше 4 символов!", null);
@@ -54,7 +53,6 @@
 		 * @param {Function} callback
 		 */
 		login(email, password, callback) {
-			console.log('login');
 			if (email.length < 4) {
 				callback("Длина логина должна быть не меньше 4 символов!", null);
 				return;
