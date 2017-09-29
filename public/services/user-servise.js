@@ -42,7 +42,8 @@
 				callback("Логин и пароль не должны совпадать!", null);
 				return;
 			}
-			return Http.FetchPost('/sign_up', {email, password});
+			let username = email;
+			return Http.FetchPost('/sign_up', {username, email, password});
 		}
 
 
@@ -99,15 +100,23 @@
 			}.bind(this));
 		}
 
+		/**
+		 * Проверяет, авторизован ли пользователь
+		 * @param force - пременная для принудительной отправки гет запроса если true
+		 * @param {Function} callback - функция колбек
+		 * @return {Function} callback - возвращает функцию колбек с результатом запроса или ошибкой
+		 */
 		getDataFetch(callback, force = false) {
 			if (this.isLoggedIn() && !force) {
 				return callback(null, this.user);
 			}
-
 			Http.FetchGet('/whoisit');
 		}
 
 
+		/**
+		 * Разлогинивает куки
+		 */
 		logout() {
 			if (this.isLoggedIn()) {
 				this.user = null;
@@ -116,6 +125,9 @@
 			}
 		}
 
+		/**
+		 * Разлогинивает пользователя удаляя куку
+		 */
 		delCookie() {
 			(function () {
 				let xhr = new XMLHttpRequest();

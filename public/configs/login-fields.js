@@ -1,6 +1,11 @@
 (function () {
 	'use strict';
 
+
+	/**
+	 * Поля для формы логина
+	 *@module loginFilds
+	 */
 	window.loginFields = [
 		{
 			attrs: {
@@ -15,7 +20,8 @@
 			attrs: {
 				type: 'password',
 				name: 'password',
-				placeholder: 'Введите пароль',
+
+							placeholder: 'Введите пароль',
 				required: 'required',
 				class: 'login_input',
 			},

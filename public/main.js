@@ -1,8 +1,10 @@
 (function () {
 	'use strict';
 
-	//повесить обработчиков!
-	//сделать переадресацию при выходе
+	/**
+	 * Основной модуль работатющий со всеми объектами
+	 *@module main
+	 */
 
 
 	const Block = window.Block;
@@ -49,6 +51,9 @@
 		.append(sections.profile);
 
 
+	/**
+	 * Открывает меню логина
+	 */
 	function openLogin() {
 		if (!sections.login.ready) {
 			sections.login.loginform = new Form(loginFields);
@@ -90,6 +95,9 @@
 		sections.login.show();
 	}
 
+	/**
+	 * Открывает меню регистрации
+	 */
 	function openSignup() {
 		if (!sections.signup.ready) {
 			sections.back.on('click', function (event) {
@@ -141,6 +149,9 @@
 		sections.signup.show();
 	}
 
+	/**
+	 * Додавбляет кнопку назад
+	 */
 	function backToPrevPage(current_page) {
 		if (!sections.back.ready) {
 			sections.back.items = {
@@ -176,6 +187,10 @@
 
 	}
 
+
+	/**
+	 * Открывает таблицу рекордов
+	 */
 	function openScores() {
 		sections.hide();
 		sections.scores.scoreboard = new Scoreboard();
@@ -187,53 +202,10 @@
 		sections.scores.show();
 	}
 
-	//     if (!sections.scores.ready) {
-	//         sections.scores.scoreboard = Scoreboard.Create();
-	//         sections.scores
-	//             .append(Block.Create('h2', {}, [], 'Список лидеров'))
-	//             .append(sections.scores.scoreboard);
-	//         sections.scores.ready = true;
-	//     }
-	//     sections.hide();
-	//     backToPrevPage('signup');
-	//     sections.scores.scoreboard.update();
-	//     sections.scores.show();
-	//     sections.scores.scoreboard.show();
-	//     userService.loadUsersList(function (err, users) {
-	//         if (err) {
-	//             alert(`Some error ${err.status}: ${err.responseText}`);
-	//             return openMenu();
-	//         }
-	//
-	//         sections.scores.scoreboard.update(users);
-	//         sections.scores.show();
-	//     }, true);
-	// }
 
-	// function openProfile() {
-	//     if (!sections.profile.ready) {
-	//         sections.profile.profile = new Profile();
-	//         sections.profile
-	//             .append(Block.Create('h2', {}, [], 'Мой профиль'))
-	//             .append(sections.profile.profile);
-	//         sections.profile.ready = true;
-	//     }
-	//     sections.hide();
-	//     if (userService.isLoggedIn()) {
-	//         userService.getData(function (err, user) {
-	//             if (err) {
-	//                 alert(`Some error ${err.status}: ${err.responseText}`);
-	//                 return openMenu();
-	//             }
-	//
-	//             sections.profile.profile.update(user);
-	//             sections.profile.show();
-	//         }, true);
-	//         return;
-	//     }
-	//     return openMenu();
-	// }
-
+	/**
+	 * Открывает основное меню
+	 */
 	function openMenu() {
 		if (!sections.menu.ready) {
 			sections.menu.items = {
@@ -309,10 +281,15 @@
 		sections.menu.show();
 	}
 
-
+	/**
+	 * Открытие меню по клиу на заголовок
+	 */
 	title.on('click', openMenu);
 	openMenu();
 
+	/**
+	 * Получает данные пользователя
+	 */
 	userService.getData(function (err, resp) {
 		if (err) {
 			return;

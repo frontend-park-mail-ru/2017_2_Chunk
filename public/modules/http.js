@@ -1,6 +1,8 @@
 (function () {
 	'use strict';
 
+	const backendUrl = 'https://chunkgame.herokuapp.com';
+
 	const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
 	/**
@@ -16,7 +18,7 @@
 		 */
 		static Get(address, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('GET', address, true);
+			xhr.open('GET', backendUrl + address, true);
 			xhr.withCredentials = true;
 
 			xhr.onreadystatechange = function () {
@@ -25,7 +27,6 @@
 					return callback(xhr, null);
 				}
 
-				// const response = JSON.parse(xhr.responseText).errorMessage;
 				callback(null, JSON.parse(xhr.responseText));
 			};
 
@@ -40,7 +41,7 @@
 		 */
 		static Post(address, body, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', address, true);
+			xhr.open('POST', backendUrl + address, true);
 			xhr.withCredentials = true;
 			xhr.timeout = 15000;
 			xhr.setRequestHeader('Content-Type', 'application/json; charset=utf8');
@@ -57,8 +58,12 @@
 		}
 
 
+		/**
+		 * Выполняет GET-запрос по указанному адресу
+		 * @param {string} address - адрес запроса
+		 */
 		static FetchGet(address) {
-			const url = (Http.BaseUrl || baseUrl) + address;
+			const url = backendUrl + address;
 			return fetch(url, {
 				method: 'GET',
 				mode: 'cors',
@@ -73,9 +78,12 @@
 				});
 		}
 
-
+		/**
+		 * Выполняет POST-запрос по указанному адресу
+		 * @param {Object} body-request
+		 */
 		static FetchPost(address, body) {
-			const url = address;
+			const url = backendUrl + address;
 			return fetch(url, {
 				method: 'POST',
 				mode: 'cors',

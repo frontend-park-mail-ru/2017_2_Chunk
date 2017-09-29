@@ -21,6 +21,10 @@
 		}
 
 
+		/**
+		 * Вызывается при отправке формы
+		 * @param {Function} callback - колбек функция
+		 */
 		onSubmit(callback) {
 			this.el.addEventListener('submit', (event) => {
 				event.preventDefault();
@@ -35,12 +39,9 @@
 			});
 		}
 
-		// errorMessage (text) {
-		//     this.password.value = this.confirm.value = '';
-		//     this.message.parentElement.hidden = false;
-		//     this.message.innerHTML = text;
-		// }
-
+		/**
+		 * Сбрасывает атрибуты HTMLElement
+		 */
 		reset() {
 			this.el.reset();
 		}

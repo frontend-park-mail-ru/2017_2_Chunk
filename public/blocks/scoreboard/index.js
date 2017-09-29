@@ -5,7 +5,6 @@
 	 * Модуль для получения шаблона таблицы рекордов с пользователями
 	 * @Module Scoreboard
 	 */
-
 	const Block = window.Block;
 	const ScoreboardTemplate = window.ScoreboardTemplate;
 

@@ -1,6 +1,10 @@
 (function () {
 	'use strict';
 
+	/**
+	 * Поля для формы регистрации
+	 *@module loginFilds
+	 */
 	window.signupFields = [
 		{
 			attrs: {
