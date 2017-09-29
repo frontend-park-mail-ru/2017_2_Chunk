@@ -8,7 +8,15 @@ const idCreator = require('uuid/v4');           // Создает уникаль
 const app = express();
 
 
+// const {pug_escape, template} = require("./recordList");
+//
+// console.log(template({name: 'Igor'}));
+// console.log(template({name: 'Igor'}));
+
+
+
 // Middleware
+
 // app.use(morgan('dev'));                     // Формат выводимой инфы о запросах
 app.use(express.static('./public'));        // Отдаёт статику при совпадении имён
 app.use(bodyParser.json());                 // С помощью какой-то древней магии парсит тело запроса,
@@ -20,83 +28,94 @@ const ttl = 1000 * 60 * 60 * 24;            // 1 день
 
 app.get('/whoisit', (request, response) => {
 
-    // Вытаскиваем нужную куку
-    const id = request.cookies['my_cookie'];
+	// Вытаскиваем нужную куку
+	const id = request.cookies['my_cookie'];
+	console.log('my id: ', id);
 
-    // Устанавливаем заголовки ответа
-    response.set('Content-Type', 'application/json; charset=utf8');
+	// Устанавливаем заголовки ответа
+	response.set('Content-Type', 'application/json; charset=utf8');
 
-    // array[undefined] === undefined
-    !ids[id] ? response.status(404).end() :
-        response.status(200).send(JSON.stringify({username: ids[id]}));
+	// array[undefined] === undefined
+	!ids[id] ? response.status(404).end() :
+		response.status(200).send(JSON.stringify({username: ids[id]}));
 
 });
+
 app.get('/exit', (request, response) => {
-
-    response.cookie('my_cookie', null, {
-        expires: new Date(Date.now())
-    });
-    response.status(200).end();
+	console.log('URL = /exit');
+	response.cookie('my_cookie', null, {
+		expires: new Date(Date.now())
+	});
+	response.status(200).end();
 });
+
 app.post('/sign_up', (request, response) => {
 
-    const username = request.body.username;
-    const password = request.body.password;
+	const username = request.body.email;
+	const password = request.body.password;
 
-    // Устанавливаем заголовок ответа
-    response.set('Content-Type', 'application/json; charset=utf8');
+	console.log(username, password);
 
-    if (!username || !password) {
-        response.status(400).end(JSON.stringify({
-            errorMessage: "Логин и(или) пароль не указаны"
-        }));
-        return;
-    }
-    if (users[username]) {
-        return response.status(400).end(JSON.stringify({
-            errorMessage: ("Пользователь с именем '" + username + "' уже существует!")
-        }));
-    }
+	// Устанавливаем заголовок ответа
+	response.set('Content-Type', 'application/json; charset=utf8');
 
-    const new_id = idCreator();
-    users[username] = password;
-    ids[new_id] = username;
+	if (!username || !password) {
+		response.status(400).end(JSON.stringify({
+			errorMessage: "Логин и(или) пароль не указаны"
+		}));
+		return;
+	}
+	if (users[username]) {
+		return response.status(400).end(JSON.stringify({
+			errorMessage: ("Пользователь с именем '" + username + "' уже существует!")
+		}));
+	}
 
+	const new_id = idCreator();
+	users[username] = password;
+	ids[new_id] = username;
 
-    response.cookie('my_cookie', new_id, {          // Название и значение куки
-         expires: new Date(Date.now() + ttl)        // Время жизни куки
-    });
-    response.status(200).end();
+	response.cookie('my_cookie', new_id, {          // Название и значение куки
+		expires: new Date(Date.now() + ttl)        // Время жизни куки
+	});
+	response.status(200).end();
 });
+
+
 app.post('/sign_in', (request, response) => {
 
-    const username = request.body.username;
-    const password = request.body.password;
+	const username = request.body.email;
+	const password = request.body.password;
+	console.log(username, password);
 
-    // Устанавливаем заголовок ответа
-    response.set('Content-Type', 'application/json; charset=utf8');
 
-    if (!username || !password) {
-        return response.status(400).send(JSON.stringify({
-            errorMessage: "Логин и(или) пароль не указаны"
-        }))
-    }
-    if (users[username] !== password) {
-        return response.status(400).send(JSON.stringify({
-            errorMessage: "Неверные логин и(или) пароль"
-        }))
-    }
+	// Устанавливаем заголовок ответа
+	response.set('Content-Type', 'application/json; charset=utf8');
 
-    const new_id = idCreator();
-    ids[new_id] = username;
-    response.cookie('my_cookie', new_id, {
-        expires: new Date(Date.now() + ttl)
-    });
-    response.status(200).end();
+	if (!username || !password) {
+		return response.status(400).send(JSON.stringify({
+			errorMessage: "Логин и(или) пароль не указаны"
+		}))
+	}
+	if (users[username] !== password) {
+		return response.status(400).send(JSON.stringify({
+			errorMessage: "Неверные логин и(или) пароль"
+		}))
+	}
+
+	const new_id = idCreator();
+	ids[new_id] = username;
+	response.cookie('my_cookie', new_id, {
+		expires: new Date(Date.now() + ttl)
+	});
+	response.status(200).end();
 });
+
+
 app.get('*', (request, response) => {
-    response.send("<h2><i>Unknown page</i></h2>");
+	response.send("<h2><i>Unknown page</i></h2>");
 });
+
 
 app.listen(process.env.PORT || 8081, function () {
     console.log("Server run!");
