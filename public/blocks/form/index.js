@@ -1,8 +1,15 @@
 (function () {
 	'use strict';
 
-
+	/**
+	 * Базовый класс формы
+	 * @module Form
+	 */
 	class Form extends Block {
+		/**
+		 * @param Fields []- корневой элемент блока
+		 * @constructor
+		 */
 		constructor(fields = []) {
 			const el = document.createElement('form');
 			super(el);
