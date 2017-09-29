@@ -16,7 +16,8 @@ const app = express();
 
 
 // Middleware
-app.use(morgan('dev'));                     // Формат выводимой инфы о запросах
+
+// app.use(morgan('dev'));                     // Формат выводимой инфы о запросах
 app.use(express.static('./public'));        // Отдаёт статику при совпадении имён
 app.use(bodyParser.json());                 // С помощью какой-то древней магии парсит тело запроса,
 app.use(cookieParser());                    // всё то же волшебство, но уже для кук
@@ -116,6 +117,6 @@ app.get('*', (request, response) => {
 });
 
 
-app.listen(process.env.PORT || 8082, function () {
-	console.log("Server run!");
+app.listen(process.env.PORT || 8081, function () {
+    console.log("Server run!");
 });
