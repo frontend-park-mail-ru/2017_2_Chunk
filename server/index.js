@@ -87,6 +87,7 @@ app.post('/sign_in', (request, response) => {
 	const password = request.body.password;
 	console.log(username, password);
 
+
 	// Устанавливаем заголовок ответа
 	response.set('Content-Type', 'application/json; charset=utf8');
 
@@ -108,6 +109,8 @@ app.post('/sign_in', (request, response) => {
 	});
 	response.status(200).end();
 });
+
+
 app.get('*', (request, response) => {
 	response.send("<h2><i>Unknown page</i></h2>");
 });

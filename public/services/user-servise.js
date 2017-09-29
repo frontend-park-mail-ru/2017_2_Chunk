@@ -42,7 +42,7 @@
 				callback("Логин и пароль не должны совпадать!", null);
 				return;
 			}
-			Http.Post('/sign_up', {email, password}, callback);
+			return Http.FetchPost('/sign_up', {email, password});
 		}
 
 
@@ -77,8 +77,7 @@
 		 * @return {boolean}
 		 */
 		isLoggedIn() {
-			// this.getData();
-			return !!this.user;//как эта хрень работает?
+			return !!this.user;
 		}
 
 		/**
@@ -99,6 +98,15 @@
 				callback(null, userdata);
 			}.bind(this));
 		}
+
+		getDataFetch(callback, force = false) {
+			if (this.isLoggedIn() && !force) {
+				return callback(null, this.user);
+			}
+
+			Http.FetchGet('/whoisit');
+		}
+
 
 		logout() {
 			if (this.isLoggedIn()) {

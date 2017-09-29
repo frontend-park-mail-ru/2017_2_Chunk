@@ -102,14 +102,10 @@
 			sections.signup.signupform.onSubmit(function (formdata) {
 				sections.signup.message.clear();
 				sections.signup.message.hide();
-				//нет валидации
-				userService.signup(formdata.email, formdata.password, formdata.confirm, function (err, resp) {
-					if (err) {
-						sections.signup.message.setText(err);
-						sections.signup.message.show();
-						// alert(`Some error ${err.status}: ${err.responseText}`);заменить на дивчик
-						return;
-					}
+				//нет валидаци
+
+				userService.signup(formdata.email, formdata.password, formdata.confirm)
+					.then(function (resp) {
 
 					sections.signup.signupform.reset();
 
@@ -120,8 +116,14 @@
 							return;
 						}
 						openMenu();
-					}, true);
-				});
+					}, false);
+				})
+					.catch(function (err) {
+						sections.signup.message.setText(err);
+						sections.signup.message.show();
+						// alert(`Some error ${err.status}: ${err.responseText}`);заменить на дивчик
+						return;
+					})
 			});
 			sections.signup
 				.append(sections.signup.message)
