@@ -237,7 +237,6 @@ window.onload = function() {
             this.message.innerHTML = text;
         }
     };
-    signInputs = undefined;
 
 
     // Получение доступа к форме настроек
