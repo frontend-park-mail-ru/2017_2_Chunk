@@ -2,204 +2,209 @@
 <html lang="ru">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Tower Defense</title>
-    <link rel="stylesheet" type="text/css" href="CSS/index.css">
-    <script async src="javascript/script.js"></script>
+	<meta charset="UTF-8">
+	<title>Tower Defense</title>
+	<link rel="stylesheet" type="text/css" href="CSS/index.css">
+	<script type="module" src="blocks/commonBlock/block.js"></script>
+	<script type="module" src="blocks/cell/cell.js"></script>
+	<script type="module" src="blocks/trow/row.js"></script>
+	<script type="module" src="blocks/button/button.js"></script>
+	<script type="module" src="blocks/form/form.js"></script>
+	<script type="module" src="javascript/script.js"></script>
 </head>
 
 <body>
 
 <nav class="panel">
-    <button name="backward" class="navigation button back" hidden>⟸</button>
+	<button name="backward" class="navigation button back" hidden>⟸</button>
 </nav>
 <table class="profile auth" hidden>
-    <tr>
-        <td><img src="image/sign_user.png"></td>
-        <th>Username</th>
-    </tr>
+	<tr>
+		<td><img src="image/sign_user.png"></td>
+		<th>Username</th>
+	</tr>
 </table>
 <div class="warning" hidden>
-    <p>x</p>
-    <span>Warning!</span>
+	<p>x</p>
+	<span>Warning!</span>
 </div>
 
 <div class="page panel main">
-    <button name="play" class="button auth" hidden> Играть </button>
-    <button name="sign_up" class="button unauth"> Зарегистрироваться </button>
-    <button name="sign_in" class="button unauth"> Вход </button>
-    <button name="rules" class="button"> Правила </button>
-    <button name="record" class="button"> Лидеры </button>
-    <button name="settings" class="button auth" hidden> Настройки </button>
-    <button name="exit" class="button auth" hidden> Выход </button>
+	<button name="play" class="button auth" hidden> Играть </button>
+	<button name="sign_up" class="button unauth"> Зарегистрироваться </button>
+	<button name="sign_in" class="button unauth"> Вход </button>
+	<button name="rules" class="button"> Правила </button>
+	<button name="record" class="button"> Лидеры </button>
+	<button name="settings" class="button auth" hidden> Настройки </button>
+	<button name="exit" class="button auth" hidden> Выход </button>
 </div>
 <div class="page panel sign_up" hidden>
-        <form method="post" action="#">
-            <table cellspacing="10" class="input_form sign_up_form">
-                <tr hidden>
-                    <td colspan="2" class="sign_up_input alert_message">Report message</td>
-                </tr>
+	<form method="post" action="#">
+		<table cellspacing="10" class="input_form sign_up_form">
+			<tr hidden>
+				<td colspan="2" class="sign_up_input alert_message">Report message</td>
+			</tr>
 
-                <tr>
-                    <td align="right"><label>Логин:</label></td>
-                    <td><input type="text" placeholder="Придумайте логин" class="sign_up_input"></td>
-                </tr>
-                <tr>
-                    <td align="right"><label>Email:</label></td>
-                    <td><input type="email" placeholder="Укажите почту" class="sign_up_input"></td>
-                </tr>
-                <tr>
-                    <td align="right"><label>Пароль:</label></td>
-                    <td><input type="password" placeholder="Придумайте пароль" class="sign_up_input"></td>
-                </tr>
-                <tr>
-                    <td align="right"><label>Повторите:</label></td>
-                    <td><input type="password" placeholder="Подтвердите пароль" class="sign_up_input"></td>
-                </tr>
+			<tr>
+				<td align="right"><label>Логин:</label></td>
+				<td><input type="text" placeholder="Придумайте логин" class="sign_up_input"></td>
+			</tr>
+			<tr>
+				<td align="right"><label>Email:</label></td>
+				<td><input type="email" placeholder="Укажите почту" class="sign_up_input"></td>
+			</tr>
+			<tr>
+				<td align="right"><label>Пароль:</label></td>
+				<td><input type="password" placeholder="Придумайте пароль" class="sign_up_input"></td>
+			</tr>
+			<tr>
+				<td align="right"><label>Повторите:</label></td>
+				<td><input type="password" placeholder="Подтвердите пароль" class="sign_up_input"></td>
+			</tr>
 
-                <tr>
-                    <td colspan="2" align="center"><input type="submit" value="Регистрация!" class="sign_up_input"></td>
-                </tr>
-            </table>
-        </form>
-    </div>
+			<tr>
+				<td colspan="2" align="center"><input type="submit" value="Регистрация!" class="sign_up_input"></td>
+			</tr>
+		</table>
+	</form>
+</div>
 <div class="page panel sign_in" hidden>
-        <form method="post" action="#">
-            <table cellspacing="10" class="input_form sign_in_form">
-                <tr hidden>
-                    <td colspan="2" class="sign_in_input alert_message">Report message</td>
-                </tr>
+	<form method="post" action="#">
+		<table cellspacing="10" class="input_form sign_in_form">
+			<tr hidden>
+				<td colspan="2" class="sign_in_input alert_message">Report message</td>
+			</tr>
 
-                <tr>
-                    <td align="right"><label>Логин/Email:</label></td>
-                    <td><input type="text" placeholder="Логин или почту" class="sign_in_input"></td>
-                </tr>
-                <tr>
-                    <td align="right"><label>Пароль:</label></td>
-                    <td><input type="password" placeholder="Введите пароль" class="sign_in_input"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center">
-                        <input type="submit" value="Войти!" class="sign_in_input">
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
+			<tr>
+				<td align="right"><label>Логин/Email:</label></td>
+				<td><input type="text" placeholder="Логин или почту" class="sign_in_input"></td>
+			</tr>
+			<tr>
+				<td align="right"><label>Пароль:</label></td>
+				<td><input type="password" placeholder="Введите пароль" class="sign_in_input"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="submit" value="Войти!" class="sign_in_input">
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
 <div class="page panel rules" hidden>
-        <div class="div_rules">
-            <h2> Правила очень просты </h2> <br>
-            <u> <b> - Когда ты играешь один: </b> </u> <br>
-            Спасай свой замок всеми силами, ставь башни, не дай монстрам захватить его. <br> <br>
-            <u> <b> - Когда ты играешь с друзьями (а точнее врагами): </b> </u> <br>
-            Спасай свой замок, но на этот раз помни - ты можешь сам нанимать рыцарей для атаки других замков и скорейшей твоей победы.
-            <br> <br>
-            <pre>
+	<div class="div_rules">
+		<h2> Правила очень просты </h2> <br>
+		<u> <b> - Когда ты играешь один: </b> </u> <br>
+		Спасай свой замок всеми силами, ставь башни, не дай монстрам захватить его. <br> <br>
+		<u> <b> - Когда ты играешь с друзьями (а точнее врагами): </b> </u> <br>
+		Спасай свой замок, но на этот раз помни - ты можешь сам нанимать рыцарей для атаки других замков и скорейшей твоей победы.
+		<br> <br>
+		<pre>
               _/﹋\
               (҂`_´)                 ╲●  ●
               <,︻╦╤─ ҉ - - - - - - -  ▐>¯¯▌╲
               _/﹋\_                  /\ ╱╲
             </pre>
-        </div>
-    </div>
+	</div>
+</div>
 <div class="page panel record" hidden>
-    <table>
-        <tr>
-            <td colspan="3" class="head_table"><u>Таблица лидеров</u></td>
-        </tr>
-        <tr>
-            <td>1.</td> <td> Tim </td> <td align="right"> 3000 </td>
-        </tr>
-        <tr>
-            <td>2.</td> <td> Jack </td> <td align="right"> 2900 </td>
-        </tr>
-        <tr>
-            <td>3.</td> <td> Tom </td> <td align="right"> 2700 </td>
-        </tr>
-        <tr>
-            <td>4.</td> <td> Sally </td> <td align="right">2500</td>
-        </tr>
-        <tr>
-            <td>5.</td> <td> Andrey</td> <td align="right"> 2450 </td>
-        </tr>
-        <tr>
-            <td>6.</td> <td> Dima </td> <td align="right"> 2300 </td>
-        </tr>
-        <tr>
-            <td>7.</td> <td> Igor </td> <td align="right"> 2200 </td>
-        </tr>
-        <tr>
-            <td>8.</td> <td> Alex</td> <td align="right"> 2100 </td>
-        </tr>
-        <tr>
-            <td>9.</td> <td> Lol</td> <td align="right"> 2000 </td>
-        </tr>
-        <tr>
-            <td>10.</td> <td> Mike </td> <td align="right"> 1900 </td>
-        </tr>        <tr>
-            <td>2.</td> <td> Jack </td> <td align="right"> 2900 </td>
-        </tr>
-        <tr>
-            <td>3.</td> <td> Tom </td> <td align="right"> 2700 </td>
-        </tr>
-        <tr>
-            <td>4.</td> <td> Sally </td> <td align="right">2500</td>
-        </tr>
-        <tr>
-            <td>5.</td> <td> Andrey</td> <td align="right"> 2450 </td>
-        </tr>
-        <tr>
-            <td>6.</td> <td> Dima </td> <td align="right"> 2300 </td>
-        </tr>
-        <tr>
-            <td>7.</td> <td> Igor </td> <td align="right"> 2200 </td>
-        </tr>
-        <tr>
-            <td>8.</td> <td> Alex</td> <td align="right"> 2100 </td>
-        </tr>
-        <tr>
-            <td>9.</td> <td> Lol</td> <td align="right"> 2000 </td>
-        </tr>
-        <tr>
-            <td>10.</td> <td> Mike </td> <td align="right"> 1900 </td>
-        </tr>
-    </table>
+	<table>
+		<tr>
+			<td colspan="3" class="head_table"><u>Таблица лидеров</u></td>
+		</tr>
+		<tr>
+			<td>1.</td> <td> Tim </td> <td align="right"> 3000 </td>
+		</tr>
+		<tr>
+			<td>2.</td> <td> Jack </td> <td align="right"> 2900 </td>
+		</tr>
+		<tr>
+			<td>3.</td> <td> Tom </td> <td align="right"> 2700 </td>
+		</tr>
+		<tr>
+			<td>4.</td> <td> Sally </td> <td align="right">2500</td>
+		</tr>
+		<tr>
+			<td>5.</td> <td> Andrey</td> <td align="right"> 2450 </td>
+		</tr>
+		<tr>
+			<td>6.</td> <td> Dima </td> <td align="right"> 2300 </td>
+		</tr>
+		<tr>
+			<td>7.</td> <td> Igor </td> <td align="right"> 2200 </td>
+		</tr>
+		<tr>
+			<td>8.</td> <td> Alex</td> <td align="right"> 2100 </td>
+		</tr>
+		<tr>
+			<td>9.</td> <td> Lol</td> <td align="right"> 2000 </td>
+		</tr>
+		<tr>
+			<td>10.</td> <td> Mike </td> <td align="right"> 1900 </td>
+		</tr>        <tr>
+		<td>2.</td> <td> Jack </td> <td align="right"> 2900 </td>
+	</tr>
+		<tr>
+			<td>3.</td> <td> Tom </td> <td align="right"> 2700 </td>
+		</tr>
+		<tr>
+			<td>4.</td> <td> Sally </td> <td align="right">2500</td>
+		</tr>
+		<tr>
+			<td>5.</td> <td> Andrey</td> <td align="right"> 2450 </td>
+		</tr>
+		<tr>
+			<td>6.</td> <td> Dima </td> <td align="right"> 2300 </td>
+		</tr>
+		<tr>
+			<td>7.</td> <td> Igor </td> <td align="right"> 2200 </td>
+		</tr>
+		<tr>
+			<td>8.</td> <td> Alex</td> <td align="right"> 2100 </td>
+		</tr>
+		<tr>
+			<td>9.</td> <td> Lol</td> <td align="right"> 2000 </td>
+		</tr>
+		<tr>
+			<td>10.</td> <td> Mike </td> <td align="right"> 1900 </td>
+		</tr>
+	</table>
 </div>
 <div class="page panel settings" hidden>
-    <form method="post" action="#">
-        <table cellspacing="10" class="input_form setting_form">
-            <tr hidden>
-                <td colspan="2" class="setting_input alert_message">Report message</td>
-            </tr>
+	<form method="post" action="#">
+		<table cellspacing="10" class="input_form setting_form">
+			<tr hidden>
+				<td colspan="2" class="setting_input alert_message">Report message</td>
+			</tr>
 
-            <tr>
-                <td align="right"><label>Новый логин:</label></td>
-                <td><input type="text" placeholder="Не обязательно" class="setting_input"></td>
-            </tr>
-            <tr>
-                <td align="right"><label>Новый email:</label></td>
-                <td><input type="email" placeholder="Не обязательно" class="setting_input"></td>
-            </tr>
-            <tr>
-                <td align="right"><label>Новый пароль:</label></td>
-                <td><input type="password" placeholder="Не обязательно" class="setting_input"></td>
-            </tr>
-            <tr>
-                <td align="right"><label>Старый пароль:</label></td>
-                <td><input type="password" placeholder="Введите пароль" class="setting_input"></td>
-            </tr>
+			<tr>
+				<td align="right"><label>Новый логин:</label></td>
+				<td><input type="text" placeholder="Не обязательно" class="setting_input"></td>
+			</tr>
+			<tr>
+				<td align="right"><label>Новый email:</label></td>
+				<td><input type="email" placeholder="Не обязательно" class="setting_input"></td>
+			</tr>
+			<tr>
+				<td align="right"><label>Новый пароль:</label></td>
+				<td><input type="password" placeholder="Не обязательно" class="setting_input"></td>
+			</tr>
+			<tr>
+				<td align="right"><label>Старый пароль:</label></td>
+				<td><input type="password" placeholder="Введите пароль" class="setting_input"></td>
+			</tr>
 
-            <tr>
-                <td colspan="2" align="center"><input type="submit" value="Изменить!" class="setting_input"></td>
-            </tr>
-        </table>
-    </form>
+			<tr>
+				<td colspan="2" align="center"><input type="submit" value="Изменить!" class="setting_input"></td>
+			</tr>
+		</table>
+	</form>
 
 </div>
 
 <nav class="panel">
-    <img class="left_tower" src="image/tower_left.png">
-    <img class="right_tower" src="image/tower_right.png">
+	<img class="left_tower" src="image/tower_left.png">
+	<img class="right_tower" src="image/tower_right.png">
 </nav>
 
 </body>

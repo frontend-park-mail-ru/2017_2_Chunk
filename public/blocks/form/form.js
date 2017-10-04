@@ -1,49 +1,54 @@
 'use strict';
-import Block from "../common block/block";
-import Row from "../trow/row";
-import Cell from "../cell/cell"
+import Block from "../commonBlock/block.js";
+import Row from "../trow/row.js";
+import Cell from "../cell/cell.js"
 
 export default class Form extends Block {
 
-    constructor(buttonName = 'Submit!', attrs = {}, classes = []) {
+	constructor(buttonName = 'Submit!', attrs = {}, classes = []) {
 
-        super('form', [], {method: 'POST', action: '#'});
-        this.table = new Block('table', ['input_form', ...classes], {cellspacing: '10'});
+		super('form', {method: 'POST', action: '#'});
+		attrs.cellspacing = '10';
+		this.table = new Block('table', attrs, ['input_form', ...classes]);
 
-        // Создание варнинга
-        this.warning = new Row(
-            new Cell([], {colspan: '2'}, ['alert_massege']),
-            {hidden: 'true'}
-        );
+		// Создание варнинга
+		this.warning = new Row(
+			[new Cell([], {colspan: '2'}, ['alert_massege'])],
+			{hidden: 'true'}
+		);
 
-        // Создание кнопки
-        this.submit = new Row(
-            [ new Cell(
-                new Block(
-                    'input',
-                    {type: 'submit', value: buttonName}
-                    )
-            )],
-            {colspan: '2', align: 'center'}
-        );
+		// Создание кнопки
+		this.submit = new Row(
+			[ new Cell(
+				[new Block(
+					'input',
+					{type: 'submit', value: buttonName}
+				)],
+				{colspan: '2', align: 'center'}
+			)]
+		);
+		this.appendChild(this.table);
+		this.table
+			.appendChild(this.warning)
+			.appendChild(this.submit);
 
-        // Массив инпутов
-        this.inputs = [];
-    }
+		// Массив инпутов
+		this.inputs = [];
+	}
 
-    addField(labelText, type, placeholder, classes = []) {
+	addField(labelText, type, placeholder, classes = []) {
 
-        let label = new Block('label');
-        label.setText(labelText);
-        let firstCell = new Cell(label, {align: 'right'});
+		let label = new Block('label');
+		label.setText(labelText);
+		let firstCell = new Cell([label], {align: 'right'});
 
-        let input = new Block('input', {type: type, placeholder: placeholder}, classes);
-        let secondCell = new Cell(input);
-        this.inputs.push(input);
+		let input = new Block('input', {type: type, placeholder: placeholder}, classes);
+		let secondCell = new Cell([input]);
+		this.inputs.push(input);
 
-        let newField = new Row([firstCell, secondCell]);
-        document.insertBefore(newField.element, this.submit.element);
+		let newField = new Row([firstCell, secondCell]);
+		this.table.insertBefore(newField, this.submit);
 
-        return this;
-    }
+		return this;
+	}
 }
