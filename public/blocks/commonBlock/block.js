@@ -3,6 +3,7 @@
 
 export default class Block {
 
+
 	constructor(tagName, attrs = {}, classes = []) {
 
 		this.element = window.document.createElement(tagName);
@@ -13,6 +14,11 @@ export default class Block {
 	appendChild(block) {
 
 		this.element.appendChild(block.element);
+		return this;
+	}
+
+	insertBefore(newBlock, referenceBlock) {
+		this.element.insertBefore(newBlock.element, referenceBlock.element);
 		return this;
 	}
 
