@@ -1,6 +1,8 @@
 "use strict";
+import Form from "../blocks/form/form";
 
 const URL_heroku = "https://chunkgame.herokuapp.com";
+
 
 // Формирование POST запроса на регистрацию/авторизацию/изменение
 function sign_up(username, password, email, callback) {
@@ -185,6 +187,9 @@ window.onload = function() {
     //// Получение элементов
     // Главная страница
     const pageMain = document.getElementsByClassName('page panel main')[0];
+
+    let signform = new Form('Регистрация');
+    signform.addField()
 
     // Кнопка для закрытия варнинга
     const closeWarning = document.querySelector('.warning p');

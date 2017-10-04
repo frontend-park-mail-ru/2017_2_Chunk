@@ -8,7 +8,8 @@ export default class Form extends Block {
     constructor(buttonName = 'Submit!', attrs = {}, classes = []) {
 
         super('form', [], {method: 'POST', action: '#'});
-        this.table = new Block('table', ['input_form', ...classes], {cellspacing: '10'});
+        attrs.cellspacing = "10";
+        this.table = new Block('table', ['input_form', ...classes], attrs);
 
         // Создание варнинга
         this.warning = new Row(
