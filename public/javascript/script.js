@@ -179,21 +179,13 @@ function warningMessage(text) {
 
 window.onload = function() {
 
-	// let signform = window.document.createElement('div');
-	// signform.classList.add("page");
-	// signform.classList.add("panel");
-	// signform.classList.add("findme");
-
 	let signform = new Form("submit!", {} , ["findme"]);
-	let panel = new Panel();
-
 	signform
 		.addField('hello', 'text', 'print Hello')
 		.addField('Password', 'password', 'enter pass')
 		.addField('Repeat password', 'password', 'confirm password');
 
-	window.document.body.appendChild(panel.element);
-	panel.appendChild(signform);
+	window.document.body.appendChild(signform.element);
 
 
 	// Авторизация с помощью cookie

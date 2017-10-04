@@ -1,19 +1,26 @@
 'use strict';
-import Block from "../commonBlock/block.js";
+
 import Row from "../tableRow/row.js";
 import Cell from "../tableCell/cell.js";
+import Panel from "../divPanel/panel.js";
+import Block from "../commonBlock/block.js";
 
-export default class Form extends Block {
+
+export default class Form extends Panel {
 
 	constructor(buttonName = 'Submit!', attrs = {}, classes = []) {
-
-		super('form', {method: 'POST', action: '#'});
+		super();
+		const inputForm = new Block('form', { method: 'POST', action: '#' });
 		attrs.cellspacing = '10';
 		this.table = new Block('table', attrs, ['input_form', ...classes]);
 
 		// Создание варнинга
 		this.warning = new Row(
-			[new Cell([], {colspan: '2'}, ['alert_massege'])],
+			[new Cell(
+				[],
+				{ colspan: '2' },
+				['alert_massege']
+			)],
 			{hidden: 'true'}
 		);
 
@@ -24,13 +31,16 @@ export default class Form extends Block {
 					'input',
 					{type: 'submit', value: buttonName}
 				)],
-				{colspan: '2', align: 'center'}
+				{ colspan: '2', align: 'center' }
 			)]
 		);
-		this.appendChild(this.table);
-		this.table
-			.appendChild(this.warning)
-			.appendChild(this.submit);
+		this
+			.appendChild(inputForm
+				.appendChild(this.table
+					.appendChild(this.warning)
+					.appendChild(this.submit)
+				)
+			);
 
 		// Массив инпутов
 		this.inputs = [];
@@ -40,9 +50,13 @@ export default class Form extends Block {
 
 		let label = new Block('label');
 		label.setText(labelText);
-		let firstCell = new Cell([label], {align: 'right'});
+		let firstCell = new Cell([label], { align: 'right' });
 
-		let input = new Block('input', {type: type, placeholder: placeholder}, classes);
+		let input = new Block(
+			'input',
+			{ type: type, placeholder: placeholder },
+			classes
+		);
 		let secondCell = new Cell([input]);
 		this.inputs.push(input);
 
