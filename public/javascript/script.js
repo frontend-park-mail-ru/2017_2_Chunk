@@ -1,6 +1,7 @@
 "use strict";
-import Form from "../blocks/form/form.js";
-import Block from "../blocks/commonBlock/block.js"
+import Form from "../blocks/inputForm/form.js";
+import Panel from "../blocks/divPanel/panel.js";
+
 
 const URL_heroku = "https://chunkgame.herokuapp.com";
 
@@ -184,7 +185,7 @@ window.onload = function() {
 	// signform.classList.add("findme");
 
 	let signform = new Form("submit!", {} , ["findme"]);
-	let panel = new Block("div", {}, ["page", "panel"]);
+	let panel = new Panel();
 
 	signform
 		.addField('hello', 'text', 'print Hello')

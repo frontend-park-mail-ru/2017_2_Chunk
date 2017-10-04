@@ -1,5 +1,5 @@
 'use strict';
-import Block from "../common block/block.js";
+import Block from "../commonBlock/block.js";
 
 export default class Panel extends Block {
 

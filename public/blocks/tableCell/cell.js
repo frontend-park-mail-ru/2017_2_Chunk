@@ -5,9 +5,6 @@ export default class Cell extends Block {
 
     constructor(innerBlock = [], attrs = {}, classes = []) {
         super('td', attrs, classes);
-	    for (let a = 0; a < innerBlock.length; ++a) {
-		    this.appendChild(innerBlock[a]);
-	    }
-        // innerBlock.forEach(this.appendChild());
+        innerBlock.forEach(block => this.appendChild(block));
     }
 }

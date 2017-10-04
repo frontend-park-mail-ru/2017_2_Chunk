@@ -1,7 +1,7 @@
 'use strict';
 import Block from "../commonBlock/block.js";
-import Row from "../trow/row.js";
-import Cell from "../cell/cell.js"
+import Row from "../tableRow/row.js";
+import Cell from "../tableCell/cell.js";
 
 export default class Form extends Block {
 
