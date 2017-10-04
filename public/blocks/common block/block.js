@@ -3,7 +3,7 @@
 
 export default class Block {
 
-	constructor(tagName, classes = [], attrs = {}) {
+	constructor(tagName, attrs = {}, classes = []) {
 
 		this.element = window.document.createElement(tagName);
 		this.addClasses(classes);
@@ -35,7 +35,7 @@ export default class Block {
 		this.element.innerHTML = text;
 	}
 
-	addEventListener(event, handler, useCapture) {
+	addEventListener(event, handler, useCapture = false) {
 		this.element.addEventListener(event, handler, useCapture);
 	}
 }
