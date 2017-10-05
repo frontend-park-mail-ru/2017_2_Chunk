@@ -1,6 +1,7 @@
 "use strict";
 import Form from "../blocks/inputForm/form.js";
 import Panel from "../blocks/divPanel/panel.js";
+import Button from "../blocks/button/button.js";
 
 
 const URL_heroku = "https://chunkgame.herokuapp.com";
@@ -179,14 +180,81 @@ function warningMessage(text) {
 
 window.onload = function() {
 
-	let signform = new Form("submit!", {} , ["findme"]);
-	signform
-		.addField('hello', 'text', 'print Hello')
-		.addField('Password', 'password', 'enter pass')
-		.addField('Repeat password', 'password', 'confirm password');
+	let menu = new Panel({}, ['main']);
+	menu
+		.appendChild(new Button('Играть', {name: 'play', hidden: 'true'}, ['auth']))
+		.appendChild(new Button('Зарегистрироваться', {name: 'sign_up'}, ['unauth']))
+		.appendChild(new Button('Вход', {name: 'sign_in'}, ['unauth']))
+		.appendChild(new Button('Правила', {name: 'rules'}))
+		.appendChild(new Button('Лидеры', {name: 'record'}))
+		.appendChild(new Button('Настройки', {name: 'settings', hidden: 'true'}, ['auth']))
+		.appendChild(new Button('Выход', {name: 'exit', hidden: 'true'}, ['auht']));
 
-	window.document.body.appendChild(signform.element);
+	window.document.body.appendChild(menu.element);
 
+	const buttonsMenu = menu.element.childNodes;
+	// Настройка переходов по кнопкам меню
+	for (let i = 0; i < buttonsMenu.length; ++i) {
+
+		switch (buttonsMenu[i].name) {
+
+			// Настройка кнопки "Выход"
+			case 'exit':
+				buttonsMenu[i].addEventListener('click', () => {
+					exit();
+					isAuth(false);
+				}, false);
+				break;
+			// TODO
+			// // Настройка перехода по кнопке "Назад"
+			// case 'backward':
+			// 	buttonBack.button.addEventListener('click', event => {
+			// 		buttonBack.currentPage.hidden = true;
+			// 		buttonBack.button.hidden = true;
+			// 		pageMain.hidden = false;
+			// 		// Очистка форм
+			// 		signUpForm.clear();
+			// 		signInForm.clear();
+			// 		settingForm.clear();
+			// 	}, false);
+			// 	break;
+
+			case 'settings':
+				buttonsMenu[i].addEventListener('click', event => {
+
+					getProfile((error, response) => {
+						if (!error && response) {
+							settingForm.username.value = response.username;
+							settingForm.email.value = response.email;
+						}
+					});
+
+					let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
+
+					buttonBack.currentPage = new_page;
+					buttonBack.button.hidden = false;
+					new_page.hidden = false;
+					pageMain.hidden = true;
+				}, false);
+				break;
+
+
+			// Настройка остальных кнопок в главном меню
+			default:
+				let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
+				buttonsMenu[i].addEventListener('click', event => {
+
+					if (!new_page) {
+						warningMessage("Класса '" + buttonsMenu[i].name + "' не существует!");
+						return;
+					}
+					buttonBack.currentPage = new_page;
+					buttonBack.button.hidden = false;
+					new_page.hidden = false;
+					pageMain.hidden = true;
+				}, false);
+		}
+	}
 
 	// Авторизация с помощью cookie
 	whoIsIt((error, username) => {
@@ -203,7 +271,6 @@ window.onload = function() {
 	const closeWarning = document.querySelector('.warning p');
 
 	// Кнопки главного меню
-	const buttonsMenu = document.getElementsByClassName('button');
 	const buttonBack = {
 		button: document.getElementsByClassName('navigation back')[0],
 		currentPage: undefined
@@ -273,70 +340,6 @@ window.onload = function() {
 			this.message.innerHTML = text;
 		}
 	};
-
-
-	// Настройка переходов по кнопкам меню
-	for (let i = 0; i < buttonsMenu.length; ++i) {
-
-		switch (buttonsMenu[i].name) {
-
-			// Настройка кнопки "Выход"
-			case 'exit':
-				buttonsMenu[i].addEventListener('click', () => {
-					exit();
-					isAuth(false);
-				}, false);
-				break;
-
-			// Настройка перехода по кнопке "Назад"
-			case 'backward':
-				buttonBack.button.addEventListener('click', event => {
-					buttonBack.currentPage.hidden = true;
-					buttonBack.button.hidden = true;
-					pageMain.hidden = false;
-					// Очистка форм
-					signUpForm.clear();
-					signInForm.clear();
-					settingForm.clear();
-				}, false);
-				break;
-
-			case 'settings':
-				buttonsMenu[i].addEventListener('click', event => {
-
-					getProfile((error, response) => {
-						if (!error && response) {
-							settingForm.username.value = response.username;
-							settingForm.email.value = response.email;
-						}
-					});
-
-					let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
-
-					buttonBack.currentPage = new_page;
-					buttonBack.button.hidden = false;
-					new_page.hidden = false;
-					pageMain.hidden = true;
-				}, false);
-				break;
-
-
-			// Настройка остальных кнопок в главном меню
-			default:
-				let new_page = document.getElementsByClassName(buttonsMenu[i].name)[0];
-				buttonsMenu[i].addEventListener('click', event => {
-
-					if (!new_page) {
-						warningMessage("Класса '" + buttonsMenu[i].name + "' не существует!");
-						return;
-					}
-					buttonBack.currentPage = new_page;
-					buttonBack.button.hidden = false;
-					new_page.hidden = false;
-					pageMain.hidden = true;
-				}, false);
-		}
-	}
 
 
 	// Регистрация пользователя
