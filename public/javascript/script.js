@@ -179,13 +179,14 @@ function warningMessage(text) {
 
 window.onload = function() {
 
-	let signform = new Form("submit!", {} , ["findme"]);
+	let signform = new Form("Войти!");
 	signform
-		.addField('hello', 'text', 'print Hello')
-		.addField('Password', 'password', 'enter pass')
-		.addField('Repeat password', 'password', 'confirm password');
+		.addField('Логин/Email:', 'text', 'Логин или почту')
+		.addField('Пароль:', 'password', 'Введите пароль');
 
 	window.document.body.appendChild(signform.element);
+
+	signform.setWarning("Warning!");
 
 
 	// Авторизация с помощью cookie

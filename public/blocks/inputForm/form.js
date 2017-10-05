@@ -19,7 +19,7 @@ export default class Form extends Panel {
 			[new Cell(
 				[],
 				{ colspan: '2' },
-				['alert_massege']
+				['alert_message']
 			)],
 			{hidden: 'true'}
 		);
@@ -64,5 +64,30 @@ export default class Form extends Panel {
 		this.table.insertBefore(newField, this.submit);
 
 		return this;
+	}
+
+	clearFields() {
+		this.warning.element.childNodes[0].innerHTML = "";
+		this.warning.hide();
+		this.inputs.forEach(input => {
+			input.setText("");
+		})
+	}
+
+	getValues() {
+		let values = [];
+		this.inputs.forEach(input => {
+			values.push(input.value);
+		})
+	}
+
+	setWarning(warningMessage) {
+		// this.warning.setText(warningMessage);
+		this.warning.element.childNodes[0].innerHTML = warningMessage;
+		this.warning.unhide();
+	}
+
+	addEventListener() {
+
 	}
 }

@@ -33,8 +33,12 @@ export default class Block {
 		}
 	}
 
-	hidden(bool) {
-		this.element.hidden = bool;
+	hide() {
+		this.element.hidden = true;
+	}
+
+	unhide() {
+		this.element.hidden = false;
 	}
 
 	setText(text) {
