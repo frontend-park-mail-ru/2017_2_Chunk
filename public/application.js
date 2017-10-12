@@ -582,7 +582,6 @@ class UserService {
   * @return {Promise} - возвращает функцию колбек с результатом запроса или ошибкой
   */
 	getDataFetch(force = false) {
-		debugger;
 		if (this.isLoggedIn() && !force) {
 			return new Promise(function (resolve, reject) {
 				resolve(this.user);
@@ -1171,4 +1170,4 @@ webpackContext.id = 13;
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=out.webpack.js.map
+//# sourceMappingURL=application.js.map

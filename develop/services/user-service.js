@@ -95,7 +95,6 @@ export default class UserService {
 	 * @return {Promise} - возвращает функцию колбек с результатом запроса или ошибкой
 	 */
 	getDataFetch(force = false) {
-		debugger;
 		if (this.isLoggedIn() && !force) {
 			return new Promise(function(resolve, reject) {
 				resolve(this.user);

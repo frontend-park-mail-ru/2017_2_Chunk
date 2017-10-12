@@ -9,7 +9,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 module.exports = {
 	entry: './develop/include.js',
 	output: {
-		filename: 'out.webpack.js',
+		filename: 'application.js',
 		path: __dirname + '/public',
 		library: "lib"
 	},
@@ -42,6 +42,6 @@ module.exports = {
 		new webpack.DefinePlugin({
 			NODE_ENV: JSON.stringify(NODE_ENV)
 		}),
-		new ExtractTextPlugin('./bundle.css')
+		new ExtractTextPlugin('./application.css')
 	],
 };
