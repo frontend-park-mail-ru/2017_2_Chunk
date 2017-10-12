@@ -1,16 +1,17 @@
-(function () {
-	'use strict';
 
-	const backendUrl = 'https://chunkgame.herokuapp.com';
+'use strict';
 
+	// const backendUrl = 'https://chunkgame.herokuapp.com';
+	const backendUrl = "";
 	const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
+	console.log("baseUrl = ", baseUrl);
 	/**
 	 * Модуль, предоставляющий методы для выполнения HTTP-запросов
 	 * @module Http
 	 */
 
-	class Http {
+	export default class Http {
 		/**
 		 * Выполняет GET-запрос по указанному адресу
 		 * @param {string} address - адрес запроса
@@ -73,14 +74,14 @@
 					if (response.status >= 400) {
 						throw response;
 					}
-
 					return response.json();
 				});
 		}
 
 		/**
 		 * Выполняет POST-запрос по указанному адресу
-		 * @param {Object} body-request
+		 * @param {Object} body - body-request
+		 * @param {string} address - адрес запроса
 		 */
 		static FetchPost(address, body) {
 			const url = backendUrl + address;
@@ -96,7 +97,3 @@
 		}
 	}
 	Http.BaseUrl = null;
-
-	window.Http = Http;
-
-})();
