@@ -1,5 +1,5 @@
 /*бэкграунд для секций меню*/
-.application-header{
+.application-header {
     font-family: fantasy;
     font-size: 100px;
     position: relative;
@@ -8,9 +8,8 @@
     min-width: 300px;
 }
 
-
 section.section {
-    background: url('../image/hello-panel.jpg');
+    /*background: url('../image/hello-panel.jpg');*/
     position: relative;
     width: 50%;
     min-width: 300px;

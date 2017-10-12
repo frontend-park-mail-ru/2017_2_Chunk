@@ -25,6 +25,8 @@ let users = {};
 let ids = {};
 const ttl = 1000 * 60 * 60 * 24;            // 1 день
 
+
+
 app.get('/whoisit', (request, response) => {
 
 	// Вытаскиваем нужную куку
@@ -81,6 +83,9 @@ app.post('/sign_up', (request, response) => {
 });
 
 
+
+
+
 app.post('/sign_in', (request, response) => {
 
 	const username = request.body.email;
@@ -112,7 +117,7 @@ app.post('/sign_in', (request, response) => {
 
 
 app.get('*', (request, response) => {
-	response.send("<h2><i>Unknown page</i></h2>");
+	response.send("<h2><i>Unknown page =(</i></h2>");
 });
 
 
