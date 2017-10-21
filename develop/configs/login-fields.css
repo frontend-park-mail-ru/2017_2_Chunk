@@ -1,0 +1,23 @@
+input.login_input {
+    width: 80%;
+    border-radius: 25px;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 15px;
+    font-size: 16pt;
+}
+
+input.login_input [type=submit] {
+    padding: 0;
+    margin-top: 6%;
+    font-family: cursive;
+    font-style: normal;
+    font-size: 120%;
+    height: 60%;
+    min-height: 60px;
+}
+
+input.login_input :focus {
+    outline: none;
+}
+  
