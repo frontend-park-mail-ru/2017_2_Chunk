@@ -61,7 +61,7 @@ var lib =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -148,6 +148,16 @@ class Block {
 	}
 
 	/**
+  * Удаляет у текущего блока дочерний
+  * @param {Block} block
+  * @return {Block}
+  */
+	remove(block) {
+		this.el.removeChild(block.el);
+		return this;
+	}
+
+	/**
   * Позволяет подписаться на событие
   * @param {string} event
   * @param {EventListener} callback
@@ -165,6 +175,36 @@ class Block {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_block_index_js__ = __webpack_require__(0);
+
+
+
+
+
+class menuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
+	constructor() {
+		super({
+			profile: __WEBPACK_IMPORTED_MODULE_1__blocks_block_index_js__["default"].Create('div', { 'data-section': 'profile' }, ['profile', 'auth'], ''),
+			play: __WEBPACK_IMPORTED_MODULE_1__blocks_block_index_js__["default"].Create('button', { 'data-section': 'play' }, ['button', 'auth'], 'Играть'),
+			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_index_js__["default"].Create('button', { 'data-section': 'signup' }, ['button', 'unauth'], 'Зарегистрироваться'),
+			login: __WEBPACK_IMPORTED_MODULE_1__blocks_block_index_js__["default"].Create('button', { 'data-section': 'login' }, ['button', 'unauth'], 'Вход'),
+			settings: __WEBPACK_IMPORTED_MODULE_1__blocks_block_index_js__["default"].Create('button', { 'data-section': 'settings' }, ['button', 'auth'], 'Настройки'),
+			rules: __WEBPACK_IMPORTED_MODULE_1__blocks_block_index_js__["default"].Create('button', { 'data-section': 'rules' }, ['button', 'unauth'], 'Правила'),
+			scores: __WEBPACK_IMPORTED_MODULE_1__blocks_block_index_js__["default"].Create('button', { 'data-section': 'scores' }, ['button', 'unauth'], 'Таблица лидеров'),
+			exit: __WEBPACK_IMPORTED_MODULE_1__blocks_block_index_js__["default"].Create('button', { 'data-section': 'exit' }, ['button', 'auth'], 'Выход')
+		});
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = menuView;
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -174,11 +214,11 @@ function requireAll(r) {
   r.keys().forEach(r);
 }
 
-requireAll(__webpack_require__(10));
-requireAll(__webpack_require__(13));
+requireAll(__webpack_require__(12));
+requireAll(__webpack_require__(16));
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -236,7 +276,7 @@ class Form extends __WEBPACK_IMPORTED_MODULE_0__block_index__["default"] {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -272,13 +312,13 @@ class Message extends __WEBPACK_IMPORTED_MODULE_0__block_index__["default"] {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__block_index_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_scoreBoard_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_scoreBoard_js__ = __webpack_require__(6);
 
 
 
@@ -316,7 +356,7 @@ class Scoreboard extends __WEBPACK_IMPORTED_MODULE_0__block_index_js__["default"
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -391,7 +431,7 @@ const ScoreboardTemplate = {
 /* harmony default export */ __webpack_exports__["default"] = (ScoreboardTemplate);
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -430,7 +470,7 @@ const loginFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (loginFields);
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -479,12 +519,35 @@ const signupFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (signupFields);
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__ = __webpack_require__(0);
+
+
+
+
+class CommonView extends __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"] {
+	constructor(blocks) {
+		const view = document.createElement("section");
+		super(view);
+		for (let block in blocks) {
+			this.append(blocks[block]);
+		}
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = CommonView;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http__ = __webpack_require__(11);
 
 
 
@@ -645,7 +708,7 @@ class UserService {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -670,46 +733,47 @@ class Http {
   * @param {string} address - адрес запроса
   * @param {Function} callback - функция-коллбек
   */
-	static Get(address, callback) {
-		const xhr = new XMLHttpRequest();
-		xhr.open('GET', backendUrl + address, true);
-		xhr.withCredentials = true;
+	// static Get(address, callback) {
+	// 	const xhr = new XMLHttpRequest();
+	// 	xhr.open('GET', backendUrl + address, true);
+	// 	xhr.withCredentials = true;
+	//
+	// 	xhr.onreadystatechange = function () {
+	// 		if (xhr.readyState !== 4) return;
+	// 		if (+xhr.status >= 400) {
+	// 			return callback(xhr, null);
+	// 		}
+	//
+	// 		callback(null, JSON.parse(xhr.responseText));
+	// 	};
+	//
+	// 	xhr.send();
+	// }
+	//
+	// /**
+	//  * Выполняет POST-запрос по указанному адресу
+	//  * @param {string} address - адрес запроса
+	//  * @param {*} body - тело запроса (объект)
+	//  * @param {Function} callback - функция-коллбек
+	//  */
+	// static Post(address, body, callback) {
+	// 	const xhr = new XMLHttpRequest();
+	// 	xhr.open('POST', backendUrl + address, true);
+	// 	xhr.withCredentials = true;
+	// 	xhr.timeout = 15000;
+	// 	xhr.setRequestHeader('Content-Type', 'application/json; charset=utf8');
+	//
+	// 	xhr.onreadystatechange = function () {
+	// 		if (xhr.readyState !== 4) return;
+	// 		if (+xhr.status >= 400) {
+	// 			return callback(JSON.parse(xhr.responseText).errorMessage, null);
+	// 		}
+	// 		callback(null, xhr);
+	// 	};
+	//
+	// 	xhr.send(JSON.stringify(body));
+	// }
 
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState !== 4) return;
-			if (+xhr.status >= 400) {
-				return callback(xhr, null);
-			}
-
-			callback(null, JSON.parse(xhr.responseText));
-		};
-
-		xhr.send();
-	}
-
-	/**
-  * Выполняет POST-запрос по указанному адресу
-  * @param {string} address - адрес запроса
-  * @param {*} body - тело запроса (объект)
-  * @param {Function} callback - функция-коллбек
-  */
-	static Post(address, body, callback) {
-		const xhr = new XMLHttpRequest();
-		xhr.open('POST', backendUrl + address, true);
-		xhr.withCredentials = true;
-		xhr.timeout = 15000;
-		xhr.setRequestHeader('Content-Type', 'application/json; charset=utf8');
-
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState !== 4) return;
-			if (+xhr.status >= 400) {
-				return callback(JSON.parse(xhr.responseText).errorMessage, null);
-			}
-			callback(null, xhr);
-		};
-
-		xhr.send(JSON.stringify(body));
-	}
 
 	/**
   * Выполняет GET-запрос по указанному адресу
@@ -752,22 +816,25 @@ class Http {
 Http.BaseUrl = null;
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"./blocks/block/index.js": 0,
-	"./blocks/form/index.js": 2,
-	"./blocks/message/index.js": 3,
-	"./blocks/scoreboard/index.js": 4,
-	"./configs/login-fields.js": 6,
-	"./configs/signup-fields.js": 7,
-	"./include.js": 1,
-	"./main.js": 11,
-	"./modules/http.js": 9,
-	"./services/user-service.js": 8,
-	"./templates/scoreBoard.js": 5,
-	"./templates/scoreBoardOld.js": 12
+	"./blocks/form/index.js": 3,
+	"./blocks/message/index.js": 4,
+	"./blocks/scoreboard/index.js": 5,
+	"./configs/login-fields.js": 7,
+	"./configs/signup-fields.js": 8,
+	"./include.js": 2,
+	"./index.js": 13,
+	"./main.js": 14,
+	"./modules/http.js": 11,
+	"./services/user-service.js": 10,
+	"./templates/scoreBoard.js": 6,
+	"./templates/scoreBoardOld.js": 15,
+	"./views/commonView.js": 9,
+	"./views/menuView.js": 1
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -783,21 +850,33 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 10;
+webpackContext.id = 12;
 
 /***/ }),
-/* 11 */
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(1);
+
+
+
+
+/***/ }),
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_scoreboard_index_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_form_index_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__blocks_message_index_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__configs_login_fields__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__configs_signup_fields__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_user_service_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_menuView__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_scoreboard_index_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__blocks_form_index_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__blocks_message_index_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__configs_login_fields__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__configs_signup_fields__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_user_service_js__ = __webpack_require__(10);
 
 
 /**
@@ -813,250 +892,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-const userService = new __WEBPACK_IMPORTED_MODULE_6__services_user_service_js__["default"]();
+
+
+const userService = new __WEBPACK_IMPORTED_MODULE_7__services_user_service_js__["default"]();
 
 const app = new __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"](document.body);
-const title = __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('a', {}, ['application-header'], 'Tower Defence');
 
-const sections = {
-	back: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('section', {}, ['back-section', 'section']),
-	menu: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('section', {}, ['menu-section', 'section']),
-	login: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('section', {}, ['login-section', 'section']),
-	signup: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('section', {}, ['signup-section', 'section']),
-	scores: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('section', {}, ['scores-section', 'section']),
-	profile: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('section', {}, ['profile-section', 'section']),
-	hide() {
-		this.back.hide();
-		this.menu.hide();
-		this.login.hide();
-		this.signup.hide();
-		this.scores.hide();
-		this.profile.hide();
-	}
-};
+const menuView = new __WEBPACK_IMPORTED_MODULE_1__views_menuView__["default"]();
 
-sections.hide();
+app.append(menuView);
 
-app.append(title).append(sections.back).append(sections.menu).append(sections.login).append(sections.signup).append(sections.scores).append(sections.profile);
-
-/**
- * Открывает меню логина
- */
-function openLogin() {
-	if (!sections.login.ready) {
-		sections.login.loginform = new __WEBPACK_IMPORTED_MODULE_2__blocks_form_index_js__["default"](__WEBPACK_IMPORTED_MODULE_4__configs_login_fields__["default"]);
-		sections.signup.message = new __WEBPACK_IMPORTED_MODULE_3__blocks_message_index_js__["default"]();
-
-		sections.login.loginform.onSubmit(function (formdata) {
-			sections.signup.message.clear();
-			sections.signup.message.hide();
-			userService.login(formdata.email, formdata.password, function (err, resp) {
-				if (err) {
-					sections.signup.message.setText(err);
-					sections.signup.message.show();
-					return;
-				}
-
-				sections.login.loginform.reset();
-				userService.getDataFetch(function (err, resp) {
-					if (err) {
-						sections.signup.message.setText(err);
-						sections.signup.message.show();
-						return;
-					}
-					openMenu();
-				}, true);
-			});
-		});
-		sections.login.append(sections.signup.message).append(__WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('h2', {}, ['section_title'], 'Войдите')).append(sections.login.loginform);
-		sections.signup.message.hide();
-		sections.login.ready = true;
-	}
-	sections.hide();
-	backToPrevPage('signup');
-	if (userService.isLoggedIn()) {
-		return openMenu();
-	}
-	sections.login.show();
-}
-
-/**
- * Открывает меню регистрации
- */
-function openSignup() {
-	if (!sections.signup.ready) {
-		sections.signup.signupform = new __WEBPACK_IMPORTED_MODULE_2__blocks_form_index_js__["default"](__WEBPACK_IMPORTED_MODULE_5__configs_signup_fields__["default"]);
-		sections.signup.message = new __WEBPACK_IMPORTED_MODULE_3__blocks_message_index_js__["default"](); //в случае ошибки block.show()text = err_message
-		sections.signup.signupform.onSubmit(function (formdata) {
-			sections.signup.message.clear();
-			sections.signup.message.hide();
-
-			//отслыаем данные на сервер
-			userService.signup(formdata.email, formdata.password, formdata.confirm).then(function (resp) {
-				sections.signup.signupform.reset();
-
-				//получаем данные пользователя
-				userService.getDataFetch().then(function (res) {
-					console.log(res);
-					openMenu();
-				}).catch(function (err) {
-					sections.signup.message.setText(err.message);
-					sections.signup.message.show();
-				});
-			}).catch(function (err) {
-				sections.signup.message.setText(err.message);
-				sections.signup.message.show();
-			});
-		});
-		sections.signup.append(sections.signup.message).append(__WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('h2', {}, ['section_title'], 'Зарегистрируйтесь')).append(sections.signup.signupform);
-		sections.signup.message.hide();
-		sections.signup.ready = true;
-	}
-	sections.hide();
-	backToPrevPage('signup');
-
-	if (userService.isLoggedIn()) {
-		return openMenu();
-	}
-	sections.signup.show();
-}
-
-/**
- * Додавбляет кнопку назад
- */
-function backToPrevPage(current_page) {
-	if (!sections.back.ready) {
-		sections.back.items = {
-			back: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('button', { 'data-section': 'back' }, ['button', 'back'], 'Назад')
-		};
-		sections.back.on('click', function (event) {
-			event.preventDefault();
-			const target = event.target;
-			const section = target.getAttribute('data-section');
-			if (section === 'back') {
-				switch (current_page) {
-					case 'signup':
-						{
-
-							openMenu();
-							break;
-						}
-					case 'login':
-						{
-							openMenu();
-							break;
-						}
-				}
-			}
-		});
-		sections.back.append(sections.back.items.back);
-		sections.back.ready = true;
-	}
-	sections.back.hide();
-
-	if (current_page === 'signup' || current_page === 'login') {
-		sections.back.show();
-	}
-}
-
-/**
- * Открывает таблицу рекордов
- */
-function openScores() {
-	sections.hide();
-	sections.scores.scoreboard = new __WEBPACK_IMPORTED_MODULE_1__blocks_scoreboard_index_js__["default"]();
-	sections.scores.scoreboard.update([{ name: 'Igor', score: '100' }, { name: 'Nikita', score: '120' }, { name: 'Lena', score: '130' }]);
-	sections.scores.append(__WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('h2', {}, [], 'Список лидеров')).append(sections.scores.scoreboard);
-	sections.scores.show();
-}
-
-/**
- * Открывает основное меню
- */
-function openMenu() {
-	if (!sections.menu.ready) {
-		sections.menu.items = {
-			profile: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('div', { 'data-section': 'profile' }, ['profile', 'auth'], 'dfdfgdf'),
-			play: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('button', { 'data-section': 'play' }, ['button', 'auth'], 'Играть'),
-			signup: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('button', { 'data-section': 'signup' }, ['button', 'unauth'], 'Зарегистрироваться'),
-			login: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('button', { 'data-section': 'login' }, ['button', 'unauth'], 'Вход'),
-			settings: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('button', { 'data-section': 'settings' }, ['button', 'auth'], 'Настройки'),
-			rules: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('button', { 'data-section': 'rules' }, ['button', 'unauth'], 'Правила'),
-			scores: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('button', { 'data-section': 'scores' }, ['button', 'unauth'], 'Таблица лидеров'),
-			exit: __WEBPACK_IMPORTED_MODULE_0__blocks_block_index_js__["default"].Create('button', { 'data-section': 'exit' }, ['button', 'auth'], 'Выход')
-		};
-
-		sections.menu.on('click', function (event) {
-			event.preventDefault();
-			const target = event.target;
-			const section = target.getAttribute('data-section');
-			switch (section) {
-				case 'login':
-					openLogin();
-					break;
-				case 'signup':
-					openSignup();
-					break;
-				case 'scores':
-					openScores();
-					break;
-				case 'profile':
-					openProfile();
-					break;
-				case 'exit':
-					userService.logout();
-					openMenu();
-					break;
-			}
-		});
-		sections.menu.append(sections.menu.items.profile).append(sections.menu.items.play).append(sections.menu.items.signup).append(sections.menu.items.login).append(sections.menu.items.settings).append(sections.menu.items.rules).append(sections.menu.items.scores).append(sections.menu.items.exit);
-		sections.menu.ready = true;
-	}
-	sections.hide();
-
-	if (userService.isLoggedIn()) {
-		userService.getData(function (err, resp) {
-			sections.menu.items.profile.setText(resp);
-		});
-		sections.menu.items.profile.show();
-		sections.menu.items.play.show();
-		sections.menu.items.login.hide();
-		sections.menu.items.signup.hide();
-		sections.menu.items.settings.show();
-		sections.menu.items.rules.show();
-		sections.menu.items.scores.show();
-		sections.menu.items.exit.show();
-	} else {
-		sections.menu.items.profile.hide();
-		sections.menu.items.play.hide();
-		sections.menu.items.login.show();
-		sections.menu.items.signup.show();
-		sections.menu.items.settings.hide();
-		sections.menu.items.rules.show();
-		sections.menu.items.scores.show();
-		sections.menu.items.exit.hide();
-	}
-	sections.menu.show();
-}
-
-/**
- * Открытие меню по клиу на заголовок
- */
-title.on('click', openMenu);
-openMenu();
-
-/**
- * Получает данные пользователя
- */
-userService.getData(function (err, resp) {
-	if (err) {
-		return;
-	}
-	openMenu();
-}, true);
+menuView.show();
 
 /***/ }),
-/* 12 */
+/* 15 */
 /***/ (function(module, exports) {
 
 // (function () {
@@ -1105,16 +954,18 @@ userService.getData(function (err, resp) {
 //
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./CSS/index.css": 14,
-	"./CSS/new.css": 15,
-	"./blocks/form/index.css": 16,
-	"./blocks/message/index.css": 17,
-	"./configs/login-fields.css": 18,
-	"./configs/signup-fields.css": 19
+	"./CSS/index.css": 17,
+	"./CSS/new.css": 18,
+	"./blocks/block/block.css": 19,
+	"./blocks/form/index.css": 20,
+	"./blocks/message/index.css": 21,
+	"./configs/login-fields.css": 22,
+	"./configs/signup-fields.css": 23,
+	"./views/view.css": 35
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1130,25 +981,7 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 13;
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
+webpackContext.id = 16;
 
 /***/ }),
 /* 17 */
@@ -1164,6 +997,47 @@ webpackContext.id = 13;
 
 /***/ }),
 /* 19 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

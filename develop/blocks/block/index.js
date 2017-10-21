@@ -76,6 +76,16 @@ export default class Block {
 	}
 
 	/**
+	 * Удаляет у текущего блока дочерний
+	 * @param {Block} block
+	 * @return {Block}
+	 */
+	remove(block) {
+		this.el.removeChild(block.el);
+		return this;
+	}
+
+	/**
 	 * Позволяет подписаться на событие
 	 * @param {string} event
 	 * @param {EventListener} callback
