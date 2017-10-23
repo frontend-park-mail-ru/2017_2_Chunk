@@ -10,6 +10,8 @@ export default class backButtonView extends CommonView {
 		};
 		super(backButton);
 
+		this.el.style.setProperty("align-items", "flex-start");
+
 		this.hide();
 	}
 }

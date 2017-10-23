@@ -4,7 +4,7 @@ import Block from "../blocks/block/block.js";
 
 
 export default class MenuView extends CommonView {
-	constructor() {
+	constructor(eventBus) {
 		const menuElems = {
 			profile: Block.Create('div', {'data-section': 'profile'}, ['profile', 'auth'], ''),
 			play: Block.Create('button', {'data-section': 'play'}, ['button', 'auth'], 'Играть'),
@@ -17,5 +17,28 @@ export default class MenuView extends CommonView {
 		};
 		super(menuElems);
 
+		this.bus = eventBus;
+
+		this.bus.on("unauth", function() {
+			for (let elem in this.elements) {
+				if (this.elements[elem].el.classList.contains("unauth")) {
+					this.elements[elem].show();
+				}
+				else
+					this.elements[elem].hide();
+			}
+		}.bind(this));
+
+		this.bus.on("auth", function() {
+			for (let elem in this.elements) {
+				if (this.elements[elem].el.classList.contains("auth")) {
+					this.elements[elem].show();
+				}
+				else
+					this.elements[elem].hide();
+			}
+		}.bind(this));
+
+		this.bus.emit("unauth");
 	}
 }

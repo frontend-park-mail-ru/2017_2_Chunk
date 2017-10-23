@@ -31,6 +31,7 @@ const ttl = 1000 * 60 * 60 * 24;            // 1 день
 app.get('/whoisit', (request, response) => {
 
 	// Вытаскиваем нужную куку
+	console.log('my cookie = ', request.cookies['my_cookie']);
 	const id = request.cookies['my_cookie'];
 	console.log('my id: ', id);
 
@@ -45,15 +46,19 @@ app.get('/whoisit', (request, response) => {
 
 app.get('/exit', (request, response) => {
 	console.log('URL = /exit');
+
+	console.log('try to find coockie');
 	response.cookie('my_cookie', null, {
-		expires: new Date(Date.now())
+		expires: new Date(Date.now() - ttl)
 	});
+
 	response.status(200).end();
 });
 
 app.post('/sign_up', (request, response) => {
 
-	const username = request.body.email;
+	const username = request.body.username;
+	const email = request.body.email;
 	const password = request.body.password;
 
 	console.log(username, password);
@@ -62,10 +67,10 @@ app.post('/sign_up', (request, response) => {
 	response.set('Content-Type', 'application/json; charset=utf8');
 
 	if (!username || !password) {
-		response.status(400).end(JSON.stringify({
+		return response.status(400).end(JSON.stringify({
 			errorMessage: "Логин и(или) пароль не указаны"
 		}));
-		return;
+
 	}
 	if (users[username]) {
 		return response.status(400).end(JSON.stringify({

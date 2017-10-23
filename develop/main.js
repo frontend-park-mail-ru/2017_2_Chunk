@@ -10,25 +10,31 @@ import SignUpView from "./views/signUpView";
 
 import BackButtonView from "./views/backButtonView"
 
+import ProfileView from "./views/profileView"
+
 import Block from "./blocks/block/block.js";
 
 import UserService from "./services/user-service.js";
 
 import EventBus from "./modules/eventBus";
 
+	import Message from "./blocks/message/message";
+
+
 const userService = new UserService();
 
-
+const eventBus = new EventBus();
 
 const app = new Block(document.body);
 
-const menuView = new MenuView();
-
-const eventBus = new EventBus();
+const menuView = new MenuView(eventBus);
 
 const signUpView = new SignUpView();
 
 const backButtonView = new BackButtonView();
+
+const profileView = new ProfileView(eventBus);
+
 
 menuView.on("click", function(event) {
 	event.preventDefault();
@@ -37,8 +43,13 @@ menuView.on("click", function(event) {
 	switch (section) {
 		case 'signup':
 			eventBus.emit("openSignUp");
+			break;
+		case 'exit':
+			eventBus.emit("exit");
+			break;
 	}
 });
+
 
 backButtonView.on("click", function(event) {
 	event.preventDefault();
@@ -46,36 +57,63 @@ backButtonView.on("click", function(event) {
 });
 
 
+signUpView.onSubmit(function (formData) {
+	signUpView.message = new Message();
+	signUpView.message.clear();
+	signUpView.message.hide();
+	signUpView.append(signUpView.message);
+	userService.signup(formData.name, formData.email, formData.password, formData.confirm)
+		.then(function(resp) {
+			eventBus.emit("openMenu");
+
+		})
+		.catch(function(err) {
+			signUpView.message.setText(err.message);
+			signUpView.message.show();
+		}.bind(this));
+
+}.bind(this));
+
 
 eventBus.on("openSignUp", function() {
 	menuView.hide();
-});
-
-eventBus.on("openSignUp", function() {
 	signUpView.show();
-});
-
-eventBus.on("openSignUp", function() {
 	backButtonView.show();
 });
 
 eventBus.on("openMenu", function() {
 	menuView.show();
-});
-
-eventBus.on("openMenu", function() {
 	signUpView.hide();
+	backButtonView.hide();
+
+	userService.getDataFetch()
+		.then(function(resp) {
+			eventBus.emit("auth", resp.username)
+		})
+		.catch(function(err) {
+			const user = {username: null};
+			profileView.render(user.username);
+			profileView.hide();
+			console.log(err.message);
+		})
 });
 
-eventBus.on("openMenu", function() {
-	backButtonView.hide();
+
+//отследить ексепшены при отсутствии интернета
+eventBus.on("exit", function () {
+	userService.logout();
+	profileView.hide();
+	eventBus.emit("unauth");
+	eventBus.emit("openMenu");
 });
+
+
 
 
 app
 	.append(menuView)
 	.append(signUpView)
-	.append(backButtonView);
+	.append(backButtonView)
+	.append(profileView);
 
-menuView.show();
-
+eventBus.emit("openMenu");

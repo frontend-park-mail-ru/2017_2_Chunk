@@ -16,13 +16,16 @@ export default class CommonView extends Block {
 
 		super(view);
 
+		this.elements = blocks;
+
 		for (const attr in attrs) {
 			this.el.style.setProperty(attr, attrs[attr]);
 		}
 
-		for (const block in blocks) {
-			this.append(blocks[block]);
+		for (const block in this.elements) {
+			this.append(this.elements[block]);
 		}
+
 	}
 
 	show() {

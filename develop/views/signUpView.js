@@ -1,6 +1,8 @@
 "use strict";
 import commonView from "./commonView";
 import Form from "../blocks/form/form.js";
+import Message from "../blocks/message/message.js";
+
 
 export default class signUpView extends commonView {
 	constructor() {
@@ -14,7 +16,7 @@ export default class signUpView extends commonView {
 				class: "login-input",
 			}},
 			{attrs: {
-				type: "text",
+				type: "email",
 				size: "128",
 				name: "email",
 				placeholder: "Enter your email",
@@ -22,7 +24,7 @@ export default class signUpView extends commonView {
 				class: "login-input",
 			}},
 			{attrs: {
-				type: "email",
+				type: "password",
 				size: "128",
 				name: "password",
 				placeholder: "Enter password",
@@ -38,9 +40,7 @@ export default class signUpView extends commonView {
 				class: "login-input",
 			}},
 			{attrs: {
-				type: "button",
-				size: "128",
-				name: "submit",
+				type: "submit",
 				value: "submit",
 				class: "login-input button",
 			}}
@@ -48,7 +48,22 @@ export default class signUpView extends commonView {
 		const form = new Form(loginFields);
 		super({form});
 
-		this.hide();
+		const err_message = new Message();
+		this.append(err_message);
 
+		this.hide();
+	}
+
+	onSubmit(callback) {
+		this.el.addEventListener("submit", function(event) {
+			event.preventDefault();
+			const formData = {};
+			const fields = this.el.childNodes.item(0).elements;
+
+			for (let field in fields) {
+				formData[fields[field].name] = fields[field].value;
+			}
+			callback(formData);
+		}.bind(this))
 	}
 }

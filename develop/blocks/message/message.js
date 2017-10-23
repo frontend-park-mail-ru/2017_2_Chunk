@@ -13,8 +13,10 @@ export default class Message extends Block {
 	 */
 	constructor() {
 		const el = document.createElement('div');
-		el.classList.add('message');
 		super(el);
+
+		// el.classList.add('message');
+
 	}
 
 

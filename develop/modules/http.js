@@ -63,9 +63,9 @@
 		 * Выполняет GET-запрос по указанному адресу
 		 * @param {string} address - адрес запроса
 		 */
-		static FetchGet(address) {
+		static async FetchGet(address) {
 			const url = backendUrl + address;
-			return fetch(url, {
+			return await fetch(url, {
 				method: 'GET',
 				mode: 'cors',
 				credentials: 'include'

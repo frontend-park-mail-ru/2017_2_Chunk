@@ -14,11 +14,12 @@ export default class UserService {
 
 	/**
 	 * Регистрирует нового пользователя
+	 * @param {string} username
 	 * @param {string} email
 	 * @param {string} password
 	 * @param {string} confirm
 	 */
-	signup(email, password, confirm) {
+	signup(username, email, password, confirm) {
 		//validation
 		return new Promise(function (resolve, reject) {
 			if (email.length < 4) {
@@ -37,7 +38,6 @@ export default class UserService {
 				throw new Error("Логин и пароль не должны совпадать!");
 			}
 
-			let username = email;
 			resolve(Http.FetchPost('/sign_up', {username, email, password}));
 		});
 	}
@@ -81,30 +81,36 @@ export default class UserService {
 	 * @param {Function} callback
 	 * @param {boolean} [force=false] - игнорировать ли кэш?
 	 */
-	getData(callback, force = false) {
-		if (this.isLoggedIn() && !force) {
-			return callback(null, this.user);
-		}
-
-		Http.FetchGet('/whoisit');
-	}
+	// getData(callback, force = false) {
+	// 	if (this.isLoggedIn() && !force) {
+	// 		return callback(null, this.user);
+	// 	}
+	//
+	// 	Http.FetchGet('/whoisit');
+	// }
 
 	/**
 	 * Проверяет, авторизован ли пользователь
 	 * @param force - пременная для принудительной отправки гет запроса если true
 	 * @return {Promise} - возвращает функцию колбек с результатом запроса или ошибкой
 	 */
-	getDataFetch(force = false) {
+	async getDataFetch(force = false) {
 		if (this.isLoggedIn() && !force) {
 			return new Promise(function(resolve, reject) {
 				resolve(this.user);
 			});
 		}
-		return Http.FetchGet('/whoisit')
+
+		return await Http.FetchGet('/whoisit')
 			.then(function(resp) {
-				this.user = resp.username;
-				return resp;
-			}.bind(this));
+				this.user = resp;
+				return this.user;
+			}.bind(this))
+			.catch(function (err) {
+				this.user = null;
+				console.log(err.statusText);
+				throw new Error("Can not get response =(")
+			}.bind(this))
 	}
 
 
@@ -122,13 +128,11 @@ export default class UserService {
 	/**
 	 * Разлогинивает пользователя удаляя куку
 	 */
-	delCookie() {
-		(function () {
-			let xhr = new XMLHttpRequest();
-			xhr.open('GET', '/exit', true);
-			xhr.withCredentials = true;
-			xhr.send();
-		})();
+	async delCookie() {
+		await Http.FetchGet('/exit')
+			.catch(function (err) {
+				console.log(err.errorMessage);
+			});
 	}
 
 	/**
