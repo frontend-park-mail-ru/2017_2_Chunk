@@ -141,17 +141,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 class CommonView extends __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__["default"] {
 	constructor(blocks) {
 		const view = document.createElement("section");
-		const attrs = [{ "display": "flex" }, { "flex-direction": "column" }, { "align-items": "center" }, { "justify-content": "center" }];
+		const attrs = {
+			"display": "flex",
+			"flex-direction": "column",
+			"align-items": "center",
+			"justify-content": "center"
+		};
 
 		super(view);
 
-		// attrs.forEach(function(attr) {
-		// 	this.el.setAttribute(attr, attrs[attr]);
-		// });
+		for (const attr in attrs) {
+			this.el.style.setProperty(attr, attrs[attr]);
+		}
 
 		for (const block in blocks) {
 			this.append(blocks[block]);
 		}
+	}
+
+	show() {
+		this.el.style.setProperty("display", "flex");
+	}
+
+	hide() {
+		this.el.style.setProperty("display", "none");
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = CommonView;
