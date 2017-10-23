@@ -42,31 +42,31 @@ export default class UserService {
 		});
 	}
 
-	/**
-	 * Авторизация пользователя
-	 * @param {string} email
-	 * @param {string} password
-	 * @param {Function} callback
-	 */
-	login(email, password, callback) {
-		if (email.length < 4) {
-			callback("Длина логина должна быть не меньше 4 символов!", null);
-			return;
-		}
-		if (email.length > 12) {
-			callback("Длина логина не должна превышать 12 символов!", null);
-			return;
-		}
-		if (password.length < 6) {
-			callback("Длина пароля должна быть не меньше 6 символов!", null);
-			return;
-		}
-		if (password === email) {
-			callback("Логин и пароль не могут совпадать!", null);
-			return;
-		}
-		Http.Post('/sign_in', {email, password}, callback);
-	}
+	// /**
+	//  * Авторизация пользователя
+	//  * @param {string} email
+	//  * @param {string} password
+	//  * @param {Function} callback
+	//  */
+	// login(email, password, callback) {
+	// 	if (email.length < 4) {
+	// 		callback("Длина логина должна быть не меньше 4 символов!", null);
+	// 		return;
+	// 	}
+	// 	if (email.length > 12) {
+	// 		callback("Длина логина не должна превышать 12 символов!", null);
+	// 		return;
+	// 	}
+	// 	if (password.length < 6) {
+	// 		callback("Длина пароля должна быть не меньше 6 символов!", null);
+	// 		return;
+	// 	}
+	// 	if (password === email) {
+	// 		callback("Логин и пароль не могут совпадать!", null);
+	// 		return;
+	// 	}
+	// 	Http.Post('/sign_in', {email, password}, callback);
+	// }
 
 	/**
 	 * Проверяет, авторизован ли пользователь

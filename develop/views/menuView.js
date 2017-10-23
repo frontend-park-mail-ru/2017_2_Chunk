@@ -1,11 +1,11 @@
 "use strict";
-import commonView from "./commonView";
-import Block from "../blocks/block/index.js";
+import CommonView from "./commonView";
+import Block from "../blocks/block/block.js";
 
 
-export default class menuView extends commonView{
+export default class MenuView extends CommonView {
 	constructor() {
-		super({
+		const menuElems = {
 			profile: Block.Create('div', {'data-section': 'profile'}, ['profile', 'auth'], ''),
 			play: Block.Create('button', {'data-section': 'play'}, ['button', 'auth'], 'Играть'),
 			signup: Block.Create('button', {'data-section': 'signup'}, ['button', 'unauth'], 'Зарегистрироваться'),
@@ -14,6 +14,8 @@ export default class menuView extends commonView{
 			rules: Block.Create('button', {'data-section': 'rules'}, ['button', 'unauth'], 'Правила'),
 			scores: Block.Create('button', {'data-section': 'scores'}, ['button', 'unauth'], 'Таблица лидеров'),
 			exit: Block.Create('button', {'data-section': 'exit'}, ['button', 'auth'], 'Выход'),
-		});
+		};
+		super(menuElems);
+
 	}
 }

@@ -3,12 +3,12 @@
  * @module Form
  */
 'use strict';
-import Block from "../block/index";
+import Block from "../block/block";
 
 
 export default class Form extends Block {
 	/**
-	 * @param Fields []- корневой элемент блока
+	 * @param fields []- корневой элемент блока
 	 * @constructor
 	 */
 	constructor(fields = []) {

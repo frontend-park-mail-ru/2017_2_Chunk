@@ -1,26 +1,81 @@
-import Block from "./blocks/block/index.js";
 
 /**
  * Основной модуль работатющий со всеми объектами
  *@module main
  */
 
-import MenuView from "./views/menuView"
+import MenuView from "./views/menuView";
 
-import Scoreboard from "./blocks/scoreboard/index.js";
-import Form from "./blocks/form/index.js";
-import Message from "./blocks/message/index.js";
+import SignUpView from "./views/signUpView";
 
-import loginFields from "./configs/login-fields";
-import signupFields from "./configs/signup-fields";
-import UserService from "./services/user-service.js"
+import BackButtonView from "./views/backButtonView"
+
+import Block from "./blocks/block/block.js";
+
+import UserService from "./services/user-service.js";
+
+import EventBus from "./modules/eventBus";
 
 const userService = new UserService();
+
+
 
 const app = new Block(document.body);
 
 const menuView = new MenuView();
 
-app.append(menuView);
+const eventBus = new EventBus();
+
+const signUpView = new SignUpView();
+
+const backButtonView = new BackButtonView();
+
+menuView.on("click", function(event) {
+	event.preventDefault();
+	const target = event.target;
+	const section = target.getAttribute("data-section");
+	switch (section) {
+		case 'signup':
+			eventBus.emit("openSignUp");
+	}
+});
+
+backButtonView.on("click", function(event) {
+	event.preventDefault();
+	eventBus.emit("openMenu");
+});
+
+
+
+eventBus.on("openSignUp", function() {
+	menuView.hide();
+});
+
+eventBus.on("openSignUp", function() {
+	signUpView.show();
+});
+
+eventBus.on("openSignUp", function() {
+	backButtonView.show();
+});
+
+eventBus.on("openMenu", function() {
+	menuView.show();
+});
+
+eventBus.on("openMenu", function() {
+	signUpView.hide();
+});
+
+eventBus.on("openMenu", function() {
+	backButtonView.hide();
+});
+
+
+app
+	.append(menuView)
+	.append(signUpView)
+	.append(backButtonView);
 
 menuView.show();
+

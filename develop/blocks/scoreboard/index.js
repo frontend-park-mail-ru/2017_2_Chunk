@@ -1,5 +1,5 @@
 'use strict';
-import Block from "../block/index.js";
+import Block from "../block/block.js";
 
 /**
  * Модуль для получения шаблона таблицы рекордов с пользователями

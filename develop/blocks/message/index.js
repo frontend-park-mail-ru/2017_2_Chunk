@@ -1,6 +1,6 @@
 'use strict';
 
-import Block from "../block/index";
+import Block from "../block/block";
 
 /**
  * Базовый класс формы для отправки информационных сообщений в тело html документа
