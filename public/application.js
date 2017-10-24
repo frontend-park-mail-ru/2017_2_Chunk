@@ -1067,7 +1067,6 @@ var map = {
 	"./configs/login-fields.js": 17,
 	"./configs/signup-fields.js": 18,
 	"./include.js": 6,
-	"./index.js": 19,
 	"./main.js": 20,
 	"./modules/eventBus.js": 5,
 	"./modules/http.js": 14,
@@ -1231,17 +1230,7 @@ const signupFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (signupFields);
 
 /***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(4);
-
-
-
-
-/***/ }),
+/* 19 */,
 /* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
