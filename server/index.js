@@ -1,5 +1,6 @@
 'use strict';
 
+const cool = require('cool-ascii-faces');
 const express = require('express');             // Веб-фреймворк
 const morgan = require('morgan');               // Выводит информацию о пришедшем запросе в консоль
 const bodyParser = require('body-parser');      // Парсер для тела запроса
@@ -53,6 +54,10 @@ app.get('/exit', (request, response) => {
 	});
 
 	response.status(200).end();
+});
+
+app.get('/cool', function(request, response) {
+	response.send(cool());
 });
 
 app.post('/sign_up', (request, response) => {

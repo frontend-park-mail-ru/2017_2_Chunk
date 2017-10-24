@@ -1,1 +1,1 @@
-web: node ./server/form.js
+web: node ./server/index.js
