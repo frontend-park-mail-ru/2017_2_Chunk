@@ -19,6 +19,8 @@ export default class Form extends Block {
 			const f = Block.Create('input', field.attrs || {}, field.classes || []);
 			this.append(f);
 		}.bind(this));
+
+		this.el.classList.add("form-block");
 	}
 
 

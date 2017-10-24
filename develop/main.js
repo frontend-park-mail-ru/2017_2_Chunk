@@ -14,6 +14,8 @@ import BackButtonView from "./views/backButtonView";
 
 import ProfileView from "./views/profileView";
 
+import RulesView from "./views/rulesView";
+
 import Block from "./blocks/block/block.js";
 
 import UserService from "./services/user-service.js";
@@ -38,6 +40,9 @@ const loginView = new LoginView(eventBus);
 const backButtonView = new BackButtonView();
 
 const profileView = new ProfileView(eventBus);
+
+const rulesView = new RulesView(eventBus);
+
 
 
 backButtonView.on("click", function(event) {
@@ -83,6 +88,16 @@ eventBus.on("openLogin", function() {
 	signUpView.hide();
 	backButtonView.show();
 	loginView.show();
+	rulesView.hide();
+});
+
+
+eventBus.on("openRules", function() {
+	menuView.hide();
+	signUpView.hide();
+	backButtonView.show();
+	loginView.hide();
+	rulesView.show();
 });
 
 
@@ -91,6 +106,7 @@ eventBus.on("openMenu", function() {
 	signUpView.hide();
 	backButtonView.hide();
 	loginView.hide();
+	rulesView.hide();
 
 	userService.getDataFetch()
 		.then(function(resp) {
@@ -119,7 +135,8 @@ app
 	.append(signUpView)
 	.append(loginView)
 	.append(backButtonView)
-	.append(profileView);
+	.append(profileView)
+	.append(rulesView);
 
 
 eventBus.emit("openMenu");

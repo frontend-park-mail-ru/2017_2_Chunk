@@ -1,0 +1,147 @@
+/*section {*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+/*}*/
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    position: relative;
+    width: 30%;
+    min-width: 300px;
+    margin: 1.5% auto;
+    border-radius: 5%;
+    border: ridge black;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+
+div.profile {
+    font-family: cursive;
+    font-size: 23pt;
+    position: fixed;
+    max-width: 300px;
+    left: 80%;
+    top: 5%;
+}
+
+.form-block {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    width: 80%;
+}
+
+.form-block__input {
+
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    font-size: 16px;
+    margin-bottom: 3px;
+    background-color: transparent;
+    border: 0.1em solid #d1d1d1;
+    height: 2em;
+    padding: 0.4em;
+    border-radius: 0.4em;
+    box-shadow: none;
+}
+
+.form-block__button {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    background-color: chocolate;
+    border: 0.1em chocolate;
+    height: 3em;
+    padding: 0.4em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+
+    border-radius: 0.4em;
+    box-shadow: none;
+
+}
+
+::-webkit-input-placeholder {
+    color: #fff;
+    font-weight: bold;
+}
+::-moz-placeholder {
+    color: #c0392b;
+    font-weight: bold;
+}
+/* Firefox 19+ */
+
+:-moz-placeholder {
+    color: #c0392b;
+    font-weight: bold;
+}
+/* Firefox 18- */
+
+:-ms-input-placeholder {
+    color: #c0392b;
+    font-weight: bold;
+}
+
+::-webkit-input-placeholder {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+::-moz-placeholder {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+:-moz-placeholder {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+:-ms-input-placeholder {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+:focus::-webkit-input-placeholder {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+:focus::-moz-placeholder {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+:focus:-moz-placeholder {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+:focus:-ms-input-placeholder {
+    opacity: 0;
+    transition: opacity 0.6s ease;}
+
+
+
+input[placeholder] {
+    text-overflow: ellipsis;
+}
+
+input::-moz-placeholder {
+    text-overflow: ellipsis;
+}
+
+input:-moz-placeholder {
+    text-overflow: ellipsis;
+}
+
+input:-ms-input-placeholder {
+    text-overflow: ellipsis;
+}

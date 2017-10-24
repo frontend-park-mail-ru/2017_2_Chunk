@@ -1,7 +1,7 @@
 /*бэкграунд для секций меню*/
 body {
-    background: url('../image/background_wood.jpg');
-    background-color: #99bc54;
+    background: url('../image/background_wood_2.jpg');
+    background-color: burlywood;
     width: 98%;
     height: 95%;
     min-height: 600px;
@@ -20,17 +20,20 @@ body {
     /*min-width: 300px;*/
 /*}*/
 
-/*section.section {*/
-    /*!*background: url('../image/hello-panel.jpg');*!*/
-    /*position: relative;*/
-    /*width: 50%;*/
-    /*min-width: 300px;*/
-    /*margin: 1.5% auto;*/
-    /*border-radius:5%;*/
-    /*border: ridge black;*/
-    /*padding-top: 1%;*/
-    /*padding-bottom: 2%;*/
-/*}*/
+section {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    position: relative;
+    width: 30%;
+    min-width: 300px;
+    margin: 1.5% auto;
+    border-radius:5%;
+    border: ridge black;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
 
 /*.section_title {*/
     /*font-family: fantasy;*/
@@ -41,28 +44,5 @@ body {
     /*align-self: center;*/
 /*}*/
 
-/*.section button, input[type=submit] {*/
-    /*font-family: cursive;*/
-    /*font-size: 250%;*/
-    /*text-shadow: darkgray  2px 2px;*/
-    /*box-shadow: 10px 5px darkgrey , 12px 7px black;*/
-    /*border-radius: 30%;*/
-    /*width: 86%;*/
-    /*height: 125px;*/
-    /*margin-left: 6%;*/
-    /*margin-top: 2%;*/
-    /*margin-bottom: 2%;*/
-    /*border: ridge black;*/
-/*}*/
-
-/*!*Профиль*!*/
-/*div.profile {*/
-    /*font-family: cursive;*/
-    /*font-size: 23pt;*/
-    /*position: fixed;*/
-    /*max-width: 300px;*/
-    /*left: 80%;*/
-    /*top: 5%;*/
-/*}*/
 
 

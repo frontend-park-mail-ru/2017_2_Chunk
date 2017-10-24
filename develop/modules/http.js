@@ -59,6 +59,9 @@
 		// }
 
 
+
+		//какие орматы даных здесь?
+		//что попадает в throw response, что в response json
 		/**
 		 * Выполняет GET-запрос по указанному адресу
 		 * @param {string} address - адрес запроса
@@ -101,7 +104,7 @@
 			}).then(function (response) {
 				debugger;
 				if (response.status >= 400) {
-					throw response;
+					throw JSON.parse(response.body).errorMessage;
 				}
 				return response;
 			});

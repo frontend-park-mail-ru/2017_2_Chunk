@@ -1,10 +1,10 @@
 section .button {
     font-family: "Comic Sans";
-    font-size: 2em;
+    font-size: 1.5em;
     /*text-shadow: darkgray  2px 2px;*/
     /*box-shadow: 10px 5px darkgrey , 12px 7px black;*/
     /*border-radius: 30%;*/
-    width: 30%;
+    width: 80%;
     height: 80%;
     /*margin-left: 6%;*/
     /*margin-top: 3%;*/
@@ -13,3 +13,4 @@ section .button {
     /*padding-top: 10%;*/
     border: ridge black;
 }
+

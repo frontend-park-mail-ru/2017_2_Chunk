@@ -13,7 +13,7 @@ export default class signUpView extends commonView {
 				name: "name",
 				placeholder: "Enter your name",
 				required: "required",
-				class: "login-input",
+				class: "form-block__input ",
 			}},
 			{attrs: {
 				type: "email",
@@ -21,7 +21,7 @@ export default class signUpView extends commonView {
 				name: "email",
 				placeholder: "Enter your email",
 				required: "required",
-				class: "login-input",
+				class: "form-block__input ",
 			}},
 			{attrs: {
 				type: "password",
@@ -29,7 +29,7 @@ export default class signUpView extends commonView {
 				name: "password",
 				placeholder: "Enter password",
 				required: "required",
-				class: "login-input",
+				class: "form-block__input ",
 			}},
 			{attrs: {
 				type: "password",
@@ -37,12 +37,12 @@ export default class signUpView extends commonView {
 				name: "confirm",
 				placeholder: "Confirm password",
 				required: "required",
-				class: "login-input",
+				class: "form-block__input ",
 			}},
 			{attrs: {
 				type: "submit",
 				value: "submit",
-				class: "login-input button",
+				class: "form-block__button",
 			}}
 		];
 		const form = new Form(signUpFields);

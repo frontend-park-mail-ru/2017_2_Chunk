@@ -72,9 +72,9 @@ app.post('/sign_up', (request, response) => {
 		}));
 	}
 	if (users[username]) {
-		response.status(400);
-		response.responseText = "Пользователь с именем '" + username + "' уже существует!";
-		return response.json({text: "hello!"})
+		return response.status(400).send(JSON.stringify({
+			errorMessage: "Пользователь существует"
+		}));
 		}
 
 	const new_id = idCreator();
