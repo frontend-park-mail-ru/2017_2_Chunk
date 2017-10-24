@@ -1,5 +1,7 @@
 'use strict';
 
+//по урлу exit не поулчается выйти
+
 import Http from "../modules/http";
 
 /**
@@ -19,13 +21,13 @@ export default class UserService {
 	 * @param {string} password
 	 * @param {string} confirm
 	 */
-	signup(username, email, password, confirm) {
+	signup(username, email, password, confirm) {//не парсит JSON
 		//validation
 		return new Promise(function (resolve, reject) {
-			if (email.length < 4) {
+			if (username.length < 4) {
 				throw new Error("Длина логина должна быть не меньше 4 символов!");
 			}
-			if (email.length > 12) {
+			if (username.length > 12) {
 				throw new Error("Длина логина не должна превышать 12 символов!");
 			}
 			if (password.length < 6) {
@@ -34,39 +36,59 @@ export default class UserService {
 			if (password !== confirm) {
 				throw new Error("Пароли не совпадают!!!");
 			}
-			if (password === email) {
+			if (password === username) {
 				throw new Error("Логин и пароль не должны совпадать!");
 			}
 
-			resolve(Http.FetchPost('/sign_up', {username, email, password}));
-		});
+			resolve(Http.FetchPost('/sign_up', {username, email, password})
+				.then(function(resp) {
+					alert("good response status" + resp.status);
+					return resp;
+				})
+				.catch(function(err) {//не могу достать errorMessage
+					alert("err response status " + err.status  + err.errorMessage);
+					throw new Error("err resp status " + err.status + JSON.parse(err).errorMessage);
+				}));
+
+		})
 	}
 
-	// /**
-	//  * Авторизация пользователя
-	//  * @param {string} email
-	//  * @param {string} password
-	//  * @param {Function} callback
-	//  */
-	// login(email, password, callback) {
-	// 	if (email.length < 4) {
-	// 		callback("Длина логина должна быть не меньше 4 символов!", null);
-	// 		return;
-	// 	}
-	// 	if (email.length > 12) {
-	// 		callback("Длина логина не должна превышать 12 символов!", null);
-	// 		return;
-	// 	}
-	// 	if (password.length < 6) {
-	// 		callback("Длина пароля должна быть не меньше 6 символов!", null);
-	// 		return;
-	// 	}
-	// 	if (password === email) {
-	// 		callback("Логин и пароль не могут совпадать!", null);
-	// 		return;
-	// 	}
-	// 	Http.Post('/sign_in', {email, password}, callback);
-	// }
+
+	/**
+	 * Авторизация пользователя
+	 * @param {string} email
+	 * @param {string} password
+	 * @param {Function} callback
+	 */
+	login(email, password, callback) {
+		return new Promise(function (resolve, reject) {
+			if (email.length < 4) {
+				callback("Длина логина должна быть не меньше 4 символов!", null);
+				return;
+			}
+			if (email.length > 12) {
+				callback("Длина логина не должна превышать 12 символов!", null);
+				return;
+			}
+			if (password.length < 6) {
+				callback("Длина пароля должна быть не меньше 6 символов!", null);
+				return;
+			}
+			if (password === email) {
+				callback("Логин и пароль не могут совпадать!", null);
+				return;
+			}
+			resolve(Http.FetchPost('/login', {username, password})
+				.then(function (resp) {
+					alert("good response status" + resp.status);
+					return resp;
+				})
+				.catch(function (err) {//не могу достать errorMessage
+					alert("err response status " + err.status + err.errorMessage);
+					throw new Error("err resp status " + err.status + JSON.parse(err).errorMessage);
+				}));
+		})
+	}
 
 	/**
 	 * Проверяет, авторизован ли пользователь
@@ -76,18 +98,6 @@ export default class UserService {
 		return !!this.user;
 	}
 
-	/**
-	 * Загружает данные о текущем пользователе
-	 * @param {Function} callback
-	 * @param {boolean} [force=false] - игнорировать ли кэш?
-	 */
-	// getData(callback, force = false) {
-	// 	if (this.isLoggedIn() && !force) {
-	// 		return callback(null, this.user);
-	// 	}
-	//
-	// 	Http.FetchGet('/whoisit');
-	// }
 
 	/**
 	 * Проверяет, авторизован ли пользователь
@@ -130,8 +140,8 @@ export default class UserService {
 	 */
 	async delCookie() {
 		await Http.FetchGet('/exit')
-			.catch(function (err) {
-				console.log(err.errorMessage);
+			.catch(function (err) {//получить ошибки с сервера
+				console.log(err.errorMessage);//удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
 			});
 	}
 
@@ -150,7 +160,7 @@ export default class UserService {
 			if (this.isLoggedIn()) {
 				this.users = this.users.map(user => {
 					if (user.email === this.user.email) {
-						user.me = true;
+						user.me = trsignUpViewue;
 					}
 					return user;
 				});

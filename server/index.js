@@ -67,16 +67,15 @@ app.post('/sign_up', (request, response) => {
 	response.set('Content-Type', 'application/json; charset=utf8');
 
 	if (!username || !password) {
-		return response.status(400).end(JSON.stringify({
+		return response.status(400).send(JSON.stringify({
 			errorMessage: "Логин и(или) пароль не указаны"
 		}));
-
 	}
 	if (users[username]) {
-		return response.status(400).end(JSON.stringify({
-			errorMessage: ("Пользователь с именем '" + username + "' уже существует!")
-		}));
-	}
+		response.status(400);
+		response.responseText = "Пользователь с именем '" + username + "' уже существует!";
+		return response.json({text: "hello!"})
+		}
 
 	const new_id = idCreator();
 	users[username] = password;

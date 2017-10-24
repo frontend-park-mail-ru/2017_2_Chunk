@@ -1,6 +1,6 @@
 
 'use strict';
-
+//в Fetch post не получается получить в ответ объект json c ошибкой
 	// const backendUrl = 'https://chunkgame.herokuapp.com';
 	const backendUrl = "";
 	const baseUrl = `${window.location.protocol}//${window.location.host}`;
@@ -63,9 +63,9 @@
 		 * Выполняет GET-запрос по указанному адресу
 		 * @param {string} address - адрес запроса
 		 */
-		static async FetchGet(address) {
+		static FetchGet(address) {
 			const url = backendUrl + address;
-			return await fetch(url, {
+			return fetch(url, {
 				method: 'GET',
 				mode: 'cors',
 				credentials: 'include'
@@ -83,6 +83,11 @@
 		 * @param {Object} body - body-request
 		 * @param {string} address - адрес запроса
 		 */
+
+		//Не получается получить из json errMessage.
+		//
+		//
+		//
 		static FetchPost(address, body) {
 			const url = backendUrl + address;
 			return fetch(url, {
@@ -93,7 +98,13 @@
 				headers: {
 					'Content-Type': 'application/json; charset=utf-8'
 				}
-			})
+			}).then(function (response) {
+				debugger;
+				if (response.status >= 400) {
+					throw response;
+				}
+				return response;
+			});
 		}
 	}
 	Http.BaseUrl = null;

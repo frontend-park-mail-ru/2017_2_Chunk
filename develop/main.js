@@ -8,9 +8,11 @@ import MenuView from "./views/menuView";
 
 import SignUpView from "./views/signUpView";
 
-import BackButtonView from "./views/backButtonView"
+import LoginView from "./views/loginView";
 
-import ProfileView from "./views/profileView"
+import BackButtonView from "./views/backButtonView";
+
+import ProfileView from "./views/profileView";
 
 import Block from "./blocks/block/block.js";
 
@@ -18,7 +20,7 @@ import UserService from "./services/user-service.js";
 
 import EventBus from "./modules/eventBus";
 
-	import Message from "./blocks/message/message";
+import Message from "./blocks/message/message";
 
 
 const userService = new UserService();
@@ -29,26 +31,13 @@ const app = new Block(document.body);
 
 const menuView = new MenuView(eventBus);
 
-const signUpView = new SignUpView();
+const signUpView = new SignUpView(eventBus);
+
+const loginView = new LoginView(eventBus);
 
 const backButtonView = new BackButtonView();
 
 const profileView = new ProfileView(eventBus);
-
-
-menuView.on("click", function(event) {
-	event.preventDefault();
-	const target = event.target;
-	const section = target.getAttribute("data-section");
-	switch (section) {
-		case 'signup':
-			eventBus.emit("openSignUp");
-			break;
-		case 'exit':
-			eventBus.emit("exit");
-			break;
-	}
-});
 
 
 backButtonView.on("click", function(event) {
@@ -58,20 +47,26 @@ backButtonView.on("click", function(event) {
 
 
 signUpView.onSubmit(function (formData) {
-	signUpView.message = new Message();
-	signUpView.message.clear();
-	signUpView.message.hide();
-	signUpView.append(signUpView.message);
 	userService.signup(formData.name, formData.email, formData.password, formData.confirm)
 		.then(function(resp) {
 			eventBus.emit("openMenu");
-
 		})
 		.catch(function(err) {
-			signUpView.message.setText(err.message);
-			signUpView.message.show();
+			console.log("some err with sign up");
+			signUpView.setErrorText(err.message)//нужно поставить ошибку из json
 		}.bind(this));
+}.bind(this));
 
+
+loginView.onSubmit(function (formData) {
+	userService.login(formData.name, formData.password)
+		.then(function(resp) {
+			eventBus.emit("openMenu");
+		})
+		.catch(function(err) {
+			console.log("some err with sign up");
+			signUpView.setErrorText(err.message)//нужно поставить ошибку из json
+		}.bind(this));
 }.bind(this));
 
 
@@ -79,12 +74,23 @@ eventBus.on("openSignUp", function() {
 	menuView.hide();
 	signUpView.show();
 	backButtonView.show();
+	loginView.hide();
 });
+
+
+eventBus.on("openLogin", function() {
+	menuView.hide();
+	signUpView.hide();
+	backButtonView.show();
+	loginView.show();
+});
+
 
 eventBus.on("openMenu", function() {
 	menuView.show();
 	signUpView.hide();
 	backButtonView.hide();
+	loginView.hide();
 
 	userService.getDataFetch()
 		.then(function(resp) {
@@ -108,12 +114,12 @@ eventBus.on("exit", function () {
 });
 
 
-
-
 app
 	.append(menuView)
 	.append(signUpView)
+	.append(loginView)
 	.append(backButtonView)
 	.append(profileView);
+
 
 eventBus.emit("openMenu");

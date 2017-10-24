@@ -4,22 +4,14 @@ import Form from "../blocks/form/form.js";
 import Message from "../blocks/message/message.js";
 
 
-export default class signUpView extends commonView {
+export default class loginView extends commonView {
 	constructor(eventBus) {
-		const signUpFields = [
+		const loginFields = [
 			{attrs: {
 				type: "text",
 				size: "128",
 				name: "name",
 				placeholder: "Enter your name",
-				required: "required",
-				class: "login-input",
-			}},
-			{attrs: {
-				type: "email",
-				size: "128",
-				name: "email",
-				placeholder: "Enter your email",
 				required: "required",
 				class: "login-input",
 			}},
@@ -32,24 +24,15 @@ export default class signUpView extends commonView {
 				class: "login-input",
 			}},
 			{attrs: {
-				type: "password",
-				size: "128",
-				name: "confirm",
-				placeholder: "Confirm password",
-				required: "required",
-				class: "login-input",
-			}},
-			{attrs: {
 				type: "submit",
 				value: "submit",
 				class: "login-input button",
 			}}
 		];
-		const form = new Form(signUpFields);
+		const form = new Form(loginFields);
 		super({form});
 
 		this.bus = eventBus;
-
 		const err_message = new Message();
 		this.append(err_message);
 
@@ -80,3 +63,5 @@ export default class signUpView extends commonView {
 		this.message.show();
 	}
 }
+
+
