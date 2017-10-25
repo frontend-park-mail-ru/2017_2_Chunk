@@ -5,7 +5,12 @@
     /*justify-content: center;*/
 /*}*/
 
+.hidden {
+    opacity: 0;
+}
+
 section {
+    transition: all .7s;
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -14,6 +19,8 @@ section {
     width: 20em;
     min-width: 300px;
     margin: 1.5% auto;
+    margin-top: 5em;
+
     border-radius: 0.8em;
     border: ridge black;
     padding-top: 1%;
@@ -39,7 +46,6 @@ div.profile {
 }
 
 .form-block__input {
-
     display: block;
     width: 80%;
     margin: 0 auto;

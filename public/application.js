@@ -211,11 +211,19 @@ class CommonView extends __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__["d
 	}
 
 	show() {
-		this.el.style.setProperty("display", "flex");
+		setTimeout(() => {
+			this.el.style.setProperty("display", "flex");
+		}, 150);
+		setTimeout(() => {
+			this.el.classList.remove("hidden");
+		}, 200);
 	}
 
 	hide() {
-		this.el.style.setProperty("display", "none");
+		this.el.classList.add("hidden");
+		setTimeout(() => {
+			this.el.style.setProperty("display", "none");
+		}, 150);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = CommonView;
