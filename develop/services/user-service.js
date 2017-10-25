@@ -160,7 +160,7 @@ export default class UserService {
 			if (this.isLoggedIn()) {
 				this.users = this.users.map(user => {
 					if (user.email === this.user.email) {
-						user.me = trsignUpViewue;
+						user.me = user;
 					}
 					return user;
 				});

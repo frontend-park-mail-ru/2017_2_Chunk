@@ -1,10 +1,10 @@
 "use strict";
-import commonView from "./commonView";
+import CommonView from "./commonView";
 import Form from "../blocks/form/form.js";
 import Message from "../blocks/message/message.js";
 
 
-export default class loginView extends commonView {
+export default class LoginView extends CommonView {
 	constructor(eventBus) {
 		const loginFields = [
 			{attrs: {

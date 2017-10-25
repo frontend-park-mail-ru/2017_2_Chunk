@@ -376,10 +376,14 @@ requireAll(__webpack_require__(21));
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
-const ScoreboardTemplate = {
-	pugEscape: function pugEscape(e) {
+class scoreboardTemplate {
+	constructor() {
+		this.pug_match_html = /["&<>]/;
+	}
+
+	pug_escape(e) {
 		var a = "" + e,
-		    t = this.pugMatchHtml.exec(a);
+		    t = this.pug_match_html.exec(a);
 		if (!t) return e;
 		var r,
 		    c,
@@ -405,43 +409,41 @@ const ScoreboardTemplate = {
 			c !== r && (s += a.substring(c, r)), c = r + 1, s += n;
 		}
 		return c !== r ? s + a.substring(c, r) : s;
-	},
+	}
 
-	pugMatchHtml: /["&<>]/,
-
-	template: function template(locals) {
+	template(locals) {
 		var pug_html = "",
 		    pug_mixins = {},
 		    pug_interp;
 		;var locals_for_with = locals || {};
 		(function (users) {
-			pug_html = pug_html + "\u003Cthead\u003E\u003Ctr\u003E\u003Cth\u003EEmail\u003C\u002Fth\u003E\u003Cth\u003EScores\u003C\u002Fth\u003E\u003C\u002Ftr\u003E\u003C\u002Fthead\u003E\u003Ctbody\u003E";
+			pug_html = pug_html + "\u003Cdiv class=\"scoreboard__fields\"\u003E";
 			// iterate users
 			;(function () {
 				var $$obj = users;
 				if ('number' == typeof $$obj.length) {
 					for (var pug_index0 = 0, $$l = $$obj.length; pug_index0 < $$l; pug_index0++) {
 						var user = $$obj[pug_index0];
-						pug_html = pug_html + "\u003Ctr\u003E\u003Cth\u003E" + this.pugEscape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fth\u003E\u003Cth\u003E" + this.pugEscape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fth\u003E\u003C\u002Ftr\u003E";
+						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
 					}
 				} else {
 					var $$l = 0;
 					for (var pug_index0 in $$obj) {
 						$$l++;
 						var user = $$obj[pug_index0];
-						pug_html = pug_html + "\u003Ctr\u003E\u003Cth\u003E" + this.pugEscape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fth\u003E\u003Cth\u003E" + this.pugEscape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fth\u003E\u003C\u002Ftr\u003E";
+						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
 					}
 				}
 			}).call(this);
 
-			pug_html = pug_html + "\u003C\u002Ftbody\u003E";
+			pug_html = pug_html + "\u003C\u002Fdiv\u003E";
 		}).call(this, "users" in locals_for_with ? locals_for_with.users : typeof users !== "undefined" ? users : undefined);
 		;
 		return pug_html;
 	}
-};
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = scoreboardTemplate;
 
-/* harmony default export */ __webpack_exports__["default"] = (ScoreboardTemplate);
 
 /***/ }),
 /* 7 */
@@ -615,7 +617,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-class loginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
+class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	constructor(eventBus) {
 		const loginFields = [{ attrs: {
 				type: "text",
@@ -668,7 +670,7 @@ class loginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		this.message.show();
 	}
 }
-/* harmony export (immutable) */ __webpack_exports__["default"] = loginView;
+/* harmony export (immutable) */ __webpack_exports__["default"] = LoginView;
 
 
 /***/ }),
@@ -929,7 +931,7 @@ class UserService {
 			if (this.isLoggedIn()) {
 				this.users = this.users.map(user => {
 					if (user.email === this.user.email) {
-						user.me = trsignUpViewue;
+						user.me = user;
 					}
 					return user;
 				});
@@ -1539,9 +1541,26 @@ webpackContext.id = 21;
 /***/ }),
 /* 49 */,
 /* 50 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commonView__ = __webpack_require__(1);
+
+
+
+
+
+class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"] {
+	constructor() {
+		const templ = new __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__["default"]();
+
+		super();
+	}
+
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = ScoreboardView;
 
 
 /***/ })
