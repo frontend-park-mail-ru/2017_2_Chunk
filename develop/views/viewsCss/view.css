@@ -57,6 +57,12 @@ div.profile {
     padding: 0.4em;
     border-radius: 0.4em;
     box-shadow: none;
+
+}
+
+.form-block__input:focus {
+    background: transparent; /* Цвет фона */
+    border: 0.1em solid #ff8700; /* Параметры рамки */
 }
 
 .form-block__button {
@@ -74,7 +80,14 @@ div.profile {
 
     border-radius: 0.4em;
     box-shadow: none;
+    cursor: pointer;
 
+}
+
+.form-block__button:focus {
+    background: #8b2b03; /* Цвет фона */
+    opacity: 1;
+    border: 0.1em solid #ff8700; /* Параметры рамки */
 }
 
 

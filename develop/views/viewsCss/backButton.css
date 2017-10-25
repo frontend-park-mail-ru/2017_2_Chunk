@@ -15,3 +15,9 @@
     box-shadow: none;
 
 }
+
+.back__button:focus {
+    background: #fffb4c; /* Цвет фона */
+    opacity: 1;
+    border: 0.1em solid #ff8700; /* Параметры рамки */
+}

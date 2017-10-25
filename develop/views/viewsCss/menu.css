@@ -10,4 +10,10 @@
     border-radius: 0.4em;
     box-shadow: none;
     background-color: rgb(111, 43, 8);
+    cursor: pointer;
+}
+
+.menu__button:focus {
+    background: #8b2b03; /* Цвет фона */
+    opacity: 1;
 }
