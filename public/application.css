@@ -145,7 +145,7 @@ body {
 }
 
 section {
-    transition: all .7s;
+    transition: all .12s;
     display: flex;
     flex-direction: column;
     align-content: center;
