@@ -100,12 +100,12 @@ body {
     width: 5em;
     border-radius: 0.4em;
     box-shadow: none;
-    background-color: rgb(111, 43, 8);
+    background-color: rgba(0, 0, 0, 0.87);
     cursor: pointer;
 }
 
 .menu__button:focus {
-    background: #8b2b03; /* Цвет фона */
+    /*background: #8b2b03; !* Цвет фона *!*/
     opacity: 1;
 }
 /*.form-block {*/
@@ -164,6 +164,7 @@ section {
 
 section .button {
     font-family: "Comic Sans";
+    color: white;
     font-size: 1.2em;
     /*text-shadow: darkgray  2px 2px;*/
     /*box-shadow: 10px 5px darkgrey , 12px 7px black;*/
@@ -200,6 +201,7 @@ div.profile {
     width: 80%;
     margin: 0 auto;
     font-size: 16px;
+
     margin-bottom: 3px;
     background-color: transparent;
     border: 0.1em solid #d1d1d1;
@@ -216,11 +218,12 @@ div.profile {
 }
 
 .form-block__button {
+    color: white;
     display: block;
     width: 80%;
     font-size: 16px;
     margin: 0 auto;
-    background-color: #793413;
+    background-color: rgba(0, 0, 0, 0.87);
     opacity: 0.9;
     border: 0.1em chocolate;
     height: 3em;
@@ -235,7 +238,7 @@ div.profile {
 }
 
 .form-block__button:focus {
-    background: #8b2b03; /* Цвет фона */
+    /*background: #8b2b03; !* Цвет фона *!*/
     opacity: 1;
     border: 0.1em solid #ff8700; /* Параметры рамки */
 }
