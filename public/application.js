@@ -61,7 +61,7 @@ var lib =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -180,7 +180,7 @@ class Block {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_eventBus__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_eventBus__ = __webpack_require__(5);
 
 
 
@@ -334,48 +334,6 @@ class Form extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
-class EventBus {
-	constructor() {
-		this.listeners = {};
-	}
-
-	on(event, listener) {
-		this.listeners[event] = this.listeners[event] || [];
-		this.listeners[event].push(listener);
-		console.log("ON emitBus");
-	}
-
-	emit(event, data) {
-		this.listeners[event].forEach(function (listener) {
-			listener(data);
-		});
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = EventBus;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function requireAll(r) {
-  r.keys().forEach(r);
-}
-
-requireAll(__webpack_require__(15));
-requireAll(__webpack_require__(21));
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-
-
 class scoreboardTemplate {
 	constructor() {
 		this.pug_match_html = /["&<>]/;
@@ -424,14 +382,14 @@ class scoreboardTemplate {
 				if ('number' == typeof $$obj.length) {
 					for (var pug_index0 = 0, $$l = $$obj.length; pug_index0 < $$l; pug_index0++) {
 						var user = $$obj[pug_index0];
-						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
+						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
 					}
 				} else {
 					var $$l = 0;
 					for (var pug_index0 in $$obj) {
 						$$l++;
 						var user = $$obj[pug_index0];
-						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
+						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
 					}
 				}
 			}).call(this);
@@ -444,6 +402,48 @@ class scoreboardTemplate {
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = scoreboardTemplate;
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+class EventBus {
+	constructor() {
+		this.listeners = {};
+	}
+
+	on(event, listener) {
+		this.listeners[event] = this.listeners[event] || [];
+		this.listeners[event].push(listener);
+		console.log("ON emitBus");
+	}
+
+	emit(event, data) {
+		this.listeners[event].forEach(function (listener) {
+			listener(data);
+		});
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = EventBus;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function requireAll(r) {
+  r.keys().forEach(r);
+}
+
+requireAll(__webpack_require__(16));
+requireAll(__webpack_require__(22));
 
 /***/ }),
 /* 7 */
@@ -506,6 +506,9 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 					break;
 				case 'rules':
 					this.bus.emit("openRules");
+					break;
+				case 'scores':
+					this.bus.emit("openScoreboard");
 					break;
 			}
 		}.bind(this));
@@ -775,7 +778,44 @@ class rulesViewView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"]
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commonView__ = __webpack_require__(1);
+
+
+
+
+
+class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"] {
+	constructor(EventBus, UserService) {
+		super();
+
+		this.bus = EventBus;
+		// this.userService = UserService;
+
+		this.bus.on("openScoreboard", () => {
+			const users = [{ name: "Igor", score: "1904" }, { name: "Nina", score: "2015" }, { name: "Lesha", score: "2001" }];
+			this.update(users);
+			this.show();
+		});
+	}
+
+	update(users = []) {
+		console.log('Scoreboard.update', users[0]);
+		this.clear();
+		const scoreboardTemplate = new __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__["default"]();
+		this.el.innerHTML = scoreboardTemplate.template({ users });
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = ScoreboardView;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http__ = __webpack_require__(15);
 
 
 //по урлу exit не поулчается выйти
@@ -945,7 +985,7 @@ class UserService {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1065,30 +1105,30 @@ class Http {
 Http.BaseUrl = null;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"./blocks/block/block.js": 0,
 	"./blocks/form/form.js": 3,
 	"./blocks/message/message.js": 2,
-	"./blocks/scoreboard/index.js": 16,
-	"./configs/login-fields.js": 17,
-	"./configs/signup-fields.js": 18,
-	"./include.js": 5,
-	"./main.js": 19,
-	"./modules/eventBus.js": 4,
-	"./modules/http.js": 14,
-	"./services/user-service.js": 13,
-	"./templates/scoreBoard.js": 6,
-	"./templates/scoreBoardOld.js": 20,
+	"./blocks/scoreboard/index.js": 17,
+	"./configs/login-fields.js": 18,
+	"./configs/signup-fields.js": 19,
+	"./include.js": 6,
+	"./main.js": 20,
+	"./modules/eventBus.js": 5,
+	"./modules/http.js": 15,
+	"./services/user-service.js": 14,
+	"./templates/scoreBoard.js": 4,
+	"./templates/scoreBoardOld.js": 21,
 	"./views/backButtonView.js": 10,
 	"./views/commonView.js": 1,
 	"./views/loginView.js": 9,
 	"./views/menuView.js": 7,
 	"./views/profileView.js": 11,
 	"./views/rulesView.js": 12,
-	"./views/scoreboardView.js": 50,
+	"./views/scoreboardView.js": 13,
 	"./views/signUpView.js": 8
 };
 function webpackContext(req) {
@@ -1105,16 +1145,16 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 15;
+webpackContext.id = 16;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__block_block_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_scoreBoard_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_scoreBoard_js__ = __webpack_require__(4);
 
 
 
@@ -1152,7 +1192,7 @@ class Scoreboard extends __WEBPACK_IMPORTED_MODULE_0__block_block_js__["default"
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1191,7 +1231,7 @@ const loginFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (loginFields);
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1240,7 +1280,7 @@ const signupFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (signupFields);
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1251,10 +1291,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__blocks_block_block_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_user_service_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_eventBus__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__blocks_message_message__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__blocks_block_block_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_user_service_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_eventBus__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__blocks_message_message__ = __webpack_require__(2);
 
 /**
  * Основной модуль работатющий со всеми объектами
@@ -1281,11 +1322,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-const userService = new __WEBPACK_IMPORTED_MODULE_7__services_user_service_js__["default"]();
 
-const eventBus = new __WEBPACK_IMPORTED_MODULE_8__modules_eventBus__["default"]();
 
-const app = new __WEBPACK_IMPORTED_MODULE_6__blocks_block_block_js__["default"](document.body);
+const userService = new __WEBPACK_IMPORTED_MODULE_8__services_user_service_js__["default"]();
+
+const eventBus = new __WEBPACK_IMPORTED_MODULE_9__modules_eventBus__["default"]();
+
+const app = new __WEBPACK_IMPORTED_MODULE_7__blocks_block_block_js__["default"](document.body);
 
 const menuView = new __WEBPACK_IMPORTED_MODULE_0__views_menuView__["default"](eventBus);
 
@@ -1298,6 +1341,8 @@ const backButtonView = new __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__["
 const profileView = new __WEBPACK_IMPORTED_MODULE_4__views_profileView__["default"](eventBus);
 
 const rulesView = new __WEBPACK_IMPORTED_MODULE_5__views_rulesView__["default"](eventBus);
+
+const scoreboardView = new __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__["default"](eventBus, userService);
 
 backButtonView.on("click", function (event) {
 	event.preventDefault();
@@ -1327,6 +1372,7 @@ eventBus.on("openSignUp", function () {
 	signUpView.show();
 	backButtonView.show();
 	loginView.hide();
+	scoreboardView.hide();
 });
 
 eventBus.on("openLogin", function () {
@@ -1351,6 +1397,7 @@ eventBus.on("openMenu", function () {
 	backButtonView.hide();
 	loginView.hide();
 	rulesView.hide();
+	scoreboardView.hide();
 
 	userService.getDataFetch().then(function (resp) {
 		eventBus.emit("auth", resp.username);
@@ -1370,12 +1417,18 @@ eventBus.on("exit", function () {
 	eventBus.emit("openMenu");
 });
 
-app.append(menuView).append(signUpView).append(loginView).append(backButtonView).append(profileView).append(rulesView);
+eventBus.on("openScoreboard", function () {
+	menuView.hide();
+	backButtonView.show();
+	scoreboardView.show();
+});
+
+app.append(menuView).append(signUpView).append(loginView).append(backButtonView).append(profileView).append(rulesView).append(scoreboardView);
 
 eventBus.emit("openMenu");
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 // (function () {
@@ -1424,7 +1477,7 @@ eventBus.emit("openMenu");
 //
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -1434,11 +1487,11 @@ var map = {
 	"./configs/login-fields.css": 26,
 	"./configs/signup-fields.css": 27,
 	"./views/viewsCss/backButton.css": 28,
-	"./views/viewsCss/commonView.css": 48,
-	"./views/viewsCss/login.css": 29,
-	"./views/viewsCss/menu.css": 30,
-	"./views/viewsCss/signUp.css": 31,
-	"./views/viewsCss/view.css": 32
+	"./views/viewsCss/commonView.css": 29,
+	"./views/viewsCss/login.css": 30,
+	"./views/viewsCss/menu.css": 31,
+	"./views/viewsCss/signUp.css": 32,
+	"./views/viewsCss/view.css": 33
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1454,10 +1507,9 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 21;
+webpackContext.id = 22;
 
 /***/ }),
-/* 22 */,
 /* 23 */
 /***/ (function(module, exports) {
 
@@ -1518,50 +1570,10 @@ webpackContext.id = 21;
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */
+/* 33 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 49 */,
-/* 50 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commonView__ = __webpack_require__(1);
-
-
-
-
-
-class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"] {
-	constructor() {
-		const templ = new __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__["default"]();
-
-		super();
-	}
-
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = ScoreboardView;
-
 
 /***/ })
 /******/ ]);

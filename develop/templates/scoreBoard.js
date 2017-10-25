@@ -44,14 +44,14 @@ export default class scoreboardTemplate {
 				if ('number' == typeof $$obj.length) {
 					for (var pug_index0 = 0, $$l = $$obj.length; pug_index0 < $$l; pug_index0++) {
 						var user = $$obj[pug_index0];
-						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + (pug_escape(null == (pug_interp = user.name) ? "" : pug_interp)) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + (pug_escape(null == (pug_interp = user.score) ? "" : pug_interp)) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
+						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + (this.pug_escape(null == (pug_interp = user.name) ? "" : pug_interp)) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + (this.pug_escape(null == (pug_interp = user.score) ? "" : pug_interp)) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
 					}
 				} else {
 					var $$l = 0;
 					for (var pug_index0 in $$obj) {
 						$$l++;
 						var user = $$obj[pug_index0];
-						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + (pug_escape(null == (pug_interp = user.name) ? "" : pug_interp)) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + (pug_escape(null == (pug_interp = user.score) ? "" : pug_interp)) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
+						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + (this.pug_escape(null == (pug_interp = user.name) ? "" : pug_interp)) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + (this.pug_escape(null == (pug_interp = user.score) ? "" : pug_interp)) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
 					}
 				}
 			}).call(this);

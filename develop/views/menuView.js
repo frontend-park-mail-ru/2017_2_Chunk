@@ -62,6 +62,9 @@ export default class MenuView extends CommonView {
 				case 'rules':
 					this.bus.emit("openRules");
 					break;
+				case 'scores':
+					this.bus.emit("openScoreboard");
+					break;
 			}
 		}.bind(this));
 
