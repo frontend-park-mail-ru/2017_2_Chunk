@@ -1112,7 +1112,6 @@ var map = {
 	"./blocks/block/block.js": 0,
 	"./blocks/form/form.js": 3,
 	"./blocks/message/message.js": 2,
-	"./blocks/scoreboard/index.js": 17,
 	"./configs/login-fields.js": 18,
 	"./configs/signup-fields.js": 19,
 	"./include.js": 6,
@@ -1121,7 +1120,6 @@ var map = {
 	"./modules/http.js": 15,
 	"./services/user-service.js": 14,
 	"./templates/scoreBoard.js": 4,
-	"./templates/scoreBoardOld.js": 21,
 	"./views/backButtonView.js": 10,
 	"./views/commonView.js": 1,
 	"./views/loginView.js": 9,
@@ -1148,50 +1146,7 @@ module.exports = webpackContext;
 webpackContext.id = 16;
 
 /***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__block_block_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_scoreBoard_js__ = __webpack_require__(4);
-
-
-
-
-/**
- * Модуль для получения шаблона таблицы рекордов с пользователями
- * @Module Scoreboard
- */
-
-
-
-class Scoreboard extends __WEBPACK_IMPORTED_MODULE_0__block_block_js__["default"] {
-	/**
-  * HTMLElement el - корневой элемент блока
-  * @constructor
-  */
-	constructor() {
-		const el = document.createElement('table');
-		super(el);
-	}
-
-	/**
-  * Позволяет записать в шаблон таблицы рекордов пользователей users
-  * шаблон вместе с данными записывается в this.el в виде готового HTML блока 'table'
-  * инициализированного в конструкторе
-  * @param users[]- массив пользователей
-  */
-	update(users = []) {
-		console.log('Scoreboard.update', users[0]);
-		this.clear();
-		this.el.innerHTML = __WEBPACK_IMPORTED_MODULE_1__templates_scoreBoard_js__["default"].template({ users });
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = Scoreboard;
-
-
-/***/ }),
+/* 17 */,
 /* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1428,61 +1383,11 @@ app.append(menuView).append(signUpView).append(loginView).append(backButtonView)
 eventBus.emit("openMenu");
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
-// (function () {
-// 	'use strict';
-//
-// 	window.ScoreboardTemplateOld = {
-// 		pugEscape: function pug_escape(e) {
-// 			var a = "" + e, t = this.pugMatchHtml.exec(a);
-// 			if (!t) return e;
-// 			var r, c, n, s = "";
-// 			for (r = t.index, c = 0; r < a.length; r++) {
-// 				switch (a.charCodeAt(r)) {
-// 					case 34:
-// 						n = "&quot;";
-// 						break;
-// 					case 38:
-// 						n = "&amp;";
-// 						break;
-// 					case 60:
-// 						n = "&lt;";
-// 						break;
-// 					case 62:
-// 						n = "&gt;";
-// 						break;
-// 					default:
-// 						continue
-// 				}
-// 				c !== r && (s += a.substring(c, r)), c = r + 1, s += n
-// 			}
-// 			return c !== r ? s + a.substring(c, r) : s
-// 		},
-// 		pug_match_html: /["&<>]/,
-// 		template: function template(locals) {
-// 			var pug_html = "", pug_mixins = {}, pug_interp;
-// 			;var locals_for_with = (locals || {});
-// 			(function (name) {
-// 				pug_html = pug_html + "\u003Cdiv\u003E\u003Cp\u003E" + (this.pugEscape(null == (pug_interp = name) ? "" : pug_interp)) + "'s Pug source code!\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E";
-// 			}.call(this, "name" in locals_for_with ? locals_for_with.name : typeof name !== "undefined" ? name : undefined));
-// 			;
-// 			return pug_html;
-// 		}
-// 	}
-//
-// })();
-//
-//
-
-/***/ }),
+/* 21 */,
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./blocks/block/block.css": 23,
-	"./blocks/form/index.css": 24,
 	"./blocks/message/index.css": 25,
 	"./configs/login-fields.css": 26,
 	"./configs/signup-fields.css": 27,
@@ -1510,18 +1415,8 @@ module.exports = webpackContext;
 webpackContext.id = 22;
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 23 */,
+/* 24 */,
 /* 25 */
 /***/ (function(module, exports) {
 
