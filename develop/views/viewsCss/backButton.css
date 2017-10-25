@@ -1,5 +1,6 @@
 .back__button {
-    background-color: chocolate;
+    background-color: rgba(210, 156, 30, 0.91);
+    opacity: 0.9;
     border: 0.1em chocolate;
     height: 3em;
     position: fixed;

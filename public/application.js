@@ -1418,13 +1418,13 @@ eventBus.emit("openMenu");
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./CSS/new.css": 22,
 	"./blocks/block/block.css": 23,
 	"./blocks/form/index.css": 24,
 	"./blocks/message/index.css": 25,
 	"./configs/login-fields.css": 26,
 	"./configs/signup-fields.css": 27,
 	"./views/viewsCss/backButton.css": 28,
+	"./views/viewsCss/commonView.css": 48,
 	"./views/viewsCss/login.css": 29,
 	"./views/viewsCss/menu.css": 30,
 	"./views/viewsCss/signUp.css": 31,
@@ -1447,12 +1447,7 @@ module.exports = webpackContext;
 webpackContext.id = 21;
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 22 */,
 /* 23 */
 /***/ (function(module, exports) {
 
@@ -1508,6 +1503,27 @@ webpackContext.id = 21;
 
 /***/ }),
 /* 32 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

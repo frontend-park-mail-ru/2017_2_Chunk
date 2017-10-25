@@ -11,10 +11,10 @@ section {
     align-content: center;
     justify-content: center;
     position: relative;
-    width: 30%;
+    width: 20em;
     min-width: 300px;
     margin: 1.5% auto;
-    border-radius: 5%;
+    border-radius: 0.8em;
     border: ridge black;
     padding-top: 1%;
     padding-bottom: 1%;
@@ -56,8 +56,10 @@ div.profile {
 .form-block__button {
     display: block;
     width: 80%;
+    font-size: 16px;
     margin: 0 auto;
-    background-color: chocolate;
+    background-color: #793413;
+    opacity: 0.9;
     border: 0.1em chocolate;
     height: 3em;
     padding: 0.4em;
@@ -69,6 +71,8 @@ div.profile {
 
 }
 
+
+/*штуки стилей плейсхолдеров*/
 ::-webkit-input-placeholder {
     color: #fff;
     font-weight: bold;

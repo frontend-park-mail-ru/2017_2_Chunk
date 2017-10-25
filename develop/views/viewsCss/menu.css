@@ -1,5 +1,6 @@
 .menu__button {
     border: 0.1em chocolate;
+    opacity: 0.8;
     height: 3em;
     padding: 0.4em;
     margin-top: 0.5em;
@@ -7,5 +8,5 @@
     width: 5em;
     border-radius: 0.4em;
     box-shadow: none;
-    background-color: chocolate;
+    background-color: rgb(111, 43, 8);
 }
