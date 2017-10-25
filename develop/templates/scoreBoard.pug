@@ -1,10 +1,5 @@
-thead
-    tr
-        th Email
-        th Scores
-
-tbody
+div(class='scoreboard__fields')
     each user in users
-        tr
-            th #{user.name}
-            th #{user.score}
+        div
+            span #{user.name}
+            span #{user.score}
