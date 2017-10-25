@@ -818,11 +818,11 @@ class UserService {
 			}
 
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/sign_up', { username, email, password }).then(function (resp) {
-				alert("good response status" + resp.status);
+				console.log("good response status" + resp.status);
 				return resp;
 			}).catch(function (err) {
 				//не могу достать errorMessage
-				alert("err response status " + err.status + err.errorMessage);
+				console.log("err response status " + err.status + err.errorMessage);
 				throw new Error("err resp status " + err.status + JSON.parse(err).errorMessage);
 			}));
 		});
@@ -1051,7 +1051,6 @@ class Http {
 				'Content-Type': 'application/json; charset=utf-8'
 			}
 		}).then(function (response) {
-			debugger;
 			if (response.status >= 400) {
 				throw JSON.parse(response.body).errorMessage;
 			}
@@ -1087,6 +1086,7 @@ var map = {
 	"./views/menuView.js": 7,
 	"./views/profileView.js": 11,
 	"./views/rulesView.js": 12,
+	"./views/scoreboardView.js": 50,
 	"./views/signUpView.js": 8
 };
 function webpackContext(req) {
@@ -1535,6 +1535,14 @@ webpackContext.id = 21;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 49 */,
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 /***/ })
 /******/ ]);

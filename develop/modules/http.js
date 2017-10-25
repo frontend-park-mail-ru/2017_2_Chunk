@@ -102,7 +102,6 @@
 					'Content-Type': 'application/json; charset=utf-8'
 				}
 			}).then(function (response) {
-				debugger;
 				if (response.status >= 400) {
 					throw JSON.parse(response.body).errorMessage;
 				}

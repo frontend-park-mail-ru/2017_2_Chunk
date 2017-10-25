@@ -42,11 +42,11 @@ export default class UserService {
 
 			resolve(Http.FetchPost('/sign_up', {username, email, password})
 				.then(function(resp) {
-					alert("good response status" + resp.status);
+					console.log("good response status" + resp.status);
 					return resp;
 				})
 				.catch(function(err) {//не могу достать errorMessage
-					alert("err response status " + err.status  + err.errorMessage);
+					console.log("err response status " + err.status  + err.errorMessage);
 					throw new Error("err resp status " + err.status + JSON.parse(err).errorMessage);
 				}));
 
