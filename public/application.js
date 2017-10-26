@@ -850,9 +850,9 @@ class UserService {
 				return resp;
 			}.bind(this)).catch(function (err) {
 				//не могу достать errorMessage
-				console.log(JSON.parse(err).message);
-				console.log("err response status " + err.json().message);
-				throw new Error("err resp text " + err.message);
+				console.info(err);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
 			}.bind(this)));
 		});
 	}
@@ -887,9 +887,10 @@ class UserService {
 				return resp;
 			}.bind(this)).catch(function (err) {
 				//не могу достать errorMessage
-				console.log(JSON.parse(err).message);
-				console.log("err response status " + err.json().message);
-				throw new Error("err resp text " + err.message);
+				debugger;
+				console.log(err.errormessage);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
 			}.bind(this)));
 		});
 	}
@@ -1024,8 +1025,8 @@ class Http {
 		debugger;
 		const url = backendUrl + address;
 		const myHeaders = new Headers();
-		myHeaders.set("Content-Type", "application/json");
-		return await fetch(url, {
+		myHeaders.set("Content-Type", "application/json; charset=utf-8");
+		return fetch(url, {
 			method: 'POST',
 			mode: 'cors',
 			credentials: 'include',
@@ -1035,10 +1036,13 @@ class Http {
 			// 	'Content-Type': 'application/json; charset=utf-8'
 			// }
 		}).then(function (response) {
+			let json = response.json();
 			if (response.status >= 400) {
-				throw response;
+				return json.then(resp => {
+					throw resp;
+				});
 			}
-			return response.json();
+			return json;
 		});
 	}
 }
@@ -1113,6 +1117,7 @@ class Router {
 		}.bind(this));
 
 		this._routes.forEach(function (route, number) {
+
 			if (location.pathname.match(route.url_pattern)) {
 				//match вернет null при отсутсвии совпадения
 				console.log("Matched!");

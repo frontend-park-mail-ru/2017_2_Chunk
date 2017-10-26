@@ -46,8 +46,8 @@
 			debugger;
 			const url = backendUrl + address;
 			const myHeaders = new Headers();
-			myHeaders.set("Content-Type", "application/json");
-			return await fetch(url, {
+			myHeaders.set("Content-Type", "application/json; charset=utf-8");
+			return fetch(url, {
 				method: 'POST',
 				mode: 'cors',
 				credentials: 'include',
@@ -57,10 +57,11 @@
 				// 	'Content-Type': 'application/json; charset=utf-8'
 				// }
 			}).then(function (response) {
+				let json = response.json();
 				if (response.status >= 400) {
-					throw response;
+					return json.then(resp => {throw resp});
 				}
-				return response.json();
+				return json;
 			});
 		}
 	}

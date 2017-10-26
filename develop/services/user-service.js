@@ -45,9 +45,9 @@ export default class UserService {
 					return resp;
 				}.bind(this))
 				.catch(function(err) {//не могу достать errorMessage
-					console.log(JSON.parse(err).message);
-					console.log("err response status "  + err.json().message);
-					throw new Error("err resp text " + err.message);
+					console.info(err);
+					console.log("err response status "  + err.errorMessage);
+					throw new Error(err.errorMessage);
 				}.bind(this)));
 		})
 	}
@@ -84,9 +84,10 @@ export default class UserService {
 					return resp;
 				}.bind(this))
 				.catch(function(err) {//не могу достать errorMessage
-					console.log(JSON.parse(err).message);
-					console.log("err response status "  + err.json().message);
-					throw new Error("err resp text " + err.message);
+					debugger;
+					console.log(err.errormessage);
+					console.log("err response status "  + err.errorMessage);
+					throw new Error(err.errorMessage);
 				}.bind(this)));
 		})
 	}

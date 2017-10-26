@@ -64,6 +64,7 @@ export default class Router {
 		}.bind(this));
 
 		this._routes.forEach(function(route, number) {
+
 			if (location.pathname.match(route.url_pattern)) {//match вернет null при отсутсвии совпадения
 				console.log("Matched!");
 				window.history.pushState({page: this.routes[number].url}, route.url_pattern, route.url_pattern);
