@@ -37,11 +37,14 @@ export default class Router {
 
 		//реагирует на любые клики. в том числе и сабмиты
 		this.app.on("click", (event) => {
-			event.preventDefault();
 			const target = event.target;
-			console.log(target.href);
-			this.goTo(target.href);
-		});
+			const type = target.tagName.toLowerCase();
+			if (type === 'a'){
+				event.preventDefault();
+				this.goTo(target.href);
+				return;
+			}
+		}, false);
 
 
 		window.onpopstate = function() {
@@ -60,7 +63,6 @@ export default class Router {
 			});
 		}.bind(this));
 
-
 		this._routes.forEach(function(route, number) {
 			if (location.pathname.match(route.url_pattern)) {//match вернет null при отсутсвии совпадения
 				console.log("Matched!");
@@ -75,7 +77,7 @@ export default class Router {
 	goTo(path) {
 		this._routes.forEach((route, number) => {
 			if(path.match(route.url_pattern)) {
-				window.history.pushState({page: this.routes[number].url}, route.url_pattern, route.url_pattern);
+				window.history.pushState({page: "bla"}, "bla", route.url_pattern);
 				route.emit(this.routes[number].event);
 				return;
 			}

@@ -5,7 +5,7 @@ import Message from "../blocks/message/message.js";
 
 
 export default class signUpView extends commonView {
-	constructor(eventBus) {
+	constructor(eventBus, userService, router) {
 		const signUpFields = [
 			{attrs: {
 				type: "text",
@@ -49,19 +49,19 @@ export default class signUpView extends commonView {
 		super({form});
 
 		this.bus = eventBus;
+		this.userService = userService;
+		this.router = router;
 
 		const err_message = new Message();
 		this.append(err_message);
 
 		this.hide();
-	}
 
-
-	onSubmit(callback) {
 		this.message = new Message();
 		this.message.clear();
 		this.message.hide();
 		this.append(this.message);
+
 		this.el.addEventListener("submit", function(event) {
 			event.preventDefault();
 			const formData = {};
@@ -70,8 +70,24 @@ export default class signUpView extends commonView {
 			for (let field in fields) {
 				formData[fields[field].name] = fields[field].value;
 			}
-			callback(formData);
-		}.bind(this))
+			this.onSubmit(formData);
+
+		}.bind(this), true)
+	}
+
+
+	onSubmit(formData) {
+		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm)
+			.then(function(resp) {
+				this.bus.emit("auth");
+				this.router.goTo("/menu");
+			}.bind(this))
+			.catch(function(err) {
+				debugger;
+				console.log("some err with sign up");
+				console.log("err: ", err.message);
+				this.setErrorText(err.message)//нужно поставить ошибку из json
+			}.bind(this));
 	}
 
 

@@ -25,7 +25,7 @@ app.use("/signup", express.static('./public'));
 app.use("/login", express.static('./public'));
 app.use("/rules", express.static('./public'));
 app.use("/scoreboard", express.static('./public'));
-app.use("/exit", express.static('./public'));
+// app.use("/exit", express.static('./public'));
 
 
 app.use(bodyParser.json());                 // С помощью какой-то древней магии парсит тело запроса,
@@ -74,23 +74,28 @@ app.get('/cool', function(request, response) {
 
 app.post('/sign_up', (request, response) => {
 
+	console.log("in server");
 	const username = request.body.username;
 	const email = request.body.email;
 	const password = request.body.password;
 
 	console.log(username, password);
-
 	// Устанавливаем заголовок ответа
 	response.set('Content-Type', 'application/json; charset=utf8');
 
 	if (!username || !password) {
 		return response.status(400).send(JSON.stringify({
-			errorMessage: "Логин и(или) пароль не указаны"
+			message: "Логин и(или) пароль не указаны"
+		}));
+	}
+	if (username === password) {
+		return response.status(400).send(JSON.stringify({
+			message: "Пароль и логин совпадают"
 		}));
 	}
 	if (users[username]) {
 		return response.status(400).send(JSON.stringify({
-			errorMessage: "Пользователь существует"
+			message: "Пользователь существует"
 		}));
 		}
 
@@ -101,10 +106,9 @@ app.post('/sign_up', (request, response) => {
 	response.cookie('my_cookie', new_id, {          // Название и значение куки
 		expires: new Date(Date.now() + ttl)        // Время жизни куки
 	});
-	response.status(200).end();
+	console.log("resp status 200");
+	response.status(200).send(JSON.stringify({username: username, email: email}));
 });
-
-
 
 
 
@@ -136,9 +140,6 @@ app.post('/sign_in', (request, response) => {
 	});
 	response.status(200).end();
 });
-
-
-
 
 
 app.listen(process.env.PORT || 8081, function () {

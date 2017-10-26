@@ -216,7 +216,7 @@ class CommonView extends __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__["d
 		}, 150);
 		setTimeout(() => {
 			this.el.classList.remove("hidden");
-		}, 200);
+		}, 100);
 	}
 
 	hide() {
@@ -396,7 +396,6 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		super(menuElems);
 
 		this.bus = eventBus;
-		this.router = router;
 
 		this.bus.on("unauth", function () {
 			for (let elem in this.elements) {
@@ -466,7 +465,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
-	constructor(eventBus) {
+	constructor(eventBus, userService, router) {
 		const signUpFields = [{ attrs: {
 				type: "text",
 				size: "128",
@@ -504,18 +503,19 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		super({ form });
 
 		this.bus = eventBus;
+		this.userService = userService;
+		this.router = router;
 
 		const err_message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
 		this.append(err_message);
 
 		this.hide();
-	}
 
-	onSubmit(callback) {
 		this.message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
 		this.message.clear();
 		this.message.hide();
 		this.append(this.message);
+
 		this.el.addEventListener("submit", function (event) {
 			event.preventDefault();
 			const formData = {};
@@ -524,7 +524,19 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 			for (let field in fields) {
 				formData[fields[field].name] = fields[field].value;
 			}
-			callback(formData);
+			this.onSubmit(formData);
+		}.bind(this), true);
+	}
+
+	onSubmit(formData) {
+		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm).then(function (resp) {
+			this.bus.emit("auth");
+			this.router.goTo("/menu");
+		}.bind(this)).catch(function (err) {
+			debugger;
+			console.log("some err with sign up");
+			console.log("err: ", err.message);
+			this.setErrorText(err.message); //нужно поставить ошибку из json
 		}.bind(this));
 	}
 
@@ -684,11 +696,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-class rulesViewView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
+class rulesView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	constructor(emitBus) {
 		const rules = {
 			back: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('div', {}, ['rulesText', 'back'], 'text Text text')
 		};
+
 		super(rules);
 
 		this.bus = emitBus;
@@ -700,7 +713,7 @@ class rulesViewView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"]
 		});
 	}
 }
-/* harmony export (immutable) */ __webpack_exports__["default"] = rulesViewView;
+/* harmony export (immutable) */ __webpack_exports__["default"] = rulesView;
 
 
 /***/ }),
@@ -851,30 +864,31 @@ class UserService {
 		//не парсит JSON
 		//validation
 		return new Promise(function (resolve, reject) {
-			if (username.length < 4) {
-				throw new Error("Длина логина должна быть не меньше 4 символов!");
-			}
-			if (username.length > 12) {
-				throw new Error("Длина логина не должна превышать 12 символов!");
-			}
-			if (password.length < 6) {
-				throw new Error("Длина пароля должна быть не меньше 6 символов!");
-			}
-			if (password !== confirm) {
-				throw new Error("Пароли не совпадают!!!");
-			}
-			if (password === username) {
-				throw new Error("Логин и пароль не должны совпадать!");
-			}
+			// if (username.length < 4) {
+			// 	throw new Error("Длина логина должна быть не меньше 4 символов!");
+			// }
+			// if (username.length > 12) {
+			// 	throw new Error("Длина логина не должна превышать 12 символов!");
+			// }
+			// if (password.length < 6) {
+			// 	throw new Error("Длина пароля должна быть не меньше 6 символов!");
+			// }
+			// if (password !== confirm) {
+			// 	throw new Error("Пароли не совпадают!!!");
+			// }
+			// if (password === username) {
+			// 	throw new Error("Логин и пароль не должны совпадать!");
+			// }
 
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/sign_up', { username, email, password }).then(function (resp) {
-				console.log("good response status" + resp.status);
+				console.log("good response status" + resp.username);
 				return resp;
-			}).catch(function (err) {
+			}.bind(this)).catch(function (err) {
 				//не могу достать errorMessage
-				console.log("err response status " + err.status + err.errorMessage);
-				throw new Error("err resp status " + err.status + JSON.parse(err).errorMessage);
-			}));
+				console.log(JSON.parse(err).message);
+				console.log("err response status " + err.json().message);
+				throw new Error("err resp text " + err.message);
+			}.bind(this)));
 		});
 	}
 
@@ -886,22 +900,22 @@ class UserService {
   */
 	login(email, password, callback) {
 		return new Promise(function (resolve, reject) {
-			if (email.length < 4) {
-				callback("Длина логина должна быть не меньше 4 символов!", null);
-				return;
-			}
-			if (email.length > 12) {
-				callback("Длина логина не должна превышать 12 символов!", null);
-				return;
-			}
-			if (password.length < 6) {
-				callback("Длина пароля должна быть не меньше 6 символов!", null);
-				return;
-			}
-			if (password === email) {
-				callback("Логин и пароль не могут совпадать!", null);
-				return;
-			}
+			// if (email.length < 4) {
+			// 	callback("Длина логина должна быть не меньше 4 символов!", null);
+			// 	return;
+			// }
+			// if (email.length > 12) {
+			// 	callback("Длина логина не должна превышать 12 символов!", null);
+			// 	return;
+			// }
+			// if (password.length < 6) {
+			// 	callback("Длина пароля должна быть не меньше 6 символов!", null);
+			// 	return;
+			// }
+			// if (password === email) {
+			// 	callback("Логин и пароль не могут совпадать!", null);
+			// 	return;
+			// }
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/login', { username, password }).then(function (resp) {
 				alert("good response status" + resp.status);
 				return resp;
@@ -926,14 +940,13 @@ class UserService {
   * @param force - пременная для принудительной отправки гет запроса если true
   * @return {Promise} - возвращает функцию колбек с результатом запроса или ошибкой
   */
-	async getDataFetch(force = false) {
+	getDataFetch(force = false) {
 		if (this.isLoggedIn() && !force) {
 			return new Promise(function (resolve, reject) {
 				resolve(this.user);
-			});
+			}.bind(this));
 		}
-
-		return await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/whoisit').then(function (resp) {
+		return __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/whoisit').then(function (resp) {
 			this.user = resp;
 			return this.user;
 		}.bind(this)).catch(function (err) {
@@ -964,30 +977,34 @@ class UserService {
 		});
 	}
 
+	loadUsersList() {
+		return __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('');
+	}
+
 	/**
   * Загружает список всех пользователей
   * @param callback
   */
-	loadUsersList(callback) {
-		__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].Get('/users', function (err, users) {
-			if (err) {
-				return callback(err, users);
-			}
-
-			this.users = users;
-
-			if (this.isLoggedIn()) {
-				this.users = this.users.map(user => {
-					if (user.email === this.user.email) {
-						user.me = user;
-					}
-					return user;
-				});
-			}
-
-			callback(null, this.users);
-		}.bind(this));
-	}
+	// loadUsersList(callback) {
+	// 	Http.Get('/users', function (err, users) {
+	// 		if (err) {
+	// 			return callback(err, users);
+	// 		}
+	//
+	// 		this.users = users;
+	//
+	// 		if (this.isLoggedIn()) {
+	// 			this.users = this.users.map(user => {
+	// 				if (user.email === this.user.email) {
+	// 					user.me = user;
+	// 				}
+	// 				return user;
+	// 			});
+	// 		}
+	//
+	// 		callback(null, this.users);
+	// 	}.bind(this));
+	// }
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = UserService;
 
@@ -1090,9 +1107,9 @@ class Http {
 	//
 	//
 	//
-	static FetchPost(address, body) {
+	static async FetchPost(address, body) {
 		const url = backendUrl + address;
-		return fetch(url, {
+		return await fetch(url, {
 			method: 'POST',
 			mode: 'cors',
 			credentials: 'include',
@@ -1102,7 +1119,7 @@ class Http {
 			}
 		}).then(function (response) {
 			if (response.status >= 400) {
-				throw JSON.parse(response.body).errorMessage;
+				throw response;
 			}
 			return response.json();
 		});
@@ -1151,11 +1168,14 @@ class Router {
 
 		//реагирует на любые клики. в том числе и сабмиты
 		this.app.on("click", event => {
-			event.preventDefault();
 			const target = event.target;
-			console.log(target.href);
-			this.goTo(target.href);
-		});
+			const type = target.tagName.toLowerCase();
+			if (type === 'a') {
+				event.preventDefault();
+				this.goTo(target.href);
+				return;
+			}
+		}, false);
 
 		window.onpopstate = function () {
 			console.log(location.pathname);
@@ -1189,7 +1209,7 @@ class Router {
 	goTo(path) {
 		this._routes.forEach((route, number) => {
 			if (path.match(route.url_pattern)) {
-				window.history.pushState({ page: this.routes[number].url }, route.url_pattern, route.url_pattern);
+				window.history.pushState({ page: "bla" }, "bla", route.url_pattern);
 				route.emit(this.routes[number].event);
 				return;
 			}
@@ -1397,7 +1417,7 @@ const app = new __WEBPACK_IMPORTED_MODULE_7__blocks_block_block_js__["default"](
 
 const menuView = new __WEBPACK_IMPORTED_MODULE_0__views_menuView__["default"](eventBus, router);
 
-const signUpView = new __WEBPACK_IMPORTED_MODULE_1__views_signUpView__["default"](eventBus);
+const signUpView = new __WEBPACK_IMPORTED_MODULE_1__views_signUpView__["default"](eventBus, userService, router);
 
 const loginView = new __WEBPACK_IMPORTED_MODULE_2__views_loginView__["default"](eventBus);
 
@@ -1415,15 +1435,6 @@ const scoreboardView = new __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__["
 // 	eventBus.emit("openMenu");
 // });
 
-
-signUpView.onSubmit(function (formData) {
-	userService.signup(formData.name, formData.email, formData.password, formData.confirm).then(function (resp) {
-		eventBus.emit("openMenu");
-	}).catch(function (err) {
-		console.log("some err with sign up");
-		signUpView.setErrorText(err.message); //нужно поставить ошибку из json
-	}.bind(this));
-}.bind(this));
 
 loginView.onSubmit(function (formData) {
 	userService.login(formData.name, formData.password).then(function (resp) {
@@ -1463,12 +1474,12 @@ eventBus.on("openRules", function () {
 
 eventBus.on("openMenu", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
-	menuView.show();
 	signUpView.hide();
 	backButtonView.hide();
 	loginView.hide();
 	rulesView.hide();
 	scoreboardView.hide();
+	menuView.show();
 
 	userService.getDataFetch().then(function (resp) {
 		eventBus.emit("auth", resp.username);
@@ -1478,14 +1489,14 @@ eventBus.on("openMenu", function () {
 		profileView.hide();
 		console.log(err.message);
 	});
-});
+}.bind(this));
 
 //отследить ексепшены при отсутствии интернета
 eventBus.on("exit", function () {
 	userService.logout();
 	profileView.hide();
 	eventBus.emit("unauth");
-	eventBus.emit("openMenu");
+	router.goTo('/menu');
 });
 
 eventBus.on("openScoreboard", function () {

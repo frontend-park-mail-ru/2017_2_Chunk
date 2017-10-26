@@ -18,7 +18,6 @@ export default class MenuView extends CommonView {
 
 
 		this.bus = eventBus;
-		this.router = router;
 
 		this.bus.on("unauth", function() {
 			for (let elem in this.elements) {

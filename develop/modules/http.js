@@ -91,9 +91,9 @@
 		//
 		//
 		//
-		static FetchPost(address, body) {
+		static async FetchPost(address, body) {
 			const url = backendUrl + address;
-			return fetch(url, {
+			return await fetch(url, {
 				method: 'POST',
 				mode: 'cors',
 				credentials: 'include',
@@ -103,7 +103,7 @@
 				}
 			}).then(function (response) {
 				if (response.status >= 400) {
-					throw JSON.parse(response.body).errorMessage;
+					throw response;
 				}
 				return response.json();
 			});

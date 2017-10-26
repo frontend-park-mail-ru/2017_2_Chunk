@@ -39,7 +39,7 @@ const app = new Block(document.body);
 
 const menuView = new MenuView(eventBus, router);
 
-const signUpView = new SignUpView(eventBus);
+const signUpView = new SignUpView(eventBus, userService, router);
 
 const loginView = new LoginView(eventBus);
 
@@ -58,17 +58,6 @@ const scoreboardView = new ScoreboardView(eventBus, userService);
 // 	eventBus.emit("openMenu");
 // });
 
-
-signUpView.onSubmit(function (formData) {
-	userService.signup(formData.name, formData.email, formData.password, formData.confirm)
-		.then(function(resp) {
-			eventBus.emit("openMenu");
-		})
-		.catch(function(err) {
-			console.log("some err with sign up");
-			signUpView.setErrorText(err.message)//нужно поставить ошибку из json
-		}.bind(this));
-}.bind(this));
 
 
 loginView.onSubmit(function (formData) {
@@ -100,7 +89,6 @@ eventBus.on("openLogin", function() {
 	backButtonView.show();
 	loginView.show();
 	rulesView.hide();
-
 });
 
 
@@ -116,12 +104,12 @@ eventBus.on("openRules", function() {
 
 eventBus.on("openMenu", function() {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
-	menuView.show();
 	signUpView.hide();
 	backButtonView.hide();
 	loginView.hide();
 	rulesView.hide();
 	scoreboardView.hide();
+	menuView.show();
 
 	userService.getDataFetch()
 		.then(function(resp) {
@@ -133,7 +121,7 @@ eventBus.on("openMenu", function() {
 			profileView.hide();
 			console.log(err.message);
 		})
-});
+}.bind(this));
 
 
 //отследить ексепшены при отсутствии интернета
@@ -141,7 +129,7 @@ eventBus.on("exit", function () {
 	userService.logout();
 	profileView.hide();
 	eventBus.emit("unauth");
-	eventBus.emit("openMenu");
+	router.goTo('/menu');
 });
 
 
@@ -161,6 +149,7 @@ app
 	.append(profileView)
 	.append(rulesView)
 	.append(scoreboardView);
+
 
 
 router.start();

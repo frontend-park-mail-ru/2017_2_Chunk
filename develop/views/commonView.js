@@ -30,14 +30,12 @@ export default class CommonView extends Block {
 
 	show() {
 		setTimeout(() => {this.el.style.setProperty("display", "flex");}, 150);
-		setTimeout(() => {this.el.classList.remove("hidden");}, 200)
-
+		setTimeout(() => {this.el.classList.remove("hidden");}, 100)
 	}
 
 	hide() {
-		this.el.classList.add("hidden");
+		this.el.classList.add("hidden",);
 		setTimeout(() => {this.el.style.setProperty("display", "none");}, 150);
-
 	}
 }
 
