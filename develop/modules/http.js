@@ -105,7 +105,7 @@
 				if (response.status >= 400) {
 					throw JSON.parse(response.body).errorMessage;
 				}
-				return response;
+				return response.json();
 			});
 		}
 	}

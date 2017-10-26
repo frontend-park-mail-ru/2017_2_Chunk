@@ -49,7 +49,6 @@ export default class UserService {
 					console.log("err response status " + err.status  + err.errorMessage);
 					throw new Error("err resp status " + err.status + JSON.parse(err).errorMessage);
 				}));
-
 		})
 	}
 

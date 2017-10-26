@@ -19,7 +19,15 @@ const app = express();
 // Middleware
 
 // app.use(morgan('dev'));                     // Формат выводимой инфы о запросах
-app.use(express.static('./public'));        // Отдаёт статику при совпадении имён
+// app.use("/", express.static('./public'));// Отдаёт статику при совпадении имён
+app.use("/menu", express.static('./public'));
+app.use("/signup", express.static('./public'));
+app.use("/login", express.static('./public'));
+app.use("/rules", express.static('./public'));
+app.use("/scoreboard", express.static('./public'));
+app.use("/exit", express.static('./public'));
+
+
 app.use(bodyParser.json());                 // С помощью какой-то древней магии парсит тело запроса,
 app.use(cookieParser());                    // всё то же волшебство, но уже для кук
 
@@ -27,6 +35,11 @@ let users = {};
 let ids = {};
 const ttl = 1000 * 60 * 60 * 24;            // 1 день
 
+//
+// app.get('/', (request, response) => {
+// 	console.log("/2");
+// 	response.redirect("/menu")
+// });
 
 
 app.get('/whoisit', (request, response) => {
@@ -126,9 +139,7 @@ app.post('/sign_in', (request, response) => {
 });
 
 
-app.get('*', (request, response) => {
-	response.send("<h2><i>Unknown page =(</i></h2>");
-});
+
 
 
 app.listen(process.env.PORT || 8081, function () {

@@ -2,7 +2,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin  = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 
@@ -26,7 +26,7 @@ module.exports = {
 			test: /\.js$/,
 			exclude: /(node_modules|bower_components)/,
 			loader: 'babel-loader',
-		},  {
+		}, {
 			test: /\.css$/,
 			use: ExtractTextPlugin.extract({
 				fallback: 'style-loader',
@@ -35,13 +35,36 @@ module.exports = {
 		}, {
 			test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
 			loader: 'url-loader?limit=30000&name=./[name]-[hash].[ext]',
-		}]
+		}, {
+			test: /[\/\\]node_modules[\/\\]some-module[\/\\]index\.js$/,
+			loader: "imports-loader?this=>window"
+		}, {
+			test: /[\/\\]node_modules[\/\\]some-module[\/\\]index\.js$/,
+			loader: "imports-loader?define=>false"
+		}, {
+			test: /\.json$/,
+			loader: 'json-loader'
+		}],
 	},
 
 	plugins: [
 		new webpack.DefinePlugin({
-			NODE_ENV: JSON.stringify(NODE_ENV)
+			'process.env': {
+				NODE_ENV: JSON.stringify(NODE_ENV),
+				BROWSER: JSON.stringify(true)
+			}
 		}),
-		new ExtractTextPlugin('./application.css')
+		new ExtractTextPlugin('./application.css'),
+		new webpack.ProvidePlugin({
+			$: "jquery",
+			jQuery: "jquery",
+			'window.jQuery': 'jquery',
+		})
 	],
+
+	resolve: {
+		alias: {
+			jquery: "jquery/src/jquery"
+		}
+	}
 };

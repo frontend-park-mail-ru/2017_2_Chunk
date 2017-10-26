@@ -13,9 +13,8 @@ export default class ScoreboardView extends CommonView {
 
 		this.bus.on("openScoreboard", () => {
 			const users = [
-				{name: "Igor", score: "1904"},
-				{name: "Nina", score: "2015"},
-				{name: "Lesha", score: "2001"}];
+				{name: 'Igor', score: '1904'},
+				{name:'Sasha', score: '2010'}];
 			this.update(users);
 			this.show();
 		})

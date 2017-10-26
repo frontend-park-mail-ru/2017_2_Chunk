@@ -1,6 +1,7 @@
 .menu__button {
     border: 0.1em transparent;
     font-size: 12px;
+    text-align: center;
     opacity: 0.9;
     height: 3em;
     padding: 0.6em;

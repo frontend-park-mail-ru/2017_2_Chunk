@@ -61,7 +61,7 @@ var lib =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -180,7 +180,7 @@ class Block {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_eventBus__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_eventBus__ = __webpack_require__(4);
 
 
 
@@ -334,83 +334,6 @@ class Form extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
-class scoreboardTemplate {
-	constructor() {
-		this.pug_match_html = /["&<>]/;
-	}
-
-	pug_escape(e) {
-		var a = "" + e,
-		    t = this.pug_match_html.exec(a);
-		if (!t) return e;
-		var r,
-		    c,
-		    n,
-		    s = "";
-		for (r = t.index, c = 0; r < a.length; r++) {
-			switch (a.charCodeAt(r)) {
-				case 34:
-					n = "&quot;";
-					break;
-				case 38:
-					n = "&amp;";
-					break;
-				case 60:
-					n = "&lt;";
-					break;
-				case 62:
-					n = "&gt;";
-					break;
-				default:
-					continue;
-			}
-			c !== r && (s += a.substring(c, r)), c = r + 1, s += n;
-		}
-		return c !== r ? s + a.substring(c, r) : s;
-	}
-
-	template(locals) {
-		var pug_html = "",
-		    pug_mixins = {},
-		    pug_interp;
-		;var locals_for_with = locals || {};
-		(function (users) {
-			pug_html = pug_html + "\u003Cdiv class=\"scoreboard__fields\"\u003E";
-			// iterate users
-			;(function () {
-				var $$obj = users;
-				if ('number' == typeof $$obj.length) {
-					for (var pug_index0 = 0, $$l = $$obj.length; pug_index0 < $$l; pug_index0++) {
-						var user = $$obj[pug_index0];
-						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
-					}
-				} else {
-					var $$l = 0;
-					for (var pug_index0 in $$obj) {
-						$$l++;
-						var user = $$obj[pug_index0];
-						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
-					}
-				}
-			}).call(this);
-
-			pug_html = pug_html + "\u003C\u002Fdiv\u003E";
-		}).call(this, "users" in locals_for_with ? locals_for_with.users : typeof users !== "undefined" ? users : undefined);
-		;
-		return pug_html;
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = scoreboardTemplate;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-
-
 class EventBus {
 	constructor() {
 		this.listeners = {};
@@ -432,7 +355,7 @@ class EventBus {
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -442,11 +365,11 @@ function requireAll(r) {
   r.keys().forEach(r);
 }
 
-requireAll(__webpack_require__(16));
-requireAll(__webpack_require__(22));
+requireAll(__webpack_require__(17));
+requireAll(__webpack_require__(21));
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -459,20 +382,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
-	constructor(eventBus) {
+	constructor(eventBus, router) {
 		const menuElems = {
 			profile: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('div', { 'data-section': 'profile' }, ['profile', 'auth'], ''),
-			play: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('button', { 'data-section': 'play' }, ['button', 'auth', 'menu__button'], 'Играть'),
-			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('button', { 'data-section': 'signup' }, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
-			login: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('button', { 'data-section': 'login' }, ['button', 'unauth', 'menu__button'], 'Вход'),
-			settings: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('button', { 'data-section': 'settings' }, ['button', 'auth', 'menu__button'], 'Настройки'),
-			rules: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('button', { 'data-section': 'rules' }, ['button', "every-available", 'menu__button'], 'Правила'),
-			scores: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('button', { 'data-section': 'scores' }, ['button', 'unauth', 'menu__button'], 'Таблица лидеров'),
-			exit: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('button', { 'data-section': 'exit' }, ['button', 'auth', 'menu__button'], 'Выход')
+			play: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'play', 'href': '/play' }, ['button', 'auth', 'menu__button'], 'Играть'),
+			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'signup', 'href': '/signup' }, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
+			login: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'login', 'href': '/login' }, ['button', 'unauth', 'menu__button'], 'Вход'),
+			settings: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'settings', 'href': '/settings' }, ['button', 'auth', 'menu__button'], 'Настройки'),
+			rules: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'rules', 'href': '/rules' }, ['button', "every-available", 'menu__button'], 'Правила'),
+			scores: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'scores', 'href': '/scoreboard' }, ['button', 'unauth', 'menu__button'], 'Таблица лидеров'),
+			exit: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'exit', 'href': '/exit' }, ['button', 'auth', 'menu__button'], 'Выход')
 		};
 		super(menuElems);
 
 		this.bus = eventBus;
+		this.router = router;
 
 		this.bus.on("unauth", function () {
 			for (let elem in this.elements) {
@@ -490,28 +414,35 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 			}
 		}.bind(this));
 
-		this.on("click", function (event) {
-			event.preventDefault();
-			const target = event.target;
-			const section = target.getAttribute("data-section");
-			switch (section) {
-				case 'signup':
-					this.bus.emit("openSignUp");
-					break;
-				case 'exit':
-					this.bus.emit("exit");
-					break;
-				case 'login':
-					this.bus.emit("openLogin");
-					break;
-				case 'rules':
-					this.bus.emit("openRules");
-					break;
-				case 'scores':
-					this.bus.emit("openScoreboard");
-					break;
-			}
-		}.bind(this));
+		// this.on("click", function(event) {
+		// 	// console.log('click!');
+		// 	// router.goTo(event.target.href);
+		// 	event.preventDefault();
+		// 	debugger;
+		// 	const target = event.target;
+		// 	const section = target.getAttribute("data-section");
+		// 	switch (section) {
+		// 		case 'signup':
+		// 			this.bus.emit("openSignUp");
+		// 			break;
+		// 		case 'exit':
+		// 			this.bus.emit("exit");
+		// 			break;
+		// 		case 'login':
+		// 			this.bus.emit("openLogin");
+		// 			break;
+		// 		case 'rules':
+		// 			this.bus.emit("openRules");
+		// 			break;
+		// 		case 'scores':
+		// 			const users = [
+		// 				{name: "Igor", score: "1904"},
+		// 				{name: "Nina", score: "2015"},
+		// 				{name: "Lesha", score: "2001"}];
+		// 			this.bus.emit("openScoreboard", users);
+		// 			break;
+		// 	}
+		// }.bind(this));
 
 		this.bus.emit("unauth");
 	}
@@ -520,7 +451,7 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -606,7 +537,7 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -677,7 +608,7 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -692,7 +623,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 class backButtonView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	constructor() {
 		const backButton = {
-			back: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('button', {}, ["back__button"], 'Back')
+			back: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'href': '/menu' }, ["back__button"], 'Back')
 		};
 		super(backButton);
 
@@ -706,7 +637,7 @@ class backButtonView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -741,7 +672,7 @@ class profileView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -773,12 +704,12 @@ class rulesViewView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"]
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commonView__ = __webpack_require__(1);
 
 
@@ -793,7 +724,7 @@ class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"
 		// this.userService = UserService;
 
 		this.bus.on("openScoreboard", () => {
-			const users = [{ name: "Igor", score: "1904" }, { name: "Nina", score: "2015" }, { name: "Lesha", score: "2001" }];
+			const users = [{ name: 'Igor', score: '1904' }, { name: 'Sasha', score: '2010' }];
 			this.update(users);
 			this.show();
 		});
@@ -807,6 +738,83 @@ class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = ScoreboardView;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+class scoreboardTemplate {
+	constructor() {
+		this.pug_match_html = /["&<>]/;
+	}
+
+	pug_escape(e) {
+		var a = "" + e,
+		    t = this.pug_match_html.exec(a);
+		if (!t) return e;
+		var r,
+		    c,
+		    n,
+		    s = "";
+		for (r = t.index, c = 0; r < a.length; r++) {
+			switch (a.charCodeAt(r)) {
+				case 34:
+					n = "&quot;";
+					break;
+				case 38:
+					n = "&amp;";
+					break;
+				case 60:
+					n = "&lt;";
+					break;
+				case 62:
+					n = "&gt;";
+					break;
+				default:
+					continue;
+			}
+			c !== r && (s += a.substring(c, r)), c = r + 1, s += n;
+		}
+		return c !== r ? s + a.substring(c, r) : s;
+	}
+
+	template(locals) {
+		var pug_html = "",
+		    pug_mixins = {},
+		    pug_interp;
+		;var locals_for_with = locals || {};
+		(function (users) {
+			pug_html = pug_html + "\u003Cdiv class=\"scoreboard__fields\"\u003E";
+			// iterate users
+			;(function () {
+				var $$obj = users;
+				if ('number' == typeof $$obj.length) {
+					for (var pug_index0 = 0, $$l = $$obj.length; pug_index0 < $$l; pug_index0++) {
+						var user = $$obj[pug_index0];
+						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
+					}
+				} else {
+					var $$l = 0;
+					for (var pug_index0 in $$obj) {
+						$$l++;
+						var user = $$obj[pug_index0];
+						pug_html = pug_html + "\u003Cdiv\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.name) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003Cspan\u003E" + this.pug_escape(null == (pug_interp = user.score) ? "" : pug_interp) + "\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E";
+					}
+				}
+			}).call(this);
+
+			pug_html = pug_html + "\u003C\u002Fdiv\u003E";
+		}).call(this, "users" in locals_for_with ? locals_for_with.users : typeof users !== "undefined" ? users : undefined);
+		;
+		return pug_html;
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = scoreboardTemplate;
 
 
 /***/ }),
@@ -1096,7 +1104,7 @@ class Http {
 			if (response.status >= 400) {
 				throw JSON.parse(response.body).errorMessage;
 			}
-			return response;
+			return response.json();
 		});
 	}
 }
@@ -1106,6 +1114,103 @@ Http.BaseUrl = null;
 
 /***/ }),
 /* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__blocks_block_block__ = __webpack_require__(0);
+
+
+
+
+class Router {
+	constructor(eventBus) {
+		this.routes = [{
+			url: "/menu",
+			event: "openMenu"
+		}, {
+			url: "/signup",
+			event: "openSignUp"
+		}, {
+			url: "/login",
+			event: "openLogin"
+		}, {
+			url: "/rules",
+			event: "openRules"
+		}, {
+			url: "/scoreboard",
+			event: "openScoreboard"
+		}, {
+			url: "/exit",
+			event: "exit"
+		}];
+
+		this.bus = eventBus;
+
+		this.app = new __WEBPACK_IMPORTED_MODULE_0__blocks_block_block__["default"](document.body);
+
+		//реагирует на любые клики. в том числе и сабмиты
+		this.app.on("click", event => {
+			event.preventDefault();
+			const target = event.target;
+			console.log(target.href);
+			this.goTo(target.href);
+		});
+
+		window.onpopstate = function () {
+			console.log(location.pathname);
+			this.changeState(location.pathname);
+			return;
+		}.bind(this);
+	}
+
+	start() {
+		this._routes = [];
+		this.routes.forEach(function (route) {
+			this._routes.push({
+				url_pattern: route.url,
+				emit: function (event) {
+					this.bus.emit(event);
+				}.bind(this)
+			});
+		}.bind(this));
+
+		this._routes.forEach(function (route, number) {
+			if (location.pathname.match(route.url_pattern)) {
+				//match вернет null при отсутсвии совпадения
+				console.log("Matched!");
+				window.history.pushState({ page: this.routes[number].url }, route.url_pattern, route.url_pattern);
+				route.emit(this.routes[number].event);
+				return;
+			}
+		}.bind(this));
+	}
+
+	goTo(path) {
+		this._routes.forEach((route, number) => {
+			if (path.match(route.url_pattern)) {
+				window.history.pushState({ page: this.routes[number].url }, route.url_pattern, route.url_pattern);
+				route.emit(this.routes[number].event);
+				return;
+			}
+		});
+	}
+
+	//для кнопки назад и вперед
+	changeState(path) {
+		this._routes.forEach((route, number) => {
+			if (path.match(route.url_pattern)) {
+				route.emit(this.routes[number].event);
+				return;
+			}
+		});
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = Router;
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -1114,20 +1219,21 @@ var map = {
 	"./blocks/message/message.js": 2,
 	"./configs/login-fields.js": 18,
 	"./configs/signup-fields.js": 19,
-	"./include.js": 6,
+	"./include.js": 5,
 	"./main.js": 20,
-	"./modules/eventBus.js": 5,
+	"./modules/eventBus.js": 4,
 	"./modules/http.js": 15,
+	"./modules/router.js": 16,
 	"./services/user-service.js": 14,
-	"./templates/scoreBoard.js": 4,
-	"./views/backButtonView.js": 10,
+	"./templates/scoreBoard.js": 13,
+	"./views/backButtonView.js": 9,
 	"./views/commonView.js": 1,
-	"./views/loginView.js": 9,
-	"./views/menuView.js": 7,
-	"./views/profileView.js": 11,
-	"./views/rulesView.js": 12,
-	"./views/scoreboardView.js": 13,
-	"./views/signUpView.js": 8
+	"./views/loginView.js": 8,
+	"./views/menuView.js": 6,
+	"./views/profileView.js": 10,
+	"./views/rulesView.js": 11,
+	"./views/scoreboardView.js": 12,
+	"./views/signUpView.js": 7
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1143,10 +1249,9 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 16;
+webpackContext.id = 17;
 
 /***/ }),
-/* 17 */,
 /* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1240,17 +1345,18 @@ const signupFields = [{
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_signUpView__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_signUpView__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__blocks_block_block_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_user_service_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_eventBus__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__blocks_message_message__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_eventBus__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__modules_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__blocks_message_message__ = __webpack_require__(2);
 
 /**
  * Основной модуль работатющий со всеми объектами
@@ -1279,13 +1385,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
+
 const userService = new __WEBPACK_IMPORTED_MODULE_8__services_user_service_js__["default"]();
 
 const eventBus = new __WEBPACK_IMPORTED_MODULE_9__modules_eventBus__["default"]();
 
+const router = new __WEBPACK_IMPORTED_MODULE_10__modules_router__["default"](eventBus);
+
 const app = new __WEBPACK_IMPORTED_MODULE_7__blocks_block_block_js__["default"](document.body);
 
-const menuView = new __WEBPACK_IMPORTED_MODULE_0__views_menuView__["default"](eventBus);
+const menuView = new __WEBPACK_IMPORTED_MODULE_0__views_menuView__["default"](eventBus, router);
 
 const signUpView = new __WEBPACK_IMPORTED_MODULE_1__views_signUpView__["default"](eventBus);
 
@@ -1299,10 +1409,12 @@ const rulesView = new __WEBPACK_IMPORTED_MODULE_5__views_rulesView__["default"](
 
 const scoreboardView = new __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__["default"](eventBus, userService);
 
-backButtonView.on("click", function (event) {
-	event.preventDefault();
-	eventBus.emit("openMenu");
-});
+// backButtonView.on("click", function(event) {
+// 	window.history.back();
+// 	event.preventDefault();
+// 	eventBus.emit("openMenu");
+// });
+
 
 signUpView.onSubmit(function (formData) {
 	userService.signup(formData.name, formData.email, formData.password, formData.confirm).then(function (resp) {
@@ -1323,6 +1435,7 @@ loginView.onSubmit(function (formData) {
 }.bind(this));
 
 eventBus.on("openSignUp", function () {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/signup");
 	menuView.hide();
 	signUpView.show();
 	backButtonView.show();
@@ -1331,6 +1444,7 @@ eventBus.on("openSignUp", function () {
 });
 
 eventBus.on("openLogin", function () {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
 	menuView.hide();
 	signUpView.hide();
 	backButtonView.show();
@@ -1339,6 +1453,7 @@ eventBus.on("openLogin", function () {
 });
 
 eventBus.on("openRules", function () {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/rules");
 	menuView.hide();
 	signUpView.hide();
 	backButtonView.show();
@@ -1347,6 +1462,7 @@ eventBus.on("openRules", function () {
 });
 
 eventBus.on("openMenu", function () {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
 	menuView.show();
 	signUpView.hide();
 	backButtonView.hide();
@@ -1373,6 +1489,7 @@ eventBus.on("exit", function () {
 });
 
 eventBus.on("openScoreboard", function () {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
 	menuView.hide();
 	backButtonView.show();
 	scoreboardView.show();
@@ -1380,23 +1497,22 @@ eventBus.on("openScoreboard", function () {
 
 app.append(menuView).append(signUpView).append(loginView).append(backButtonView).append(profileView).append(rulesView).append(scoreboardView);
 
-eventBus.emit("openMenu");
+router.start();
 
 /***/ }),
-/* 21 */,
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./blocks/message/index.css": 25,
-	"./configs/login-fields.css": 26,
-	"./configs/signup-fields.css": 27,
-	"./views/viewsCss/backButton.css": 28,
-	"./views/viewsCss/commonView.css": 29,
-	"./views/viewsCss/login.css": 30,
-	"./views/viewsCss/menu.css": 31,
-	"./views/viewsCss/signUp.css": 32,
-	"./views/viewsCss/view.css": 33
+	"./blocks/message/index.css": 22,
+	"./configs/login-fields.css": 23,
+	"./configs/signup-fields.css": 24,
+	"./views/viewsCss/backButton.css": 25,
+	"./views/viewsCss/commonView.css": 26,
+	"./views/viewsCss/login.css": 27,
+	"./views/viewsCss/menu.css": 28,
+	"./views/viewsCss/signUp.css": 29,
+	"./views/viewsCss/view.css": 30
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1412,11 +1528,27 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 22;
+webpackContext.id = 21;
 
 /***/ }),
-/* 23 */,
-/* 24 */,
+/* 22 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
 /* 25 */
 /***/ (function(module, exports) {
 
@@ -1448,24 +1580,6 @@ webpackContext.id = 22;
 
 /***/ }),
 /* 30 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 33 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -24,6 +24,8 @@ import UserService from "./services/user-service.js";
 
 import EventBus from "./modules/eventBus";
 
+import Router from "./modules/router"
+
 import Message from "./blocks/message/message";
 
 
@@ -31,9 +33,11 @@ const userService = new UserService();
 
 const eventBus = new EventBus();
 
+const router = new Router(eventBus);
+
 const app = new Block(document.body);
 
-const menuView = new MenuView(eventBus);
+const menuView = new MenuView(eventBus, router);
 
 const signUpView = new SignUpView(eventBus);
 
@@ -48,10 +52,11 @@ const rulesView = new RulesView(eventBus);
 const scoreboardView = new ScoreboardView(eventBus, userService);
 
 
-backButtonView.on("click", function(event) {
-	event.preventDefault();
-	eventBus.emit("openMenu");
-});
+// backButtonView.on("click", function(event) {
+// 	window.history.back();
+// 	event.preventDefault();
+// 	eventBus.emit("openMenu");
+// });
 
 
 signUpView.onSubmit(function (formData) {
@@ -79,6 +84,7 @@ loginView.onSubmit(function (formData) {
 
 
 eventBus.on("openSignUp", function() {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/signup");
 	menuView.hide();
 	signUpView.show();
 	backButtonView.show();
@@ -88,6 +94,7 @@ eventBus.on("openSignUp", function() {
 
 
 eventBus.on("openLogin", function() {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
 	menuView.hide();
 	signUpView.hide();
 	backButtonView.show();
@@ -98,6 +105,7 @@ eventBus.on("openLogin", function() {
 
 
 eventBus.on("openRules", function() {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/rules");
 	menuView.hide();
 	signUpView.hide();
 	backButtonView.show();
@@ -107,6 +115,7 @@ eventBus.on("openRules", function() {
 
 
 eventBus.on("openMenu", function() {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
 	menuView.show();
 	signUpView.hide();
 	backButtonView.hide();
@@ -137,6 +146,7 @@ eventBus.on("exit", function () {
 
 
 eventBus.on("openScoreboard", function () {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
 	menuView.hide();
 	backButtonView.show();
 	scoreboardView.show();
@@ -153,4 +163,7 @@ app
 	.append(scoreboardView);
 
 
-eventBus.emit("openMenu");
+router.start();
+
+
+
