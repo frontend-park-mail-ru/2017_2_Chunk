@@ -15,6 +15,9 @@ export default class Message extends Block {
 		const el = document.createElement('div');
 		super(el);
 
+		this.el.style.setProperty("text-align", "center");
+		this.el.style.setProperty("font-size", "1.5em");
+
 		// el.classList.add('message');
 
 	}

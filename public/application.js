@@ -253,6 +253,9 @@ class Message extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
 		const el = document.createElement('div');
 		super(el);
 
+		this.el.style.setProperty("text-align", "center");
+		this.el.style.setProperty("font-size", "1.5em");
+
 		// el.classList.add('message');
 	}
 
@@ -386,7 +389,7 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		const menuElems = {
 			profile: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('div', { 'data-section': 'profile' }, ['profile', 'auth'], ''),
 			play: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'play', 'href': '/play' }, ['button', 'auth', 'menu__button'], 'Играть'),
-			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'signup', 'href': '/signup' }, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
+			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'signup', 'href': '/sign_up' }, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
 			login: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'login', 'href': '/login' }, ['button', 'unauth', 'menu__button'], 'Вход'),
 			settings: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'settings', 'href': '/settings' }, ['button', 'auth', 'menu__button'], 'Настройки'),
 			rules: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'rules', 'href': '/rules' }, ['button', "every-available", 'menu__button'], 'Правила'),
@@ -412,36 +415,6 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 				} else this.elements[elem].hide();
 			}
 		}.bind(this));
-
-		// this.on("click", function(event) {
-		// 	// console.log('click!');
-		// 	// router.goTo(event.target.href);
-		// 	event.preventDefault();
-		// 	debugger;
-		// 	const target = event.target;
-		// 	const section = target.getAttribute("data-section");
-		// 	switch (section) {
-		// 		case 'signup':
-		// 			this.bus.emit("openSignUp");
-		// 			break;
-		// 		case 'exit':
-		// 			this.bus.emit("exit");
-		// 			break;
-		// 		case 'login':
-		// 			this.bus.emit("openLogin");
-		// 			break;
-		// 		case 'rules':
-		// 			this.bus.emit("openRules");
-		// 			break;
-		// 		case 'scores':
-		// 			const users = [
-		// 				{name: "Igor", score: "1904"},
-		// 				{name: "Nina", score: "2015"},
-		// 				{name: "Lesha", score: "2001"}];
-		// 			this.bus.emit("openScoreboard", users);
-		// 			break;
-		// 	}
-		// }.bind(this));
 
 		this.bus.emit("unauth");
 	}
@@ -506,9 +479,6 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		this.userService = userService;
 		this.router = router;
 
-		const err_message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
-		this.append(err_message);
-
 		this.hide();
 
 		this.message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
@@ -536,7 +506,7 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 			debugger;
 			console.log("some err with sign up");
 			console.log("err: ", err.message);
-			this.setErrorText(err.message); //нужно поставить ошибку из json
+			this.setErrorText(err); //нужно поставить ошибку из json
 		}.bind(this));
 	}
 
@@ -864,23 +834,24 @@ class UserService {
 		//не парсит JSON
 		//validation
 		return new Promise(function (resolve, reject) {
-			// if (username.length < 4) {
-			// 	throw new Error("Длина логина должна быть не меньше 4 символов!");
-			// }
-			// if (username.length > 12) {
-			// 	throw new Error("Длина логина не должна превышать 12 символов!");
-			// }
-			// if (password.length < 6) {
-			// 	throw new Error("Длина пароля должна быть не меньше 6 символов!");
-			// }
-			// if (password !== confirm) {
-			// 	throw new Error("Пароли не совпадают!!!");
-			// }
-			// if (password === username) {
-			// 	throw new Error("Логин и пароль не должны совпадать!");
-			// }
+			debugger;
+			if (username.length < 4) {
+				throw new Error("Длина логина должна быть не меньше 4 символов!");
+			}
+			if (username.length > 12) {
+				throw new Error("Длина логина не должна превышать 12 символов!");
+			}
+			if (password.length < 6) {
+				throw new Error("Длина пароля должна быть не меньше 6 символов!");
+			}
+			if (password !== confirm) {
+				throw new Error("Пароли не совпадают!!!");
+			}
+			if (password === username) {
+				throw new Error("Логин и пароль не должны совпадать!");
+			}
 
-			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/sign_up', { username, email, password }).then(function (resp) {
+			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_up', { username, email, password }).then(function (resp) {
 				console.log("good response status" + resp.username);
 				return resp;
 			}.bind(this)).catch(function (err) {
@@ -900,22 +871,22 @@ class UserService {
   */
 	login(email, password, callback) {
 		return new Promise(function (resolve, reject) {
-			// if (email.length < 4) {
-			// 	callback("Длина логина должна быть не меньше 4 символов!", null);
-			// 	return;
-			// }
-			// if (email.length > 12) {
-			// 	callback("Длина логина не должна превышать 12 символов!", null);
-			// 	return;
-			// }
-			// if (password.length < 6) {
-			// 	callback("Длина пароля должна быть не меньше 6 символов!", null);
-			// 	return;
-			// }
-			// if (password === email) {
-			// 	callback("Логин и пароль не могут совпадать!", null);
-			// 	return;
-			// }
+			if (email.length < 4) {
+				callback("Длина логина должна быть не меньше 4 символов!", null);
+				return;
+			}
+			if (email.length > 12) {
+				callback("Длина логина не должна превышать 12 символов!", null);
+				return;
+			}
+			if (password.length < 6) {
+				callback("Длина пароля должна быть не меньше 6 символов!", null);
+				return;
+			}
+			if (password === email) {
+				callback("Логин и пароль не могут совпадать!", null);
+				return;
+			}
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/login', { username, password }).then(function (resp) {
 				alert("good response status" + resp.status);
 				return resp;
@@ -1020,7 +991,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //в Fetch post не получается получить в ответ объект json c ошибкой
 // const backendUrl = 'https://chunkgame.herokuapp.com';
 
-const backendUrl = "";
+const backendUrl = "https://backend-java-spring.herokuapp.com";
 const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
 console.log("baseUrl = ", baseUrl);
@@ -1030,65 +1001,20 @@ console.log("baseUrl = ", baseUrl);
  */
 
 class Http {
-	/**
-  * Выполняет GET-запрос по указанному адресу
-  * @param {string} address - адрес запроса
-  * @param {Function} callback - функция-коллбек
-  */
-	// static Get(address, callback) {
-	// 	const xhr = new XMLHttpRequest();
-	// 	xhr.open('GET', backendUrl + address, true);
-	// 	xhr.withCredentials = true;
-	//
-	// 	xhr.onreadystatechange = function () {
-	// 		if (xhr.readyState !== 4) return;
-	// 		if (+xhr.status >= 400) {
-	// 			return callback(xhr, null);
-	// 		}
-	//
-	// 		callback(null, JSON.parse(xhr.responseText));
-	// 	};
-	//
-	// 	xhr.send();
-	// }
-	//
-	// /**
-	//  * Выполняет POST-запрос по указанному адресу
-	//  * @param {string} address - адрес запроса
-	//  * @param {*} body - тело запроса (объект)
-	//  * @param {Function} callback - функция-коллбек
-	//  */
-	// static Post(address, body, callback) {
-	// 	const xhr = new XMLHttpRequest();
-	// 	xhr.open('POST', backendUrl + address, true);
-	// 	xhr.withCredentials = true;
-	// 	xhr.timeout = 15000;
-	// 	xhr.setRequestHeader('Content-Type', 'application/json; charset=utf8');
-	//
-	// 	xhr.onreadystatechange = function () {
-	// 		if (xhr.readyState !== 4) return;
-	// 		if (+xhr.status >= 400) {
-	// 			return callback(JSON.parse(xhr.responseText).errorMessage, null);
-	// 		}
-	// 		callback(null, xhr);
-	// 	};
-	//
-	// 	xhr.send(JSON.stringify(body));
-	// }
-
-
-	//какие орматы даных здесь?
-	//что попадает в throw response, что в response json
+	//что попадает в throw response
 	/**
   * Выполняет GET-запрос по указанному адресу
   * @param {string} address - адрес запроса
   */
 	static FetchGet(address) {
 		const url = backendUrl + address;
+		const myHeaders = new Headers();
+		myHeaders.append("Content-Type", 'application/json; charset=utf-8');
 		return fetch(url, {
 			method: 'GET',
-			mode: 'cors',
-			credentials: 'include'
+			mode: 'no-cors',
+			credentials: 'include',
+			headers: myHeaders
 		}).then(function (response) {
 			if (response.status >= 400) {
 				throw response;
@@ -1104,14 +1030,11 @@ class Http {
   */
 
 	//Не получается получить из json errMessage.
-	//
-	//
-	//
 	static async FetchPost(address, body) {
 		const url = backendUrl + address;
 		return await fetch(url, {
 			method: 'POST',
-			mode: 'cors',
+			mode: 'no-cors',
 			credentials: 'include',
 			body: JSON.stringify(body),
 			headers: {
@@ -1146,7 +1069,7 @@ class Router {
 			url: "/menu",
 			event: "openMenu"
 		}, {
-			url: "/signup",
+			url: "/sign_up",
 			event: "openSignUp"
 		}, {
 			url: "/login",

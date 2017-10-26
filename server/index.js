@@ -21,7 +21,7 @@ const app = express();
 // app.use(morgan('dev'));                     // Формат выводимой инфы о запросах
 // app.use("/", express.static('./public'));// Отдаёт статику при совпадении имён
 app.use("/menu", express.static('./public'));
-app.use("/signup", express.static('./public'));
+app.use("/sign_up", express.static('./public'));
 app.use("/login", express.static('./public'));
 app.use("/rules", express.static('./public'));
 app.use("/scoreboard", express.static('./public'));

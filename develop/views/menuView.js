@@ -7,7 +7,7 @@ export default class MenuView extends CommonView {
 		const menuElems = {
 			profile: Block.Create('div', {'data-section': 'profile'}, ['profile', 'auth'], ''),
 			play: Block.Create('a', {'data-section': 'play', 'href': '/play'}, ['button', 'auth', 'menu__button'], 'Играть'),
-			signup: Block.Create('a', {'data-section': 'signup', 'href': '/signup'}, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
+			signup: Block.Create('a', {'data-section': 'signup', 'href': '/sign_up'}, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
 			login: Block.Create('a', {'data-section': 'login', 'href': '/login'}, ['button', 'unauth', 'menu__button'], 'Вход'),
 			settings: Block.Create('a', {'data-section': 'settings', 'href': '/settings'}, ['button', 'auth', 'menu__button'], 'Настройки'),
 			rules: Block.Create('a', {'data-section': 'rules', 'href': '/rules'}, ['button', "every-available", 'menu__button'], 'Правила'),
@@ -42,37 +42,6 @@ export default class MenuView extends CommonView {
 			}
 		}.bind(this));
 
-
-
-		// this.on("click", function(event) {
-		// 	// console.log('click!');
-		// 	// router.goTo(event.target.href);
-		// 	event.preventDefault();
-		// 	debugger;
-		// 	const target = event.target;
-		// 	const section = target.getAttribute("data-section");
-		// 	switch (section) {
-		// 		case 'signup':
-		// 			this.bus.emit("openSignUp");
-		// 			break;
-		// 		case 'exit':
-		// 			this.bus.emit("exit");
-		// 			break;
-		// 		case 'login':
-		// 			this.bus.emit("openLogin");
-		// 			break;
-		// 		case 'rules':
-		// 			this.bus.emit("openRules");
-		// 			break;
-		// 		case 'scores':
-		// 			const users = [
-		// 				{name: "Igor", score: "1904"},
-		// 				{name: "Nina", score: "2015"},
-		// 				{name: "Lesha", score: "2001"}];
-		// 			this.bus.emit("openScoreboard", users);
-		// 			break;
-		// 	}
-		// }.bind(this));
 
 		this.bus.emit("unauth");
 	}

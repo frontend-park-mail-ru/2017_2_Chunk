@@ -52,9 +52,6 @@ export default class signUpView extends commonView {
 		this.userService = userService;
 		this.router = router;
 
-		const err_message = new Message();
-		this.append(err_message);
-
 		this.hide();
 
 		this.message = new Message();
@@ -86,7 +83,7 @@ export default class signUpView extends commonView {
 				debugger;
 				console.log("some err with sign up");
 				console.log("err: ", err.message);
-				this.setErrorText(err.message)//нужно поставить ошибку из json
+				this.setErrorText(err)//нужно поставить ошибку из json
 			}.bind(this));
 	}
 
