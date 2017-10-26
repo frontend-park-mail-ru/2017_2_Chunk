@@ -36,10 +36,9 @@ let ids = {};
 const ttl = 1000 * 60 * 60 * 24;            // 1 день
 
 //
-// app.get('/', (request, response) => {
-// 	console.log("/2");
-// 	response.redirect("/menu")
-// });
+app.get('/', (request, response) => {
+	response.redirect("/menu")
+});
 
 
 app.get('/whoisit', (request, response) => {
