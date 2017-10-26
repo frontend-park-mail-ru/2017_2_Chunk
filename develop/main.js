@@ -41,7 +41,7 @@ const menuView = new MenuView(eventBus, router);
 
 const signUpView = new SignUpView(eventBus, userService, router);
 
-const loginView = new LoginView(eventBus);
+const loginView = new LoginView(eventBus, userService, router);
 
 const backButtonView = new BackButtonView();
 
@@ -58,20 +58,6 @@ const scoreboardView = new ScoreboardView(eventBus, userService);
 // 	eventBus.emit("openMenu");
 // });
 
-
-
-loginView.onSubmit(function (formData) {
-	userService.login(formData.username, formData.password)
-		.then(function(resp) {
-			console.dir(resp);
-			eventBus.emit("auth");
-			router.goTo("/menu");
-		})
-		.catch(function(err) {
-			console.log("some err with sign up");
-			signUpView.setErrorText(err)//нужно поставить ошибку из json
-		}.bind(this));
-}.bind(this));
 
 
 eventBus.on("openSignUp", function() {

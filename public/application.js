@@ -501,6 +501,8 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	onSubmit(formData) {
 		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm).then(function (resp) {
 			console.dir(resp);
+			this.message.clear();
+			this.message.hide();
 			this.bus.emit("auth");
 			this.router.goTo("/menu");
 		}.bind(this)).catch(function (err) {
@@ -534,7 +536,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
-	constructor(eventBus) {
+	constructor(eventBus, userService, router) {
 		const loginFields = [{ attrs: {
 				type: "text",
 				size: "128",
@@ -558,13 +560,16 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		super({ form });
 
 		this.bus = eventBus;
+		this.router = router;
+		this.userService = userService;
+
 		this.message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
+		this.message.clear();
+		this.message.hide();
 		this.append(this.message);
 
 		this.hide();
-	}
 
-	onSubmit(callback) {
 		this.el.addEventListener("submit", function (event) {
 			event.preventDefault();
 			const formData = {};
@@ -573,7 +578,21 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 			for (let field in fields) {
 				formData[fields[field].name] = fields[field].value;
 			}
-			callback(formData);
+			this.onSubmit(formData);
+		}.bind(this), true);
+	}
+
+	onSubmit(formData) {
+		this.userService.login(formData.username, formData.password).then(function (resp) {
+			console.dir(resp);
+			this.message.clear();
+			this.message.hide();
+			this.bus.emit("auth");
+			this.router.goTo("/menu");
+		}.bind(this)).catch(function (err) {
+			console.log("some err with sign up");
+			console.log("err: ", err.message);
+			this.setErrorText(err); //нужно поставить ошибку из json
 		}.bind(this));
 	}
 
@@ -1007,10 +1026,13 @@ class Http {
 			credentials: 'include',
 			headers: myHeaders
 		}).then(function (response) {
+			let json = response.json();
 			if (response.status >= 400) {
-				throw response;
+				return json.then(resp => {
+					throw resp;
+				});
 			}
-			return response.json();
+			return json;
 		});
 	}
 
@@ -1341,7 +1363,7 @@ const menuView = new __WEBPACK_IMPORTED_MODULE_0__views_menuView__["default"](ev
 
 const signUpView = new __WEBPACK_IMPORTED_MODULE_1__views_signUpView__["default"](eventBus, userService, router);
 
-const loginView = new __WEBPACK_IMPORTED_MODULE_2__views_loginView__["default"](eventBus);
+const loginView = new __WEBPACK_IMPORTED_MODULE_2__views_loginView__["default"](eventBus, userService, router);
 
 const backButtonView = new __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__["default"]();
 
@@ -1357,17 +1379,6 @@ const scoreboardView = new __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__["
 // 	eventBus.emit("openMenu");
 // });
 
-
-loginView.onSubmit(function (formData) {
-	userService.login(formData.username, formData.password).then(function (resp) {
-		console.dir(resp);
-		eventBus.emit("auth");
-		router.goTo("/menu");
-	}).catch(function (err) {
-		console.log("some err with sign up");
-		signUpView.setErrorText(err); //нужно поставить ошибку из json
-	}.bind(this));
-}.bind(this));
 
 eventBus.on("openSignUp", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/signup");

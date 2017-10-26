@@ -77,6 +77,8 @@ export default class signUpView extends commonView {
 		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm)
 			.then(function(resp) {
 				console.dir(resp);
+				this.message.clear();
+				this.message.hide();
 				this.bus.emit("auth");
 				this.router.goTo("/menu");
 			}.bind(this))

@@ -28,11 +28,12 @@
 				headers: myHeaders,
 			})
 				.then(function (response) {
-					if (response.status >= 400) {
-						throw response;
-					}
-					return response.json();
-				});
+				let json = response.json();
+				if (response.status >= 400) {
+					return json.then(resp => {throw resp});
+				}
+				return json;
+			});
 		}
 
 		/**

@@ -5,7 +5,7 @@ import Message from "../blocks/message/message.js";
 
 
 export default class LoginView extends CommonView {
-	constructor(eventBus) {
+	constructor(eventBus, userService, router) {
 		const loginFields = [
 			{attrs: {
 				type: "text",
@@ -33,14 +33,16 @@ export default class LoginView extends CommonView {
 		super({form});
 
 		this.bus = eventBus;
+		this.router = router;
+		this.userService = userService;
+
 		this.message = new Message();
+		this.message.clear();
+		this.message.hide();
 		this.append(this.message);
 
 		this.hide();
-	}
 
-
-	onSubmit(callback) {
 		this.el.addEventListener("submit", function(event) {
 			event.preventDefault();
 			const formData = {};
@@ -49,8 +51,27 @@ export default class LoginView extends CommonView {
 			for (let field in fields) {
 				formData[fields[field].name] = fields[field].value;
 			}
-			callback(formData);
-		}.bind(this))
+			this.onSubmit(formData);
+
+		}.bind(this), true)
+	}
+
+
+	onSubmit(formData)
+	{
+		this.userService.login(formData.username, formData.password)
+			.then(function (resp) {
+				console.dir(resp);
+				this.message.clear();
+				this.message.hide();
+				this.bus.emit("auth");
+				this.router.goTo("/menu");
+			}.bind(this))
+			.catch(function (err) {
+				console.log("some err with sign up");
+				console.log("err: ", err.message);
+				this.setErrorText(err)//нужно поставить ошибку из json
+			}.bind(this));
 	}
 
 
