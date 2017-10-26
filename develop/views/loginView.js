@@ -10,7 +10,7 @@ export default class LoginView extends CommonView {
 			{attrs: {
 				type: "text",
 				size: "128",
-				name: "name",
+				name: "username",
 				placeholder: "Enter your name",
 				required: "required",
 				class: "form-block__input",
@@ -33,18 +33,14 @@ export default class LoginView extends CommonView {
 		super({form});
 
 		this.bus = eventBus;
-		const err_message = new Message();
-		this.append(err_message);
+		this.message = new Message();
+		this.append(this.message);
 
 		this.hide();
 	}
 
 
 	onSubmit(callback) {
-		this.message = new Message();
-		this.message.clear();
-		this.message.hide();
-		this.append(this.message);
 		this.el.addEventListener("submit", function(event) {
 			event.preventDefault();
 			const formData = {};

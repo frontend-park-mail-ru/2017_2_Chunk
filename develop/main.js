@@ -61,13 +61,15 @@ const scoreboardView = new ScoreboardView(eventBus, userService);
 
 
 loginView.onSubmit(function (formData) {
-	userService.login(formData.name, formData.password)
+	userService.login(formData.username, formData.password)
 		.then(function(resp) {
-			eventBus.emit("openMenu");
+			console.dir(resp);
+			this.bus.emit("auth");
+			this.router.goTo("/menu");
 		})
 		.catch(function(err) {
 			console.log("some err with sign up");
-			signUpView.setErrorText(err.message)//нужно поставить ошибку из json
+			signUpView.setErrorText(err)//нужно поставить ошибку из json
 		}.bind(this));
 }.bind(this));
 

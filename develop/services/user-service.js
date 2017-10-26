@@ -55,37 +55,38 @@ export default class UserService {
 
 	/**
 	 * Авторизация пользователя
-	 * @param {string} email
+	 * @param {string} username
 	 * @param {string} password
 	 * @param {Function} callback
 	 */
-	login(email, password, callback) {
+	login(username, password) {
 		return new Promise(function (resolve, reject) {
-			if (email.length < 4) {
-				callback("Длина логина должна быть не меньше 4 символов!", null);
+			if (username.length < 4) {
+				throw new Error("Длина логина должна быть не меньше 4 символов!", null);
 				return;
 			}
-			if (email.length > 12) {
-				callback("Длина логина не должна превышать 12 символов!", null);
+			if (username.length > 12) {
+				throw new Error("Длина логина не должна превышать 12 символов!", null);
 				return;
 			}
 			if (password.length < 6) {
-				callback("Длина пароля должна быть не меньше 6 символов!", null);
+				throw new Error("Длина пароля должна быть не меньше 6 символов!", null);
 				return;
 			}
-			if (password === email) {
-				callback("Логин и пароль не могут совпадать!", null);
+			if (password === username) {
+				throw new Error("Логин и пароль не могут совпадать!", null);
 				return;
 			}
-			resolve(Http.FetchPost('/login', {username, password})
-				.then(function (resp) {
-					alert("good response status" + resp.status);
+			resolve(Http.FetchPost('/sign_in', {username, password})
+				.then(function(resp) {
+					console.log("good response status" + resp.username);
 					return resp;
-				})
-				.catch(function (err) {//не могу достать errorMessage
-					alert("err response status " + err.status + err.errorMessage);
-					throw new Error("err resp status " + err.status + JSON.parse(err).errorMessage);
-				}));
+				}.bind(this))
+				.catch(function(err) {//не могу достать errorMessage
+					console.log(JSON.parse(err).message);
+					console.log("err response status "  + err.json().message);
+					throw new Error("err resp text " + err.message);
+				}.bind(this)));
 		})
 	}
 
@@ -124,24 +125,17 @@ export default class UserService {
 
 
 	/**
-	 * Разлогинивает куки
+	 * Разлогинивает
 	 */
 	logout() {
 		if (this.isLoggedIn()) {
 			this.user = null;
 			this.users = [];
-			this.delCookie();
+			Http.FetchGet('/exit')
+				.catch(function (err) {//получить ошибки с сервера
+					console.log(err.errorMessage);//удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
+				});
 		}
-	}
-
-	/**
-	 * Разлогинивает пользователя удаляя куку
-	 */
-	async delCookie() {
-		await Http.FetchGet('/exit')
-			.catch(function (err) {//получить ошибки с сервера
-				console.log(err.errorMessage);//удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
-			});
 	}
 
 

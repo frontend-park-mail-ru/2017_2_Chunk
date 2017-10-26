@@ -538,7 +538,7 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		const loginFields = [{ attrs: {
 				type: "text",
 				size: "128",
-				name: "name",
+				name: "username",
 				placeholder: "Enter your name",
 				required: "required",
 				class: "form-block__input"
@@ -558,17 +558,13 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		super({ form });
 
 		this.bus = eventBus;
-		const err_message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
-		this.append(err_message);
+		this.message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
+		this.append(this.message);
 
 		this.hide();
 	}
 
 	onSubmit(callback) {
-		this.message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
-		this.message.clear();
-		this.message.hide();
-		this.append(this.message);
 		this.el.addEventListener("submit", function (event) {
 			event.preventDefault();
 			const formData = {};
@@ -863,36 +859,37 @@ class UserService {
 
 	/**
   * Авторизация пользователя
-  * @param {string} email
+  * @param {string} username
   * @param {string} password
   * @param {Function} callback
   */
-	login(email, password, callback) {
+	login(username, password) {
 		return new Promise(function (resolve, reject) {
-			if (email.length < 4) {
-				callback("Длина логина должна быть не меньше 4 символов!", null);
+			if (username.length < 4) {
+				throw new Error("Длина логина должна быть не меньше 4 символов!", null);
 				return;
 			}
-			if (email.length > 12) {
-				callback("Длина логина не должна превышать 12 символов!", null);
+			if (username.length > 12) {
+				throw new Error("Длина логина не должна превышать 12 символов!", null);
 				return;
 			}
 			if (password.length < 6) {
-				callback("Длина пароля должна быть не меньше 6 символов!", null);
+				throw new Error("Длина пароля должна быть не меньше 6 символов!", null);
 				return;
 			}
-			if (password === email) {
-				callback("Логин и пароль не могут совпадать!", null);
+			if (password === username) {
+				throw new Error("Логин и пароль не могут совпадать!", null);
 				return;
 			}
-			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/login', { username, password }).then(function (resp) {
-				alert("good response status" + resp.status);
+			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/sign_in', { username, password }).then(function (resp) {
+				console.log("good response status" + resp.username);
 				return resp;
-			}).catch(function (err) {
+			}.bind(this)).catch(function (err) {
 				//не могу достать errorMessage
-				alert("err response status " + err.status + err.errorMessage);
-				throw new Error("err resp status " + err.status + JSON.parse(err).errorMessage);
-			}));
+				console.log(JSON.parse(err).message);
+				console.log("err response status " + err.json().message);
+				throw new Error("err resp text " + err.message);
+			}.bind(this)));
 		});
 	}
 
@@ -927,24 +924,17 @@ class UserService {
 	}
 
 	/**
-  * Разлогинивает куки
+  * Разлогинивает
   */
 	logout() {
 		if (this.isLoggedIn()) {
 			this.user = null;
 			this.users = [];
-			this.delCookie();
+			__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/exit').catch(function (err) {
+				//получить ошибки с сервера
+				console.log(err.errorMessage); //удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
+			});
 		}
-	}
-
-	/**
-  * Разлогинивает пользователя удаляя куку
-  */
-	async delCookie() {
-		await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/exit').catch(function (err) {
-			//получить ошибки с сервера
-			console.log(err.errorMessage); //удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
-		});
 	}
 
 	loadUsersList() {
@@ -1362,11 +1352,13 @@ const scoreboardView = new __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__["
 
 
 loginView.onSubmit(function (formData) {
-	userService.login(formData.name, formData.password).then(function (resp) {
-		eventBus.emit("openMenu");
+	userService.login(formData.username, formData.password).then(function (resp) {
+		console.dir(resp);
+		this.bus.emit("auth");
+		this.router.goTo("/menu");
 	}).catch(function (err) {
 		console.log("some err with sign up");
-		signUpView.setErrorText(err.message); //нужно поставить ошибку из json
+		signUpView.setErrorText(err); //нужно поставить ошибку из json
 	}.bind(this));
 }.bind(this));
 
