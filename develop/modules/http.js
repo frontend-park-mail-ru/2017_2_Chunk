@@ -2,7 +2,7 @@
 'use strict';
 //в Fetch post не получается получить в ответ объект json c ошибкой
 	// const backendUrl = 'https://chunkgame.herokuapp.com';
-	// const backendUrl = "https://backend-java-spring.herokuapp.com";
+	const backendUrl = "https://backend-java-spring.herokuapp.com/user";
 	const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
 	console.log("baseUrl = ", baseUrl);
@@ -23,7 +23,7 @@
 			myHeaders.append("Content-Type", 'application/json; charset=utf-8');
 			return fetch(url, {
 				method: 'GET',
-				mode: 'no-cors',
+				mode: 'cors',
 				credentials: 'include',
 				headers: myHeaders,
 			})
@@ -44,14 +44,17 @@
 		//Не получается получить из json errMessage.
 		static async FetchPost(address, body) {
 			const url = backendUrl + address;
+			const myHeaders = new Headers();
+			myHeaders.set("Content-Type", "application/json");
 			return await fetch(url, {
 				method: 'POST',
-				mode: 'no-cors',
+				mode: 'cors',
 				credentials: 'include',
 				body: JSON.stringify(body),
-				headers: {
-					'Content-Type': 'application/json; charset=utf-8'
-				}
+				headers: myHeaders,
+				// headers: {
+				// 	'Content-Type': 'application/json; charset=utf-8'
+				// }
 			}).then(function (response) {
 				if (response.status >= 400) {
 					throw response;

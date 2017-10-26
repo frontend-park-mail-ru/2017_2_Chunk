@@ -7,7 +7,7 @@ export default class MenuView extends CommonView {
 		const menuElems = {
 			profile: Block.Create('div', {'data-section': 'profile'}, ['profile', 'auth'], ''),
 			play: Block.Create('a', {'data-section': 'play', 'href': '/play'}, ['button', 'auth', 'menu__button'], 'Играть'),
-			signup: Block.Create('a', {'data-section': 'signup', 'href': '/sign_up'}, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
+			signup: Block.Create('a', {'data-section': 'signup', 'href': '/signup'}, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
 			login: Block.Create('a', {'data-section': 'login', 'href': '/login'}, ['button', 'unauth', 'menu__button'], 'Вход'),
 			settings: Block.Create('a', {'data-section': 'settings', 'href': '/settings'}, ['button', 'auth', 'menu__button'], 'Настройки'),
 			rules: Block.Create('a', {'data-section': 'rules', 'href': '/rules'}, ['button', "every-available", 'menu__button'], 'Правила'),

@@ -389,7 +389,7 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		const menuElems = {
 			profile: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('div', { 'data-section': 'profile' }, ['profile', 'auth'], ''),
 			play: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'play', 'href': '/play' }, ['button', 'auth', 'menu__button'], 'Играть'),
-			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'signup', 'href': '/sign_up' }, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
+			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'signup', 'href': '/signup' }, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
 			login: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'login', 'href': '/login' }, ['button', 'unauth', 'menu__button'], 'Вход'),
 			settings: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'settings', 'href': '/settings' }, ['button', 'auth', 'menu__button'], 'Настройки'),
 			rules: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'rules', 'href': '/rules' }, ['button', "every-available", 'menu__button'], 'Правила'),
@@ -500,10 +500,10 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 	onSubmit(formData) {
 		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm).then(function (resp) {
+			console.dir(resp);
 			this.bus.emit("auth");
 			this.router.goTo("/menu");
 		}.bind(this)).catch(function (err) {
-			debugger;
 			console.log("some err with sign up");
 			console.log("err: ", err.message);
 			this.setErrorText(err); //нужно поставить ошибку из json
@@ -832,9 +832,7 @@ class UserService {
   */
 	signup(username, email, password, confirm) {
 		//не парсит JSON
-		//validation
 		return new Promise(function (resolve, reject) {
-			debugger;
 			if (username.length < 4) {
 				throw new Error("Длина логина должна быть не меньше 4 символов!");
 			}
@@ -851,7 +849,7 @@ class UserService {
 				throw new Error("Логин и пароль не должны совпадать!");
 			}
 
-			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_up', { username, email, password }).then(function (resp) {
+			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/sign_up', { username, email, password }).then(function (resp) {
 				console.log("good response status" + resp.username);
 				return resp;
 			}.bind(this)).catch(function (err) {
@@ -918,6 +916,7 @@ class UserService {
 			}.bind(this));
 		}
 		return __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/whoisit').then(function (resp) {
+
 			this.user = resp;
 			return this.user;
 		}.bind(this)).catch(function (err) {
@@ -990,8 +989,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 //в Fetch post не получается получить в ответ объект json c ошибкой
 // const backendUrl = 'https://chunkgame.herokuapp.com';
-// const backendUrl = "https://backend-java-spring.herokuapp.com";
 
+const backendUrl = "https://backend-java-spring.herokuapp.com/user";
 const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
 console.log("baseUrl = ", baseUrl);
@@ -1012,7 +1011,7 @@ class Http {
 		myHeaders.append("Content-Type", 'application/json; charset=utf-8');
 		return fetch(url, {
 			method: 'GET',
-			mode: 'no-cors',
+			mode: 'cors',
 			credentials: 'include',
 			headers: myHeaders
 		}).then(function (response) {
@@ -1032,14 +1031,17 @@ class Http {
 	//Не получается получить из json errMessage.
 	static async FetchPost(address, body) {
 		const url = backendUrl + address;
+		const myHeaders = new Headers();
+		myHeaders.set("Content-Type", "application/json");
 		return await fetch(url, {
 			method: 'POST',
-			mode: 'no-cors',
+			mode: 'cors',
 			credentials: 'include',
 			body: JSON.stringify(body),
-			headers: {
-				'Content-Type': 'application/json; charset=utf-8'
-			}
+			headers: myHeaders
+			// headers: {
+			// 	'Content-Type': 'application/json; charset=utf-8'
+			// }
 		}).then(function (response) {
 			if (response.status >= 400) {
 				throw response;
@@ -1069,7 +1071,7 @@ class Router {
 			url: "/menu",
 			event: "openMenu"
 		}, {
-			url: "/sign_up",
+			url: "/signup",
 			event: "openSignUp"
 		}, {
 			url: "/login",
@@ -1405,6 +1407,7 @@ eventBus.on("openMenu", function () {
 	menuView.show();
 
 	userService.getDataFetch().then(function (resp) {
+		console.log(resp);
 		eventBus.emit("auth", resp.username);
 	}).catch(function (err) {
 		const user = { username: null };

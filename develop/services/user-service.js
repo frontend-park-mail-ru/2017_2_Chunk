@@ -22,9 +22,7 @@ export default class UserService {
 	 * @param {string} confirm
 	 */
 	signup(username, email, password, confirm) {//не парсит JSON
-		//validation
 		return new Promise(function (resolve, reject) {
-			debugger;
 			if (username.length < 4) {
 				throw new Error("Длина логина должна быть не меньше 4 символов!");
 			}
@@ -41,7 +39,7 @@ export default class UserService {
 				throw new Error("Логин и пароль не должны совпадать!");
 			}
 
-			resolve(Http.FetchPost('/user/sign_up', {username, email, password})
+			resolve(Http.FetchPost('/sign_up', {username, email, password})
 				.then(function(resp) {
 					console.log("good response status" + resp.username);
 					return resp;
@@ -113,6 +111,7 @@ export default class UserService {
 		}
 		return Http.FetchGet('/whoisit')
 			.then(function(resp) {
+
 				this.user = resp;
 				return this.user;
 			}.bind(this))

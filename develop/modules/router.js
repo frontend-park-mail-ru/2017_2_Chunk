@@ -10,7 +10,7 @@ export default class Router {
 				event: "openMenu"
 			},
 			{
-				url: "/sign_up",
+				url: "/signup",
 				event: "openSignUp"
 			},
 			{

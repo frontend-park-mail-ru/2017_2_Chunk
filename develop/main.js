@@ -111,8 +111,10 @@ eventBus.on("openMenu", function() {
 	scoreboardView.hide();
 	menuView.show();
 
+
 	userService.getDataFetch()
 		.then(function(resp) {
+			console.log(resp);
 			eventBus.emit("auth", resp.username)
 		})
 		.catch(function(err) {

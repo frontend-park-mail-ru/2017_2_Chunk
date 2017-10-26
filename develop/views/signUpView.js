@@ -76,11 +76,11 @@ export default class signUpView extends commonView {
 	onSubmit(formData) {
 		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm)
 			.then(function(resp) {
+				console.dir(resp);
 				this.bus.emit("auth");
 				this.router.goTo("/menu");
 			}.bind(this))
 			.catch(function(err) {
-				debugger;
 				console.log("some err with sign up");
 				console.log("err: ", err.message);
 				this.setErrorText(err)//нужно поставить ошибку из json
