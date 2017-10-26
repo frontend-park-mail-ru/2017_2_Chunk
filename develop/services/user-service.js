@@ -55,17 +55,18 @@ export default class UserService {
 
 	/**
 	 * Авторизация пользователя
-	 * @param {string} username
+	 * @param {string} login
 	 * @param {string} password
 	 * @param {Function} callback
 	 */
-	login(username, password) {
+	login(login, password) {
+		debugger;
 		return new Promise(function (resolve, reject) {
-			if (username.length < 4) {
+			if (login.length < 4) {
 				throw new Error("Длина логина должна быть не меньше 4 символов!", null);
 				return;
 			}
-			if (username.length > 12) {
+			if (login.length > 12) {
 				throw new Error("Длина логина не должна превышать 12 символов!", null);
 				return;
 			}
@@ -73,11 +74,11 @@ export default class UserService {
 				throw new Error("Длина пароля должна быть не меньше 6 символов!", null);
 				return;
 			}
-			if (password === username) {
+			if (password === login) {
 				throw new Error("Логин и пароль не могут совпадать!", null);
 				return;
 			}
-			resolve(Http.FetchPost('/sign_in', {username, password})
+			resolve(Http.FetchPost('/sign_in', {login, password})
 				.then(function(resp) {
 					console.log("good response status" + resp.username);
 					return resp;

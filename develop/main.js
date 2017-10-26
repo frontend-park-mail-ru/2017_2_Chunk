@@ -64,8 +64,8 @@ loginView.onSubmit(function (formData) {
 	userService.login(formData.username, formData.password)
 		.then(function(resp) {
 			console.dir(resp);
-			this.bus.emit("auth");
-			this.router.goTo("/menu");
+			eventBus.emit("auth");
+			router.goTo("/menu");
 		})
 		.catch(function(err) {
 			console.log("some err with sign up");

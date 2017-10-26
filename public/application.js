@@ -859,17 +859,18 @@ class UserService {
 
 	/**
   * Авторизация пользователя
-  * @param {string} username
+  * @param {string} login
   * @param {string} password
   * @param {Function} callback
   */
-	login(username, password) {
+	login(login, password) {
+		debugger;
 		return new Promise(function (resolve, reject) {
-			if (username.length < 4) {
+			if (login.length < 4) {
 				throw new Error("Длина логина должна быть не меньше 4 символов!", null);
 				return;
 			}
-			if (username.length > 12) {
+			if (login.length > 12) {
 				throw new Error("Длина логина не должна превышать 12 символов!", null);
 				return;
 			}
@@ -877,11 +878,11 @@ class UserService {
 				throw new Error("Длина пароля должна быть не меньше 6 символов!", null);
 				return;
 			}
-			if (password === username) {
+			if (password === login) {
 				throw new Error("Логин и пароль не могут совпадать!", null);
 				return;
 			}
-			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/sign_in', { username, password }).then(function (resp) {
+			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/sign_in', { login, password }).then(function (resp) {
 				console.log("good response status" + resp.username);
 				return resp;
 			}.bind(this)).catch(function (err) {
@@ -1020,6 +1021,7 @@ class Http {
 
 	//Не получается получить из json errMessage.
 	static async FetchPost(address, body) {
+		debugger;
 		const url = backendUrl + address;
 		const myHeaders = new Headers();
 		myHeaders.set("Content-Type", "application/json");
@@ -1354,8 +1356,8 @@ const scoreboardView = new __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__["
 loginView.onSubmit(function (formData) {
 	userService.login(formData.username, formData.password).then(function (resp) {
 		console.dir(resp);
-		this.bus.emit("auth");
-		this.router.goTo("/menu");
+		eventBus.emit("auth");
+		router.goTo("/menu");
 	}).catch(function (err) {
 		console.log("some err with sign up");
 		signUpView.setErrorText(err); //нужно поставить ошибку из json
