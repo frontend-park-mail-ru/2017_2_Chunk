@@ -5,19 +5,23 @@ import Field from "./field.js";
 export default class Game{
 
 	constructor(canvas1, canvas2) {
-		window.onload = () => {
+		// window.onload = () => {
 		// 	this.canvas1 = document.getElementById("1");
 		// 	this.canvas2 = document.getElementById("2")
-			this.canvasForCubes = canvas1.getContext();
-			this.canvasForFigure = canvas2.getContext();
-			// this.field = new Field(6, this.canvasForCubes, this.canvasForFigure);
-		};
+			this.canvasForCubes = canvas1;
+			this.canvasForFigure = canvas2;
+			this.field = new Field(6, this.canvasForCubes, this.canvasForFigure);
+		// };
 	}
 
 	start(exit) {
-		// this.field.drawField();
-		this.exit = exit;
-		setTimeout(() => {alert("go to menu!"); exit();}, 2000);
+		this.field.drawField();
+		this.field.setFigure(2, 2, 3);
+		this.field.setFigure(5, 5, 2);
+		this.field.drawAllFigures();
+
+
+		// this.exit = exit;
 	}
 };
 // let canvasForClicks = document.getElementById("2");

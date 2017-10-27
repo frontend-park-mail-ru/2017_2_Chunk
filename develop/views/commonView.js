@@ -7,7 +7,7 @@ export default class CommonView extends Block {
 	constructor(blocks) {
 		const view = document.createElement("section");
 		const attrs = {
-				"display": "flex",
+				"display": "inline-flex",
 				"flex-direction": "column",
 				"align-items": "center",
 				"justify-content": "center",
@@ -25,7 +25,6 @@ export default class CommonView extends Block {
 		for (const block in this.elements) {
 			this.append(this.elements[block]);
 		}
-
 	}
 
 	show() {

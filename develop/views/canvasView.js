@@ -6,7 +6,6 @@ import Block from "../blocks/block/block.js";
 
 export default class canvasView extends CommonView {
 	constructor(id, classes) {
-		debugger;
 		const canvas = {
 			canvas: Block.Create('canvas',
 				{'id': id, 'width': '850', 'height': '850'},
@@ -16,10 +15,9 @@ export default class canvasView extends CommonView {
 
 
 		this.canvas = canvas;
-		this.el.style.setProperty("align-items", "flex-start");
-		this.el.style.setProperty("border", "none");
 
-		window.onload = function () {this.ctx = this.el.getContext('2d');};
+
+		this.ctx = this.canvas.canvas.el.getContext('2d');
 		// this.ctx = this.el.getContext('2d');
 
 		this.hide();

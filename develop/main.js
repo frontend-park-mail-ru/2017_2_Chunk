@@ -139,7 +139,7 @@ eventBus.on("openScoreboard", function () {
 	scoreboardView.show();
 });
 
-const game = new Game(canvas1, canvas2);
+const game = new Game(canvas1.ctx, canvas2.ctx);
 
 eventBus.on("openGame", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
@@ -149,6 +149,8 @@ eventBus.on("openGame", function () {
 	profileView.hide();
 	loginView.hide();
 	signUpView.hide();
+	canvas1.show();
+	canvas2.show();
 	game.start(() => router.goTo('/menu'));  //выход в меню
 });
 

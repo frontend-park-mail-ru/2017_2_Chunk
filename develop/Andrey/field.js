@@ -18,10 +18,10 @@ export default class Field {
 		let imgs = [];
 		let ok = 0;
 
-		this.canvas1 = canvas1;
-		this.canvasForCubes = this.canvas1.getContext("2d");
-		this.canvas2 = canvas2;
-		this.canvasForFigure = this.canvas2.getContext("2d");
+		// this.canvas1 = canvas1;
+		this.canvasForCubes = canvas1;
+		// this.canvas2 = canvas2;
+		this.canvasForFigure = canvas2;
 
 		// const canvas1 = document.getElementById("1");
 		// const canvas2 = document.getElementById("2");
@@ -71,13 +71,13 @@ export default class Field {
 	}
 
 	drawField () {
-		// this.canvasForCubes.fillStyle = 'white';
+		this.canvasForCubes.fillStyle = 'white';
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let br = this.arrayOfCubes[i][j].brightness;
 				this.canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
-				// this.canvasForCubes.font = 'bold 30px sans-serif';
-				// canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
+				this.canvasForCubes.font = 'bold 30px sans-serif';
+				this.canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
 			}
 		}
 	}
