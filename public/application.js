@@ -2045,15 +2045,15 @@ eventBus.on("openScoreboard", function () {
 
 eventBus.on("openGame", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
-	menuView.hide();
-	backButtonView.hide();
-	scoreboardView.hide();
-	profileView.hide();
-	loginView.hide();
-	signUpView.hide();
-	updateView.hide();
-	canvas.show();
-	game.start(() => router.goTo('/menu')); //выход в меню
+	document.location.href = "https://dexp.amigo.mail.ru/?context=prtnrs&_1lr=0-2446909_2008196_48374651204&source2=2138_gclid%3dCjwKCAjwssvPBRBBEiwASFoVd7oYdBEGmfvVx23YcIJB984HYqMOuZwH3cht1gwTgUaiUfE4ENc_sxoCXqMQAvD_BwE%26url%3dhttp%253a%252f%252fdexp.amigo.mail.ru%26_1larg_sub%3d48374651204%26ext_partnerid%3ddse.1%253a848001%2Cdse.2%253a848002%2Chp.1%253a848003%2Chp.2%253a848004%2Cpult.1%253a848005%2Cpult.2%253a848006%2Cvbm.1%253a848007%2Cvbm.2%253a848008%2Cany%253a848009%26partnerid%3d848000&gclid=CjwKCAjwssvPBRBBEiwASFoVd7oYdBEGmfvVx23YcIJB984HYqMOuZwH3cht1gwTgUaiUfE4ENc_sxoCXqMQAvD_BwE&url=http%3a%2f%2fdexp.amigo.mail.ru&ext_partnerid=dse.1%3a848001,dse.2%3a848002,hp.1%3a848003,hp.2%3a848004,pult.1%3a848005,pult.2%3a848006,vbm.1%3a848007,vbm.2%3a848008,any%3a848009&partnerid=848000"; // menuView.hide();
+	// backButtonView.hide();
+	// scoreboardView.hide();
+	// profileView.hide();
+	// loginView.hide();
+	// signUpView.hide();
+	// updateView.hide();
+	// canvas.show();
+	// game.start(() => router.goTo('/menu'));  //выход в меню
 });
 
 app.append(menuView).append(signUpView).append(loginView).append(backButtonView).append(profileView).append(rulesView).append(scoreboardView).append(canvas).append(updateView);
