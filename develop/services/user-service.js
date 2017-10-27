@@ -57,25 +57,20 @@ export default class UserService {
 	 * Авторизация пользователя
 	 * @param {string} login
 	 * @param {string} password
-	 * @param {Function} callback
 	 */
 	login(login, password) {
 		return new Promise(function (resolve, reject) {
 			if (login.length < 4) {
 				throw new Error("Длина логина должна быть не меньше 4 символов!", null);
-				return;
 			}
 			if (login.length > 12) {
 				throw new Error("Длина логина не должна превышать 12 символов!", null);
-				return;
 			}
 			if (password.length < 6) {
 				throw new Error("Длина пароля должна быть не меньше 6 символов!", null);
-				return;
 			}
 			if (password === login) {
 				throw new Error("Логин и пароль не могут совпадать!", null);
-				return;
 			}
 			resolve(Http.FetchPost('/user/sign_in', {login, password})
 				.then(function(resp) {
@@ -89,6 +84,50 @@ export default class UserService {
 				}.bind(this)));
 		})
 	}
+
+
+	/**
+	 * Обновляет данные существующего пользователя
+	 * @param {string} username
+	 * @param {string} email
+	 * @param {string} password
+	 * @param {string} old_password
+	 */
+	update(username, email, password, old_password) {//не парсит JSON
+		return new Promise(function (resolve, reject) {
+			if (username.length < 4) {
+				throw new Error("Длина логина должна быть не меньше 4 символов!");
+			}
+			if (username.length > 12) {
+				throw new Error("Длина логина не должна превышать 12 символов!");
+			}
+			if (password.length < 6) {
+				throw new Error("Длина пароля должна быть не меньше 6 символов!");
+			}
+			if (old_password.length < 6) {
+				throw new Error("Длина пароля должна быть не меньше 6 символов!");
+			}
+			if (password === username) {
+				throw new Error("Логин и пароль не должны совпадать!");
+			}
+			if (old_password === username) {
+				throw new Error("Логин и пароль не должны совпадать!");
+			}
+
+			resolve(Http.FetchPost('/user/update', {username, email, password, old_password})
+				.then(function(resp) {
+					console.log("good response status" + resp.username);
+					return resp;
+				}.bind(this))
+				.catch(function(err) {//не могу достать errorMessage
+					console.info(err);
+					console.log("err response status "  + err.errorMessage);
+					throw new Error(err.errorMessage);
+				}.bind(this)));
+		})
+	}
+
+
 
 	/**
 	 * Проверяет, авторизован ли пользователь
@@ -104,13 +143,13 @@ export default class UserService {
 	 * @param force - пременная для принудительной отправки гет запроса если true
 	 * @return {Promise} - возвращает функцию колбек с результатом запроса или ошибкой
 	 */
-	getDataFetch(force = false) {
+	async getDataFetch(force = false) {
 		if (this.isLoggedIn() && !force) {
-			return new Promise(function(resolve, reject) {
+			return await new Promise(function(resolve, reject) {
 				resolve(this.user);
 			}.bind(this));
 		}
-		return Http.FetchGet('/user/whoisit')
+		return await Http.FetchGet('/user/whoisit')
 			.then(function(resp) {
 				this.user = resp;
 				return this.user;

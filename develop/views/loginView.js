@@ -57,8 +57,7 @@ export default class LoginView extends CommonView {
 	}
 
 
-	onSubmit(formData)
-	{
+	onSubmit(formData) {
 		this.userService.login(formData.username, formData.password)
 			.then(function (resp) {
 				console.dir(resp);

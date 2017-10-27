@@ -85,10 +85,13 @@ eventBus.on("openSignUp", function() {
 eventBus.on("openLogin", function() {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
 	menuView.hide();
-	signUpView.hide();
 	backButtonView.show();
+	scoreboardView.hide();
+	profileView.hide();
 	loginView.show();
-	rulesView.hide();
+	signUpView.hide();
+	updateView.hide();
+	canvas.hide();
 });
 
 
@@ -126,7 +129,6 @@ eventBus.on("openMenu", function() {
 	updateView.hide();
 
 	menuView.show();
-
 
 	userService.getDataFetch()
 		.then(function(resp) {

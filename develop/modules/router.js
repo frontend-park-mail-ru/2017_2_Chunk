@@ -72,18 +72,26 @@ export default class Router {
 			});
 		}.bind(this));
 
-		let auth = this.userService.isLoggedIn();
 
-		if(auth) {
-			for (let i = 0; i < 4; i++) {
+		debugger;
+		let auth = this.userService.getDataFetch()
+			.then(async function(resp) {
+				return await resp;
+			})
+			.catch(function(err) {
+				return null
+			});
+
+		if(auth !== null) {
+			for (let i = 0; i < 5; i++) {
 				if(location.pathname.match(this._routes[i].url_pattern)) {
-					window.history.pushState({page: this.routes[number].url}, route.url_pattern, route.url_pattern);
+					window.history.pushState({page: this.routes[i].url}, this.routes[i].url, this.routes[i].url);
 					this._routes[i].emit(this.routes[i].event);
 					return;
 				}
 			}
 			window.history.pushState({page: this.routes[0].url}, this.routes[0].url, this.routes[0].url);
-			this._routes[0].emit(this._routes[0].event);
+			this.goTo(this._routes[0].url_pattern);
 		}
 		else {
 			this._routes.forEach(function (route, number) {
