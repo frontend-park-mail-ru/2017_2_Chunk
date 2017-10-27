@@ -48,6 +48,7 @@ export default class updateView extends CommonView {
 		const form = new Form(updateFields);
 		super({form});
 
+		this.form = form;
 
 		this.bus = eventBus;
 		this.router = router;
@@ -71,12 +72,12 @@ export default class updateView extends CommonView {
 		}.bind(this), true);
 
 		this.bus.on("openUpdate", function() {
-			debugger;
 			this.userService.getDataFetch()
 				.then(function(resp) {
-					const fields = this.el.childNodes.item(0).elements;
-					fields[0].innerHTML = resp.username;
-					fields[1].innerHTML = resp.email;
+					const username = this.form.fields[0].el;
+					const email = this.form.fields[1].el;
+					username.value = resp.username;
+					email.value = resp.email;
 				}.bind(this))
 				.catch(function(err) {
 					console.log("err: ", err.message);

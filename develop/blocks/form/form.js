@@ -15,8 +15,10 @@ export default class Form extends Block {
 		const el = document.createElement('form');
 		super(el);
 
+		this.fields = [];
 		fields.forEach(function (field) {
 			const f = Block.Create('input', field.attrs || {}, field.classes || []);
+			this.fields.push(f);
 			this.append(f);
 		}.bind(this));
 
