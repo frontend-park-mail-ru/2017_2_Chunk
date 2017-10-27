@@ -659,6 +659,8 @@ class profileView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["
 			this.setText(username);
 			this.show();
 		});
+
+		this.hide();
 	}
 
 	render(username) {
@@ -883,7 +885,6 @@ class UserService {
   * @param {Function} callback
   */
 	login(login, password) {
-		debugger;
 		return new Promise(function (resolve, reject) {
 			if (login.length < 4) {
 				throw new Error("Длина логина должна быть не меньше 4 символов!", null);
@@ -906,7 +907,6 @@ class UserService {
 				return resp;
 			}.bind(this)).catch(function (err) {
 				//не могу достать errorMessage
-				debugger;
 				console.log(err.errormessage);
 				console.log("err response status " + err.errorMessage);
 				throw new Error(err.errorMessage);
@@ -1044,7 +1044,6 @@ class Http {
 
 	//Не получается получить из json errMessage.
 	static async FetchPost(address, body) {
-		debugger;
 		const url = backendUrl + address;
 		const myHeaders = new Headers();
 		myHeaders.set("Content-Type", "application/json; charset=utf-8");
@@ -1084,29 +1083,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 class Router {
-	constructor(eventBus) {
+	constructor(eventBus, userService) {
 		this.routes = [{
 			url: "/menu",
 			event: "openMenu"
+		}, {
+			url: "/exit",
+			event: "exit"
+		}, {
+			url: "/scoreboard",
+			event: "openScoreboard"
+		}, {
+			url: "/rules",
+			event: "openRules"
 		}, {
 			url: "/signup",
 			event: "openSignUp"
 		}, {
 			url: "/login",
 			event: "openLogin"
-		}, {
-			url: "/rules",
-			event: "openRules"
-		}, {
-			url: "/scoreboard",
-			event: "openScoreboard"
-		}, {
-			url: "/exit",
-			event: "exit"
 		}];
 
 		this.bus = eventBus;
-
+		this.userService = userService;
 		this.app = new __WEBPACK_IMPORTED_MODULE_0__blocks_block_block__["default"](document.body);
 
 		//реагирует на любые клики. в том числе и сабмиты
@@ -1138,16 +1137,27 @@ class Router {
 			});
 		}.bind(this));
 
-		this._routes.forEach(function (route, number) {
+		let auth = this.userService.isLoggedIn();
 
-			if (location.pathname.match(route.url_pattern)) {
-				//match вернет null при отсутсвии совпадения
-				console.log("Matched!");
-				window.history.pushState({ page: this.routes[number].url }, route.url_pattern, route.url_pattern);
-				route.emit(this.routes[number].event);
-				return;
+		if (auth) {
+			for (let i = 0; i < 4; i++) {
+				if (location.pathname.match(this._routes[i].url_pattern)) {
+					window.history.pushState({ page: this.routes[number].url }, route.url_pattern, route.url_pattern);
+					this._routes[i].emit(this.routes[i].event);
+					return;
+				}
 			}
-		}.bind(this));
+			window.history.pushState({ page: this.routes[0].url }, this.routes[0].url, this.routes[0].url);
+			this._routes[0].emit(this._routes[0].event);
+		} else {
+			this._routes.forEach(function (route, number) {
+				if (location.pathname.match(route.url_pattern)) {
+					//match вернет null при отсутсвии совпадения
+					window.history.pushState({ page: this.routes[number].url }, route.url_pattern, route.url_pattern);
+					route.emit(this.routes[number].event);
+				}
+			}.bind(this));
+		}
 	}
 
 	goTo(path) {
@@ -1355,7 +1365,7 @@ const userService = new __WEBPACK_IMPORTED_MODULE_8__services_user_service_js__[
 
 const eventBus = new __WEBPACK_IMPORTED_MODULE_9__modules_eventBus__["default"]();
 
-const router = new __WEBPACK_IMPORTED_MODULE_10__modules_router__["default"](eventBus);
+const router = new __WEBPACK_IMPORTED_MODULE_10__modules_router__["default"](eventBus, userService);
 
 const app = new __WEBPACK_IMPORTED_MODULE_7__blocks_block_block_js__["default"](document.body);
 

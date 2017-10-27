@@ -33,7 +33,7 @@ const userService = new UserService();
 
 const eventBus = new EventBus();
 
-const router = new Router(eventBus);
+const router = new Router(eventBus, userService);
 
 const app = new Block(document.body);
 

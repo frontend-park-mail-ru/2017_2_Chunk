@@ -60,7 +60,6 @@ export default class UserService {
 	 * @param {Function} callback
 	 */
 	login(login, password) {
-		debugger;
 		return new Promise(function (resolve, reject) {
 			if (login.length < 4) {
 				throw new Error("Длина логина должна быть не меньше 4 символов!", null);
@@ -84,7 +83,6 @@ export default class UserService {
 					return resp;
 				}.bind(this))
 				.catch(function(err) {//не могу достать errorMessage
-					debugger;
 					console.log(err.errormessage);
 					console.log("err response status "  + err.errorMessage);
 					throw new Error(err.errorMessage);

@@ -13,7 +13,9 @@ export default class profileView extends Block {
 		this.bus.on("auth", (username) => {
 			this.setText(username);
 			this.show();
-		})
+		});
+
+		this.hide();
 	}
 
 	render(username) {

@@ -44,7 +44,6 @@
 
 		//Не получается получить из json errMessage.
 		static async FetchPost(address, body) {
-			debugger;
 			const url = backendUrl + address;
 			const myHeaders = new Headers();
 			myHeaders.set("Content-Type", "application/json; charset=utf-8");

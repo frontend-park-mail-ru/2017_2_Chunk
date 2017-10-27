@@ -3,11 +3,23 @@
 import Block from "../blocks/block/block"
 
 export default class Router {
-	constructor(eventBus) {
+	constructor(eventBus, userService) {
 		this.routes = [
 			{
 				url: "/menu",
 				event: "openMenu"
+			},
+			{
+				url: "/exit",
+				event: "exit"
+			},
+			{
+				url: "/scoreboard",
+				event: "openScoreboard"
+			},
+			{
+				url: "/rules",
+				event: "openRules"
 			},
 			{
 				url: "/signup",
@@ -17,21 +29,10 @@ export default class Router {
 				url: "/login",
 				event: "openLogin"
 			},
-			{
-				url: "/rules",
-				event: "openRules"
-			},
-			{
-				url: "/scoreboard",
-				event: "openScoreboard"
-			},
-			{
-				url: "/exit",
-				event: "exit"
-			}];
+			];
 
 		this.bus = eventBus;
-
+		this.userService = userService;
 		this.app = new Block(document.body);
 
 
@@ -63,15 +64,27 @@ export default class Router {
 			});
 		}.bind(this));
 
-		this._routes.forEach(function(route, number) {
+		let auth = this.userService.isLoggedIn();
 
-			if (location.pathname.match(route.url_pattern)) {//match вернет null при отсутсвии совпадения
-				console.log("Matched!");
-				window.history.pushState({page: this.routes[number].url}, route.url_pattern, route.url_pattern);
-				route.emit(this.routes[number].event);
-				return;
+		if(auth) {
+			for (let i = 0; i < 4; i++) {
+				if(location.pathname.match(this._routes[i].url_pattern)) {
+					window.history.pushState({page: this.routes[number].url}, route.url_pattern, route.url_pattern);
+					this._routes[i].emit(this.routes[i].event);
+					return;
+				}
 			}
-		}.bind(this));
+			window.history.pushState({page: this.routes[0].url}, this.routes[0].url, this.routes[0].url);
+			this._routes[0].emit(this._routes[0].event);
+		}
+		else {
+			this._routes.forEach(function (route, number) {
+				if (location.pathname.match(route.url_pattern)) {//match вернет null при отсутсвии совпадения
+					window.history.pushState({page: this.routes[number].url}, route.url_pattern, route.url_pattern);
+					route.emit(this.routes[number].event);
+				}
+			}.bind(this));
+		}
 	}
 
 
