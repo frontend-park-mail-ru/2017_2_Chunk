@@ -15,9 +15,8 @@ section {
     /*display: inline-flex;*/
     /*position: absolute;*/
     width: 20em;
-    min-width: 300px;
+    /*min-width: 300px;*/
     margin: 1.5% auto;
-    margin-top: 5em;
 
     border-radius: 0.8em;
     border: ridge black;
@@ -44,7 +43,8 @@ section .button {
 
 div.profile {
     font-family: cursive;
-    font-size: 23pt;
+    font-size: 2em;
+    color: #ff8700;
     position: fixed;
     max-width: 300px;
     left: 80%;
@@ -63,7 +63,8 @@ div.profile {
     display: block;
     width: 80%;
     margin: 0 auto;
-    font-size: 16px;
+    font-size: 1em;
+    color: #ff8700;
 
     margin-bottom: 3px;
     background-color: transparent;

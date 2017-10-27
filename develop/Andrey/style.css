@@ -15,10 +15,7 @@ body {
     position: absolute;
     left: auto;
     top: auto;
-    z-index: 0;
     background-image: url("images/background2.png");
-    margin-top: 8%;
-
 }
 
 .canv2 {

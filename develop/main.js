@@ -54,9 +54,11 @@ const rulesView = new RulesView(eventBus);
 
 const scoreboardView = new ScoreboardView(eventBus, userService);
 
-const canvas1 = new Canvas(1, "canv1");
+const canvas = new Canvas();
 
-const canvas2 = new Canvas(2, "canv2");
+const game = new Game(canvas.ctx1, canvas.ctx1);
+
+
 
 
 // backButtonView.on("click", function(event) {
@@ -99,8 +101,7 @@ eventBus.on("openRules", function() {
 
 eventBus.on("openMenu", function() {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
-	canvas1.hide();
-	canvas2.hide();
+	canvas.hide();
 	signUpView.hide();
 	backButtonView.hide();
 	loginView.hide();
@@ -139,7 +140,6 @@ eventBus.on("openScoreboard", function () {
 	scoreboardView.show();
 });
 
-const game = new Game(canvas1, canvas2);
 
 eventBus.on("openGame", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
@@ -149,8 +149,7 @@ eventBus.on("openGame", function () {
 	profileView.hide();
 	loginView.hide();
 	signUpView.hide();
-	canvas1.show();
-	canvas2.show();
+	canvas.show();
 	game.start(() => router.goTo('/menu'));  //выход в меню
 });
 
@@ -163,8 +162,7 @@ app
 	.append(profileView)
 	.append(rulesView)
 	.append(scoreboardView)
-	.append(canvas1)
-	.append(canvas2);
+	.append(canvas);
 
 
 router.start();
