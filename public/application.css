@@ -1,4 +1,29 @@
-.message {
+body {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.canv1 {
+    position: absolute;
+    left: auto;
+    top: auto;
+    z-index: 0;
+    background-image: url(./background2-8bc754cd26eed4f4513e64c7ec343099.png);
+}
+
+.canv2 {
+    position: absolute;
+    left: auto;
+    top: auto;
+    z-index: 1;
+}.message {
     font-family: fantasy;
     position: relative;
     margin-left: 20%;
