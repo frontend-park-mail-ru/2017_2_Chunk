@@ -2,7 +2,7 @@
 'use strict';
 //в Fetch post не получается получить в ответ объект json c ошибкой
 	// const backendUrl = 'https://chunkgame.herokuapp.com';
-	const backendUrl = "https://backend-java-spring.herokuapp.com/user";
+	const backendUrl = "https://backend-java-spring.herokuapp.com";
 	const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
 	console.log("baseUrl = ", baseUrl);
