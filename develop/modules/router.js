@@ -73,7 +73,6 @@ export default class Router {
 		}.bind(this));
 
 
-		debugger;
 		let auth = this.userService.getDataFetch()
 			.then(async function(resp) {
 				return await resp;

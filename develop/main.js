@@ -63,7 +63,16 @@ const game = new Game(canvas.ctx1, canvas.ctx1);
 
 
 
-
+const Views = [];
+Views.push(menuView);
+Views.push(signUpView);
+Views.push(loginView);
+Views.push(updateView);
+Views.push(backButtonView);
+Views.push(profileView);
+Views.push(rulesView);
+Views.push(scoreboardView);
+Views.push(canvas);
 // backButtonView.on("click", function(event) {
 // 	window.history.back();
 // 	event.preventDefault();
@@ -74,24 +83,21 @@ const game = new Game(canvas.ctx1, canvas.ctx1);
 
 eventBus.on("openSignUp", function() {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/signup");
-	menuView.hide();
+	Views.forEach((view) => {
+		view.hide();
+	});
 	signUpView.show();
 	backButtonView.show();
-	loginView.hide();
-	scoreboardView.hide();
 });
 
 
 eventBus.on("openLogin", function() {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
-	menuView.hide();
-	backButtonView.show();
-	scoreboardView.hide();
-	profileView.hide();
+	Views.forEach((view) => {
+		view.hide();
+	});
 	loginView.show();
-	signUpView.hide();
-	updateView.hide();
-	canvas.hide();
+	backButtonView.show();
 });
 
 
@@ -120,14 +126,9 @@ eventBus.on("openRules", function() {
 
 eventBus.on("openMenu", function() {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
-	canvas.hide();
-	signUpView.hide();
-	backButtonView.hide();
-	loginView.hide();
-	rulesView.hide();
-	scoreboardView.hide();
-	updateView.hide();
-
+	Views.forEach((view) => {
+		view.hide();
+	});
 	menuView.show();
 
 	userService.getDataFetch()
