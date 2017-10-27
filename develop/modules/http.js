@@ -2,7 +2,8 @@
 'use strict';
 //в Fetch post не получается получить в ответ объект json c ошибкой
 	// const backendUrl = 'https://chunkgame.herokuapp.com';
-	const backendUrl = "https://backend-java-spring.herokuapp.com/user";
+	// const backendUrl = "https://backend-java-spring.herokuapp.com/";
+	const backendUrl = "https://backend-java-spring.herokuapp.com";
 	const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
 	console.log("baseUrl = ", baseUrl);
@@ -52,10 +53,7 @@
 				mode: 'cors',
 				credentials: 'include',
 				body: JSON.stringify(body),
-				headers: myHeaders,
-				// headers: {
-				// 	'Content-Type': 'application/json; charset=utf-8'
-				// }
+				headers: myHeaders
 			}).then(function (response) {
 				let json = response.json();
 				if (response.status >= 400) {

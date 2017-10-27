@@ -18,6 +18,7 @@ export default class canvasView extends CommonView {
 
 
 		this.ctx = this.canvas.canvas.el.getContext('2d');
+
 		// this.ctx = this.el.getContext('2d');
 
 		this.hide();

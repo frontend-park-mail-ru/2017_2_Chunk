@@ -139,7 +139,7 @@ eventBus.on("openScoreboard", function () {
 	scoreboardView.show();
 });
 
-const game = new Game(canvas1.ctx, canvas2.ctx);
+const game = new Game(canvas1, canvas2);
 
 eventBus.on("openGame", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
