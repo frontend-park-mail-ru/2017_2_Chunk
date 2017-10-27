@@ -1687,7 +1687,7 @@ class Router {
 		}).catch(function (err) {
 			return null;
 		});
-
+		debugger;
 		if (auth !== null) {
 			for (let i = 0; i < 5; i++) {
 				if (location.pathname.match(this._routes[i].url_pattern)) {
@@ -1986,23 +1986,20 @@ eventBus.on("openLogin", function () {
 
 eventBus.on("openUpdate", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
-	menuView.hide();
-	signUpView.hide();
-	backButtonView.show();
-	loginView.hide();
-	rulesView.hide();
-	canvas.hide();
-	scoreboardView.hide();
+	Views.forEach(view => {
+		view.hide();
+	});
 	updateView.show();
+	backButtonView.show();
 });
 
 eventBus.on("openRules", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/rules");
-	menuView.hide();
-	signUpView.hide();
-	backButtonView.show();
-	loginView.hide();
+	Views.forEach(view => {
+		view.hide();
+	});
 	rulesView.show();
+	backButtonView.show();
 });
 
 eventBus.on("openMenu", function () {
@@ -2033,9 +2030,11 @@ eventBus.on("exit", function () {
 
 eventBus.on("openScoreboard", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
-	menuView.hide();
-	backButtonView.show();
+	Views.forEach(view => {
+		view.hide();
+	});
 	scoreboardView.show();
+	backButtonView.show();
 });
 
 eventBus.on("openGame", function () {

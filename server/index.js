@@ -19,6 +19,8 @@ app.use("/update", express.static('./public'));
 app.use("/game", express.static('./public'));
 app.use("/rules", express.static('./public'));
 app.use("/scoreboard", express.static('./public'));
+app.use("/exit", express.static('./public'));
+
 
 
 app.use(bodyParser.json());                 // С помощью какой-то древней магии парсит тело запроса,

@@ -80,7 +80,7 @@ export default class Router {
 			.catch(function(err) {
 				return null
 			});
-
+		debugger;
 		if(auth !== null) {
 			for (let i = 0; i < 5; i++) {
 				if(location.pathname.match(this._routes[i].url_pattern)) {
