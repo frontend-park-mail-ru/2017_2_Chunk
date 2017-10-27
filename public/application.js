@@ -437,6 +437,12 @@ class Field {
 		this.canvas2 = canvas2;
 		this.canvasForFigure = this.canvas2.getContext("2d");
 
+		// const canvas1 = document.getElementById("1");
+		// const canvas2 = document.getElementById("2");
+		// this.canvasForCubes = canvas1.getContext('2d');
+		// this.canvasForFigure = canvas2.getContext('2d');
+
+
 		for (let i = 0; i < imgUrl.length; i++) {
 			let img = new Image();
 			imgs.push(img);
@@ -478,13 +484,12 @@ class Field {
 	}
 
 	drawField() {
-
-		this.canvasForCubes.fillStyle = 'white';
+		// this.canvasForCubes.fillStyle = 'white';
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let br = this.arrayOfCubes[i][j].brightness;
 				this.canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
-				this.canvasForCubes.font = 'bold 30px sans-serif';
+				// this.canvasForCubes.font = 'bold 30px sans-serif';
 				// canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
 			}
 		}
@@ -566,15 +571,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 class Game {
 
 	constructor(canvas1, canvas2) {
-		// this.canvas1 = canvas1;
-		// this.canvasForCubes = canvas1.get(0).getContext("2d");
-		// this.canvas2 = canvas2;
-		// this.canvasForFigure = this.canvas2.getContext("2d");
-		// this.field = new Field(6, canvas1, canvas2);
+		window.onload = () => {
+			// 	this.canvas1 = document.getElementById("1");
+			// 	this.canvas2 = document.getElementById("2")
+			this.canvasForCubes = canvas1.getContext();
+			this.canvasForFigure = canvas2.getContext();
+			// this.field = new Field(6, this.canvasForCubes, this.canvasForFigure);
+		};
 	}
 
 	start(exit) {
-		this.field.drawField();
+		// this.field.drawField();
 		this.exit = exit;
 		setTimeout(() => {
 			alert("go to menu!");exit();
@@ -1167,16 +1174,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 class canvasView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	constructor(id, classes) {
+		debugger;
 		const canvas = {
-			back: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('canvas', { 'id': id, 'width': '850', 'height': '850' }, [classes], "")
+			canvas: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('canvas', { 'id': id, 'width': '850', 'height': '850' }, [classes], "")
 		};
 		super(canvas);
 
+		this.canvas = canvas;
 		this.el.style.setProperty("align-items", "flex-start");
 		this.el.style.setProperty("border", "none");
 
+		window.onload = function () {
+			this.ctx = this.el.getContext('2d');
+		};
+		// this.ctx = this.el.getContext('2d');
+
 		this.hide();
 	}
+
+	show() {
+		setTimeout(() => {
+			this.el.style.setProperty("display", "flex");
+		}, 0);
+		setTimeout(() => {
+			this.el.classList.remove("hidden");
+		}, 0);
+	}
+
+	hide() {
+		this.el.classList.add("hidden");
+		setTimeout(() => {
+			this.el.style.setProperty("display", "none");
+		}, 0);
+	}
+
+	// 	getContext() {
+	// 		return this.canvas.el.getContext("2d");
+	// }
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = canvasView;
 

@@ -5,15 +5,17 @@ import Field from "./field.js";
 export default class Game{
 
 	constructor(canvas1, canvas2) {
-		// this.canvas1 = canvas1;
-		// this.canvasForCubes = canvas1.get(0).getContext("2d");
-		// this.canvas2 = canvas2;
-		// this.canvasForFigure = this.canvas2.getContext("2d");
-		// this.field = new Field(6, canvas1, canvas2);
+		window.onload = () => {
+		// 	this.canvas1 = document.getElementById("1");
+		// 	this.canvas2 = document.getElementById("2")
+			this.canvasForCubes = canvas1.getContext();
+			this.canvasForFigure = canvas2.getContext();
+			// this.field = new Field(6, this.canvasForCubes, this.canvasForFigure);
+		};
 	}
 
 	start(exit) {
-		this.field.drawField();
+		// this.field.drawField();
 		this.exit = exit;
 		setTimeout(() => {alert("go to menu!"); exit();}, 2000);
 	}
