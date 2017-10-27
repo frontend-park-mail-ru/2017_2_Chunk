@@ -236,46 +236,6 @@ class CommonView extends __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__["d
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__block_block__ = __webpack_require__(0);
-
-
-
-
-/**
- * Базовый класс формы для отправки информационных сообщений в тело html документа
- * @module Message
- */
-class Message extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
-	/**
-  * Создает элемент div CSS класса message
-  * @constructor
-  */
-	constructor() {
-		const el = document.createElement('div');
-		super(el);
-
-		this.el.style.setProperty("text-align", "center");
-		this.el.style.setProperty("font-size", "1.5em");
-
-		// el.classList.add('message');
-	}
-
-	/**
-  * Сбрасывает атрибуты HTMLElement
-  */
-	reset() {
-		this.el.reset();
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = Message;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__block_block__ = __webpack_require__(0);
 /**
  * Базовый класс формы
  * @module Form
@@ -330,6 +290,46 @@ class Form extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__block_block__ = __webpack_require__(0);
+
+
+
+
+/**
+ * Базовый класс формы для отправки информационных сообщений в тело html документа
+ * @module Message
+ */
+class Message extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
+	/**
+  * Создает элемент div CSS класса message
+  * @constructor
+  */
+	constructor() {
+		const el = document.createElement('div');
+		super(el);
+
+		this.el.style.setProperty("text-align", "center");
+		this.el.style.setProperty("font-size", "1.5em");
+
+		// el.classList.add('message');
+	}
+
+	/**
+  * Сбрасывает атрибуты HTMLElement
+  */
+	reset() {
+		this.el.reset();
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = Message;
+
+
+/***/ }),
 /* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -368,11 +368,14 @@ function requireAll(r) {
   r.keys().forEach(r);
 }
 
-requireAll(__webpack_require__(17));
 requireAll(__webpack_require__(21));
+requireAll(__webpack_require__(25));
 
 /***/ }),
-/* 6 */
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -423,14 +426,14 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
 
 
 
@@ -521,14 +524,14 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
 
 
 
@@ -605,7 +608,7 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -634,7 +637,7 @@ class backButtonView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"
 
 
 /***/ }),
-/* 10 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -671,7 +674,7 @@ class profileView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["
 
 
 /***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -704,12 +707,12 @@ class rulesView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 12 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commonView__ = __webpack_require__(1);
 
 
@@ -741,7 +744,7 @@ class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"
 
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -818,12 +821,13 @@ class scoreboardTemplate {
 
 
 /***/ }),
-/* 14 */
+/* 17 */,
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http__ = __webpack_require__(19);
 
 
 //по урлу exit не поулчается выйти
@@ -991,7 +995,7 @@ class UserService {
 
 
 /***/ }),
-/* 15 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1072,7 +1076,7 @@ class Http {
 Http.BaseUrl = null;
 
 /***/ }),
-/* 16 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1184,30 +1188,30 @@ class Router {
 
 
 /***/ }),
-/* 17 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"./blocks/block/block.js": 0,
-	"./blocks/form/form.js": 3,
-	"./blocks/message/message.js": 2,
-	"./configs/login-fields.js": 18,
-	"./configs/signup-fields.js": 19,
+	"./blocks/form/form.js": 2,
+	"./blocks/message/message.js": 3,
+	"./configs/login-fields.js": 22,
+	"./configs/signup-fields.js": 23,
 	"./include.js": 5,
-	"./main.js": 20,
+	"./main.js": 24,
 	"./modules/eventBus.js": 4,
-	"./modules/http.js": 15,
-	"./modules/router.js": 16,
-	"./services/user-service.js": 14,
-	"./templates/scoreBoard.js": 13,
-	"./views/backButtonView.js": 9,
+	"./modules/http.js": 19,
+	"./modules/router.js": 20,
+	"./services/user-service.js": 18,
+	"./templates/scoreBoard.js": 16,
+	"./views/backButtonView.js": 12,
 	"./views/commonView.js": 1,
-	"./views/loginView.js": 8,
-	"./views/menuView.js": 6,
-	"./views/profileView.js": 10,
-	"./views/rulesView.js": 11,
-	"./views/scoreboardView.js": 12,
-	"./views/signUpView.js": 7
+	"./views/loginView.js": 11,
+	"./views/menuView.js": 9,
+	"./views/profileView.js": 13,
+	"./views/rulesView.js": 14,
+	"./views/scoreboardView.js": 15,
+	"./views/signUpView.js": 10
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1223,10 +1227,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 17;
+webpackContext.id = 21;
 
 /***/ }),
-/* 18 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1265,7 +1269,7 @@ const loginFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (loginFields);
 
 /***/ }),
-/* 19 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1314,23 +1318,23 @@ const signupFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (signupFields);
 
 /***/ }),
-/* 20 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_signUpView__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_signUpView__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__blocks_block_block_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_user_service_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_user_service_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_eventBus__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__modules_router__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__blocks_message_message__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__modules_router__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__blocks_message_message__ = __webpack_require__(3);
 
 /**
  * Основной модуль работатющий со всеми объектами
@@ -1457,19 +1461,19 @@ app.append(menuView).append(signUpView).append(loginView).append(backButtonView)
 router.start();
 
 /***/ }),
-/* 21 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./blocks/message/index.css": 22,
-	"./configs/login-fields.css": 23,
-	"./configs/signup-fields.css": 24,
-	"./views/viewsCss/backButton.css": 25,
-	"./views/viewsCss/commonView.css": 26,
-	"./views/viewsCss/login.css": 27,
-	"./views/viewsCss/menu.css": 28,
-	"./views/viewsCss/signUp.css": 29,
-	"./views/viewsCss/view.css": 30
+	"./blocks/message/index.css": 51,
+	"./configs/login-fields.css": 28,
+	"./configs/signup-fields.css": 29,
+	"./views/viewsCss/backButton.css": 30,
+	"./views/viewsCss/commonView.css": 31,
+	"./views/viewsCss/login.css": 32,
+	"./views/viewsCss/menu.css": 33,
+	"./views/viewsCss/signUp.css": 34,
+	"./views/viewsCss/view.css": 35
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1485,45 +1489,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 21;
+webpackContext.id = 25;
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 26 */,
+/* 27 */,
 /* 28 */
 /***/ (function(module, exports) {
 
@@ -1537,6 +1507,57 @@ webpackContext.id = 21;
 
 /***/ }),
 /* 30 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
