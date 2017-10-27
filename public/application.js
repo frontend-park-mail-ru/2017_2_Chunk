@@ -236,46 +236,6 @@ class CommonView extends __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__["d
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__block_block__ = __webpack_require__(0);
-
-
-
-
-/**
- * Базовый класс формы для отправки информационных сообщений в тело html документа
- * @module Message
- */
-class Message extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
-	/**
-  * Создает элемент div CSS класса message
-  * @constructor
-  */
-	constructor() {
-		const el = document.createElement('div');
-		super(el);
-
-		this.el.style.setProperty("text-align", "center");
-		this.el.style.setProperty("font-size", "1.5em");
-
-		// el.classList.add('message');
-	}
-
-	/**
-  * Сбрасывает атрибуты HTMLElement
-  */
-	reset() {
-		this.el.reset();
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = Message;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__block_block__ = __webpack_require__(0);
 /**
  * Базовый класс формы
  * @module Form
@@ -330,6 +290,46 @@ class Form extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__block_block__ = __webpack_require__(0);
+
+
+
+
+/**
+ * Базовый класс формы для отправки информационных сообщений в тело html документа
+ * @module Message
+ */
+class Message extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
+	/**
+  * Создает элемент div CSS класса message
+  * @constructor
+  */
+	constructor() {
+		const el = document.createElement('div');
+		super(el);
+
+		this.el.style.setProperty("text-align", "center");
+		this.el.style.setProperty("font-size", "1.5em");
+
+		// el.classList.add('message');
+	}
+
+	/**
+  * Сбрасывает атрибуты HTMLElement
+  */
+	reset() {
+		this.el.reset();
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = Message;
+
+
+/***/ }),
 /* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -368,8 +368,8 @@ function requireAll(r) {
   r.keys().forEach(r);
 }
 
-requireAll(__webpack_require__(19));
-requireAll(__webpack_require__(24));
+requireAll(__webpack_require__(21));
+requireAll(__webpack_require__(25));
 
 /***/ }),
 /* 6 */
@@ -415,18 +415,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-let canvas1 = document.getElementById("1");
-let canvasForCubes = canvas1.getContext('2d');
-let canvas2 = document.getElementById("2");
-let canvasForFigure = canvas2.getContext('2d');
-
 const sideOfCube = 90;
 const sideOfCanvas = 850;
 const indent = 150;
 
 class Field {
 
-	constructor(count) {
+	constructor(count, canvas1, canvas2) {
 		this.count = count;
 		let imgUrl = [];
 		imgUrl.push("images/cube.png");
@@ -436,6 +431,11 @@ class Field {
 
 		let imgs = [];
 		let ok = 0;
+
+		this.canvas1 = canvas1;
+		this.canvasForCubes = this.canvas1.getContext("2d");
+		this.canvas2 = canvas2;
+		this.canvasForFigure = this.canvas2.getContext("2d");
 
 		for (let i = 0; i < imgUrl.length; i++) {
 			let img = new Image();
@@ -460,9 +460,7 @@ class Field {
 			cubes[i] = [];
 		}
 		let diff = 0;
-		// let id = 0;
 		for (let i = 0; i < this.count; i++) {
-			// id = (i+1)*10;
 			let x = startOfFieldX + diff;
 			let y = startOfFieldY + diff;
 			for (let j = 0; j < this.count; j++) {
@@ -470,7 +468,6 @@ class Field {
 				cubes[i][j].setFigure(0);
 				cubes[i][j].setBrightness(0);
 				cubes[i][j].setId(i, j);
-				// id++;
 				cubes[i][j].setCoordinates(x, y);
 				x -= sideOfCube / 2 + 2;
 				y += sideOfCube / 2 + 2;
@@ -481,19 +478,20 @@ class Field {
 	}
 
 	drawField() {
-		canvasForCubes.fillStyle = 'white';
+
+		this.canvasForCubes.fillStyle = 'white';
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let br = this.arrayOfCubes[i][j].brightness;
-				canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
-				canvasForCubes.font = 'bold 30px sans-serif';
+				this.canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
+				this.canvasForCubes.font = 'bold 30px sans-serif';
 				// canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
 			}
 		}
 	}
 
 	clearField() {
-		canvasForCubes.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
+		this.canvasForCubes.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
 	}
 
 	findById(idx, idy) {
@@ -513,37 +511,24 @@ class Field {
 	}
 
 	drawFigures(idx, idy) {
-		canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x + 5, this.findById(idx, idy).y - 70);
+		this.canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x + 5, this.findById(idx, idy).y - 70);
 	}
 
 	drawAllFigures() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				if (this.arrayOfCubes[i][j].figure > 1) {
-					canvasForFigure.drawImage(this.massOfUrl[this.arrayOfCubes[i][j].figure], this.arrayOfCubes[i][j].x + 5, this.arrayOfCubes[i][j].y - 65);
+					this.canvasForFigure.drawImage(this.massOfUrl[this.arrayOfCubes[i][j].figure], this.arrayOfCubes[i][j].x + 5, this.arrayOfCubes[i][j].y - 65);
 				}
 			}
 		}
 	}
 
 	clearFigures() {
-		canvasForFigure.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
-	}
-
-	test() {
-		canvasForCubes.lineWidth = 2;
-		canvasForCubes.strokeStyle = 'white';
-		canvasForCubes.beginPath();
-		canvasForCubes.rect(200, 200, 100, 200);
-		canvasForCubes.stroke();
-		canvasForCubes.closePath();
-		console.log(canvasForCubes.isPointInPath(250, 250));
-		console.log(canvasForCubes.isPointInPath(100, 100));
+		this.canvasForFigure.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
 	}
 
 	brightCubes(idx, idy) {
-		// let id1 = Math.floor(id/10);
-		// let id2 = id % 10;
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let idx2 = this.arrayOfCubes[i][j].idx;
@@ -573,6 +558,160 @@ class Field {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field_js__ = __webpack_require__(7);
+
+
+
+
+class Game {
+
+	constructor(canvas1, canvas2) {
+		// this.canvas1 = canvas1;
+		// this.canvasForCubes = canvas1.get(0).getContext("2d");
+		// this.canvas2 = canvas2;
+		// this.canvasForFigure = this.canvas2.getContext("2d");
+		// this.field = new Field(6, canvas1, canvas2);
+	}
+
+	start(exit) {
+		this.field.drawField();
+		this.exit = exit;
+		setTimeout(() => {
+			alert("go to menu!");exit();
+		}, 2000);
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = Game;
+;
+// let canvasForClicks = document.getElementById("2");
+// // let ctx = canvasForClicks.getContext('2d');
+//
+// let z = new Field(6);
+// canvasForClicks.addEventListener('click', updateCanvas, false);
+//
+// const x = 425;
+// const y = 230;
+// const sq = Math.sqrt(2)/2;
+// const side = 64;
+//
+// window.onload = function () {
+// 	z.drawField();
+// 	// z.setFigure(1, 2, 2);
+// 	// z.setFigure(3, 1, 3);
+// 	// z.setFigure(5, 5, 2);
+// 	// z.setFigure(4, 3, 3);
+// 	// z.setFigure(5, 2, 2);
+// 	// z.setFigure(3, 4, 3);
+// 	// z.drawAllFigures();
+// 	// z.brightCubes(5, 4);
+// 	// z.drawField();
+// };
+//
+// function findOffset(obj) {
+// 	let curX = 0;
+// 	let curY = 0;
+// 	if (obj.offsetParent) {
+// 		do {
+// 			curX += obj.offsetLeft;
+// 			curY += obj.offsetTop;
+// 		} while (obj = obj.offsetParent);
+// 		return {x:curX,y:curY};
+// 	}
+// }
+//
+// function updateCanvas(e){
+// 	let pos = findOffset(canvasForClicks);
+//
+// 	let mouseX = e.pageX - pos.x;
+// 	let mouseY = e.pageY - pos.y;
+//
+// 	let XX = (mouseX - x + mouseY - y)*sq;
+// 	let YY = (mouseY - mouseX + x - y)*sq;
+//
+// 	if (XX < side*6 && YY < side*6 && XX > 0 && YY > 0) {
+// 		let idx;
+// 		let idy;
+// 		for (let i = 0; i < 6; i++) {
+// 			if (XX > side*i)
+// 				idx = i;
+// 		}
+// 		for (let i = 0; i < 6; i++) {
+// 			if (YY > side*i)
+// 				idy = i;
+// 		}
+// 		z.deleteAllBrightCube();
+// 		z.brightCubes(idx, idy);
+// 		z.drawField();
+// 	}
+// }
+//
+// // let canvas,ctx, mouseX = 999, mouseY = 999,circles = new Array();
+// // let num = Math.floor(Math.random()*30-10)+10;
+// //
+// // function init(){
+// // 	canvas = document.getElementById('2');
+// // 	ctx = canvas.getContext('2d');
+// //
+// // 	for(let i=0; i < num; i++){
+// // 		circles[i] = {
+// // 			x: Math.floor(Math.random()*canvas.width),
+// // 			y : Math.floor(Math.random()*canvas.height),
+// // 			r : Math.floor(Math.random()*60-10)+10
+// // 		}
+// // 	}
+// // 	drawCanvas();
+// // 	canvas.addEventListener('mousemove',updateCanvas,false);
+// //
+// // }
+// //
+// // init();
+// //
+// // function findOffset(obj) {
+// // 	let curX = 0;
+// // 	let curY = 0;
+// // 	if (obj.offsetParent) {
+// // 		do {
+// // 			curX += obj.offsetLeft;
+// // 			curY += obj.offsetTop;
+// // 		} while (obj = obj.offsetParent);
+// // 		return {x:curX,y:curY};
+// // 	}
+// // }
+// //
+// // function updateCanvas(e){
+// // 	let pos = findOffset(canvas);
+// //
+// // 	mouseX = e.pageX - pos.x;
+// // 	mouseY = e.pageY - pos.y;
+// //
+// // 	ctx.clearRect(0,0,canvas.width,canvas.height);
+// // 	drawCanvas();
+// // }
+// //
+// //
+// // function drawCanvas() {
+// //
+// // 	for(let i = 0; i < num; i++){
+// // 		ctx.beginPath();
+// // 		ctx.fillStyle = 'rgba(0,0,0,.5)';
+// //
+// // 		ctx.arc(circles[i].x,circles[i].y,circles[i].r,0,Math.PI*2,false);
+// // 		if(ctx.isPointInPath(mouseX,mouseY)){
+// // 			ctx.fillStyle = 'red';
+// // 		}
+// // 		ctx.fill();
+// // 	}
+// // }
+//
+//
+//
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__ = __webpack_require__(0);
 
@@ -584,7 +723,7 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	constructor(eventBus, router) {
 		const menuElems = {
 			profile: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('div', { 'data-section': 'profile' }, ['profile', 'auth'], ''),
-			play: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'play', 'href': '/play' }, ['button', 'auth', 'menu__button'], 'Играть'),
+			play: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'play', 'href': '/game' }, ['button', 'auth', 'menu__button'], 'Играть'),
 			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'signup', 'href': '/signup' }, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
 			login: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'login', 'href': '/login' }, ['button', 'unauth', 'menu__button'], 'Вход'),
 			settings: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'settings', 'href': '/settings' }, ['button', 'auth', 'menu__button'], 'Настройки'),
@@ -619,14 +758,14 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
 
 
 
@@ -717,14 +856,14 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
 
 
 
@@ -801,7 +940,7 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -830,7 +969,7 @@ class backButtonView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -867,7 +1006,7 @@ class profileView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -900,12 +1039,12 @@ class rulesView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commonView__ = __webpack_require__(1);
 
 
@@ -937,7 +1076,7 @@ class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1014,12 +1153,41 @@ class scoreboardTemplate {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__ = __webpack_require__(0);
+
+
+
+
+
+class canvasView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
+	constructor(id, classes) {
+		const canvas = {
+			back: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('canvas', { 'id': id, 'width': '850', 'height': '850' }, [classes], "")
+		};
+		super(canvas);
+
+		this.el.style.setProperty("align-items", "flex-start");
+		this.el.style.setProperty("border", "none");
+
+		this.hide();
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = canvasView;
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http__ = __webpack_require__(19);
 
 
 //по урлу exit не поулчается выйти
@@ -1187,7 +1355,7 @@ class UserService {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1268,7 +1436,7 @@ class Http {
 Http.BaseUrl = null;
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1298,6 +1466,9 @@ class Router {
 		}, {
 			url: "/login",
 			event: "openLogin"
+		}, {
+			url: "/game",
+			event: "openGame"
 		}];
 
 		this.bus = eventBus;
@@ -1380,33 +1551,34 @@ class Router {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"./Andrey/cell.js": 6,
 	"./Andrey/field.js": 7,
-	"./Andrey/gameHandler.js": 20,
+	"./Andrey/gameHandler.js": 8,
 	"./blocks/block/block.js": 0,
-	"./blocks/form/form.js": 3,
-	"./blocks/message/message.js": 2,
-	"./configs/login-fields.js": 21,
-	"./configs/signup-fields.js": 22,
+	"./blocks/form/form.js": 2,
+	"./blocks/message/message.js": 3,
+	"./configs/login-fields.js": 22,
+	"./configs/signup-fields.js": 23,
 	"./include.js": 5,
-	"./main.js": 23,
+	"./main.js": 24,
 	"./modules/eventBus.js": 4,
-	"./modules/http.js": 17,
-	"./modules/router.js": 18,
-	"./services/user-service.js": 16,
-	"./templates/scoreBoard.js": 15,
-	"./views/backButtonView.js": 11,
+	"./modules/http.js": 19,
+	"./modules/router.js": 20,
+	"./services/user-service.js": 18,
+	"./templates/scoreBoard.js": 16,
+	"./views/backButtonView.js": 12,
+	"./views/canvasView.js": 17,
 	"./views/commonView.js": 1,
-	"./views/loginView.js": 10,
-	"./views/menuView.js": 8,
-	"./views/profileView.js": 12,
-	"./views/rulesView.js": 13,
-	"./views/scoreboardView.js": 14,
-	"./views/signUpView.js": 9
+	"./views/loginView.js": 11,
+	"./views/menuView.js": 9,
+	"./views/profileView.js": 13,
+	"./views/rulesView.js": 14,
+	"./views/scoreboardView.js": 15,
+	"./views/signUpView.js": 10
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1422,138 +1594,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 19;
+webpackContext.id = 21;
 
 /***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field_js__ = __webpack_require__(7);
-
-
-
-let canvasForClicks = document.getElementById("2");
-// let ctx = canvasForClicks.getContext('2d');
-
-let z = new __WEBPACK_IMPORTED_MODULE_0__field_js__["default"](6);
-canvasForClicks.addEventListener('click', updateCanvas, false);
-
-const x = 425;
-const y = 230;
-const sq = Math.sqrt(2) / 2;
-const side = 64;
-
-window.onload = function () {
-	z.drawField();
-	// z.setFigure(1, 2, 2);
-	// z.setFigure(3, 1, 3);
-	// z.setFigure(5, 5, 2);
-	// z.setFigure(4, 3, 3);
-	// z.setFigure(5, 2, 2);
-	// z.setFigure(3, 4, 3);
-	// z.drawAllFigures();
-	// z.brightCubes(5, 4);
-	// z.drawField();
-};
-
-function findOffset(obj) {
-	let curX = 0;
-	let curY = 0;
-	if (obj.offsetParent) {
-		do {
-			curX += obj.offsetLeft;
-			curY += obj.offsetTop;
-		} while (obj = obj.offsetParent);
-		return { x: curX, y: curY };
-	}
-}
-
-function updateCanvas(e) {
-	let pos = findOffset(canvasForClicks);
-
-	let mouseX = e.pageX - pos.x;
-	let mouseY = e.pageY - pos.y;
-
-	let XX = (mouseX - x + mouseY - y) * sq;
-	let YY = (mouseY - mouseX + x - y) * sq;
-
-	if (XX < side * 6 && YY < side * 6 && XX > 0 && YY > 0) {
-		let idx;
-		let idy;
-		for (let i = 0; i < 6; i++) {
-			if (XX > side * i) idx = i;
-		}
-		for (let i = 0; i < 6; i++) {
-			if (YY > side * i) idy = i;
-		}
-		z.deleteAllBrightCube();
-		z.brightCubes(idx, idy);
-		z.drawField();
-	}
-}
-
-// let canvas,ctx, mouseX = 999, mouseY = 999,circles = new Array();
-// let num = Math.floor(Math.random()*30-10)+10;
-//
-// function init(){
-// 	canvas = document.getElementById('2');
-// 	ctx = canvas.getContext('2d');
-//
-// 	for(let i=0; i < num; i++){
-// 		circles[i] = {
-// 			x: Math.floor(Math.random()*canvas.width),
-// 			y : Math.floor(Math.random()*canvas.height),
-// 			r : Math.floor(Math.random()*60-10)+10
-// 		}
-// 	}
-// 	drawCanvas();
-// 	canvas.addEventListener('mousemove',updateCanvas,false);
-//
-// }
-//
-// init();
-//
-// function findOffset(obj) {
-// 	let curX = 0;
-// 	let curY = 0;
-// 	if (obj.offsetParent) {
-// 		do {
-// 			curX += obj.offsetLeft;
-// 			curY += obj.offsetTop;
-// 		} while (obj = obj.offsetParent);
-// 		return {x:curX,y:curY};
-// 	}
-// }
-//
-// function updateCanvas(e){
-// 	let pos = findOffset(canvas);
-//
-// 	mouseX = e.pageX - pos.x;
-// 	mouseY = e.pageY - pos.y;
-//
-// 	ctx.clearRect(0,0,canvas.width,canvas.height);
-// 	drawCanvas();
-// }
-//
-//
-// function drawCanvas() {
-//
-// 	for(let i = 0; i < num; i++){
-// 		ctx.beginPath();
-// 		ctx.fillStyle = 'rgba(0,0,0,.5)';
-//
-// 		ctx.arc(circles[i].x,circles[i].y,circles[i].r,0,Math.PI*2,false);
-// 		if(ctx.isPointInPath(mouseX,mouseY)){
-// 			ctx.fillStyle = 'red';
-// 		}
-// 		ctx.fill();
-// 	}
-// }
-
-/***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1592,7 +1636,7 @@ const loginFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (loginFields);
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1641,23 +1685,24 @@ const signupFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (signupFields);
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_signUpView__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__blocks_block_block_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_user_service_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_eventBus__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__modules_router__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__blocks_message_message__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_signUpView__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_canvasView__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__blocks_block_block_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_user_service_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__modules_eventBus__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__modules_router__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Andrey_gameHandler__ = __webpack_require__(8);
 
 /**
  * Основной модуль работатющий со всеми объектами
@@ -1688,13 +1733,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-const userService = new __WEBPACK_IMPORTED_MODULE_8__services_user_service_js__["default"]();
 
-const eventBus = new __WEBPACK_IMPORTED_MODULE_9__modules_eventBus__["default"]();
 
-const router = new __WEBPACK_IMPORTED_MODULE_10__modules_router__["default"](eventBus, userService);
+const userService = new __WEBPACK_IMPORTED_MODULE_9__services_user_service_js__["default"]();
 
-const app = new __WEBPACK_IMPORTED_MODULE_7__blocks_block_block_js__["default"](document.body);
+const eventBus = new __WEBPACK_IMPORTED_MODULE_10__modules_eventBus__["default"]();
+
+const router = new __WEBPACK_IMPORTED_MODULE_11__modules_router__["default"](eventBus, userService);
+
+const app = new __WEBPACK_IMPORTED_MODULE_8__blocks_block_block_js__["default"](document.body);
 
 const menuView = new __WEBPACK_IMPORTED_MODULE_0__views_menuView__["default"](eventBus, router);
 
@@ -1709,6 +1756,10 @@ const profileView = new __WEBPACK_IMPORTED_MODULE_4__views_profileView__["defaul
 const rulesView = new __WEBPACK_IMPORTED_MODULE_5__views_rulesView__["default"](eventBus);
 
 const scoreboardView = new __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__["default"](eventBus, userService);
+
+const canvas1 = new __WEBPACK_IMPORTED_MODULE_7__views_canvasView__["default"](1, "canv1");
+
+const canvas2 = new __WEBPACK_IMPORTED_MODULE_7__views_canvasView__["default"](2, "canv2");
 
 // backButtonView.on("click", function(event) {
 // 	window.history.back();
@@ -1746,6 +1797,8 @@ eventBus.on("openRules", function () {
 
 eventBus.on("openMenu", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
+	canvas1.hide();
+	canvas2.hide();
 	signUpView.hide();
 	backButtonView.hide();
 	loginView.hide();
@@ -1779,25 +1832,38 @@ eventBus.on("openScoreboard", function () {
 	scoreboardView.show();
 });
 
-app.append(menuView).append(signUpView).append(loginView).append(backButtonView).append(profileView).append(rulesView).append(scoreboardView);
+const game = new __WEBPACK_IMPORTED_MODULE_12__Andrey_gameHandler__["default"](canvas1, canvas2);
+
+eventBus.on("openGame", function () {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
+	menuView.hide();
+	backButtonView.hide();
+	scoreboardView.hide();
+	profileView.hide();
+	loginView.hide();
+	signUpView.hide();
+	game.start(() => router.goTo('/menu')); //выход в меню
+});
+
+app.append(menuView).append(signUpView).append(loginView).append(backButtonView).append(profileView).append(rulesView).append(scoreboardView).append(canvas1).append(canvas2);
 
 router.start();
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./Andrey/style.css": 25,
-	"./blocks/message/index.css": 26,
-	"./configs/login-fields.css": 27,
-	"./configs/signup-fields.css": 28,
-	"./views/viewsCss/backButton.css": 29,
-	"./views/viewsCss/commonView.css": 30,
-	"./views/viewsCss/login.css": 31,
-	"./views/viewsCss/menu.css": 32,
-	"./views/viewsCss/signUp.css": 33,
-	"./views/viewsCss/view.css": 34
+	"./Andrey/style.css": 26,
+	"./blocks/message/index.css": 27,
+	"./configs/login-fields.css": 28,
+	"./configs/signup-fields.css": 29,
+	"./views/viewsCss/backButton.css": 30,
+	"./views/viewsCss/commonView.css": 31,
+	"./views/viewsCss/login.css": 32,
+	"./views/viewsCss/menu.css": 33,
+	"./views/viewsCss/signUp.css": 34,
+	"./views/viewsCss/view.css": 35
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1813,13 +1879,7 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 24;
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
+webpackContext.id = 25;
 
 /***/ }),
 /* 26 */
@@ -1871,6 +1931,12 @@ webpackContext.id = 24;
 
 /***/ }),
 /* 34 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

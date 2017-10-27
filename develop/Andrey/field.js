@@ -1,18 +1,13 @@
 'use strict';
 import Cell from "./cell.js";
 
-let canvas1 = document.getElementById("1");
-let canvasForCubes = canvas1.getContext('2d');
-let canvas2 = document.getElementById("2");
-let canvasForFigure = canvas2.getContext('2d');
-
 const sideOfCube = 90;
 const sideOfCanvas = 850;
 const indent = 150;
 
 export default class Field {
 
-	constructor (count) {
+	constructor (count, canvas1, canvas2) {
 		this.count = count;
 		let imgUrl = [];
 		imgUrl.push("images/cube.png");
@@ -22,6 +17,11 @@ export default class Field {
 
 		let imgs = [];
 		let ok = 0;
+
+		this.canvas1 = canvas1;
+		this.canvasForCubes = this.canvas1.getContext("2d");
+		this.canvas2 = canvas2;
+		this.canvasForFigure = this.canvas2.getContext("2d");
 
 		for(let i = 0; i < imgUrl.length; i++) {
 			let img = new Image();
@@ -47,9 +47,7 @@ export default class Field {
 			cubes[i] = [];
 		}
 		let diff = 0;
-		// let id = 0;
 		for (let i = 0; i < this.count; i++) {
-			// id = (i+1)*10;
 			let x = startOfFieldX + diff;
 			let y = startOfFieldY + diff;
 			for (let j = 0; j < this.count; j++) {
@@ -57,7 +55,6 @@ export default class Field {
 				cubes[i][j].setFigure(0);
 				cubes[i][j].setBrightness(0);
 				cubes[i][j].setId(i, j);
-				// id++;
 				cubes[i][j].setCoordinates(x, y);
 				x -= sideOfCube/2+2;
 				y += sideOfCube/2+2;
@@ -68,19 +65,20 @@ export default class Field {
 	}
 
 	drawField () {
-		canvasForCubes.fillStyle = 'white';
+
+		this.canvasForCubes.fillStyle = 'white';
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let br = this.arrayOfCubes[i][j].brightness;
-				canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
-				canvasForCubes.font = 'bold 30px sans-serif';
+				this.canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
+				this.canvasForCubes.font = 'bold 30px sans-serif';
 				// canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
 			}
 		}
 	}
 
 	clearField() {
-		canvasForCubes.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
+		this.canvasForCubes.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
 	}
 
 	findById(idx, idy) {
@@ -101,37 +99,24 @@ export default class Field {
 	}
 
 	drawFigures(idx, idy) {
-		canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x+5, this.findById(idx, idy).y-70);
+		this.canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x+5, this.findById(idx, idy).y-70);
 	}
 
 	drawAllFigures() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				if (this.arrayOfCubes[i][j].figure > 1) {
-					canvasForFigure.drawImage(this.massOfUrl[this.arrayOfCubes[i][j].figure], this.arrayOfCubes[i][j].x+5, this.arrayOfCubes[i][j].y-65);
+					this.canvasForFigure.drawImage(this.massOfUrl[this.arrayOfCubes[i][j].figure], this.arrayOfCubes[i][j].x+5, this.arrayOfCubes[i][j].y-65);
 				}
 			}
 		}
 	}
 
 	clearFigures() {
-		canvasForFigure.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
-	}
-
-	test () {
-		canvasForCubes.lineWidth = 2;
-		canvasForCubes.strokeStyle = 'white';
-		canvasForCubes.beginPath();
-		canvasForCubes.rect(200,200,100,200);
-		canvasForCubes.stroke();
-		canvasForCubes.closePath();
-		console.log(canvasForCubes.isPointInPath(250,250));
-		console.log(canvasForCubes.isPointInPath(100,100))
+		this.canvasForFigure.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
 	}
 
 	brightCubes(idx, idy) {
-		// let id1 = Math.floor(id/10);
-		// let id2 = id % 10;
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let idx2 = this.arrayOfCubes[i][j].idx;

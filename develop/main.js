@@ -18,15 +18,18 @@ import RulesView from "./views/rulesView";
 
 import ScoreboardView from "./views/scoreboardView";
 
+import Canvas from "./views/canvasView";
+
 import Block from "./blocks/block/block.js";
 
 import UserService from "./services/user-service.js";
 
 import EventBus from "./modules/eventBus";
 
-import Router from "./modules/router"
+import Router from "./modules/router";
 
-import Message from "./blocks/message/message";
+import Game from "./Andrey/gameHandler";
+
 
 
 const userService = new UserService();
@@ -50,6 +53,10 @@ const profileView = new ProfileView(eventBus);
 const rulesView = new RulesView(eventBus);
 
 const scoreboardView = new ScoreboardView(eventBus, userService);
+
+const canvas1 = new Canvas(1, "canv1");
+
+const canvas2 = new Canvas(2, "canv2");
 
 
 // backButtonView.on("click", function(event) {
@@ -92,6 +99,8 @@ eventBus.on("openRules", function() {
 
 eventBus.on("openMenu", function() {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
+	canvas1.hide();
+	canvas2.hide();
 	signUpView.hide();
 	backButtonView.hide();
 	loginView.hide();
@@ -130,6 +139,19 @@ eventBus.on("openScoreboard", function () {
 	scoreboardView.show();
 });
 
+const game = new Game(canvas1, canvas2);
+
+eventBus.on("openGame", function () {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
+	menuView.hide();
+	backButtonView.hide();
+	scoreboardView.hide();
+	profileView.hide();
+	loginView.hide();
+	signUpView.hide();
+	game.start(() => router.goTo('/menu'));  //выход в меню
+});
+
 
 app
 	.append(menuView)
@@ -138,7 +160,9 @@ app
 	.append(backButtonView)
 	.append(profileView)
 	.append(rulesView)
-	.append(scoreboardView);
+	.append(scoreboardView)
+	.append(canvas1)
+	.append(canvas2);
 
 
 

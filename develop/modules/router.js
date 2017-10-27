@@ -29,6 +29,10 @@ export default class Router {
 				url: "/login",
 				event: "openLogin"
 			},
+			{
+				url: "/game",
+				event: "openGame"
+			},
 			];
 
 		this.bus = eventBus;
