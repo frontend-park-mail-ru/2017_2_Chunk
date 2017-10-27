@@ -112,7 +112,6 @@ export default class UserService {
 		}
 		return Http.FetchGet('/user/whoisit')
 			.then(function(resp) {
-
 				this.user = resp;
 				return this.user;
 			}.bind(this))

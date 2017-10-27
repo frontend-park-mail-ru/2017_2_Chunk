@@ -22,6 +22,10 @@ export default class Router {
 				event: "openRules"
 			},
 			{
+				url: "/update",
+				event: "openUpdate"
+			},
+			{
 				url: "/signup",
 				event: "openSignUp"
 			},

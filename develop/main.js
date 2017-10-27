@@ -18,6 +18,8 @@ import RulesView from "./views/rulesView";
 
 import ScoreboardView from "./views/scoreboardView";
 
+import UpdateView from "./views/updateView";
+
 import Canvas from "./views/canvasView";
 
 import Block from "./blocks/block/block.js";
@@ -29,7 +31,6 @@ import EventBus from "./modules/eventBus";
 import Router from "./modules/router";
 
 import Game from "./Andrey/gameHandler";
-
 
 
 const userService = new UserService();
@@ -45,6 +46,8 @@ const menuView = new MenuView(eventBus, router);
 const signUpView = new SignUpView(eventBus, userService, router);
 
 const loginView = new LoginView(eventBus, userService, router);
+
+const updateView = new UpdateView(eventBus, userService, router);
 
 const backButtonView = new BackButtonView();
 
@@ -89,6 +92,19 @@ eventBus.on("openLogin", function() {
 });
 
 
+eventBus.on("openUpdate", function() {
+	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
+	menuView.hide();
+	signUpView.hide();
+	backButtonView.show();
+	loginView.hide();
+	rulesView.hide();
+	canvas.hide();
+	scoreboardView.hide();
+	updateView.show();
+});
+
+
 eventBus.on("openRules", function() {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/rules");
 	menuView.hide();
@@ -107,6 +123,8 @@ eventBus.on("openMenu", function() {
 	loginView.hide();
 	rulesView.hide();
 	scoreboardView.hide();
+	updateView.hide();
+
 	menuView.show();
 
 
@@ -149,6 +167,7 @@ eventBus.on("openGame", function () {
 	profileView.hide();
 	loginView.hide();
 	signUpView.hide();
+	updateView.hide();
 	canvas.show();
 	game.start(() => router.goTo('/menu'));  //выход в меню
 });
@@ -162,7 +181,8 @@ app
 	.append(profileView)
 	.append(rulesView)
 	.append(scoreboardView)
-	.append(canvas);
+	.append(canvas)
+	.append(updateView);
 
 
 router.start();
