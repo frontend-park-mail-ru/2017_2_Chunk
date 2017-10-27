@@ -54,6 +54,7 @@ export default class signUpView extends commonView {
 
 		this.hide();
 
+		this.form = form;
 		this.message = new Message();
 		this.message.clear();
 		this.message.hide();
@@ -76,16 +77,14 @@ export default class signUpView extends commonView {
 	onSubmit(formData) {
 		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm)
 			.then(function(resp) {
-				console.dir(resp);
+				this.form.reset();
 				this.message.clear();
 				this.message.hide();
 				this.bus.emit("auth");
 				this.router.goTo("/menu");
 			}.bind(this))
 			.catch(function(err) {
-				console.log("some err with sign up");
-				console.log("err: ", err.message);
-				this.setErrorText(err)//нужно поставить ошибку из json
+				this.setErrorText(err)
 			}.bind(this));
 	}
 

@@ -825,6 +825,7 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 		this.hide();
 
+		this.form = form;
 		this.message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
 		this.message.clear();
 		this.message.hide();
@@ -844,15 +845,13 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 	onSubmit(formData) {
 		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm).then(function (resp) {
-			console.dir(resp);
+			this.form.reset();
 			this.message.clear();
 			this.message.hide();
 			this.bus.emit("auth");
 			this.router.goTo("/menu");
 		}.bind(this)).catch(function (err) {
-			console.log("some err with sign up");
-			console.log("err: ", err.message);
-			this.setErrorText(err); //нужно поставить ошибку из json
+			this.setErrorText(err);
 		}.bind(this));
 	}
 
@@ -903,6 +902,7 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		const form = new __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__["default"](loginFields);
 		super({ form });
 
+		this.form = form;
 		this.bus = eventBus;
 		this.router = router;
 		this.userService = userService;
@@ -928,14 +928,12 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 	onSubmit(formData) {
 		this.userService.login(formData.username, formData.password).then(function (resp) {
-			console.dir(resp);
+			this.form.reset();
 			this.message.clear();
 			this.message.hide();
 			this.bus.emit("auth");
 			this.router.goTo("/menu");
 		}.bind(this)).catch(function (err) {
-			console.log("some err with sign up");
-			console.log("err: ", err.message);
 			this.setErrorText(err); //нужно поставить ошибку из json
 		}.bind(this));
 	}
@@ -1244,7 +1242,6 @@ class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 				username.value = resp.username;
 				email.value = resp.email;
 			}.bind(this)).catch(function (err) {
-				console.log("err: ", err.message);
 				this.setErrorText(err);
 			}.bind(this));
 		}.bind(this));
@@ -1252,15 +1249,13 @@ class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 	onSubmit(formData) {
 		this.userService.update(formData.username, formData.email, formData.password, formData.old_password).then(function (resp) {
-			console.dir(resp);
+			this.form.reset();
 			this.message.clear();
 			this.message.hide();
 			this.bus.emit("auth");
 			this.router.goTo("/menu");
 		}.bind(this)).catch(function (err) {
-			console.log("some err with sign up");
-			console.log("err: ", err.message);
-			this.setErrorText(err); //нужно поставить ошибку из json
+			this.setErrorText(err);
 		}.bind(this));
 	}
 

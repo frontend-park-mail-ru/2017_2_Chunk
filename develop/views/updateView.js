@@ -80,7 +80,6 @@ export default class updateView extends CommonView {
 					email.value = resp.email;
 				}.bind(this))
 				.catch(function(err) {
-					console.log("err: ", err.message);
 					this.setErrorText(err)
 				}.bind(this))
 		}.bind(this));
@@ -90,16 +89,14 @@ export default class updateView extends CommonView {
 	onSubmit(formData) {
 		this.userService.update(formData.username, formData.email, formData.password, formData.old_password)
 			.then(function (resp) {
-				console.dir(resp);
+				this.form.reset();
 				this.message.clear();
 				this.message.hide();
 				this.bus.emit("auth");
 				this.router.goTo("/menu");
 			}.bind(this))
 			.catch(function (err) {
-				console.log("some err with sign up");
-				console.log("err: ", err.message);
-				this.setErrorText(err)//нужно поставить ошибку из json
+				this.setErrorText(err)
 			}.bind(this));
 	}
 

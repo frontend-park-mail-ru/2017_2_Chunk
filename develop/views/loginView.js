@@ -32,6 +32,7 @@ export default class LoginView extends CommonView {
 		const form = new Form(loginFields);
 		super({form});
 
+		this.form = form;
 		this.bus = eventBus;
 		this.router = router;
 		this.userService = userService;
@@ -60,15 +61,13 @@ export default class LoginView extends CommonView {
 	onSubmit(formData) {
 		this.userService.login(formData.username, formData.password)
 			.then(function (resp) {
-				console.dir(resp);
+				this.form.reset();
 				this.message.clear();
 				this.message.hide();
 				this.bus.emit("auth");
 				this.router.goTo("/menu");
 			}.bind(this))
 			.catch(function (err) {
-				console.log("some err with sign up");
-				console.log("err: ", err.message);
 				this.setErrorText(err)//нужно поставить ошибку из json
 			}.bind(this));
 	}
