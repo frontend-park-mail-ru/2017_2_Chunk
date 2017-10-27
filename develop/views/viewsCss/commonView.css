@@ -4,8 +4,9 @@ body {
     width: 98%;
     height: 95%;
     min-height: 600px;
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
     overflow: auto;
 }

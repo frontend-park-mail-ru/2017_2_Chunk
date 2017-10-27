@@ -4,24 +4,25 @@ import Block from "../blocks/block/block.js";
 
 
 
-export default class canvasView extends CommonView {
-	constructor(id, classes) {
-		const canvas = {
-			canvas: Block.Create('canvas',
-				{'id': id, 'width': '850', 'height': '850'},
-				[classes], ""),
-		};
-		super(canvas);
+export default class CanvasView extends CommonView {
+	constructor() {
+		const canvas1 = Block.Create('canvas', {'id': '1', 'width': '850', 'height': '850'}, ['canv1'], "");
+		const canvas2 = Block.Create('canvas', {'id': '2', 'width': '850', 'height': '850'}, ['canv2'], "");
+		// canvas.style.setProperty("position", "absolute");
+		super([canvas1, canvas2]);
+
+		this.el.style.setProperty("border", "none");
+
+		this.canvas1 = canvas1;
+		this.canvas2 = canvas2;
 
 
+		this.ctx1 = this.canvas1.el.getContext('2d');
+		this.ctx2 = this.canvas2.el.getContext('2d');
 
 
-		this.canvas = canvas;
-
-
-		this.ctx = this.canvas.canvas.el.getContext('2d');
-		// this.ctx = this.el.getContext('2d');
-
+		this.canvas1.el.style.setProperty("position", "absolute");
+		this.canvas2.el.style.setProperty("position", "absolute");
 		this.hide();
 	}
 
@@ -35,7 +36,4 @@ export default class canvasView extends CommonView {
 		setTimeout(() => {this.el.style.setProperty("display", "none");}, 0);
 	}
 
-// 	getContext() {
-// 		return this.canvas.el.getContext("2d");
-// }
 }

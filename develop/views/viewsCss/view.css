@@ -15,9 +15,8 @@ section {
     /*display: inline-flex;*/
     /*position: absolute;*/
     width: 20em;
-    min-width: 300px;
+    /*min-width: 300px;*/
     margin: 1.5% auto;
-    margin-top: 5em;
 
     border-radius: 0.8em;
     border: ridge black;
