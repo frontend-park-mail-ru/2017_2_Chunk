@@ -1,0 +1,8 @@
+.message {
+    font-family: fantasy;
+    position: relative;
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 60%;
+    align-self: center;
+}

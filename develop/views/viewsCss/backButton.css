@@ -1,0 +1,25 @@
+.back__button {
+    background-color: rgba(210, 156, 30, 0.91);
+    text-align: center;
+    font-size: 1.5em;
+    opacity: 0.9;
+    border: 0.1em chocolate;
+    height: 1em;
+    position: fixed;
+    max-width: 300px;
+    right: 75%;
+    top: 5%;
+    padding: 0.4em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    width: 20em;
+    border-radius: 0.4em;
+    box-shadow: none;
+
+}
+
+.back__button:focus {
+    background: #fffb4c; /* Цвет фона */
+    opacity: 1;
+    border: 0.1em solid #ff8700; /* Параметры рамки */
+}

@@ -1,0 +1,11 @@
+body {
+    background: url('../../image/background_wood_2.jpg');
+    background-color: burlywood;
+    width: 98%;
+    height: 95%;
+    min-height: 600px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+}
