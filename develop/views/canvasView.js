@@ -14,6 +14,8 @@ export default class canvasView extends CommonView {
 		super(canvas);
 
 
+
+
 		this.canvas = canvas;
 
 

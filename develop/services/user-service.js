@@ -39,7 +39,7 @@ export default class UserService {
 				throw new Error("Логин и пароль не должны совпадать!");
 			}
 
-			resolve(Http.FetchPost('/sign_up', {username, email, password})
+			resolve(Http.FetchPost('/user/sign_up', {username, email, password})
 				.then(function(resp) {
 					console.log("good response status" + resp.username);
 					return resp;
@@ -77,7 +77,7 @@ export default class UserService {
 				throw new Error("Логин и пароль не могут совпадать!", null);
 				return;
 			}
-			resolve(Http.FetchPost('/sign_in', {login, password})
+			resolve(Http.FetchPost('/user/sign_in', {login, password})
 				.then(function(resp) {
 					console.log("good response status" + resp.username);
 					return resp;
@@ -110,7 +110,7 @@ export default class UserService {
 				resolve(this.user);
 			}.bind(this));
 		}
-		return Http.FetchGet('/whoisit')
+		return Http.FetchGet('/user/whoisit')
 			.then(function(resp) {
 
 				this.user = resp;
@@ -131,7 +131,7 @@ export default class UserService {
 		if (this.isLoggedIn()) {
 			this.user = null;
 			this.users = [];
-			Http.FetchGet('/exit')
+			Http.FetchGet('/user/exit')
 				.catch(function (err) {//получить ошибки с сервера
 					console.log(err.errorMessage);//удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
 				});
