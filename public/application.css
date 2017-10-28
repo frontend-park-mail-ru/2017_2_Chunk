@@ -233,7 +233,7 @@ A:hover {
     justify-content: space-around;
     font-size: 4vh;
     width: 12em;
-    height: 3em;
+    /*height: 3em;*/
     min-width: 300px;
     min-height: 250px;
     margin: 1.5% auto;
@@ -246,7 +246,6 @@ A:hover {
 section .button {
     font-family: "Comic Sans";
     color: white;
-    min-font-size: 50em;
 
 
     /*text-shadow: darkgray  2px 2px;*/
