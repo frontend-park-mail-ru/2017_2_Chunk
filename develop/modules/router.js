@@ -26,6 +26,10 @@ export default class Router {
 				event: "openUpdate"
 			},
 			{
+				url: "/game",
+				event: "openGame"
+			},
+			{
 				url: "/signup",
 				event: "openSignUp"
 			},
@@ -33,11 +37,9 @@ export default class Router {
 				url: "/login",
 				event: "openLogin"
 			},
-			{
-				url: "/game",
-				event: "openGame"
-			},
+
 			];
+
 
 		this.bus = eventBus;
 		this.userService = userService;
@@ -65,6 +67,7 @@ export default class Router {
 
 	start() {
 		this._routes = [];
+		this.counter = 0;
 		this.routes.forEach(function(route) {
 			this._routes.push({
 				url_pattern: route.url,
@@ -81,7 +84,7 @@ export default class Router {
 				return null
 			});
 		if(auth !== null) {
-			for (let i = 0; i < 5; i++) {
+			for (let i = 0; i < 6; i++) {
 				if(location.pathname.match(this._routes[i].url_pattern)) {
 					window.history.pushState({page: this.routes[i].url}, this.routes[i].url, this.routes[i].url);
 					this._routes[i].emit(this.routes[i].event);
