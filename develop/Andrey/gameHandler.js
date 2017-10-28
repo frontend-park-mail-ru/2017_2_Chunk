@@ -79,7 +79,24 @@ export default class Game{
 	}
 
 	gamePlay () {
-		alert("here");
+		// alert("here");
+		return new Promise(function (resolve, reject) {
+			let width = 6;
+			let height = 6;
+			let maxPlayers = 2;
+			resolve(Http.FetchPost('/game/single/play', {width, height, maxPlayers})
+				.then(function(resp) {
+					let ID = resp.gameID;
+					// alert(ID);
+					return resp;
+				}.bind(this))
+				.catch(function(err) {//не могу достать errorMessage
+					console.log(err.errormessage);
+					console.log("err response status "  + err.errorMessage);
+					throw new Error(err.errorMessage);
+				}.bind(this)));
+		})
+
 	}
 
 	start(exit) {
@@ -91,11 +108,11 @@ export default class Game{
 		this.gameComplete();
 		// this.gamePlay();
 		// alert("here");
-		// this.canv.addEventListener('click', this.updateCanvas, false);
+		this.canv.addEventListener('click', this.updateCanvas.bind(this), false);
 		// this.exit = exit;
 	}
 
-	static findOffset(obj) {
+	findOffset(obj) {
 		let curX = 0;
 		let curY = 0;
 		if (obj.offsetParent) {
