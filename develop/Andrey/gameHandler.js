@@ -10,40 +10,35 @@ const side = 64;
 
 export default class Game{
 
-	constructor(canvas1, canvas2) {
-		this.canvas1 = canvas1;
-		this.canvasForCubes = canvas1.ctx;
-		this.canvas2 = canvas2;
-		this.canvasForFigure = canvas2.ctx;
+	constructor(canvas1, canvas2, canv) {
+		// this.canvas1 = canvas1;
+		this.canvasForCubes = canvas1;
+		// this.canvas2 = canvas2;
+		this.canvasForFigure = canvas2;
+		this.canv = canv;
+
+		this.mass = [];
+		for (let i = 0; i < 6; i++) {
+			this.mass[i] = [];
+		}
+		for (let i = 0; i < 6; i++) {
+			for (let j = 0; j < 6; j++) {
+				this.mass[i][j] = 5;
+			}
+		}
+
 		this.field = new Field(6, this.canvasForCubes, this.canvasForFigure);
 	}
 
 	gameStart () {
 		return new Promise(function (resolve, reject) {
-			// if (login.length < 4) {
-			// 	throw new Error("Длина логина должна быть не меньше 4 символов!", null);
-			// 	return;
-			// }
-			// if (login.length > 12) {
-			// 	throw new Error("Длина логина не должна превышать 12 символов!", null);
-			// 	return;
-			// }
-			// if (password.length < 6) {
-			// 	throw new Error("Длина пароля должна быть не меньше 6 символов!", null);
-			// 	return;
-			// }
-			// if (password === login) {
-			// 	throw new Error("Логин и пароль не могут совпадать!", null);
-			// 	return;
-			// }
-			let width = 5;
-			let height = 5;
+			let width = 6;
+			let height = 6;
 			let maxPlayers = 2;
 			resolve(Http.FetchPost('/game/single/create', {width, height, maxPlayers})
 				.then(function(resp) {
-					let ID = resp.ID;
-					alert(ID);
-					alert(resp);
+					let ID = resp.gameID;
+					// alert(ID);
 					return resp;
 				}.bind(this))
 				.catch(function(err) {//не могу достать errorMessage
@@ -54,18 +49,53 @@ export default class Game{
 		})
 	}
 
+	gameComplete () {
+		this.gameID = 0;
+		return Http.FetchGet('/game/complete?gameID=' + this.gameID)
+			.then(function(resp) {
+				this.mass = resp.field;
+				for (let i = 0; i < 6; i++) {
+					for (let j = 0; j < 6; j++) {
+						let model = 0;
+						if (resp.field[i][j] >= 0) {
+							// alert("ok");
+							model = resp.field[i][j] + 2;
+							this.field.setFigure(i, j, model);
+							// alert(this.field.findById(i, j).figure);
+						}
+					}
+				}
+				this.field.drawAllFigures();
+				let players = resp.players;
+				// alert(this.mass[0][0]);
+				// alert(players[0].username);
+				// return resp;
+			}.bind(this))
+			.catch(function (err) {
+				this.user = null;
+				console.log(err.statusText);
+				throw new Error("Can not get response =(")
+			}.bind(this))
+	}
+
+	gamePlay () {
+		alert("here");
+	}
+
 	start(exit) {
 		this.field.drawField();
-		this.field.setFigure(2, 2, 3);
-		this.field.setFigure(5, 5, 2);
-		this.field.drawAllFigures();
+		// this.field.setFigure(2, 2, 3);
+		// this.field.setFigure(5, 5, 2);
+		// this.field.drawAllFigures();
 		this.gameStart();
-		// this.canvas2.addEventListener('click', this.updateCanvas, false);
-
+		this.gameComplete();
+		this.gamePlay();
+		// alert("here");
+		// this.canv.addEventListener('click', this.updateCanvas, false);
 		// this.exit = exit;
 	}
 
-	findOffset(obj) {
+	static findOffset(obj) {
 		let curX = 0;
 		let curY = 0;
 		if (obj.offsetParent) {
@@ -78,7 +108,7 @@ export default class Game{
 	}
 
 	updateCanvas(e){
-		let pos = this.findOffset(this.canvasForFigure);
+		let pos = this.findOffset(this.canv);
 
 		let mouseX = e.pageX - pos.x;
 		let mouseY = e.pageY - pos.y;

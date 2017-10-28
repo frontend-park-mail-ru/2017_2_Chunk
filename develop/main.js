@@ -56,7 +56,7 @@ const scoreboardView = new ScoreboardView(eventBus, userService);
 
 const canvas = new Canvas();
 
-const game = new Game(canvas.ctx1, canvas.ctx1);
+const game = new Game(canvas.ctx1, canvas.ctx2, canvas.canv);
 
 
 
@@ -139,7 +139,6 @@ eventBus.on("openScoreboard", function () {
 	backButtonView.show();
 	scoreboardView.show();
 });
-
 
 eventBus.on("openGame", function () {
 	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
