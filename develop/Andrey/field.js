@@ -71,13 +71,13 @@ export default class Field {
 	}
 
 	drawField () {
-		this.canvasForCubes.fillStyle = 'white';
+		// this.canvasForCubes.fillStyle = 'white';
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let br = this.arrayOfCubes[i][j].brightness;
 				this.canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
-				this.canvasForCubes.font = 'bold 30px sans-serif';
-				this.canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
+				// this.canvasForCubes.font = 'bold 30px sans-serif';
+				// this.canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
 			}
 		}
 	}

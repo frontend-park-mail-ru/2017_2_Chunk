@@ -89,7 +89,7 @@ export default class Game{
 		// this.field.drawAllFigures();
 		this.gameStart();
 		this.gameComplete();
-		this.gamePlay();
+		// this.gamePlay();
 		// alert("here");
 		// this.canv.addEventListener('click', this.updateCanvas, false);
 		// this.exit = exit;
