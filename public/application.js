@@ -2061,12 +2061,12 @@ var map = {
 	"./configs/signup-fields.css": 30,
 	"./views/viewsCss/backButton.css": 31,
 	"./views/viewsCss/commonView.css": 32,
-	"./views/viewsCss/form.css": 33,
-	"./views/viewsCss/login.css": 34,
-	"./views/viewsCss/menu.css": 35,
-	"./views/viewsCss/section.css": 36,
-	"./views/viewsCss/signUp.css": 37,
-	"./views/viewsCss/view.css": 38
+	"./views/viewsCss/form.css": 52,
+	"./views/viewsCss/login.css": 33,
+	"./views/viewsCss/menu.css": 34,
+	"./views/viewsCss/section.css": 53,
+	"./views/viewsCss/signUp.css": 35,
+	"./views/viewsCss/view.css": 36
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -2145,13 +2145,28 @@ webpackContext.id = 26;
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 37 */
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 38 */
+/* 53 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
