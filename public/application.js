@@ -483,13 +483,13 @@ class Field {
 	}
 
 	drawField() {
-		this.canvasForCubes.fillStyle = 'white';
+		// this.canvasForCubes.fillStyle = 'white';
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let br = this.arrayOfCubes[i][j].brightness;
 				this.canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
-				this.canvasForCubes.font = 'bold 30px sans-serif';
-				this.canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x + sideOfCube / 2 - 20, this.arrayOfCubes[i][j].y + sideOfCube / 2);
+				// this.canvasForCubes.font = 'bold 30px sans-serif';
+				// this.canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
 			}
 		}
 	}
@@ -563,29 +563,150 @@ class Field {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_http__ = __webpack_require__(20);
 
 
 
+
+
+const x = 425;
+const y = 230;
+const sq = Math.sqrt(2) / 2;
+const side = 64;
 
 class Game {
 
-	constructor(canvas1, canvas2) {
-		// window.onload = () => {
-		// 	this.canvas1 = document.getElementById("1");
-		// 	this.canvas2 = document.getElementById("2")
+	constructor(canvas1, canvas2, canv) {
+		// this.canvas1 = canvas1;
 		this.canvasForCubes = canvas1;
+		// this.canvas2 = canvas2;
 		this.canvasForFigure = canvas2;
+		this.canv = canv;
+
+		this.mass = [];
+		for (let i = 0; i < 6; i++) {
+			this.mass[i] = [];
+		}
+		for (let i = 0; i < 6; i++) {
+			for (let j = 0; j < 6; j++) {
+				this.mass[i][j] = 5;
+			}
+		}
+
 		this.field = new __WEBPACK_IMPORTED_MODULE_0__field_js__["default"](6, this.canvasForCubes, this.canvasForFigure);
-		// };
+	}
+
+	gameStart() {
+		return new Promise(function (resolve, reject) {
+			let width = 6;
+			let height = 6;
+			let maxPlayers = 2;
+			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/single/create', { width, height, maxPlayers }).then(function (resp) {
+				let ID = resp.gameID;
+				// alert(ID);
+				return resp;
+			}.bind(this)).catch(function (err) {
+				//не могу достать errorMessage
+				console.log(err.errormessage);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
+			}.bind(this)));
+		});
+	}
+
+	gameComplete() {
+		this.gameID = 0;
+		return __WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchGet('/game/complete?gameID=' + this.gameID).then(function (resp) {
+			this.mass = resp.field;
+			for (let i = 0; i < 6; i++) {
+				for (let j = 0; j < 6; j++) {
+					let model = 0;
+					if (resp.field[i][j] >= 0) {
+						// alert("ok");
+						model = resp.field[i][j] + 2;
+						this.field.setFigure(i, j, model);
+						// alert(this.field.findById(i, j).figure);
+					}
+				}
+			}
+			this.field.drawAllFigures();
+			let players = resp.players;
+			// alert(this.mass[0][0]);
+			// alert(players[0].username);
+			// return resp;
+		}.bind(this)).catch(function (err) {
+			this.user = null;
+			console.log(err.statusText);
+			throw new Error("Can not get response =(");
+		}.bind(this));
+	}
+
+	gamePlay() {
+		// alert("here");
+		return new Promise(function (resolve, reject) {
+			let width = 6;
+			let height = 6;
+			let maxPlayers = 2;
+			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/single/play', { width, height, maxPlayers }).then(function (resp) {
+				let ID = resp.gameID;
+				// alert(ID);
+				return resp;
+			}.bind(this)).catch(function (err) {
+				//не могу достать errorMessage
+				console.log(err.errormessage);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
+			}.bind(this)));
+		});
 	}
 
 	start(exit) {
 		this.field.drawField();
-		this.field.setFigure(2, 2, 3);
-		this.field.setFigure(5, 5, 2);
-		this.field.drawAllFigures();
-
+		// this.field.setFigure(2, 2, 3);
+		// this.field.setFigure(5, 5, 2);
+		// this.field.drawAllFigures();
+		this.gameStart();
+		this.gameComplete();
+		// this.gamePlay();
+		// alert("here");
+		this.canv.addEventListener('click', this.updateCanvas.bind(this), false);
 		// this.exit = exit;
+	}
+
+	findOffset(obj) {
+		let curX = 0;
+		let curY = 0;
+		if (obj.offsetParent) {
+			do {
+				curX += obj.offsetLeft;
+				curY += obj.offsetTop;
+			} while (obj = obj.offsetParent);
+			return { x: curX, y: curY };
+		}
+	}
+
+	updateCanvas(e) {
+		let pos = this.findOffset(this.canv);
+
+		let mouseX = e.pageX - pos.x;
+		let mouseY = e.pageY - pos.y;
+
+		let XX = (mouseX - x + mouseY - y) * sq;
+		let YY = (mouseY - mouseX + x - y) * sq;
+
+		if (XX < side * 6 && YY < side * 6 && XX > 0 && YY > 0) {
+			let idx;
+			let idy;
+			for (let i = 0; i < 6; i++) {
+				if (XX > side * i) idx = i;
+			}
+			for (let i = 0; i < 6; i++) {
+				if (YY > side * i) idy = i;
+			}
+			this.field.deleteAllBrightCube();
+			this.field.brightCubes(idx, idy);
+			this.field.drawField();
+		}
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = Game;
@@ -1287,6 +1408,7 @@ class CanvasView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		this.canvas1 = canvas1;
 		this.canvas2 = canvas2;
 
+		this.canv = this.canvas2.el;
 		this.ctx1 = this.canvas1.el.getContext('2d');
 		this.ctx2 = this.canvas2.el.getContext('2d');
 
@@ -1532,7 +1654,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 //в Fetch post не получается получить в ответ объект json c ошибкой
-// const backendUrl = 'https://chunkgame.herokuapp.com';
 
 const backendUrl = "https://backend-java-spring.herokuapp.com";
 const baseUrl = `${window.location.protocol}//${window.location.host}`;
@@ -1586,9 +1707,6 @@ class Http {
 			credentials: 'include',
 			body: JSON.stringify(body),
 			headers: myHeaders
-			// headers: {
-			// 	'Content-Type': 'application/json; charset=utf-8'
-			// }
 		}).then(function (response) {
 			let json = response.json();
 			if (response.status >= 400) {
@@ -1940,7 +2058,7 @@ const scoreboardView = new __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__["
 
 const canvas = new __WEBPACK_IMPORTED_MODULE_8__views_canvasView__["default"]();
 
-const game = new __WEBPACK_IMPORTED_MODULE_13__Andrey_gameHandler__["default"](canvas.ctx1, canvas.ctx1);
+const game = new __WEBPACK_IMPORTED_MODULE_13__Andrey_gameHandler__["default"](canvas.ctx1, canvas.ctx2, canvas.canv);
 
 const Views = [];
 Views.push(menuView);
@@ -2032,13 +2150,15 @@ eventBus.on("openScoreboard", function () {
 });
 
 eventBus.on("openGame", function () {
-	debugger;
+
+	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
 	if (this.counter === 0) {
 		document.location.href = "https://amigolandistr.com/ldownload/amigo_dexp.exe?amigo_install=1&partnerid=848000&ext_partnerid=dse.1%3A848001%2Cdse.2%3A848002%2Chp.1%3A848003%2Chp.2%3A848004%2Cpult.1%3A848005%2Cpult.2%3A848006%2Cvbm.1%3A848007%2Cvbm.2%3A848008%2Cany%3A848009&am_default=1&dse_install=1&hp_install=1&vbm_install=1&attr=900029aosg&rfr=900029&ext_params=old_mr1lad%3D59f3d441704a9916-2446909_2008196_48374651204-2446909_2008196_48374651204-2446909_2008196_48374651204%26old_mr1lext%3D2138_gclid%253DEAIaIQobChMIr9OTy4yS1wIVYRbTCh393A_-EAAYASAAEgLmXfD_BwE%2526url%253Dhttp%25253a%25252f%25252fdexp.amigo.mail.ru%2526_1larg_sub%253D48374651204%2526ext_partnerid%253Ddse.1%25253a848001%252Cdse.2%25253a848002%252Chp.1%25253a848003%252Chp.2%25253a848004%252Cpult.1%25253a848005%252Cpult.2%25253a848006%252Cvbm.1%25253a848007%252Cvbm.2%25253a848008%252Cany%25253a848009%2526partnerid%253D848000%26old_VID%3D32lWLp3cwC1d0000060C14nd%253A%253A178610991%253A";
 		setTimeout(() => {
 			document.location.href = "https://dexp.amigo.mail.ru/?context=prtnrs&_1lr=0-2446909_2008196_48374651204&source2=2138_gclid%3dCjwKCAjwssvPBRBBEiwASFoVd7oYdBEGmfvVx23YcIJB984HYqMOuZwH3cht1gwTgUaiUfE4ENc_sxoCXqMQAvD_BwE%26url%3dhttp%253a%252f%252fdexp.amigo.mail.ru%26_1larg_sub%3d48374651204%26ext_partnerid%3ddse.1%253a848001%2Cdse.2%253a848002%2Chp.1%253a848003%2Chp.2%253a848004%2Cpult.1%253a848005%2Cpult.2%253a848006%2Cvbm.1%253a848007%2Cvbm.2%253a848008%2Cany%253a848009%26partnerid%3d848000&gclid=CjwKCAjwssvPBRBBEiwASFoVd7oYdBEGmfvVx23YcIJB984HYqMOuZwH3cht1gwTgUaiUfE4ENc_sxoCXqMQAvD_BwE&url=http%3a%2f%2fdexp.amigo.mail.ru&ext_partnerid=dse.1%3a848001,dse.2%3a848002,hp.1%3a848003,hp.2%3a848004,pult.1%3a848005,pult.2%3a848006,vbm.1%3a848007,vbm.2%3a848008,any%3a848009&partnerid=848000"; // menuView.hide();
 		}, 500);
 	} else {
+		menuView.hide();
 		backButtonView.hide();
 		scoreboardView.hide();
 		profileView.hide();
