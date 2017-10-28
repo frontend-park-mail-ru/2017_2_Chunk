@@ -1,13 +1,15 @@
 .menu__button {
-    border: 0.1em transparent;
-    font-size: 12px;
+    border: 0.05em solid transparent;
     text-align: center;
     opacity: 0.9;
-    height: 3em;
-    padding: 0.6em;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    width: 5em;
+    width: 10em;
+    height: 1em;
+    padding: 0.3em;
+    min-height: 30px;
+    min-width: 250px;
+
+    /*margin-top: 0.5em;*/
+    /*margin-bottom: 0.5em;*/
     border-radius: 0.4em;
     box-shadow: none;
     background-color: rgba(0, 0, 0, 0.87);
@@ -16,5 +18,23 @@
 
 .menu__button:focus {
     /*background: #8b2b03; !* Цвет фона *!*/
+
+    border: 0.05em solid #ff8700;
     opacity: 1;
+}
+
+
+.menu__button:hover {
+    /*background: #8b2b03; !* Цвет фона *!*/
+    color: #ff8700; /* Цвет ссылки */
+    /*border: 0.05em solid #ff8700;*/
+    opacity: 1;
+}
+
+A:link {
+    text-decoration: none; /* Убирает подчеркивание для ссылок */
+}
+
+A:hover {
+    color: black; /* Цвет ссылки */
 }

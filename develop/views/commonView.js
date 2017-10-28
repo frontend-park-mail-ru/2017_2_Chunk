@@ -6,21 +6,18 @@ import EventBus from "../modules/eventBus"
 export default class CommonView extends Block {
 	constructor(blocks) {
 		const view = document.createElement("section");
-		const attrs = {
-				"display": "inline-flex",
-				"flex-direction": "column",
-				"align-items": "center",
-				"justify-content": "center",
-			};
+		// const attrs = {
+		//
+		// 	};
 
 
 		super(view);
 
 		this.elements = blocks;
 
-		for (const attr in attrs) {
-			this.el.style.setProperty(attr, attrs[attr]);
-		}
+		// for (const attr in attrs) {
+		// 	this.el.style.setProperty(attr, attrs[attr]);
+		// }
 
 		for (const block in this.elements) {
 			this.append(this.elements[block]);

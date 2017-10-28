@@ -1,8 +1,11 @@
 .back__button {
-    background-color: rgba(210, 156, 30, 0.91);
+    background-color: rgba(0, 0, 0, 0.87);
+    transition: all .12s;
+
     text-align: center;
     font-size: 1.5em;
-    opacity: 0.9;
+    color: white;
+    opacity: 0.8;
     border: 0.1em chocolate;
     height: 1em;
     position: fixed;
@@ -15,11 +18,16 @@
     width: 20em;
     border-radius: 0.4em;
     box-shadow: none;
-
 }
 
 .back__button:focus {
-    background: #fffb4c; /* Цвет фона */
     opacity: 1;
     border: 0.1em solid #ff8700; /* Параметры рамки */
+    color: #ff8700;
+}
+
+.back__button:hover {
+    /*opacity: 1;*/
+    /*border: 0.1em solid #ff8700; !* Параметры рамки *!*/
+    color: #ff8700;
 }

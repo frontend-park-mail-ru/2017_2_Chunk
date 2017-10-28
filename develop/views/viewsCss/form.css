@@ -1,0 +1,58 @@
+.form-block {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-around;
+    min-width: 280px;
+    min-height: 250px;
+}
+
+.form-block__input {
+    font-size: 1em;
+    color: #ff8700;
+
+    background-color: transparent;
+    border: 0.05em solid #d1d1d1;
+    border-radius: 0.4em;
+    box-shadow: none;
+
+
+    /*border: 0.05em solid transparent;*/
+    opacity: 0.9;
+    width: 8em;
+    height: 1em;
+    padding: 0.3em;
+    min-height: 30px;
+    min-width: 250px;
+}
+
+.form-block__input:focus {
+    background: transparent; /* Цвет фона */
+    border: 0.1em solid #ff8700; /* Параметры рамки */
+}
+
+.form-block__button {
+    color: white;
+    display: block;
+    width: 80%;
+    font-size: 16px;
+    margin: 0 auto;
+    background-color: rgba(0, 0, 0, 0.87);
+    opacity: 0.9;
+    border: 0.1em chocolate;
+    height: 3em;
+    padding: 0.4em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+
+    border-radius: 0.4em;
+    box-shadow: none;
+    cursor: pointer;
+
+}
+
+.form-block__button:focus {
+    /*background: #8b2b03; !* Цвет фона *!*/
+    opacity: 1;
+    border: 0.1em solid #ff8700; /* Параметры рамки */
+}

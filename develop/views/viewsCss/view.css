@@ -1,45 +1,6 @@
-/*section {*/
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*align-items: center;*/
-    /*justify-content: center;*/
-/*}*/
-
 .hidden {
     opacity: 0;
 }
-
-section {
-    transition: all .12s;
-
-    /*display: inline-flex;*/
-    /*position: absolute;*/
-    width: 20em;
-    /*min-width: 300px;*/
-    margin: 1.5% auto;
-
-    border-radius: 0.8em;
-    border: ridge black;
-    padding-top: 1%;
-    padding-bottom: 1%;
-}
-
-section .button {
-    font-family: "Comic Sans";
-    color: white;
-    font-size: 1.2em;
-    /*text-shadow: darkgray  2px 2px;*/
-    /*box-shadow: 10px 5px darkgrey , 12px 7px black;*/
-    /*border-radius: 30%;*/
-    width: 80%;
-    height: 80%;
-    /*margin-left: 6%;*/
-    /*margin-top: 3%;*/
-    /*margin-bottom: 10%;*/
-    /*padding-bottom: 10%;*/
-    /*padding-top: 10%;*/
-}
-
 
 div.profile {
     font-family: cursive;
@@ -51,67 +12,12 @@ div.profile {
     top: 5%;
 }
 
-.form-block {
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    width: 80%;
-}
-
-.form-block__input {
-    display: block;
-    width: 80%;
-    margin: 0 auto;
-    font-size: 1em;
-    color: #ff8700;
-
-    margin-bottom: 3px;
-    background-color: transparent;
-    border: 0.1em solid #d1d1d1;
-    height: 2em;
-    padding: 0.4em;
-    border-radius: 0.4em;
-    box-shadow: none;
-
-}
-
-.form-block__input:focus {
-    background: transparent; /* Цвет фона */
-    border: 0.1em solid #ff8700; /* Параметры рамки */
-}
-
-.form-block__button {
-    color: white;
-    display: block;
-    width: 80%;
-    font-size: 16px;
-    margin: 0 auto;
-    background-color: rgba(0, 0, 0, 0.87);
-    opacity: 0.9;
-    border: 0.1em chocolate;
-    height: 3em;
-    padding: 0.4em;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-
-    border-radius: 0.4em;
-    box-shadow: none;
-    cursor: pointer;
-
-}
-
-.form-block__button:focus {
-    /*background: #8b2b03; !* Цвет фона *!*/
-    opacity: 1;
-    border: 0.1em solid #ff8700; /* Параметры рамки */
-}
-
 
 /*штуки стилей плейсхолдеров*/
 ::-webkit-input-placeholder {
     color: #fff;
-    font-weight: bold;
+    /*font-weight: bold;*/
+    font-size: 3vh;
 }
 ::-moz-placeholder {
     color: #c0392b;
