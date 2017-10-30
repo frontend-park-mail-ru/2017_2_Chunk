@@ -5,14 +5,16 @@
 
 
 .menu__button {
-    font-family: HALLMT_,"Comic Sans";
+
     border: 0.05em solid white;
-    min-font-size: 40px !important;
+    font-size:calc(12px + 1.5vw);
     text-align: center;
     opacity: 1;
     width: 10em;
-    height: 1em;
-    padding: 0.3em;
+    height: 1.2em;
+    padding-top: 0.1em;
+    padding-bottom: 0.4em;
+
     margin-bottom: 0.5em;
     margin-top: 0.5em;
     min-height: 30px;

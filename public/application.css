@@ -59,6 +59,7 @@
     z-index: 1;
 }body {
     /*background: url('../../image/dark-2.jpg');*/
+    font-family: "Comic Sans MS";
     background-color: black;
     width: 98%;
     height: 95%;
@@ -69,6 +70,7 @@
     justify-content: center;
     overflow: auto;
 }.form-block {
+    font-family: "Comic Sans MS";
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -78,7 +80,8 @@
 }
 
 .form-block__input {
-    font-size: 1em;
+    font-family: "Comic Sans MS";
+    font-size:calc(12px + 1.5vw);
     color: #ff8700;
 
     background-color: transparent;
@@ -108,10 +111,11 @@
 }
 
 .form-block__button {
+    font-family: "Comic Sans MS";
     color: white;
     display: block;
     width: 10em;
-    font-size: 1em;
+    font-size:calc(12px + 1.5vw);
     margin: 0 auto;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -148,14 +152,16 @@
 
 
 .menu__button {
-    font-family: HALLMT_,"Comic Sans";
+
     border: 0.05em solid white;
-    min-font-size: 40px !important;
+    font-size:calc(12px + 1.5vw);
     text-align: center;
     opacity: 1;
     width: 10em;
-    height: 1em;
-    padding: 0.3em;
+    height: 1.2em;
+    padding-top: 0.1em;
+    padding-bottom: 0.4em;
+
     margin-bottom: 0.5em;
     margin-top: 0.5em;
     min-height: 30px;
@@ -197,6 +203,7 @@ A:link {
 A:hover {
     color: black; /* Цвет ссылки */
 }section {
+
     transition: all .12s;
     display: flex;
     flex-direction: column;
@@ -261,7 +268,7 @@ A:hover {
 
 div.profile {
     font-family: cursive;
-    font-size: 4vh;
+    font-size:calc(12px + 1.5vw);
     color: #ff8700;
     position: fixed;
     max-width: 300px;
@@ -274,7 +281,7 @@ div.profile {
 ::-webkit-input-placeholder {
     color: #fff;
     /*font-weight: bold;*/
-    font-size: 3vh;
+    font-size:calc(8px + 1.5vw);
 }
 ::-moz-placeholder {
     color: #c0392b;

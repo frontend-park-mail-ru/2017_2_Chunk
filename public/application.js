@@ -1653,7 +1653,7 @@ class CommonView extends __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__["d
 		}, 170);
 		setTimeout(() => {
 			this.el.classList.remove("hidden");
-		}, 100);
+		}, 130);
 	}
 
 	hide() {

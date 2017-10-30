@@ -1,4 +1,5 @@
 section {
+
     transition: all .12s;
     display: flex;
     flex-direction: column;

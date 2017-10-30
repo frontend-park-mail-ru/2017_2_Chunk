@@ -1,4 +1,5 @@
 .form-block {
+    font-family: "Comic Sans MS";
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -8,7 +9,8 @@
 }
 
 .form-block__input {
-    font-size: 1em;
+    font-family: "Comic Sans MS";
+    font-size:calc(12px + 1.5vw);
     color: #ff8700;
 
     background-color: transparent;
@@ -38,10 +40,11 @@
 }
 
 .form-block__button {
+    font-family: "Comic Sans MS";
     color: white;
     display: block;
     width: 10em;
-    font-size: 1em;
+    font-size:calc(12px + 1.5vw);
     margin: 0 auto;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
