@@ -41,7 +41,11 @@ export default class UserService {
 
 			resolve(Http.FetchPost('/user/sign_up', {username, email, password})
 				.then(function(resp) {
-					console.log("good response status" + resp.username);
+					console.log("user name " + resp.username);
+					this.user = resp;
+					return resp;
+				}.bind(this))
+				.then(function (resp) {
 					return resp;
 				}.bind(this))
 				.catch(function(err) {//не могу достать errorMessage
@@ -49,7 +53,7 @@ export default class UserService {
 					console.log("err response status "  + err.errorMessage);
 					throw new Error(err.errorMessage);
 				}.bind(this)));
-		})
+		}.bind(this))
 	}
 
 
@@ -75,6 +79,7 @@ export default class UserService {
 			resolve(Http.FetchPost('/user/sign_in', {login, password})
 				.then(function(resp) {
 					console.log("good response status" + resp.username);
+					this.user = resp;
 					return resp;
 				}.bind(this))
 				.catch(function(err) {//не могу достать errorMessage
@@ -82,7 +87,7 @@ export default class UserService {
 					console.log("err response status "  + err.errorMessage);
 					throw new Error(err.errorMessage);
 				}.bind(this)));
-		})
+		}.bind(this))
 	}
 
 
@@ -116,7 +121,8 @@ export default class UserService {
 
 			resolve(Http.FetchPost('/user/update', {username, email, password, old_password})
 				.then(function(resp) {
-					console.log("good response status" + resp.username);
+					debugger;
+					console.log("username: " + resp.username);
 					return resp;
 				}.bind(this))
 				.catch(function(err) {//не могу достать errorMessage
@@ -124,7 +130,7 @@ export default class UserService {
 					console.log("err response status "  + err.errorMessage);
 					throw new Error(err.errorMessage);
 				}.bind(this)));
-		})
+		}.bind(this))
 	}
 
 
@@ -143,13 +149,13 @@ export default class UserService {
 	 * @param force - пременная для принудительной отправки гет запроса если true
 	 * @return {Promise} - возвращает функцию колбек с результатом запроса или ошибкой
 	 */
-	async getDataFetch(force = false) {
+	getDataFetch(force = false) {
 		if (this.isLoggedIn() && !force) {
-			return await new Promise(function(resolve, reject) {
+			return new Promise(function(resolve, reject) {
 				resolve(this.user);
 			}.bind(this));
 		}
-		return await Http.FetchGet('/user/whoisit')
+		return Http.FetchGet('/user/whoisit')
 			.then(function(resp) {
 				this.user = resp;
 				return this.user;
@@ -169,7 +175,10 @@ export default class UserService {
 		if (this.isLoggedIn()) {
 			this.user = null;
 			this.users = [];
-			await Http.FetchGet('/user/exit')
+			Http.FetchGet('/user/exit')
+				.then(() => {
+					this.getDataFetch();
+				})
 				.catch(function (err) {//получить ошибки с сервера
 					console.log(err.errorMessage);//удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
 				});

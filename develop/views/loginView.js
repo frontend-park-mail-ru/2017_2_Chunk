@@ -64,7 +64,7 @@ export default class LoginView extends CommonView {
 				this.form.reset();
 				this.message.clear();
 				this.message.hide();
-				this.bus.emit("auth");
+				this.bus.emit("auth", resp.username);
 				this.router.goTo("/menu");
 			}.bind(this))
 			.catch(function (err) {

@@ -31,7 +31,7 @@
 				if (response.status >= 400) {
 					return json.then(resp => {throw resp});
 				}
-				return json;
+				return json.then(resp => {return resp});
 			});
 		}
 
@@ -46,7 +46,7 @@
 			const url = backendUrl + address;
 			const myHeaders = new Headers();
 			myHeaders.set("Content-Type", "application/json; charset=utf-8");
-			return fetch(url, {
+			return await fetch(url, {
 				method: 'POST',
 				mode: 'cors',
 				credentials: 'include',
@@ -57,7 +57,7 @@
 				if (response.status >= 400) {
 					return json.then(resp => {throw resp});
 				}
-				return json;
+				return json.then(resp => {return resp});
 			});
 		}
 	}

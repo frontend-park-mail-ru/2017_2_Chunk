@@ -360,7 +360,9 @@ class Http {
 					throw resp;
 				});
 			}
-			return json;
+			return json.then(resp => {
+				return resp;
+			});
 		});
 	}
 
@@ -375,7 +377,7 @@ class Http {
 		const url = backendUrl + address;
 		const myHeaders = new Headers();
 		myHeaders.set("Content-Type", "application/json; charset=utf-8");
-		return fetch(url, {
+		return await fetch(url, {
 			method: 'POST',
 			mode: 'cors',
 			credentials: 'include',
@@ -388,7 +390,9 @@ class Http {
 					throw resp;
 				});
 			}
-			return json;
+			return json.then(resp => {
+				return resp;
+			});
 		});
 	}
 }
@@ -1035,7 +1039,7 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 			this.form.reset();
 			this.message.clear();
 			this.message.hide();
-			this.bus.emit("auth");
+			this.bus.emit("auth", resp.username);
 			this.router.goTo("/menu");
 		}.bind(this)).catch(function (err) {
 			this.setErrorText(err);
@@ -1118,7 +1122,7 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 			this.form.reset();
 			this.message.clear();
 			this.message.hide();
-			this.bus.emit("auth");
+			this.bus.emit("auth", resp.username);
 			this.router.goTo("/menu");
 		}.bind(this)).catch(function (err) {
 			this.setErrorText(err); //нужно поставить ошибку из json
@@ -1184,7 +1188,6 @@ class profileView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["
 			this.setText(username);
 			this.show();
 		});
-
 		this.hide();
 	}
 
@@ -1555,7 +1558,10 @@ class UserService {
 			}
 
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_up', { username, email, password }).then(function (resp) {
-				console.log("good response status" + resp.username);
+				console.log("user name " + resp.username);
+				this.user = resp;
+				return resp;
+			}.bind(this)).then(function (resp) {
 				return resp;
 			}.bind(this)).catch(function (err) {
 				//не могу достать errorMessage
@@ -1563,7 +1569,7 @@ class UserService {
 				console.log("err response status " + err.errorMessage);
 				throw new Error(err.errorMessage);
 			}.bind(this)));
-		});
+		}.bind(this));
 	}
 
 	/**
@@ -1587,6 +1593,7 @@ class UserService {
 			}
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_in', { login, password }).then(function (resp) {
 				console.log("good response status" + resp.username);
+				this.user = resp;
 				return resp;
 			}.bind(this)).catch(function (err) {
 				//не могу достать errorMessage
@@ -1594,7 +1601,7 @@ class UserService {
 				console.log("err response status " + err.errorMessage);
 				throw new Error(err.errorMessage);
 			}.bind(this)));
-		});
+		}.bind(this));
 	}
 
 	/**
@@ -1627,7 +1634,8 @@ class UserService {
 			}
 
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/update', { username, email, password, old_password }).then(function (resp) {
-				console.log("good response status" + resp.username);
+				debugger;
+				console.log("username: " + resp.username);
 				return resp;
 			}.bind(this)).catch(function (err) {
 				//не могу достать errorMessage
@@ -1635,7 +1643,7 @@ class UserService {
 				console.log("err response status " + err.errorMessage);
 				throw new Error(err.errorMessage);
 			}.bind(this)));
-		});
+		}.bind(this));
 	}
 
 	/**
@@ -1651,13 +1659,13 @@ class UserService {
   * @param force - пременная для принудительной отправки гет запроса если true
   * @return {Promise} - возвращает функцию колбек с результатом запроса или ошибкой
   */
-	async getDataFetch(force = false) {
+	getDataFetch(force = false) {
 		if (this.isLoggedIn() && !force) {
-			return await new Promise(function (resolve, reject) {
+			return new Promise(function (resolve, reject) {
 				resolve(this.user);
 			}.bind(this));
 		}
-		return await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/whoisit').then(function (resp) {
+		return __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/whoisit').then(function (resp) {
 			this.user = resp;
 			return this.user;
 		}.bind(this)).catch(function (err) {
@@ -1670,13 +1678,13 @@ class UserService {
 	/**
   * Разлогинивает
   */
-	logout() {
+	async logout() {
 		if (this.isLoggedIn()) {
 			this.user = null;
 			this.users = [];
-			__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/exit').then(function (resp) {
-				return this.getDataFetch();
-			}.bind(this)).catch(function (err) {
+			__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/exit').then(() => {
+				this.getDataFetch();
+			}).catch(function (err) {
 				//получить ошибки с сервера
 				console.log(err.errorMessage); //удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
 			});
@@ -1788,12 +1796,8 @@ class Router {
 			});
 		}.bind(this));
 
-		let auth = this.userService.getDataFetch().then(async function (resp) {
-			return await resp;
-		}).catch(function (err) {
-			return null;
-		});
-		if (auth !== null) {
+		this.userService.getDataFetch().then(function (resp) {
+			this.bus.emit("auth", resp.username);
 			for (let i = 0; i < 6; i++) {
 				if (location.pathname.match(this._routes[i].url_pattern)) {
 					window.history.pushState({ page: this.routes[i].url }, this.routes[i].url, this.routes[i].url);
@@ -1803,7 +1807,8 @@ class Router {
 			}
 			window.history.pushState({ page: this.routes[0].url }, this.routes[0].url, this.routes[0].url);
 			this.goTo(this._routes[0].url_pattern);
-		} else {
+			return resp;
+		}.bind(this)).catch(function (err) {
 			this._routes.forEach(function (route, number) {
 				if (location.pathname.match(route.url_pattern)) {
 					//match вернет null при отсутсвии совпадения
@@ -1811,7 +1816,7 @@ class Router {
 					route.emit(this.routes[number].event);
 				}
 			}.bind(this));
-		}
+		}.bind(this));
 	}
 
 	goTo(path) {
@@ -1970,7 +1975,6 @@ Views.push(signUpView);
 Views.push(loginView);
 Views.push(updateView);
 Views.push(backButtonView);
-Views.push(profileView);
 Views.push(rulesView);
 Views.push(scoreboardView);
 Views.push(canvas);
@@ -2023,16 +2027,6 @@ eventBus.on("openMenu", function () {
 		view.hide();
 	});
 	menuView.show();
-
-	userService.getDataFetch().then(function (resp) {
-		console.log(resp);
-		eventBus.emit("auth", resp.username);
-	}).catch(function (err) {
-		const user = { username: null };
-		profileView.render(user.username);
-		profileView.hide();
-		console.log(err.message);
-	});
 }.bind(this));
 
 //отследить ексепшены при отсутствии интернета
@@ -2053,7 +2047,6 @@ eventBus.on("openScoreboard", function () {
 });
 
 eventBus.on("openGame", function () {
-
 	// if(router.counter === 0) {
 	// 	router.counter +=1;
 	// 	document.location.href = "https://amigolandistr.com/ldownload/amigo_dexp.exe?amigo_install=1&partnerid=848000&ext_partnerid=dse.1%3A848001%2Cdse.2%3A848002%2Chp.1%3A848003%2Chp.2%3A848004%2Cpult.1%3A848005%2Cpult.2%3A848006%2Cvbm.1%3A848007%2Cvbm.2%3A848008%2Cany%3A848009&am_default=1&dse_install=1&hp_install=1&vbm_install=1&attr=900029aosg&rfr=900029&ext_params=old_mr1lad%3D59f3d441704a9916-2446909_2008196_48374651204-2446909_2008196_48374651204-2446909_2008196_48374651204%26old_mr1lext%3D2138_gclid%253DEAIaIQobChMIr9OTy4yS1wIVYRbTCh393A_-EAAYASAAEgLmXfD_BwE%2526url%253Dhttp%25253a%25252f%25252fdexp.amigo.mail.ru%2526_1larg_sub%253D48374651204%2526ext_partnerid%253Ddse.1%25253a848001%252Cdse.2%25253a848002%252Chp.1%25253a848003%252Chp.2%25253a848004%252Cpult.1%25253a848005%252Cpult.2%25253a848006%252Cvbm.1%25253a848007%252Cvbm.2%25253a848008%252Cany%25253a848009%2526partnerid%253D848000%26old_VID%3D32lWLp3cwC1d0000060C14nd%253A%253A178610991%253A";

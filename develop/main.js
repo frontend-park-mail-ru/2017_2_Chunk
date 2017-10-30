@@ -69,7 +69,6 @@ Views.push(signUpView);
 Views.push(loginView);
 Views.push(updateView);
 Views.push(backButtonView);
-Views.push(profileView);
 Views.push(rulesView);
 Views.push(scoreboardView);
 Views.push(canvas);
@@ -128,18 +127,6 @@ eventBus.on("openMenu", function() {
 		view.hide();
 	});
 	menuView.show();
-
-	userService.getDataFetch()
-		.then(function(resp) {
-			console.log(resp);
-			eventBus.emit("auth", resp.username)
-		})
-		.catch(function(err) {
-			const user = {username: null};
-			profileView.render(user.username);
-			profileView.hide();
-			console.log(err.message);
-		})
 }.bind(this));
 
 
@@ -163,7 +150,6 @@ eventBus.on("openScoreboard", function () {
 
 
 eventBus.on("openGame", function () {
-
 	// if(router.counter === 0) {
 	// 	router.counter +=1;
 	// 	document.location.href = "https://amigolandistr.com/ldownload/amigo_dexp.exe?amigo_install=1&partnerid=848000&ext_partnerid=dse.1%3A848001%2Cdse.2%3A848002%2Chp.1%3A848003%2Chp.2%3A848004%2Cpult.1%3A848005%2Cpult.2%3A848006%2Cvbm.1%3A848007%2Cvbm.2%3A848008%2Cany%3A848009&am_default=1&dse_install=1&hp_install=1&vbm_install=1&attr=900029aosg&rfr=900029&ext_params=old_mr1lad%3D59f3d441704a9916-2446909_2008196_48374651204-2446909_2008196_48374651204-2446909_2008196_48374651204%26old_mr1lext%3D2138_gclid%253DEAIaIQobChMIr9OTy4yS1wIVYRbTCh393A_-EAAYASAAEgLmXfD_BwE%2526url%253Dhttp%25253a%25252f%25252fdexp.amigo.mail.ru%2526_1larg_sub%253D48374651204%2526ext_partnerid%253Ddse.1%25253a848001%252Cdse.2%25253a848002%252Chp.1%25253a848003%252Chp.2%25253a848004%252Cpult.1%25253a848005%252Cpult.2%25253a848006%252Cvbm.1%25253a848007%252Cvbm.2%25253a848008%252Cany%25253a848009%2526partnerid%253D848000%26old_VID%3D32lWLp3cwC1d0000060C14nd%253A%253A178610991%253A";

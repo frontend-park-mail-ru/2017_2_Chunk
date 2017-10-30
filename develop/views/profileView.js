@@ -14,7 +14,6 @@ export default class profileView extends Block {
 			this.setText(username);
 			this.show();
 		});
-
 		this.hide();
 	}
 
