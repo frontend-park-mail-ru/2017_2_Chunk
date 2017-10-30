@@ -101,6 +101,7 @@
 }
 
 .form-block__input:focus {
+    outline: none;
     border: 0.06em solid #ff8700; /* Параметры рамки */
 }
 
@@ -153,7 +154,7 @@
 
 .menu__button {
     border: 0.04em solid white;
-    font-size:calc(8px + 2vmax) !important;
+    font-size:calc(14px + 1.5vh);
     text-align: center;
     opacity: 1;
     width: 10em;
@@ -161,8 +162,7 @@
     padding-top: 0.1em;
     padding-bottom: 0.4em;
 
-    margin-bottom: 0.5em;
-    margin-top: 0.5em;
+    margin: 0.7em;
     min-height: 30px;
     min-width: 260px;
     color: white;
@@ -202,16 +202,15 @@ A:link {
 A:hover {
     color: black; /* Цвет ссылки */
 }section {
-
     transition: all .12s;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    font-size: 4vh;
+    font-size: 4vmax;
     color: #ff8700;
 
-    width: 12em;
+    /*width: 12em;*/
     /*height: 3em;*/
     min-width: 300px;
     /*min-height: 250px;*/

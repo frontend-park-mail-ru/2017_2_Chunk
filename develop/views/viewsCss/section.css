@@ -1,14 +1,13 @@
 section {
-
     transition: all .12s;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    font-size: 4vh;
+    font-size: 4vmax;
     color: #ff8700;
 
-    width: 12em;
+    /*width: 12em;*/
     /*height: 3em;*/
     min-width: 300px;
     /*min-height: 250px;*/

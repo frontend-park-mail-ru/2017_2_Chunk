@@ -30,6 +30,7 @@
 }
 
 .form-block__input:focus {
+    outline: none;
     border: 0.06em solid #ff8700; /* Параметры рамки */
 }
 
