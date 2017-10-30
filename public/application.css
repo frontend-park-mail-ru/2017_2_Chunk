@@ -81,7 +81,7 @@
 
 .form-block__input {
     font-family: "Comic Sans MS";
-    font-size:calc(12px + 1.5vh);
+    font-size:calc(14px + 1.5vh);
     color: #ff8700;
 
     background-color: transparent;
@@ -115,7 +115,7 @@
     color: white;
     display: block;
     width: 10em;
-    font-size:calc(12px + 1.5vw);
+    font-size:calc(14px + 1.5vh);
     margin: 0 auto;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -158,6 +158,7 @@
     opacity: 1;
     width: 10em;
     height: 1.2em;
+    min-width: 250px;
     padding-top: 0.1em;
     padding-bottom: 0.4em;
 
