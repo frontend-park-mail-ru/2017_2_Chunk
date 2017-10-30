@@ -5,8 +5,8 @@
 
 
 .menu__button {
-    border: 0.05em solid white;
-    font-size:calc(16px + 1.5vh);
+    border: 0.04em solid white;
+    font-size:calc(20px + 1.5vh) !important;
     text-align: center;
     opacity: 1;
     width: 10em;
@@ -35,7 +35,7 @@
     /*background: #8b2b03; !* Цвет фона *!*/
     opacity: 0.8 !important;
     color: #FF4900 !important;
-    border: 0.05em solid #FF4900 !important;
+    border: 0.04em solid #FF4900 !important;
 }
 
 
@@ -43,7 +43,7 @@
     /*background: #8b2b03; !* Цвет фона *!*/
     opacity: 1;
     color: #ff8700 ; /* Цвет ссылки */
-    border: 0.05em solid #ff8700;
+    border: 0.04em solid #ff8700;
 
     /*border: 0.05em solid #ff8700;*/
 }

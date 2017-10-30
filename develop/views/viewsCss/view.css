@@ -4,7 +4,7 @@
 
 div.profile {
     font-family: cursive;
-    font-size:calc(12px + 1.5vh);
+    font-size:calc(20px + 2vh);
     color: #ff8700;
     position: fixed;
     max-width: 300px;

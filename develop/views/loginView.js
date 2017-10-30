@@ -25,7 +25,7 @@ export default class LoginView extends CommonView {
 			}},
 			{attrs: {
 				type: "submit",
-				value: "submit",
+				value: "Submit",
 				class: "form-block__button",
 			}}
 		];

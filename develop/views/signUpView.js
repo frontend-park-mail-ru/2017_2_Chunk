@@ -41,7 +41,7 @@ export default class signUpView extends commonView {
 			}},
 			{attrs: {
 				type: "submit",
-				value: "submit",
+				value: "Submit",
 				class: "form-block__button",
 			}}
 		];
