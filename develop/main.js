@@ -4,23 +4,23 @@
  *@module main
  */
 
-import MenuView from "./views/viewJs/menuView";
+import MenuView from "./views/menuView";
 
-import SignUpView from "./views/viewJs/signUpView";
+import SignUpView from "./views/signUpView";
 
-import LoginView from "./views/viewJs/loginView";
+import LoginView from "./views/loginView";
 
-import BackButtonView from "./views/viewJs/backButtonView";
+import BackButtonView from "./views/backButtonView";
 
-import ProfileView from "./views/viewJs/profileView";
+import ProfileView from "./views/profileView";
 
-import RulesView from "./views/viewJs/rulesView";
+import RulesView from "./views/rulesView";
 
-import ScoreboardView from "./views/viewJs/scoreboardView";
+import ScoreboardView from "./views/scoreboardView";
 
-import UpdateView from "./views/viewJs/updateView";
+import UpdateView from "./views/updateView";
 
-import Canvas from "./views/viewJs/canvasView";
+import Canvas from "./views/canvasView";
 
 import Block from "./blocks/block/block.js";
 
