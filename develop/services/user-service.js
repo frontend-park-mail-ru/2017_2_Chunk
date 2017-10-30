@@ -165,14 +165,11 @@ export default class UserService {
 	/**
 	 * Разлогинивает
 	 */
-	logout() {
+	async logout() {
 		if (this.isLoggedIn()) {
 			this.user = null;
 			this.users = [];
-			Http.FetchGet('/user/exit')
-				.then(function (resp) {
-					return this.getDataFetch();
-				}.bind(this))
+			await Http.FetchGet('/user/exit')
 				.catch(function (err) {//получить ошибки с сервера
 					console.log(err.errorMessage);//удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
 				});
