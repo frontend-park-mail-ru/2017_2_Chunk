@@ -1,9 +1,9 @@
 body {
-    background: url('../../image/dark-2.jpg');
+    /*background: url('../../image/dark-2.jpg');*/
     background-color: black;
     width: 98%;
     height: 95%;
-    min-height: 600px;
+    position: fixed;
     display: flex;
     flex-direction: column;
     align-content: center;

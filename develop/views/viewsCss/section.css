@@ -5,20 +5,22 @@ section {
     align-items: center;
     justify-content: space-around;
     font-size: 4vh;
+    color: #ff8700;
+
     width: 12em;
     /*height: 3em;*/
     min-width: 300px;
-    min-height: 250px;
+    /*min-height: 250px;*/
     margin: 1.5% auto;
     border-radius: 0.8em;
-    border: ridge black;
+    border: ridge #ff8700;
     padding-top: 1%;
     padding-bottom: 1%;
 }
 
-section .button {
-    font-family: "Comic Sans";
-    color: white;
+/*section .button {*/
+    /*font-family: "Comic Sans";*/
+    /*color: red;*/
 
 
     /*text-shadow: darkgray  2px 2px;*/
@@ -30,4 +32,4 @@ section .button {
     /*margin-bottom: 10%;*/
     /*padding-bottom: 10%;*/
     /*padding-top: 10%;*/
-}
+/*}*/

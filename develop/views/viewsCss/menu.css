@@ -1,34 +1,50 @@
+/*@font-face {*/
+    /*font-family: HALLMT_; !* Гарнитура шрифта *!*/
+    /*src: url(HALLMT__.TTF); !* Путь к файлу со шрифтом *!*/
+/*}*/
+
+
 .menu__button {
-    border: 0.05em solid transparent;
+    font-family: HALLMT_,"Comic Sans";
+    border: 0.05em solid white;
+    min-font-size: 40px !important;
     text-align: center;
-    opacity: 0.9;
+    opacity: 1;
     width: 10em;
     height: 1em;
     padding: 0.3em;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
     min-height: 30px;
     min-width: 250px;
+    color: white;
 
     /*margin-top: 0.5em;*/
     /*margin-bottom: 0.5em;*/
     border-radius: 0.4em;
     box-shadow: none;
-    background-color: rgba(0, 0, 0, 0.87);
+    /*background-color: rgba(0, 0, 0, 0.87);*/
+    background-color: transparent;
     cursor: pointer;
 }
 
+
+
 .menu__button:focus {
     /*background: #8b2b03; !* Цвет фона *!*/
-
-    border: 0.05em solid #ff8700;
-    opacity: 1;
+    opacity: 0.8 !important;
+    color: #FF4900 !important;
+    border: 0.05em solid #FF4900 !important;
 }
 
 
 .menu__button:hover {
     /*background: #8b2b03; !* Цвет фона *!*/
-    color: #ff8700; /* Цвет ссылки */
-    /*border: 0.05em solid #ff8700;*/
     opacity: 1;
+    color: #ff8700 ; /* Цвет ссылки */
+    border: 0.05em solid #ff8700;
+
+    /*border: 0.05em solid #ff8700;*/
 }
 
 A:link {

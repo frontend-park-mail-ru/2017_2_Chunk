@@ -1,0 +1,17 @@
+.canv1 {
+
+    /*max-height: 80vh;*/
+    position: absolute;
+    left: auto;
+    top: auto;
+    background-image: url("../../image/background2.png");
+}
+
+.canv2 {
+    /*max-height: 80vh;*/
+
+    position: absolute;
+    left: auto;
+    top: auto;
+    z-index: 1;
+}

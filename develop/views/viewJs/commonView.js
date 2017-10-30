@@ -6,18 +6,10 @@ import EventBus from "../modules/eventBus"
 export default class CommonView extends Block {
 	constructor(blocks) {
 		const view = document.createElement("section");
-		// const attrs = {
-		//
-		// 	};
-
 
 		super(view);
 
 		this.elements = blocks;
-
-		// for (const attr in attrs) {
-		// 	this.el.style.setProperty(attr, attrs[attr]);
-		// }
 
 		for (const block in this.elements) {
 			this.append(this.elements[block]);
@@ -25,13 +17,13 @@ export default class CommonView extends Block {
 	}
 
 	show() {
-		setTimeout(() => {this.el.style.setProperty("display", "flex");}, 150);
+		setTimeout(() => {this.el.style.setProperty("display", "flex");}, 170);
 		setTimeout(() => {this.el.classList.remove("hidden");}, 100)
 	}
 
 	hide() {
 		this.el.classList.add("hidden",);
-		setTimeout(() => {this.el.style.setProperty("display", "none");}, 150);
+		setTimeout(() => {this.el.style.setProperty("display", "none");}, 170);
 	}
 }
 

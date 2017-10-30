@@ -6,11 +6,11 @@
     font-size: 1.5em;
     color: white;
     opacity: 0.8;
-    border: 0.1em chocolate;
+    border: 0.1em solid transparent;
     height: 1em;
     position: fixed;
-    max-width: 300px;
-    right: 75%;
+    max-width: 150px;
+    right: 73%;
     top: 5%;
     padding: 0.4em;
     margin-top: 0.5em;
