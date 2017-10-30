@@ -11,10 +11,9 @@ module.exports = {
 	output: {
 		filename: 'application.js',
 		path: __dirname + '/public',
-		library: "lib"
 	},
 
-	watch: NODE_ENV === 'development',
+	watch: NODE_ENV === 'production',
 	watchOptions: {
 		aggregateTimeout: 100
 	},
