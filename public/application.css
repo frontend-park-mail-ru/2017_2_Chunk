@@ -13,7 +13,7 @@
     transition: all .12s;
 
     text-align: center;
-    font-size: 5vh;
+    font-size: 4vh;
     color: white;
     opacity: 0.8;
     border: 0.1em solid transparent;
@@ -21,7 +21,7 @@
     position: fixed;
     max-width: 150px;
     right: 73%;
-    top: 5%;
+    top: 3%;
     padding: 0.4em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -261,7 +261,7 @@ A:hover {
 
 div.profile {
     font-family: cursive;
-    font-size: 2em;
+    font-size: 4vh;
     color: #ff8700;
     position: fixed;
     max-width: 300px;
