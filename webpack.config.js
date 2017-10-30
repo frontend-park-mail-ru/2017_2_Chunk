@@ -13,7 +13,7 @@ module.exports = {
 		path: __dirname + '/public',
 	},
 
-	watch: NODE_ENV === 'production',
+	watch: NODE_ENV === 'development',
 	watchOptions: {
 		aggregateTimeout: 100
 	},

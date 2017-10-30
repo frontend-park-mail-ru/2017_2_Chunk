@@ -207,7 +207,7 @@ A:hover {
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    font-size: 4vmax;
+    /*font-size: 4vmax;*/
     color: #ff8700;
 
     /*width: 12em;*/

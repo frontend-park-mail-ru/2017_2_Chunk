@@ -2083,13 +2083,14 @@ var map = {
 	"./blocks/message/message.css": 25,
 	"./views/viewsCss/backButton.css": 26,
 	"./views/viewsCss/canvas.css": 27,
-	"./views/viewsCss/commonView.css": 28,
-	"./views/viewsCss/form.css": 29,
-	"./views/viewsCss/login.css": 30,
-	"./views/viewsCss/menu.css": 31,
-	"./views/viewsCss/section.css": 32,
-	"./views/viewsCss/signUp.css": 33,
-	"./views/viewsCss/view.css": 34
+	"./views/viewsCss/commonText.css": 28,
+	"./views/viewsCss/commonView.css": 29,
+	"./views/viewsCss/form.css": 30,
+	"./views/viewsCss/login.css": 31,
+	"./views/viewsCss/menu.css": 32,
+	"./views/viewsCss/section.css": 33,
+	"./views/viewsCss/signUp.css": 34,
+	"./views/viewsCss/view.css": 35
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -2163,6 +2164,12 @@ webpackContext.id = 24;
 
 /***/ }),
 /* 34 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
