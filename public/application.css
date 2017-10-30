@@ -137,6 +137,7 @@
 
 .form-block__button:focus {
     /*background: #8b2b03; !* Цвет фона *!*/
+    outline: none;
     opacity: 1;
     border: 0.1em solid #ff8700 !important; /* Параметры рамки */
 }

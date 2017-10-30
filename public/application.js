@@ -1674,7 +1674,9 @@ class UserService {
 		if (this.isLoggedIn()) {
 			this.user = null;
 			this.users = [];
-			__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/exit').catch(function (err) {
+			__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/exit').then(function (resp) {
+				return this.getDataFetch();
+			}.bind(this)).catch(function (err) {
 				//получить ошибки с сервера
 				console.log(err.errorMessage); //удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
 			});
