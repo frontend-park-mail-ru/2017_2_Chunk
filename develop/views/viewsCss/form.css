@@ -10,7 +10,7 @@
 
 .form-block__input {
     font-family: "Comic Sans MS";
-    font-size:calc(12px + 1.5vw);
+    font-size:calc(12px + 1.5vh);
     color: #ff8700;
 
     background-color: transparent;

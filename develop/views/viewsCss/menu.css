@@ -5,9 +5,8 @@
 
 
 .menu__button {
-
     border: 0.05em solid white;
-    font-size:calc(12px + 1.5vw);
+    font-size:calc(16px + 1.5vh);
     text-align: center;
     opacity: 1;
     width: 10em;

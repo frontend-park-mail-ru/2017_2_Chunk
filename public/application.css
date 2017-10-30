@@ -13,7 +13,7 @@
     transition: all .12s;
 
     text-align: center;
-    font-size: 4vh;
+    font-size: calc(16px + 1.5vh);
     color: white;
     opacity: 0.8;
     border: 0.1em solid transparent;
@@ -81,7 +81,7 @@
 
 .form-block__input {
     font-family: "Comic Sans MS";
-    font-size:calc(12px + 1.5vw);
+    font-size:calc(12px + 1.5vh);
     color: #ff8700;
 
     background-color: transparent;
@@ -152,9 +152,8 @@
 
 
 .menu__button {
-
     border: 0.05em solid white;
-    font-size:calc(12px + 1.5vw);
+    font-size:calc(16px + 1.5vh);
     text-align: center;
     opacity: 1;
     width: 10em;
@@ -268,7 +267,7 @@ A:hover {
 
 div.profile {
     font-family: cursive;
-    font-size:calc(12px + 1.5vw);
+    font-size:calc(12px + 1.5vh);
     color: #ff8700;
     position: fixed;
     max-width: 300px;
@@ -281,7 +280,7 @@ div.profile {
 ::-webkit-input-placeholder {
     color: #fff;
     /*font-weight: bold;*/
-    font-size:calc(8px + 1.5vw);
+    font-size:calc(8px + 1.5vh);
 }
 ::-moz-placeholder {
     color: #c0392b;
