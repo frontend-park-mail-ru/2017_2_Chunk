@@ -41,7 +41,7 @@ export default class UserService {
 
 			resolve(Http.FetchPost('/user/sign_up', {username, email, password})
 				.then(function(resp) {
-					console.log("user name " + resp.username);
+					console.log("username: " + resp.username);
 					this.user = resp;
 					return resp;
 				}.bind(this))
@@ -78,7 +78,7 @@ export default class UserService {
 			}
 			resolve(Http.FetchPost('/user/sign_in', {login, password})
 				.then(function(resp) {
-					console.log("good response status" + resp.username);
+					console.log("username: " + resp.username);
 					this.user = resp;
 					return resp;
 				}.bind(this))
@@ -121,7 +121,7 @@ export default class UserService {
 
 			resolve(Http.FetchPost('/user/update', {username, email, password, old_password})
 				.then(function(resp) {
-					debugger;
+					this.user = resp;
 					console.log("username: " + resp.username);
 					return resp;
 				}.bind(this))

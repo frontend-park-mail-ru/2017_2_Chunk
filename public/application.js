@@ -1440,7 +1440,7 @@ class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 			this.form.reset();
 			this.message.clear();
 			this.message.hide();
-			this.bus.emit("auth");
+			this.bus.emit("auth", resp.username);
 			this.router.goTo("/menu");
 		}.bind(this)).catch(function (err) {
 			this.setErrorText(err);
@@ -1560,7 +1560,7 @@ class UserService {
 			}
 
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_up', { username, email, password }).then(function (resp) {
-				console.log("user name " + resp.username);
+				console.log("username: " + resp.username);
 				this.user = resp;
 				return resp;
 			}.bind(this)).then(function (resp) {
@@ -1594,7 +1594,7 @@ class UserService {
 				throw new Error("Логин и пароль не могут совпадать!", null);
 			}
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_in', { login, password }).then(function (resp) {
-				console.log("good response status" + resp.username);
+				console.log("username: " + resp.username);
 				this.user = resp;
 				return resp;
 			}.bind(this)).catch(function (err) {
@@ -1636,7 +1636,7 @@ class UserService {
 			}
 
 			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/update', { username, email, password, old_password }).then(function (resp) {
-				debugger;
+				this.user = resp;
 				console.log("username: " + resp.username);
 				return resp;
 			}.bind(this)).catch(function (err) {
