@@ -12,7 +12,7 @@ export default class updateView extends CommonView {
 				size: "128",
 				name: "username",
 				placeholder: "Name",
-				required: "required",
+				required: "",
 				class: "form-block__input",
 			}},
 			{attrs: {
@@ -20,7 +20,7 @@ export default class updateView extends CommonView {
 				size: "128",
 				name: "email",
 				placeholder: "Email",
-				required: "required",
+				required: "",
 				class: "form-block__input",
 			}},
 			{attrs: {
@@ -28,7 +28,7 @@ export default class updateView extends CommonView {
 				size: "128",
 				name: "password",
 				placeholder: "New password",
-				required: "required",
+				required: "",
 				class: "form-block__input",
 			}},
 			{attrs: {

@@ -6,13 +6,13 @@ export default class MenuView extends CommonView {
 	constructor(eventBus, router) {
 		const menuElems = {
 			profile: Block.Create('div', {'data-section': 'profile'}, ['profile', 'auth'], ''),
-			play: Block.Create('a', {'data-section': 'play', 'href': '/game'}, ['button', 'auth', 'menu__button'], 'Играть'),
-			signup: Block.Create('a', {'data-section': 'signup', 'href': '/signup'}, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
-			login: Block.Create('a', {'data-section': 'login', 'href': '/login'}, ['button', 'unauth', 'menu__button'], 'Вход'),
-			update: Block.Create('a', {'data-section': 'update', 'href': '/update'}, ['button', 'auth', 'menu__button'], 'Настройки'),
-			rules: Block.Create('a', {'data-section': 'rules', 'href': '/rules'}, ['button', "every-available", 'menu__button'], 'Правила'),
-			scores: Block.Create('a', {'data-section': 'scores', 'href': '/scoreboard'}, ['button', 'unauth', 'menu__button'], 'Таблица лидеров'),
-			exit: Block.Create('a', {'data-section': 'exit', 'href': '/exit'}, ['button', 'auth','menu__button'], 'Выход'),
+			play: Block.Create('a', {'data-section': 'play', 'href': '/game'}, ['button', 'auth', 'menu__button'], 'Play'),
+			signup: Block.Create('a', {'data-section': 'signup', 'href': '/signup'}, ['button', 'unauth', 'menu__button'], 'Sign up'),
+			login: Block.Create('a', {'data-section': 'login', 'href': '/login'}, ['button', 'unauth', 'menu__button'], 'Login'),
+			update: Block.Create('a', {'data-section': 'update', 'href': '/update'}, ['button', 'auth', 'menu__button'], 'Profile'),
+			rules: Block.Create('a', {'data-section': 'rules', 'href': '/rules'}, ['button', "every-available", 'menu__button'], 'Rules'),
+			scores: Block.Create('a', {'data-section': 'scores', 'href': '/scoreboard'}, ['button', 'unauth', 'menu__button'], 'Scoreboard'),
+			exit: Block.Create('a', {'data-section': 'exit', 'href': '/exit'}, ['button', 'auth','menu__button'], 'Exit'),
 		};
 		super(menuElems);
 
@@ -43,6 +43,7 @@ export default class MenuView extends CommonView {
 		}.bind(this));
 
 
+		this.hide();
 		this.bus.emit("unauth");
 	}
 }

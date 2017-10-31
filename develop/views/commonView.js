@@ -14,6 +14,8 @@ export default class CommonView extends Block {
 		for (const block in this.elements) {
 			this.append(this.elements[block]);
 		}
+
+		this.hide();
 	}
 
 	show() {

@@ -157,13 +157,10 @@ eventBus.on("openGame", function () {
 	// 	}, 500);
 	// }
 	// else {
-		menuView.hide();
-		backButtonView.hide();
-		scoreboardView.hide();
-		profileView.hide();
-		loginView.hide();
-		signUpView.hide();
-		updateView.hide();
+	Views.forEach((view) => {
+		view.hide();
+	});
+		backButtonView.show();
 		canvas.show();
 		game.start(() => router.goTo('/menu'));  //выход в меню
 	// }

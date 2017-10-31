@@ -14,20 +14,20 @@ export default class Router {
 				event: "exit"
 			},
 			{
-				url: "/scoreboard",
-				event: "openScoreboard"
-			},
-			{
-				url: "/rules",
-				event: "openRules"
+				url: "/game",
+				event: "openGame"
 			},
 			{
 				url: "/update",
 				event: "openUpdate"
 			},
 			{
-				url: "/game",
-				event: "openGame"
+				url: "/scoreboard",
+				event: "openScoreboard"
+			},
+			{
+				url: "/rules",
+				event: "openRules"
 			},
 			{
 				url: "/signup",
@@ -61,66 +61,77 @@ export default class Router {
 		window.onpopstate = function() {
 			console.log(location.pathname);
 			this.changeState(location.pathname);
-			return;
 		}.bind(this);
 	}
 
 	start() {
 		this._routes = [];
 		this.counter = 0;
-		this.routes.forEach(function(route) {
+		this.routes.forEach(function (route) {
 			this._routes.push({
 				url_pattern: route.url,
-				emit: function(event) {this.bus.emit(event)}.bind(this)
+				emit: function (event) {
+					this.bus.emit(event)
+				}.bind(this)
 			});
 		}.bind(this));
 
 
 		this.userService.getDataFetch()
-			.then(function(resp) {
+			.then(function (resp) {
 				this.bus.emit("auth", resp.username);
-				for (let i = 0; i < 6; i++) {
-					if(location.pathname.match(this._routes[i].url_pattern)) {
-						window.history.pushState({page: this.routes[i].url}, this.routes[i].url, this.routes[i].url);
-						this._routes[i].emit(this.routes[i].event);
-						return;
-					}
-				}
-				window.history.pushState({page: this.routes[0].url}, this.routes[0].url, this.routes[0].url);
-				this.goTo(this._routes[0].url_pattern);
-				return resp;
-			}.bind(this))
 
-			.catch(function(err) {
-				this._routes.forEach(function (route, number) {
-					if (location.pathname.match(route.url_pattern)) {//match вернет null при отсутсвии совпадения
-						window.history.pushState({page: this.routes[number].url}, route.url_pattern, route.url_pattern);
-						route.emit(this.routes[number].event);
-					}
-				}.bind(this))
-			}.bind(this));
+				const slice_Routes = this._routes.slice(0, 6);
+				const idx = slice_Routes.findIndex(function (_route) {
+					return location.pathname.match(_route.url_pattern);
+				});
+				if (idx > -1) {
+					const _route = slice_Routes[idx];
+					window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+					this.changeState(_route.url_pattern);
+				}
+				else {
+					const _route = this._routes[0];
+					window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+					this.changeState(this.routes[0].url);
+				}
+			}.bind(this))
+			.catch(function (err) {
+				this.bus.emit("unauth");
+				const slice_Routes = this._routes.slice(4);
+				const idx = slice_Routes.findIndex(function (_route) {
+					return location.pathname.match(_route.url_pattern);
+				});
+				if (idx > -1) {
+					const _route = slice_Routes[idx];
+					window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+					this.changeState(_route.url_pattern);
+				}
+				else {
+					const _route = this._routes[0];
+					window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+					this.changeState(this.routes[0].url);
+				}
+			}.bind(this))
 	}
 
 
 	goTo(path) {
-		this._routes.forEach((route, number) => {
-			if(path.match(route.url_pattern)) {
-				window.history.pushState({page: "bla"}, "bla", route.url_pattern);
-				route.emit(this.routes[number].event);
-				return;
-			}
+		const idx = this._routes.findIndex((_route) => {
+			return path.match(_route.url_pattern)
 		});
+		window.history.pushState({page: this.routes[idx].url}, this.routes[idx].url, this.routes[idx].url);
+		this._routes[idx].emit(this.routes[idx].event);
 	}
 
 
 	//для кнопки назад и вперед
 	changeState(path) {
-		this._routes.forEach((route, number) => {
-			if(path.match(route.url_pattern)) {
-				route.emit(this.routes[number].event);
-				return;
-			}
+		const idx = this._routes.findIndex((_route) => {
+			return path.match(_route.url_pattern)
 		});
+		const _route = this._routes[idx];
+		_route.emit(this.routes[idx].event);
 	}
 }
 

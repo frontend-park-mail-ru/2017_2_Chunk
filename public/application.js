@@ -197,6 +197,8 @@ class CommonView extends __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__["d
 		for (const block in this.elements) {
 			this.append(this.elements[block]);
 		}
+
+		this.hide();
 	}
 
 	show() {
@@ -923,13 +925,13 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	constructor(eventBus, router) {
 		const menuElems = {
 			profile: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('div', { 'data-section': 'profile' }, ['profile', 'auth'], ''),
-			play: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'play', 'href': '/game' }, ['button', 'auth', 'menu__button'], 'Играть'),
-			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'signup', 'href': '/signup' }, ['button', 'unauth', 'menu__button'], 'Зарегистрироваться'),
-			login: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'login', 'href': '/login' }, ['button', 'unauth', 'menu__button'], 'Вход'),
-			update: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'update', 'href': '/update' }, ['button', 'auth', 'menu__button'], 'Настройки'),
-			rules: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'rules', 'href': '/rules' }, ['button', "every-available", 'menu__button'], 'Правила'),
-			scores: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'scores', 'href': '/scoreboard' }, ['button', 'unauth', 'menu__button'], 'Таблица лидеров'),
-			exit: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'exit', 'href': '/exit' }, ['button', 'auth', 'menu__button'], 'Выход')
+			play: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'play', 'href': '/game' }, ['button', 'auth', 'menu__button'], 'Play'),
+			signup: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'signup', 'href': '/signup' }, ['button', 'unauth', 'menu__button'], 'Sign up'),
+			login: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'login', 'href': '/login' }, ['button', 'unauth', 'menu__button'], 'Login'),
+			update: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'update', 'href': '/update' }, ['button', 'auth', 'menu__button'], 'Profile'),
+			rules: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'rules', 'href': '/rules' }, ['button', "every-available", 'menu__button'], 'Rules'),
+			scores: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'scores', 'href': '/scoreboard' }, ['button', 'unauth', 'menu__button'], 'Scoreboard'),
+			exit: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'exit', 'href': '/exit' }, ['button', 'auth', 'menu__button'], 'Exit')
 		};
 		super(menuElems);
 
@@ -951,6 +953,7 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 			}
 		}.bind(this));
 
+		this.hide();
 		this.bus.emit("unauth");
 	}
 }
@@ -1367,21 +1370,21 @@ class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 				size: "128",
 				name: "username",
 				placeholder: "Name",
-				required: "required",
+				required: "",
 				class: "form-block__input"
 			} }, { attrs: {
 				type: "email",
 				size: "128",
 				name: "email",
 				placeholder: "Email",
-				required: "required",
+				required: "",
 				class: "form-block__input"
 			} }, { attrs: {
 				type: "password",
 				size: "128",
 				name: "password",
 				placeholder: "New password",
-				required: "required",
+				required: "",
 				class: "form-block__input"
 			} }, { attrs: {
 				type: "password",
@@ -1743,17 +1746,17 @@ class Router {
 			url: "/exit",
 			event: "exit"
 		}, {
+			url: "/game",
+			event: "openGame"
+		}, {
+			url: "/update",
+			event: "openUpdate"
+		}, {
 			url: "/scoreboard",
 			event: "openScoreboard"
 		}, {
 			url: "/rules",
 			event: "openRules"
-		}, {
-			url: "/update",
-			event: "openUpdate"
-		}, {
-			url: "/game",
-			event: "openGame"
 		}, {
 			url: "/signup",
 			event: "openSignUp"
@@ -1780,7 +1783,6 @@ class Router {
 		window.onpopstate = function () {
 			console.log(location.pathname);
 			this.changeState(location.pathname);
-			return;
 		}.bind(this);
 	}
 
@@ -1798,45 +1800,53 @@ class Router {
 
 		this.userService.getDataFetch().then(function (resp) {
 			this.bus.emit("auth", resp.username);
-			for (let i = 0; i < 6; i++) {
-				if (location.pathname.match(this._routes[i].url_pattern)) {
-					window.history.pushState({ page: this.routes[i].url }, this.routes[i].url, this.routes[i].url);
-					this._routes[i].emit(this.routes[i].event);
-					return;
-				}
+
+			const slice_Routes = this._routes.slice(0, 6);
+			const idx = slice_Routes.findIndex(function (_route) {
+				return location.pathname.match(_route.url_pattern);
+			});
+			if (idx > -1) {
+				const _route = slice_Routes[idx];
+				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+				this.changeState(_route.url_pattern);
+			} else {
+				const _route = this._routes[0];
+				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+				this.changeState(this.routes[0].url);
 			}
-			window.history.pushState({ page: this.routes[0].url }, this.routes[0].url, this.routes[0].url);
-			this.goTo(this._routes[0].url_pattern);
-			return resp;
 		}.bind(this)).catch(function (err) {
-			this._routes.forEach(function (route, number) {
-				if (location.pathname.match(route.url_pattern)) {
-					//match вернет null при отсутсвии совпадения
-					window.history.pushState({ page: this.routes[number].url }, route.url_pattern, route.url_pattern);
-					route.emit(this.routes[number].event);
-				}
-			}.bind(this));
+			this.bus.emit("unauth");
+			const slice_Routes = this._routes.slice(4);
+			const idx = slice_Routes.findIndex(function (_route) {
+				return location.pathname.match(_route.url_pattern);
+			});
+			if (idx > -1) {
+				const _route = slice_Routes[idx];
+				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+				this.changeState(_route.url_pattern);
+			} else {
+				const _route = this._routes[0];
+				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+				this.changeState(this.routes[0].url);
+			}
 		}.bind(this));
 	}
 
 	goTo(path) {
-		this._routes.forEach((route, number) => {
-			if (path.match(route.url_pattern)) {
-				window.history.pushState({ page: "bla" }, "bla", route.url_pattern);
-				route.emit(this.routes[number].event);
-				return;
-			}
+		const idx = this._routes.findIndex(_route => {
+			return path.match(_route.url_pattern);
 		});
+		window.history.pushState({ page: this.routes[idx].url }, this.routes[idx].url, this.routes[idx].url);
+		this._routes[idx].emit(this.routes[idx].event);
 	}
 
 	//для кнопки назад и вперед
 	changeState(path) {
-		this._routes.forEach((route, number) => {
-			if (path.match(route.url_pattern)) {
-				route.emit(this.routes[number].event);
-				return;
-			}
+		const idx = this._routes.findIndex(_route => {
+			return path.match(_route.url_pattern);
 		});
+		const _route = this._routes[idx];
+		_route.emit(this.routes[idx].event);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = Router;
@@ -2054,13 +2064,10 @@ eventBus.on("openGame", function () {
 	// 	}, 500);
 	// }
 	// else {
-	menuView.hide();
-	backButtonView.hide();
-	scoreboardView.hide();
-	profileView.hide();
-	loginView.hide();
-	signUpView.hide();
-	updateView.hide();
+	Views.forEach(view => {
+		view.hide();
+	});
+	backButtonView.show();
 	canvas.show();
 	game.start(() => router.goTo('/menu')); //выход в меню
 	// }
