@@ -1411,7 +1411,6 @@ class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		this.message.clear();
 		this.message.hide();
 		this.append(this.message);
-
 		this.hide();
 
 		this.el.addEventListener("submit", function (event) {

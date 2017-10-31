@@ -58,7 +58,6 @@ export default class updateView extends CommonView {
 		this.message.clear();
 		this.message.hide();
 		this.append(this.message);
-
 		this.hide();
 
 		this.el.addEventListener("submit", function(event) {
