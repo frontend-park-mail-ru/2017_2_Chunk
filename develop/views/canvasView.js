@@ -27,15 +27,4 @@ export default class CanvasView extends CommonView {
 		this.canvas2.el.style.setProperty("position", "absolute");
 		this.hide();
 	}
-
-	show() {
-		setTimeout(() => {this.el.style.setProperty("display", "flex");}, 0);
-		setTimeout(() => {this.el.classList.remove("hidden");}, 0)
-	}
-
-	hide() {
-		this.el.classList.add("hidden",);
-		setTimeout(() => {this.el.style.setProperty("display", "none");}, 0);
-	}
-
 }

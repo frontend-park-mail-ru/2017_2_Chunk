@@ -1489,23 +1489,6 @@ class CanvasView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		this.canvas2.el.style.setProperty("position", "absolute");
 		this.hide();
 	}
-
-	show() {
-		setTimeout(() => {
-			this.el.style.setProperty("display", "flex");
-		}, 0);
-		setTimeout(() => {
-			this.el.classList.remove("hidden");
-		}, 0);
-	}
-
-	hide() {
-		this.el.classList.add("hidden");
-		setTimeout(() => {
-			this.el.style.setProperty("display", "none");
-		}, 0);
-	}
-
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = CanvasView;
 
