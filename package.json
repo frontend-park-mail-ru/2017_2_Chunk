@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/npm/npm.git"
+    "url": "https://github.com/frontend-park-mail-ru/2017_2_Chunk"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -47,7 +47,7 @@
   "scripts": {
     "compile-pug": "pug --client --no-debug ./public/templates/recordIndex.pug",
     "build": "babel public -d public_ES",
-    "start": "./node_modules/.bin/webpack && node ./server/index.js",
+    "start": "node ./server/index.js",
     "lint": "eslint ./**/*.js"
   }
 }
