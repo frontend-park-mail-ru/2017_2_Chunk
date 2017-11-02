@@ -5,14 +5,15 @@ export default class EventBus {
 		this.listeners = {};
 	}
 
+
 	on(event, listener) {
 		this.listeners[event] = this.listeners[event] || [];
 		this.listeners[event].push(listener);
-		console.log("ON emitBus");
 	}
 
+
 	emit(event, data) {
-		this.listeners[event].forEach(function (listener) {
+		this.listeners[event].forEach((listener) => {
 			listener(data);
 		})
 	}

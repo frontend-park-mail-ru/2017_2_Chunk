@@ -72,17 +72,10 @@ Views.push(backButtonView);
 Views.push(rulesView);
 Views.push(scoreboardView);
 Views.push(canvas);
-// backButtonView.on("click", function(event) {
-// 	window.history.back();
-// 	event.preventDefault();
-// 	eventBus.emit("openMenu");
-// });
-
 
 
 
 eventBus.on("openSignUp", function() {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/signup");
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -92,7 +85,6 @@ eventBus.on("openSignUp", function() {
 
 
 eventBus.on("openLogin", function() {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -102,7 +94,6 @@ eventBus.on("openLogin", function() {
 
 
 eventBus.on("openUpdate", function() {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -112,7 +103,6 @@ eventBus.on("openUpdate", function() {
 
 
 eventBus.on("openRules", function() {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/rules");
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -122,7 +112,6 @@ eventBus.on("openRules", function() {
 
 
 eventBus.on("openMenu", function() {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -130,17 +119,14 @@ eventBus.on("openMenu", function() {
 }.bind(this));
 
 
-//отследить ексепшены при отсутствии интернета
 eventBus.on("exit", function () {
 	userService.logout();
-	profileView.hide();
 	eventBus.emit("unauth");
 	router.goTo('/menu');
 });
 
 
 eventBus.on("openScoreboard", function () {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -180,6 +166,3 @@ app
 
 
 router.start();
-
-
-

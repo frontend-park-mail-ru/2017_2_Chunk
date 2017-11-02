@@ -13,10 +13,10 @@ module.exports = {
 		path: __dirname + '/public',
 	},
 
-	// watch: NODE_ENV === 'development',
-	watch: false,
+	watch: NODE_ENV === 'development',
+	// watch: false,
 	watchOptions: {
-		aggregateTimeout: 100
+		aggregateTimeout: 1000
 	},
 
 	devtool: NODE_ENV === 'development' ? "source-map" : null,

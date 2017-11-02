@@ -14,14 +14,12 @@ export default class CanvasView extends CommonView {
 		this.el.style.setProperty("border", "none");
 		this.el.style.setProperty("background-image", "./image/cats.jpg");
 
-
 		this.canvas1 = canvas1;
 		this.canvas2 = canvas2;
 
 		this.canv = this.canvas2.el;
 		this.ctx1 = this.canvas1.el.getContext('2d');
 		this.ctx2 = this.canvas2.el.getContext('2d');
-
 
 		this.canvas1.el.style.setProperty("position", "absolute");
 		this.canvas2.el.style.setProperty("position", "absolute");
