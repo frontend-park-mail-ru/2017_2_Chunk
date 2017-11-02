@@ -39,6 +39,9 @@ export default class LoginView extends CommonView {
 	async onSubmit(formData) {
 		const resp = await this.userService.login(formData.username, formData.password);
 		if (resp.ok) {
+			this.form.reset();
+			this.message.clear();
+			this.message.hide();
 			this.bus.emit("auth", resp.json.username);
 			this.bus.emit("openMenu");
 		}

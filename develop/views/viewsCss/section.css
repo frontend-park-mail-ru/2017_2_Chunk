@@ -7,10 +7,9 @@ section {
     /*font-size: 4vmax;*/
     color: #ff8700;
 
-    /*width: 12em;*/
-    /*height: 3em;*/
     min-width: 300px;
-    /*min-height: 250px;*/
+    font-family: "Comic Sans MS";
+    font-size:calc(14px + 1.5vh);
     margin: 1.5% auto;
     border-radius: 0.8em;
     border: ridge #ff8700;

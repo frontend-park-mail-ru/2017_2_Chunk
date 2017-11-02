@@ -81,7 +81,7 @@ export default class UserService {
 			return response;
 		}
 		if (password.length < 6) {
-			response.message = "Длина логина не должна быть не меньше 6 символов!";
+			response.message = "Попробуй еще раз! Используйте что-то поумнее";
 			return response;
 		}
 		if (password === login) {
@@ -91,7 +91,7 @@ export default class UserService {
 		const resp = await Http.FetchPost('/user/sign_in', {login, password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
-			response.message = response.json;
+			response.message = response.json.errorMessage;
 			return response;
 		}
 		response.ok = true;

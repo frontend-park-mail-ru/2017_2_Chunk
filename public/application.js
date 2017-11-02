@@ -1091,6 +1091,9 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	async onSubmit(formData) {
 		const resp = await this.userService.login(formData.username, formData.password);
 		if (resp.ok) {
+			this.form.reset();
+			this.message.clear();
+			this.message.hide();
 			this.bus.emit("auth", resp.json.username);
 			this.bus.emit("openMenu");
 		} else {
@@ -1609,7 +1612,7 @@ class UserService {
 			return response;
 		}
 		if (password.length < 6) {
-			response.message = "Длина логина не должна быть не меньше 6 символов!";
+			response.message = "Попробуй еще раз! Используйте что-то поумнее";
 			return response;
 		}
 		if (password === login) {
@@ -1619,7 +1622,7 @@ class UserService {
 		const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_in', { login, password });
 		response.json = await resp.json();
 		if (resp.status >= 400) {
-			response.message = response.json;
+			response.message = response.json.errorMessage;
 			return response;
 		}
 		response.ok = true;
