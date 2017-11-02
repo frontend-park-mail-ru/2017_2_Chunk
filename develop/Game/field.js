@@ -7,7 +7,7 @@ const indent = 150;
 
 export default class Field {
 
-	constructor (count, canvas1, canvas2) {
+	constructor (count, canvas, eventBus) {
 		this.count = count;
 		let imgUrl = [];
 		imgUrl.push("images/cube.png");
@@ -18,8 +18,10 @@ export default class Field {
 		let imgs = [];
 		let ok = 0;
 
-		this.canvasForCubes = canvas1;
-		this.canvasForFigure = canvas2;
+		this.canvasForCubes = canvas.canvasForCubes;
+		this.canvasForFigure = canvas.canvasForFigure;
+		this.winDiv = canvas.winDiv;
+		this.bus = eventBus;
 
 		for(let i = 0; i < imgUrl.length; i++) {
 			let img = new Image();
@@ -123,8 +125,9 @@ export default class Field {
 		if (this.arrayOfFigures[playerID+2] > this.arrayOfFigures[playerID+3]) {
 			win = true;
 		}
-		if (win) alert("Вы выиграли!! :)");
-		else alert("Вы проиграли :(");
+		this.bus.emit("endOfGame", win);
+		// if (win) alert("Вы выиграли!! :)");
+		// else alert("Вы проиграли :(");
 	}
 
 	deleteFigure(idx, idy) {

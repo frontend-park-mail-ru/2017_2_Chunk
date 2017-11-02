@@ -494,7 +494,7 @@ const indent = 150;
 
 class Field {
 
-	constructor(count, canvas1, canvas2) {
+	constructor(count, canvas, eventBus) {
 		this.count = count;
 		let imgUrl = [];
 		imgUrl.push("images/cube.png");
@@ -505,8 +505,10 @@ class Field {
 		let imgs = [];
 		let ok = 0;
 
-		this.canvasForCubes = canvas1;
-		this.canvasForFigure = canvas2;
+		this.canvasForCubes = canvas.canvasForCubes;
+		this.canvasForFigure = canvas.canvasForFigure;
+		this.winDiv = canvas.winDiv;
+		this.bus = eventBus;
 
 		for (let i = 0; i < imgUrl.length; i++) {
 			let img = new Image();
@@ -608,7 +610,9 @@ class Field {
 		if (this.arrayOfFigures[playerID + 2] > this.arrayOfFigures[playerID + 3]) {
 			win = true;
 		}
-		if (win) alert("Вы выиграли!! :)");else alert("Вы проиграли :(");
+		this.bus.emit("endOfGame", win);
+		// if (win) alert("Вы выиграли!! :)");
+		// else alert("Вы проиграли :(");
 	}
 
 	deleteFigure(idx, idy) {
@@ -667,222 +671,7 @@ class Field {
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_http__ = __webpack_require__(4);
-
-
-
-
-
-const x = 425;
-const y = 230;
-const sq = Math.sqrt(2) / 2;
-const side = 66;
-
-const width = 6;
-const height = 6;
-const maxPlayers = 2;
-
-function* generatorId(array) {
-	let i = 0;
-	while (i < array.length) {
-		yield array[i].playerID;
-		i++;
-		if (i === array.length) i = 0;
-	}
-}
-
-class Game {
-
-	constructor(canvas1, canvas2, canv) {
-		this.canvasForCubes = canvas1;
-		this.canvasForFigure = canvas2;
-		this.canv = canv;
-
-		this.gameID = 0;
-		this.players = [];
-		this.playerID = 0;
-		this.currentPlayerID = 0;
-		this.gameOver = false;
-		this.arrayOfFigures = [];
-
-		this.xFirstPlay = -1;
-		this.yFirstPlay = -1;
-		this.xSecondPlay = -1;
-		this.ySecondPlay = -1;
-
-		this.gen = 0;
-
-		this.field = new __WEBPACK_IMPORTED_MODULE_0__field_js__["default"](6, this.canvasForCubes, this.canvasForFigure);
-	}
-
-	gameStart() {
-		return new Promise(function (resolve, reject) {
-			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/single/create', { width, height, maxPlayers }).then(function (resp) {
-				this.gameID = resp.gameID;
-				this.gameComplete();
-				return resp;
-			}.bind(this)).catch(function (err) {
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
-	}
-
-	gameComplete() {
-		return __WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchGet('/game/complete?gameID=' + this.gameID).then(function (resp) {
-			this.players = resp.players;
-			this.gen = generatorId(this.players);
-			this.playerID = this.players[0].playerID;
-			this.currentPlayerID = resp.currentPlayerID;
-			this.gameOver = resp.gameOver;
-			this.arrayOfFigures = resp.field;
-			this.setFiguresByArray(this.arrayOfFigures);
-			this.field.drawAllFigures();
-			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-		}.bind(this)).catch(function (err) {
-			this.user = null;
-			console.log(err.statusText);
-			throw new Error("Can not get response =(");
-		}.bind(this));
-	}
-
-	gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
-		this.exit = exit;
-		let gameID = this.gameID;
-		let playerID = this.playerID;
-		return new Promise(function (resolve, reject) {
-			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/play', { x1, x2, y1, y2, gameID, playerID, currentPlayerID }).then(function (resp) {
-				this.players = resp.players;
-				this.currentPlayerID = resp.currentPlayerID;
-				this.gameOver = resp.gameOver;
-				this.arrayOfFigures = resp.field;
-				this.field.deleteAllFigure();
-				this.field.clearFigures();
-				this.setFiguresByArray(this.arrayOfFigures);
-				this.field.drawAllFigures();
-				this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-				this.field.deleteAllBrightCube();
-				this.field.drawField();
-				if (this.gameOver === true) {
-					this.field.gameOver(this.playerID);
-					this.exit();
-				}
-				this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
-				return resp;
-			}.bind(this)).catch(function (err) {
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
-	}
-
-	gameStatus(gameID, playerID, currentPlayerID, exit) {
-		this.exit = exit;
-		return new Promise(function (resolve, reject) {
-			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/status', { gameID, playerID, currentPlayerID }).then(function (resp) {
-				this.players = resp.players;
-				this.currentPlayerID = resp.currentPlayerID;
-				this.gameOver = resp.gameOver;
-				this.arrayOfFigures = resp.field;
-				this.field.deleteAllFigure();
-				this.field.clearFigures();
-				this.setFiguresByArray(this.arrayOfFigures);
-				this.field.drawAllFigures();
-				this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-
-				if (this.gameOver === true) {
-					this.field.gameOver(this.playerID);
-					this.exit();
-				}
-				return resp;
-			}.bind(this)).catch(function (err) {
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
-	}
-
-	start(exit) {
-		this.exit = exit;
-		this.field.deleteAllFigure();
-		this.field.clearFigures();
-		this.field.drawField();
-		this.gameStart();
-
-		this.canv.addEventListener('click', { handleEvent: this.updateCanvas.bind(this), exit: this.exit }, false);
-	}
-
-	setFiguresByArray(array) {
-		for (let i = 0; i < width; i++) {
-			for (let j = 0; j < height; j++) {
-				let model = 0;
-				if (array[i][j] >= 0) {
-					model = array[i][j] + 2;
-					this.field.setFigure(i, j, model);
-				}
-			}
-		}
-	}
-
-	findOffset(obj) {
-		let curX = 0;
-		let curY = 0;
-		if (obj.offsetParent) {
-			do {
-				curX += obj.offsetLeft;
-				curY += obj.offsetTop;
-			} while (obj = obj.offsetParent);
-			return { x: curX, y: curY };
-		}
-	}
-
-	updateCanvas(e) {
-		let pos = this.findOffset(this.canv);
-		let mouseX = e.pageX - pos.x;
-		let mouseY = e.pageY - pos.y;
-		let XX = (mouseX - x + mouseY - y) * sq;
-		let YY = (mouseY - mouseX + x - y) * sq;
-
-		if (XX < side * width && YY < side * height && XX > 0 && YY > 0) {
-			let idx;
-			let idy;
-			for (let i = 0; i < width; i++) {
-				if (XX > side * i) idx = i;
-			}
-			for (let i = 0; i < height; i++) {
-				if (YY > side * i) idy = i;
-			}
-
-			if (this.field.findById(idx, idy).figure === this.currentPlayerID + 2) {
-				this.field.deleteAllBrightCube();
-				this.field.brightCubes(idx, idy);
-				this.field.drawField();
-
-				this.xFirstPlay = idx;
-				this.yFirstPlay = idy;
-			}
-			if (this.field.findById(idx, idy).brightness === 1) {
-				this.xSecondPlay = idx;
-				this.ySecondPlay = idy;
-
-				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
-			}
-		}
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = Game;
-;
-
-/***/ }),
+/* 9 */,
 /* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1443,21 +1232,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 class CanvasView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
-	constructor() {
-		const canvas1 = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('canvas', { 'id': '1', 'width': '850', 'height': '850' }, ['canv1'], "");
-		const canvas2 = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('canvas', { 'id': '2', 'width': '850', 'height': '850' }, ['canv2'], "");
+	constructor(eventMarshrutka) {
+		const canvas1 = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('canvas', { 'width': '850', 'height': '850' }, ['canv1'], "");
+		const canvas2 = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('canvas', { 'width': '850', 'height': '850' }, ['canv2'], "");
+
+		const winDiv = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('div', {}, ["winDiv"], "");
 		// canvas.style.setProperty("position", "absolute");
-		super([canvas1, canvas2]);
+		super([canvas1, canvas2, winDiv]);
 
 		this.el.style.setProperty("border", "none");
 		this.el.style.setProperty("background-image", "./image/cats.jpg");
 
 		this.canvas1 = canvas1;
 		this.canvas2 = canvas2;
+		this.winDiv = winDiv;
+		this.winDiv.hide();
 
 		this.canv = this.canvas2.el;
-		this.ctx1 = this.canvas1.el.getContext('2d');
-		this.ctx2 = this.canvas2.el.getContext('2d');
+		this.canvasForCubes = this.canvas1.el.getContext('2d');
+		this.canvasForFigure = this.canvas2.el.getContext('2d');
+
+		this.marshrutka = eventMarshrutka;
+		this.marshrutka.on("endOfGame", win => {
+			if (win) {
+				this.winDiv.setText("You win! =)");
+			} else {
+				this.winDiv.setText("You lose! =(");
+			}
+			this.winDiv.show();
+		});
 
 		this.canvas1.el.style.setProperty("position", "absolute");
 		this.canvas2.el.style.setProperty("position", "absolute");
@@ -1815,7 +1618,7 @@ class Router {
 var map = {
 	"./Game/cell.js": 7,
 	"./Game/field.js": 8,
-	"./Game/gameHandler.js": 9,
+	"./Game/game.js": 51,
 	"./blocks/block/block.js": 0,
 	"./blocks/form/form.js": 2,
 	"./blocks/message/message.js": 3,
@@ -1872,7 +1675,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_user_service_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__modules_eventBus__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__modules_router__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Game_gameHandler__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Game_game__ = __webpack_require__(51);
 
 /**
  * Основной модуль работатющий со всеми объектами
@@ -1923,17 +1726,17 @@ const loginView = new __WEBPACK_IMPORTED_MODULE_2__views_loginView__["default"](
 
 const updateView = new __WEBPACK_IMPORTED_MODULE_7__views_updateView__["default"](eventBus, userService, router);
 
-const backButtonView = new __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__["default"]();
-
 const profileView = new __WEBPACK_IMPORTED_MODULE_4__views_profileView__["default"](eventBus);
 
 const rulesView = new __WEBPACK_IMPORTED_MODULE_5__views_rulesView__["default"](eventBus);
 
+const backButtonView = new __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__["default"]();
+
 const scoreboardView = new __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__["default"](eventBus, userService);
 
-const canvas = new __WEBPACK_IMPORTED_MODULE_8__views_canvasView__["default"]();
+const canvas = new __WEBPACK_IMPORTED_MODULE_8__views_canvasView__["default"](eventBus);
 
-const game = new __WEBPACK_IMPORTED_MODULE_13__Game_gameHandler__["default"](canvas.ctx1, canvas.ctx2, canvas.canv);
+const game = new __WEBPACK_IMPORTED_MODULE_13__Game_game__["default"](canvas, eventBus);
 
 const Views = [];
 Views.push(menuView);
@@ -2131,6 +1934,247 @@ webpackContext.id = 24;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_http__ = __webpack_require__(4);
+
+
+
+
+
+const x = 425;
+const y = 230;
+const sq = Math.sqrt(2) / 2;
+const side = 66;
+
+const width = 6;
+const height = 6;
+const maxPlayers = 2;
+
+function* generatorId(array) {
+	let i = 0;
+	while (i < array.length) {
+		yield array[i].playerID;
+		i++;
+		if (i === array.length) i = 0;
+	}
+}
+
+class Game {
+	constructor(canvas, eventBus) {
+		this.canvas = canvas;
+		this.canvasForCubes = canvas.canvasForCubes;
+		this.canvasForFigure = canvas.canvasForFigure;
+		this.canv = canvas.canv;
+		this.trolleybus = eventBus;
+
+		this.gameID = 0;
+		this.players = [];
+		this.playerID = 0;
+		this.currentPlayerID = 0;
+		this.gameOver = false;
+		this.arrayOfFigures = [];
+
+		this.xFirstPlay = -1;
+		this.yFirstPlay = -1;
+		this.xSecondPlay = -1;
+		this.ySecondPlay = -1;
+
+		this.gen = 0;
+
+		// this.field = new Field(6, this.canvasForCubes, this.canvasForFigure, this.canvas.winDiv);
+		this.field = new __WEBPACK_IMPORTED_MODULE_0__field_js__["default"](6, this.canvas, this.trolleybus);
+	}
+
+	gameStart() {
+		return new Promise(function (resolve, reject) {
+			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/single/create', { width, height, maxPlayers }).then(function (resp) {
+				this.gameID = resp.gameID;
+				this.gameComplete();
+				return resp;
+			}.bind(this)).catch(function (err) {
+				console.log(err.errormessage);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
+			}.bind(this)));
+		}.bind(this));
+	}
+
+	gameComplete() {
+		return __WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchGet('/game/complete?gameID=' + this.gameID).then(function (resp) {
+			this.players = resp.players;
+			this.gen = generatorId(this.players);
+			this.playerID = this.players[0].playerID;
+			this.currentPlayerID = resp.currentPlayerID;
+			this.gameOver = resp.gameOver;
+			this.arrayOfFigures = resp.field;
+			this.setFiguresByArray(this.arrayOfFigures);
+			this.field.drawAllFigures();
+			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+		}.bind(this)).catch(function (err) {
+			this.user = null;
+			console.log(err.statusText);
+			throw new Error("Can not get response =(");
+		}.bind(this));
+	}
+
+	gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
+		this.exit = exit;
+		let gameID = this.gameID;
+		let playerID = this.playerID;
+		return new Promise(function (resolve, reject) {
+			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/play', { x1, x2, y1, y2, gameID, playerID, currentPlayerID }).then(function (resp) {
+				this.players = resp.players;
+				this.currentPlayerID = resp.currentPlayerID;
+				this.gameOver = resp.gameOver;
+				this.arrayOfFigures = resp.field;
+				this.field.deleteAllFigure();
+				this.field.clearFigures();
+				this.setFiguresByArray(this.arrayOfFigures);
+				this.field.drawAllFigures();
+				this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+				this.field.deleteAllBrightCube();
+				this.field.drawField();
+				if (this.gameOver === true) {
+					this.field.gameOver(this.playerID);
+					debugger;
+					setTimeout(() => {
+						this.canvas.winDiv.hide();
+						this.exit();
+					}, 3000);
+				}
+				this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
+				return resp;
+			}.bind(this)).catch(function (err) {
+				console.log(err.errormessage);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
+			}.bind(this)));
+		}.bind(this));
+	}
+
+	gameStatus(gameID, playerID, currentPlayerID, exit) {
+		this.exit = exit;
+		return new Promise(function (resolve, reject) {
+			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/status', { gameID, playerID, currentPlayerID }).then(function (resp) {
+				this.players = resp.players;
+				this.currentPlayerID = resp.currentPlayerID;
+				this.gameOver = resp.gameOver;
+				this.arrayOfFigures = resp.field;
+				this.field.deleteAllFigure();
+				this.field.clearFigures();
+				this.setFiguresByArray(this.arrayOfFigures);
+				this.field.drawAllFigures();
+				this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+
+				if (this.gameOver === true) {
+					this.field.gameOver(this.playerID);
+					debugger;
+					setTimeout(() => {
+						this.canvas.winDiv.hide();
+						this.exit();
+					}, 3000);
+				}
+				return resp;
+			}.bind(this)).catch(function (err) {
+				console.log(err.errormessage);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
+			}.bind(this)));
+		}.bind(this));
+	}
+
+	start(exit) {
+		this.exit = exit;
+		this.field.deleteAllFigure();
+		this.field.clearFigures();
+		this.field.drawField();
+		this.gameStart();
+
+		this.canv.addEventListener('click', { handleEvent: this.updateCanvas.bind(this), exit: this.exit }, false);
+	}
+
+	setFiguresByArray(array) {
+		for (let i = 0; i < width; i++) {
+			for (let j = 0; j < height; j++) {
+				let model = 0;
+				if (array[i][j] >= 0) {
+					model = array[i][j] + 2;
+					this.field.setFigure(i, j, model);
+				}
+			}
+		}
+	}
+
+	findOffset(obj) {
+		let curX = 0;
+		let curY = 0;
+		if (obj.offsetParent) {
+			do {
+				curX += obj.offsetLeft;
+				curY += obj.offsetTop;
+			} while (obj = obj.offsetParent);
+			return { x: curX, y: curY };
+		}
+	}
+
+	updateCanvas(e) {
+		let pos = this.findOffset(this.canv);
+		let mouseX = e.pageX - pos.x;
+		let mouseY = e.pageY - pos.y;
+		let XX = (mouseX - x + mouseY - y) * sq;
+		let YY = (mouseY - mouseX + x - y) * sq;
+
+		if (XX < side * width && YY < side * height && XX > 0 && YY > 0) {
+			let idx;
+			let idy;
+			for (let i = 0; i < width; i++) {
+				if (XX > side * i) idx = i;
+			}
+			for (let i = 0; i < height; i++) {
+				if (YY > side * i) idy = i;
+			}
+
+			if (this.field.findById(idx, idy).figure === this.currentPlayerID + 2) {
+				this.field.deleteAllBrightCube();
+				this.field.brightCubes(idx, idy);
+				this.field.drawField();
+
+				this.xFirstPlay = idx;
+				this.yFirstPlay = idy;
+			}
+			if (this.field.findById(idx, idy).brightness === 1) {
+				this.xSecondPlay = idx;
+				this.ySecondPlay = idy;
+
+				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
+			}
+		}
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = Game;
+;
 
 /***/ })
 /******/ ]);

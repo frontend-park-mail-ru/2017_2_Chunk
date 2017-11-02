@@ -23,11 +23,12 @@ function* generatorId(array) {
 }
 
 export default class Game{
-
-	constructor(canvas1, canvas2, canv) {
-		this.canvasForCubes = canvas1;
-		this.canvasForFigure = canvas2;
-		this.canv = canv;
+	constructor(canvas, eventBus) {
+		this.canvas = canvas;
+		this.canvasForCubes = canvas.canvasForCubes;
+		this.canvasForFigure = canvas.canvasForFigure;
+		this.canv = canvas.canv;
+		this.trolleybus = eventBus;
 
 		this.gameID = 0;
 		this.players = [];
@@ -43,8 +44,10 @@ export default class Game{
 
 		this.gen = 0;
 
-		this.field = new Field(6, this.canvasForCubes, this.canvasForFigure);
+		// this.field = new Field(6, this.canvasForCubes, this.canvasForFigure, this.canvas.winDiv);
+		this.field = new Field(6, this.canvas, this.trolleybus);
 	}
+
 
 	gameStart() {
 		return new Promise(function (resolve, reject) {
@@ -61,6 +64,7 @@ export default class Game{
 				}.bind(this)));
 		}.bind(this));
 	};
+
 
 	gameComplete() {
 	return Http.FetchGet('/game/complete?gameID=' + this.gameID)
@@ -82,6 +86,7 @@ export default class Game{
 		}.bind(this))
 	}
 
+
 	gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
 		this.exit = exit;
 		let gameID = this.gameID;
@@ -102,7 +107,12 @@ export default class Game{
 					this.field.drawField();
 					if (this.gameOver === true) {
 						this.field.gameOver(this.playerID);
-						this.exit();
+						debugger;
+						setTimeout(() => {
+							this.canvas.winDiv.hide();
+							this.exit();
+						}, 3000);
+
 					}
 					this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
 					return resp;
@@ -114,6 +124,7 @@ export default class Game{
 				}.bind(this)));
 		}.bind(this));
 	}
+
 
 	gameStatus(gameID, playerID, currentPlayerID, exit) {
 		this.exit = exit;
@@ -132,7 +143,11 @@ export default class Game{
 
 					if (this.gameOver === true) {
 						this.field.gameOver(this.playerID);
-						this.exit();
+						debugger;
+						setTimeout(() => {
+							this.canvas.winDiv.hide();
+							this.exit();
+						}, 3000);
 					}
 					return resp;
 				}.bind(this))
@@ -144,6 +159,7 @@ export default class Game{
 		}.bind(this));
 	}
 
+
 	start(exit) {
 		this.exit = exit;
 		this.field.deleteAllFigure();
@@ -153,6 +169,7 @@ export default class Game{
 
 		this.canv.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
 	}
+
 
 	setFiguresByArray(array) {
 		for (let i = 0; i < width; i++) {
@@ -166,6 +183,7 @@ export default class Game{
 		}
 	}
 
+
 	findOffset(obj) {
 		let curX = 0;
 		let curY = 0;
@@ -177,6 +195,7 @@ export default class Game{
 			return {x:curX,y:curY};
 		}
 	}
+
 
 	updateCanvas(e){
 		let pos = this.findOffset(this.canv);
