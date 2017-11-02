@@ -6,110 +6,164 @@ import Http from "../modules/http";
 const x = 425;
 const y = 230;
 const sq = Math.sqrt(2)/2;
-const side = 64;
+const side = 66;
+
+const width = 6;
+const height = 6;
+const maxPlayers = 2;
+
+function* generatorId(array) {
+	let i = 0;
+	while (i < array.length) {
+		yield array[i].playerID;
+		i++;
+		if (i === array.length)
+			i = 0;
+	}
+}
 
 export default class Game{
 
 	constructor(canvas1, canvas2, canv) {
-		// this.canvas1 = canvas1;
 		this.canvasForCubes = canvas1;
-		// this.canvas2 = canvas2;
 		this.canvasForFigure = canvas2;
 		this.canv = canv;
 
-		this.mass = [];
-		for (let i = 0; i < 6; i++) {
-			this.mass[i] = [];
-		}
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 6; j++) {
-				this.mass[i][j] = 5;
-			}
-		}
+		this.gameID = 0;
+		this.players = [];
+		this.playerID = 0;
+		this.currentPlayerID = 0;
+		this.gameOver = false;
+		this.arrayOfFigures = [];
+
+		this.xFirstPlay = -1;
+		this.yFirstPlay = -1;
+		this.xSecondPlay = -1;
+		this.ySecondPlay = -1;
+
+		this.gen = 0;
 
 		this.field = new Field(6, this.canvasForCubes, this.canvasForFigure);
 	}
 
-	gameStart () {
+	gameStart() {
 		return new Promise(function (resolve, reject) {
-			let width = 6;
-			let height = 6;
-			let maxPlayers = 2;
 			resolve(Http.FetchPost('/game/single/create', {width, height, maxPlayers})
 				.then(function(resp) {
-					let ID = resp.gameID;
-					// alert(ID);
+					this.gameID = resp.gameID;
+					this.gameComplete();
 					return resp;
 				}.bind(this))
-				.catch(function(err) {//не могу достать errorMessage
+				.catch(function(err) {
 					console.log(err.errormessage);
 					console.log("err response status "  + err.errorMessage);
 					throw new Error(err.errorMessage);
 				}.bind(this)));
-		})
+		}.bind(this));
+	};
+
+	gameComplete() {
+	return Http.FetchGet('/game/complete?gameID=' + this.gameID)
+		.then(function(resp) {
+			this.players = resp.players;
+			this.gen = generatorId(this.players);
+			this.playerID = this.players[0].playerID;
+			this.currentPlayerID = resp.currentPlayerID;
+			this.gameOver = resp.gameOver;
+			this.arrayOfFigures = resp.field;
+			this.setFiguresByArray(this.arrayOfFigures);
+			this.field.drawAllFigures();
+			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+		}.bind(this))
+		.catch(function (err) {
+			this.user = null;
+			console.log(err.statusText);
+			throw new Error("Can not get response =(")
+		}.bind(this))
 	}
 
-	gameComplete () {
-		this.gameID = 0;
-		return Http.FetchGet('/game/complete?gameID=' + this.gameID)
-			.then(function(resp) {
-				this.mass = resp.field;
-				for (let i = 0; i < 6; i++) {
-					for (let j = 0; j < 6; j++) {
-						let model = 0;
-						if (resp.field[i][j] >= 0) {
-							// alert("ok");
-							model = resp.field[i][j] + 2;
-							this.field.setFigure(i, j, model);
-							// alert(this.field.findById(i, j).figure);
-						}
-					}
-				}
-				this.field.drawAllFigures();
-				let players = resp.players;
-				// alert(this.mass[0][0]);
-				// alert(players[0].username);
-				// return resp;
-			}.bind(this))
-			.catch(function (err) {
-				this.user = null;
-				console.log(err.statusText);
-				throw new Error("Can not get response =(")
-			}.bind(this))
-	}
-
-	gamePlay () {
-		// alert("here");
+	gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
+		this.exit = exit;
+		let gameID = this.gameID;
+		let playerID = this.playerID;
 		return new Promise(function (resolve, reject) {
-			let width = 6;
-			let height = 6;
-			let maxPlayers = 2;
-			resolve(Http.FetchPost('/game/single/play', {width, height, maxPlayers})
+			resolve(Http.FetchPost('/game/play', {x1, x2, y1, y2, gameID, playerID, currentPlayerID})
 				.then(function(resp) {
-					let ID = resp.gameID;
-					// alert(ID);
+					this.players = resp.players;
+					this.currentPlayerID = resp.currentPlayerID;
+					this.gameOver = resp.gameOver;
+					this.arrayOfFigures = resp.field;
+					this.field.deleteAllFigure();
+					this.field.clearFigures();
+					this.setFiguresByArray(this.arrayOfFigures);
+					this.field.drawAllFigures();
+					this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+					this.field.deleteAllBrightCube();
+					this.field.drawField();
+					if (this.gameOver === true) {
+						this.field.gameOver(this.playerID);
+						this.exit();
+					}
+					this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
 					return resp;
 				}.bind(this))
-				.catch(function(err) {//не могу достать errorMessage
+				.catch(function(err) {
 					console.log(err.errormessage);
 					console.log("err response status "  + err.errorMessage);
 					throw new Error(err.errorMessage);
 				}.bind(this)));
-		})
+		}.bind(this));
+	}
 
+	gameStatus(gameID, playerID, currentPlayerID, exit) {
+		this.exit = exit;
+		return new Promise(function (resolve, reject) {
+			resolve(Http.FetchPost('/game/status', {gameID, playerID, currentPlayerID})
+				.then(function(resp) {
+					this.players = resp.players;
+					this.currentPlayerID = resp.currentPlayerID;
+					this.gameOver = resp.gameOver;
+					this.arrayOfFigures = resp.field;
+					this.field.deleteAllFigure();
+					this.field.clearFigures();
+					this.setFiguresByArray(this.arrayOfFigures);
+					this.field.drawAllFigures();
+					this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+
+					if (this.gameOver === true) {
+						this.field.gameOver(this.playerID);
+						this.exit();
+					}
+					return resp;
+				}.bind(this))
+				.catch(function(err) {
+					console.log(err.errormessage);
+					console.log("err response status "  + err.errorMessage);
+					throw new Error(err.errorMessage);
+				}.bind(this)));
+		}.bind(this));
 	}
 
 	start(exit) {
+		this.exit = exit;
+		this.field.deleteAllFigure();
+		this.field.clearFigures();
 		this.field.drawField();
-		// this.field.setFigure(2, 2, 3);
-		// this.field.setFigure(5, 5, 2);
-		// this.field.drawAllFigures();
 		this.gameStart();
-		this.gameComplete();
-		// this.gamePlay();
-		// alert("here");
-		this.canv.addEventListener('click', this.updateCanvas.bind(this), false);
-		// this.exit = exit;
+
+		this.canv.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
+	}
+
+	setFiguresByArray(array) {
+		for (let i = 0; i < width; i++) {
+			for (let j = 0; j < height; j++) {
+				let model = 0;
+				if (array[i][j] >= 0) {
+					model = array[i][j] + 2;
+					this.field.setFigure(i, j, model);
+				}
+			}
+		}
 	}
 
 	findOffset(obj) {
@@ -126,149 +180,37 @@ export default class Game{
 
 	updateCanvas(e){
 		let pos = this.findOffset(this.canv);
-
 		let mouseX = e.pageX - pos.x;
 		let mouseY = e.pageY - pos.y;
-
 		let XX = (mouseX - x + mouseY - y)*sq;
 		let YY = (mouseY - mouseX + x - y)*sq;
 
-		if (XX < side*6 && YY < side*6 && XX > 0 && YY > 0) {
+		if (XX < side*width && YY < side*height && XX > 0 && YY > 0) {
 			let idx;
 			let idy;
-			for (let i = 0; i < 6; i++) {
+			for (let i = 0; i < width; i++) {
 				if (XX > side*i)
 					idx = i;
 			}
-			for (let i = 0; i < 6; i++) {
+			for (let i = 0; i < height; i++) {
 				if (YY > side*i)
 					idy = i;
 			}
-			this.field.deleteAllBrightCube();
-			this.field.brightCubes(idx, idy);
-			this.field.drawField();
+
+			if (this.field.findById(idx, idy).figure === this.currentPlayerID+2) {
+				this.field.deleteAllBrightCube();
+				this.field.brightCubes(idx, idy);
+				this.field.drawField();
+
+				this.xFirstPlay = idx;
+				this.yFirstPlay = idy;
+			}
+			if (this.field.findById(idx, idy).brightness === 1) {
+				this.xSecondPlay = idx;
+				this.ySecondPlay = idy;
+
+				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
+			}
 		}
 	}
 };
-// let canvasForClicks = document.getElementById("2");
-// // let ctx = canvasForClicks.getContext('2d');
-//
-// let z = new Field(6);
-// canvasForClicks.addEventListener('click', updateCanvas, false);
-//
-// const x = 425;
-// const y = 230;
-// const sq = Math.sqrt(2)/2;
-// const side = 64;
-//
-// window.onload = function () {
-// 	z.drawField();
-// 	// z.setFigure(1, 2, 2);
-// 	// z.setFigure(3, 1, 3);
-// 	// z.setFigure(5, 5, 2);
-// 	// z.setFigure(4, 3, 3);
-// 	// z.setFigure(5, 2, 2);
-// 	// z.setFigure(3, 4, 3);
-// 	// z.drawAllFigures();
-// 	// z.brightCubes(5, 4);
-// 	// z.drawField();
-// };
-//
-// function findOffset(obj) {
-// 	let curX = 0;
-// 	let curY = 0;
-// 	if (obj.offsetParent) {
-// 		do {
-// 			curX += obj.offsetLeft;
-// 			curY += obj.offsetTop;
-// 		} while (obj = obj.offsetParent);
-// 		return {x:curX,y:curY};
-// 	}
-// }
-//
-// function updateCanvas(e){
-// 	let pos = findOffset(canvasForClicks);
-//
-// 	let mouseX = e.pageX - pos.x;
-// 	let mouseY = e.pageY - pos.y;
-//
-// 	let XX = (mouseX - x + mouseY - y)*sq;
-// 	let YY = (mouseY - mouseX + x - y)*sq;
-//
-// 	if (XX < side*6 && YY < side*6 && XX > 0 && YY > 0) {
-// 		let idx;
-// 		let idy;
-// 		for (let i = 0; i < 6; i++) {
-// 			if (XX > side*i)
-// 				idx = i;
-// 		}
-// 		for (let i = 0; i < 6; i++) {
-// 			if (YY > side*i)
-// 				idy = i;
-// 		}
-// 		z.deleteAllBrightCube();
-// 		z.brightCubes(idx, idy);
-// 		z.drawField();
-// 	}
-// }
-//
-// // let canvas,ctx, mouseX = 999, mouseY = 999,circles = new Array();
-// // let num = Math.floor(Math.random()*30-10)+10;
-// //
-// // function init(){
-// // 	canvas = document.getElementById('2');
-// // 	ctx = canvas.getContext('2d');
-// //
-// // 	for(let i=0; i < num; i++){
-// // 		circles[i] = {
-// // 			x: Math.floor(Math.random()*canvas.width),
-// // 			y : Math.floor(Math.random()*canvas.height),
-// // 			r : Math.floor(Math.random()*60-10)+10
-// // 		}
-// // 	}
-// // 	drawCanvas();
-// // 	canvas.addEventListener('mousemove',updateCanvas,false);
-// //
-// // }
-// //
-// // init();
-// //
-// // function findOffset(obj) {
-// // 	let curX = 0;
-// // 	let curY = 0;
-// // 	if (obj.offsetParent) {
-// // 		do {
-// // 			curX += obj.offsetLeft;
-// // 			curY += obj.offsetTop;
-// // 		} while (obj = obj.offsetParent);
-// // 		return {x:curX,y:curY};
-// // 	}
-// // }
-// //
-// // function updateCanvas(e){
-// // 	let pos = findOffset(canvas);
-// //
-// // 	mouseX = e.pageX - pos.x;
-// // 	mouseY = e.pageY - pos.y;
-// //
-// // 	ctx.clearRect(0,0,canvas.width,canvas.height);
-// // 	drawCanvas();
-// // }
-// //
-// //
-// // function drawCanvas() {
-// //
-// // 	for(let i = 0; i < num; i++){
-// // 		ctx.beginPath();
-// // 		ctx.fillStyle = 'rgba(0,0,0,.5)';
-// //
-// // 		ctx.arc(circles[i].x,circles[i].y,circles[i].r,0,Math.PI*2,false);
-// // 		if(ctx.isPointInPath(mouseX,mouseY)){
-// // 			ctx.fillStyle = 'red';
-// // 		}
-// // 		ctx.fill();
-// // 	}
-// // }
-//
-//
-//

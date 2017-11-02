@@ -18,16 +18,8 @@ export default class Field {
 		let imgs = [];
 		let ok = 0;
 
-		// this.canvas1 = canvas1;
 		this.canvasForCubes = canvas1;
-		// this.canvas2 = canvas2;
 		this.canvasForFigure = canvas2;
-
-		// const canvas1 = document.getElementById("1");
-		// const canvas2 = document.getElementById("2");
-		// this.canvasForCubes = canvas1.getContext('2d');
-		// this.canvasForFigure = canvas2.getContext('2d');
-
 
 		for(let i = 0; i < imgUrl.length; i++) {
 			let img = new Image();
@@ -41,6 +33,11 @@ export default class Field {
 		}
 		this.massOfUrl = [];
 		this.massOfUrl = imgs;
+
+		this.arrayOfFigures = [];
+		for (let i = 0; i < imgUrl.length; i++) {
+			this.arrayOfFigures[i] = 0;
+		}
 
 		this.arrayOfCubes = this.setCoordinatesOnField();
 	}
@@ -71,13 +68,13 @@ export default class Field {
 	}
 
 	drawField () {
-		// this.canvasForCubes.fillStyle = 'white';
+		this.canvasForCubes.fillStyle = 'white';
+		this.canvasForCubes.font = 'bold 30px sans-serif';
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let br = this.arrayOfCubes[i][j].brightness;
 				this.canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
-				// this.canvasForCubes.font = 'bold 30px sans-serif';
-				// this.canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
+				this.canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
 			}
 		}
 	}
@@ -95,8 +92,39 @@ export default class Field {
 		}
 	}
 
+	resetArrayOfFigure() {
+		for (let i = 0; i < this.arrayOfFigures.length; i++) {
+			this.arrayOfFigures[i] = 0;
+		}
+	}
+
 	setFigure(idx, idy, num) {
 		this.findById(idx, idy).setFigure(num);
+		this.arrayOfFigures[num]++;
+	}
+
+	drawCountOfFigure(arrayOfPlayers, id) {
+		this.canvasForCubes.fillStyle = 'white';
+		this.canvasForCubes.font = 'bold 20px sans-serif';
+		let x = 60;
+		let y = 30;
+		let diff = 40;
+		this.canvasForCubes.clearRect(0, 0, 400, 200);
+		for (let i = 0; i < arrayOfPlayers.length; i++) {
+			this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i+2], x, y);
+			this.canvasForCubes.drawImage(this.massOfUrl[i+2], x - diff, y - diff/2-10, 35, 45);
+			y += diff;
+		}
+		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
+	}
+
+	gameOver(playerID) {
+		let win = false;
+		if (this.arrayOfFigures[playerID+2] > this.arrayOfFigures[playerID+3]) {
+			win = true;
+		}
+		if (win) alert("Вы выиграли!! :)");
+		else alert("Вы проиграли :(");
 	}
 
 	deleteFigure(idx, idy) {
@@ -115,6 +143,15 @@ export default class Field {
 				}
 			}
 		}
+	}
+
+	deleteAllFigure() {
+		for (let i = 0; i < this.count; i++) {
+			for (let j = 0; j < this.count; j++) {
+				this.arrayOfCubes[i][j].setFigure(0);
+			}
+		}
+		this.resetArrayOfFigure();
 	}
 
 	clearFigures() {
