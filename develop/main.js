@@ -30,7 +30,7 @@ import EventBus from "./modules/eventBus";
 
 import Router from "./modules/router";
 
-import Game from "./Game/gameHandler";
+import Game from "./Game/game";
 
 
 const userService = new UserService();
@@ -49,17 +49,18 @@ const loginView = new LoginView(eventBus, userService, router);
 
 const updateView = new UpdateView(eventBus, userService, router);
 
-const backButtonView = new BackButtonView();
 
 const profileView = new ProfileView(eventBus);
 
 const rulesView = new RulesView(eventBus);
 
+const backButtonView = new BackButtonView();
+
 const scoreboardView = new ScoreboardView(eventBus, userService);
 
-const canvas = new Canvas();
+const canvas = new Canvas(eventBus);
 
-const game = new Game(canvas.ctx1, canvas.ctx2, canvas.canv);
+const game = new Game(canvas, eventBus);
 
 
 
