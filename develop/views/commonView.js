@@ -14,14 +14,14 @@ export default class CommonView extends Block {
 		for (const block in this.elements) {
 			this.append(this.elements[block]);
 		}
-
-		this.hide();
 	}
+
 
 	show() {
 		setTimeout(() => {this.el.style.setProperty("display", "flex");}, 170);
 		setTimeout(() => {this.el.classList.remove("hidden");}, 130)
 	}
+
 
 	hide() {
 		this.el.classList.add("hidden",);

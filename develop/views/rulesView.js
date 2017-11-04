@@ -14,10 +14,10 @@ export default class rulesView extends CommonView {
 
 		this.bus = emitBus;
 
-		this.hide();
-
 		this.bus.on("openRules", () => {
 			this.show();
-		})
+		});
+
+		this.hide();
 	}
 }

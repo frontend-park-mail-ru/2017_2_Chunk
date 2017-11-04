@@ -1,50 +1,13 @@
 "use strict";
+
 import commonView from "./commonView";
 import Form from "../blocks/form/form.js";
 import Message from "../blocks/message/message.js";
+import signUpFields from "../templates/signUpFileds"
 
 
 export default class signUpView extends commonView {
 	constructor(eventBus, userService, router) {
-		const signUpFields = [
-			{attrs: {
-				type: "text",
-				size: "128",
-				name: "name",
-				placeholder: "Enter your name",
-				required: "required",
-				class: "form-block__input ",
-			}},
-			{attrs: {
-				type: "email",
-				size: "128",
-				name: "email",
-				placeholder: "Enter your email",
-				required: "required",
-				class: "form-block__input ",
-			}},
-			{attrs: {
-				type: "password",
-				size: "128",
-				name: "password",
-				placeholder: "Enter password",
-				required: "required",
-				class: "form-block__input ",
-			}},
-			{attrs: {
-				type: "password",
-				size: "128",
-				name: "confirm",
-				placeholder: "Confirm password",
-				required: "required",
-				class: "form-block__input ",
-			}},
-			{attrs: {
-				type: "submit",
-				value: "Submit",
-				class: "form-block__button",
-			}}
-		];
 		const form = new Form(signUpFields);
 		super({form});
 
@@ -52,15 +15,13 @@ export default class signUpView extends commonView {
 		this.userService = userService;
 		this.router = router;
 
-		this.hide();
-
 		this.form = form;
 		this.message = new Message();
 		this.message.clear();
 		this.message.hide();
 		this.append(this.message);
 
-		this.el.addEventListener("submit", function(event) {
+		this.el.addEventListener("submit", (event) => {
 			event.preventDefault();
 			const formData = {};
 			const fields = this.el.childNodes.item(0).elements;
@@ -69,23 +30,24 @@ export default class signUpView extends commonView {
 				formData[fields[field].name] = fields[field].value;
 			}
 			this.onSubmit(formData);
+		}, true);
 
-		}.bind(this), true)
+		this.hide();
 	}
 
 
-	onSubmit(formData) {
-		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm)
-			.then(function(resp) {
-				this.form.reset();
-				this.message.clear();
-				this.message.hide();
-				this.bus.emit("auth", resp.username);
-				this.router.goTo("/menu");
-			}.bind(this))
-			.catch(function(err) {
-				this.setErrorText(err)
-			}.bind(this));
+	async onSubmit(formData) {
+		const resp = await this.userService.signup(formData.name, formData.email, formData.password, formData.confirm);
+		if (resp.ok) {
+			this.form.reset();
+			this.message.clear();
+			this.message.hide();
+			this.bus.emit("auth", resp.json.username);
+			this.router.goTo("/menu");
+		}
+		else {
+			this.setErrorText(resp)
+		}
 	}
 
 

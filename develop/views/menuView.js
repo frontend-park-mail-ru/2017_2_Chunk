@@ -11,39 +11,36 @@ export default class MenuView extends CommonView {
 			login: Block.Create('a', {'data-section': 'login', 'href': '/login'}, ['button', 'unauth', 'menu__button'], 'Login'),
 			update: Block.Create('a', {'data-section': 'update', 'href': '/update'}, ['button', 'auth', 'menu__button'], 'Profile'),
 			rules: Block.Create('a', {'data-section': 'rules', 'href': '/rules'}, ['button', "every-available", 'menu__button'], 'Rules'),
-			scores: Block.Create('a', {'data-section': 'scores', 'href': '/scoreboard'}, ['button', 'unauth', 'menu__button'], 'Scoreboard'),
+			scores: Block.Create('a', {'data-section': 'scores', 'href': '/scoreboard'}, ['button', 'every-available', 'menu__button'], 'Scoreboard'),
 			exit: Block.Create('a', {'data-section': 'exit', 'href': '/exit'}, ['button', 'auth','menu__button'], 'Exit'),
 		};
 		super(menuElems);
 
-
 		this.bus = eventBus;
 
-		this.bus.on("unauth", function() {
+		this.bus.on("unauth", () => {
 			for (let elem in this.elements) {
-				if (this.elements[elem].el.classList.contains("unauth") ||
-					this.elements[elem].el.classList.contains("every-available")) {
-					this.elements[elem].show();
+				if (!this.elements[elem].el.classList.contains("unauth") &&
+					!this.elements[elem].el.classList.contains("every-available")) {
+					this.elements[elem].hide();
 				}
 				else
-					this.elements[elem].hide();
-			}
-		}.bind(this));
-
-
-		this.bus.on("auth", function() {
-			for (let elem in this.elements) {
-				if (this.elements[elem].el.classList.contains("auth") ||
-					this.elements[elem].el.classList.contains("every-available")) {
 					this.elements[elem].show();
+			}
+		});
+
+		this.bus.on("auth", () => {
+			for (let elem in this.elements) {
+				if (!this.elements[elem].el.classList.contains("auth") &&
+					!this.elements[elem].el.classList.contains("every-available")) {
+					this.elements[elem].hide();
 				}
 				else
-					this.elements[elem].hide();
+					this.elements[elem].show();
 			}
-		}.bind(this));
+		});
 
-
-		this.hide();
 		this.bus.emit("unauth");
+		this.hide();
 	}
 }

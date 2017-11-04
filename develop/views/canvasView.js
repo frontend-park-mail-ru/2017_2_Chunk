@@ -3,14 +3,12 @@ import CommonView from "./commonView";
 import Block from "../blocks/block/block.js";
 
 
-
 export default class CanvasView extends CommonView {
-	constructor(eventMarshrutka) {
+	constructor(eventBus) {
 		const canvas1 = Block.Create('canvas', {'width': '850', 'height': '850'}, ['canv1'], "");
 		const canvas2 = Block.Create('canvas', {'width': '850', 'height': '850'}, ['canv2'], "");
-
 		const winDiv = Block.Create('div', {}, ["winDiv"], "");
-		// canvas.style.setProperty("position", "absolute");
+
 		super([canvas1, canvas2, winDiv]);
 
 		this.el.style.setProperty("border", "none");
@@ -21,12 +19,12 @@ export default class CanvasView extends CommonView {
 		this.winDiv = winDiv;
 		this.winDiv.hide();
 
-		this.canv = this.canvas2.el;
+		this.canvasForClicks = this.canvas2.el;
 		this.canvasForCubes = this.canvas1.el.getContext('2d');
 		this.canvasForFigure = this.canvas2.el.getContext('2d');
 
-		this.marshrutka = eventMarshrutka;
-		this.marshrutka.on("endOfGame", (win) => {
+		this.eventBus = eventBus;
+		this.eventBus.on("endOfGame", (win) => {
 			if (win) {
 				this.winDiv.setText("You win! =)");
 			}

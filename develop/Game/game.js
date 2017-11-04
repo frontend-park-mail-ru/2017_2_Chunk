@@ -12,6 +12,8 @@ const width = 6;
 const height = 6;
 const maxPlayers = 2;
 
+const brightLevel = 1;
+
 function* generatorId(array) {
 	let i = 0;
 	while (i < array.length) {
@@ -25,10 +27,11 @@ function* generatorId(array) {
 export default class Game{
 	constructor(canvas, eventBus) {
 		this.canvas = canvas;
-		this.canvasForCubes = canvas.canvasForCubes;
-		this.canvasForFigure = canvas.canvasForFigure;
-		this.canv = canvas.canv;
-		this.trolleybus = eventBus;
+
+		this.canvasForCubes = this.canvas.canvasForCubes;
+		this.canvasForFigure = this.canvas.canvasForFigure;
+		this.canvasForClicks = this.canvas.canvasForClicks;
+		this.eventBus = eventBus;
 
 		this.gameID = 0;
 		this.players = [];
@@ -37,15 +40,11 @@ export default class Game{
 		this.gameOver = false;
 		this.arrayOfFigures = [];
 
-		this.xFirstPlay = -1;
-		this.yFirstPlay = -1;
-		this.xSecondPlay = -1;
-		this.ySecondPlay = -1;
+		this.xFirstPlay = this.yFirstPlay = this.xSecondPlay = this.ySecondPlay = -1;
 
 		this.gen = 0;
 
-		// this.field = new Field(6, this.canvasForCubes, this.canvasForFigure, this.canvas.winDiv);
-		this.field = new Field(6, this.canvas, this.trolleybus);
+		this.field = new Field(width, this.canvas, this.eventBus);
 	}
 
 
@@ -77,7 +76,7 @@ export default class Game{
 			this.arrayOfFigures = resp.field;
 			this.setFiguresByArray(this.arrayOfFigures);
 			this.field.drawAllFigures();
-			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+			// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
 		}.bind(this))
 		.catch(function (err) {
 			this.user = null;
@@ -102,11 +101,11 @@ export default class Game{
 					this.field.clearFigures();
 					this.setFiguresByArray(this.arrayOfFigures);
 					this.field.drawAllFigures();
-					this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+					// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
 					this.field.deleteAllBrightCube();
 					this.field.drawField();
 					if (this.gameOver === true) {
-						this.field.gameOver(this.playerID);
+						this.field.gameOverSingle(this.playerID);
 						debugger;
 						setTimeout(() => {
 							this.canvas.winDiv.hide();
@@ -139,10 +138,10 @@ export default class Game{
 					this.field.clearFigures();
 					this.setFiguresByArray(this.arrayOfFigures);
 					this.field.drawAllFigures();
-					this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+					// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
 
 					if (this.gameOver === true) {
-						this.field.gameOver(this.playerID);
+						this.field.gameOverSingle(this.playerID);
 						debugger;
 						setTimeout(() => {
 							this.canvas.winDiv.hide();
@@ -167,7 +166,7 @@ export default class Game{
 		this.field.drawField();
 		this.gameStart();
 
-		this.canv.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
+		this.canvasForClicks.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
 	}
 
 
@@ -198,7 +197,7 @@ export default class Game{
 
 
 	updateCanvas(e){
-		let pos = this.findOffset(this.canv);
+		let pos = this.findOffset(this.canvasForClicks);
 		let mouseX = e.pageX - pos.x;
 		let mouseY = e.pageY - pos.y;
 		let XX = (mouseX - x + mouseY - y)*sq;
@@ -224,7 +223,7 @@ export default class Game{
 				this.xFirstPlay = idx;
 				this.yFirstPlay = idy;
 			}
-			if (this.field.findById(idx, idy).brightness === 1) {
+			if (this.field.findById(idx, idy).brightness === brightLevel) {
 				this.xSecondPlay = idx;
 				this.ySecondPlay = idy;
 

@@ -17,7 +17,9 @@ export default class ScoreboardView extends CommonView {
 				{name:'Sasha', score: '2010'}];
 			this.update(users);
 			this.show();
-		})
+		});
+
+		this.hide();
 	}
 
 	update(users = []) {

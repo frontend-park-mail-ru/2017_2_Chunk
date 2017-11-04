@@ -197,8 +197,6 @@ class CommonView extends __WEBPACK_IMPORTED_MODULE_0__blocks_block_block_js__["d
 		for (const block in this.elements) {
 			this.append(this.elements[block]);
 		}
-
-		this.hide();
 	}
 
 	show() {
@@ -329,19 +327,15 @@ class Message extends __WEBPACK_IMPORTED_MODULE_0__block_block__["default"] {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
-//в Fetch post не получается получить в ответ объект json c ошибкой
-
 const backendUrl = "https://backend-java-spring.herokuapp.com";
 const baseUrl = `${window.location.protocol}//${window.location.host}`;
-
 console.log("baseUrl = ", baseUrl);
+
 /**
  * Модуль, предоставляющий методы для выполнения HTTP-запросов
  * @module Http
  */
-
 class Http {
-	//что попадает в throw response
 	/**
   * Выполняет GET-запрос по указанному адресу
   * @param {string} address - адрес запроса
@@ -355,16 +349,6 @@ class Http {
 			mode: 'cors',
 			credentials: 'include',
 			headers: myHeaders
-		}).then(function (response) {
-			let json = response.json();
-			if (response.status >= 400) {
-				return json.then(resp => {
-					throw resp;
-				});
-			}
-			return json.then(resp => {
-				return resp;
-			});
 		});
 	}
 
@@ -373,28 +357,16 @@ class Http {
   * @param {Object} body - body-request
   * @param {string} address - адрес запроса
   */
-
-	//Не получается получить из json errMessage.
-	static async FetchPost(address, body) {
+	static FetchPost(address, body) {
 		const url = backendUrl + address;
 		const myHeaders = new Headers();
 		myHeaders.set("Content-Type", "application/json; charset=utf-8");
-		return await fetch(url, {
+		return fetch(url, {
 			method: 'POST',
 			mode: 'cors',
 			credentials: 'include',
 			body: JSON.stringify(body),
 			headers: myHeaders
-		}).then(function (response) {
-			let json = response.json();
-			if (response.status >= 400) {
-				return json.then(resp => {
-					throw resp;
-				});
-			}
-			return json.then(resp => {
-				return resp;
-			});
 		});
 	}
 }
@@ -418,11 +390,10 @@ class EventBus {
 	on(event, listener) {
 		this.listeners[event] = this.listeners[event] || [];
 		this.listeners[event].push(listener);
-		console.log("ON emitBus");
 	}
 
 	emit(event, data) {
-		this.listeners[event].forEach(function (listener) {
+		this.listeners[event].forEach(listener => {
 			listener(data);
 		});
 	}
@@ -441,8 +412,8 @@ function requireAll(r) {
   r.keys().forEach(r);
 }
 
-requireAll(__webpack_require__(22));
-requireAll(__webpack_require__(24));
+requireAll(__webpack_require__(26));
+requireAll(__webpack_require__(28));
 
 /***/ }),
 /* 7 */
@@ -491,6 +462,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const sideOfCube = 90;
 const sideOfCanvas = 850;
 const indent = 150;
+const maxStep = 3;
+const identDrawingFigureX = 5;
+const identDrawingFigureY = -65;
 
 class Field {
 
@@ -502,14 +476,13 @@ class Field {
 		imgUrl.push("images/whitch90-130.png");
 		imgUrl.push("images/jack90-130.png");
 
-		let imgs = [];
-		let ok = 0;
-
 		this.canvasForCubes = canvas.canvasForCubes;
 		this.canvasForFigure = canvas.canvasForFigure;
 		this.winDiv = canvas.winDiv;
 		this.bus = eventBus;
 
+		let imgs = [];
+		let ok = 0;
 		for (let i = 0; i < imgUrl.length; i++) {
 			let img = new Image();
 			imgs.push(img);
@@ -519,6 +492,7 @@ class Field {
 			};
 			img.src = imgUrl[i];
 		}
+
 		this.massOfUrl = [];
 		this.massOfUrl = imgs;
 
@@ -590,29 +564,28 @@ class Field {
 		this.arrayOfFigures[num]++;
 	}
 
-	drawCountOfFigure(arrayOfPlayers, id) {
-		this.canvasForCubes.fillStyle = 'white';
-		this.canvasForCubes.font = 'bold 20px sans-serif';
-		let x = 60;
-		let y = 30;
-		let diff = 40;
-		this.canvasForCubes.clearRect(0, 0, 400, 200);
-		for (let i = 0; i < arrayOfPlayers.length; i++) {
-			this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i + 2], x, y);
-			this.canvasForCubes.drawImage(this.massOfUrl[i + 2], x - diff, y - diff / 2 - 10, 35, 45);
-			y += diff;
-		}
-		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
-	}
+	//TODO by emmiting
+	// drawCountOfFigure(arrayOfPlayers, id) {
+	// 	this.canvasForCubes.fillStyle = 'white';
+	// 	this.canvasForCubes.font = 'bold 20px sans-serif';
+	// 	let x = 60;
+	// 	let y = 30;
+	// 	let diff = 40;
+	// 	this.canvasForCubes.clearRect(0, 0, 400, 200);
+	// 	for (let i = 0; i < arrayOfPlayers.length; i++) {
+	// 		this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i+2], x, y);
+	// 		this.canvasForCubes.drawImage(this.massOfUrl[i+2], x - diff, y - diff/2-10, 35, 45);
+	// 		y += diff;
+	// 	}
+	// 	this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
+	// }
 
-	gameOver(playerID) {
+	gameOverSingle(playerID) {
 		let win = false;
 		if (this.arrayOfFigures[playerID + 2] > this.arrayOfFigures[playerID + 3]) {
 			win = true;
 		}
 		this.bus.emit("endOfGame", win);
-		// if (win) alert("Вы выиграли!! :)");
-		// else alert("Вы проиграли :(");
 	}
 
 	deleteFigure(idx, idy) {
@@ -620,14 +593,14 @@ class Field {
 	}
 
 	drawFigures(idx, idy) {
-		this.canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x + 5, this.findById(idx, idy).y - 70);
+		this.canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x + identDrawingFigureX, this.findById(idx, idy).y + identDrawingFigureY);
 	}
 
 	drawAllFigures() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				if (this.arrayOfCubes[i][j].figure > 1) {
-					this.canvasForFigure.drawImage(this.massOfUrl[this.arrayOfCubes[i][j].figure], this.arrayOfCubes[i][j].x + 5, this.arrayOfCubes[i][j].y - 65);
+					this.canvasForFigure.drawImage(this.massOfUrl[this.arrayOfCubes[i][j].figure], this.arrayOfCubes[i][j].x + identDrawingFigureX, this.arrayOfCubes[i][j].y + identDrawingFigureY);
 				}
 			}
 		}
@@ -651,7 +624,7 @@ class Field {
 			for (let j = 0; j < this.count; j++) {
 				let idx2 = this.arrayOfCubes[i][j].idx;
 				let idy2 = this.arrayOfCubes[i][j].idy;
-				if (Math.abs(idx2 - idx) >= 3 || Math.abs(idy2 - idy) >= 3 || this.arrayOfCubes[i][j].figure !== 0) {} else {
+				if (Math.abs(idx2 - idx) >= maxStep || Math.abs(idy2 - idy) >= maxStep || this.arrayOfCubes[i][j].figure !== 0) {} else {
 					this.arrayOfCubes[i][j].setBrightness(1);
 				}
 				this.findById(idx, idy).setBrightness(0);
@@ -671,7 +644,231 @@ class Field {
 
 
 /***/ }),
-/* 9 */,
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_http__ = __webpack_require__(4);
+
+
+
+
+
+const x = 425;
+const y = 230;
+const sq = Math.sqrt(2) / 2;
+const side = 66;
+
+const width = 6;
+const height = 6;
+const maxPlayers = 2;
+
+const brightLevel = 1;
+
+function* generatorId(array) {
+	let i = 0;
+	while (i < array.length) {
+		yield array[i].playerID;
+		i++;
+		if (i === array.length) i = 0;
+	}
+}
+
+class Game {
+	constructor(canvas, eventBus) {
+		this.canvas = canvas;
+
+		this.canvasForCubes = this.canvas.canvasForCubes;
+		this.canvasForFigure = this.canvas.canvasForFigure;
+		this.canvasForClicks = this.canvas.canvasForClicks;
+		this.eventBus = eventBus;
+
+		this.gameID = 0;
+		this.players = [];
+		this.playerID = 0;
+		this.currentPlayerID = 0;
+		this.gameOver = false;
+		this.arrayOfFigures = [];
+
+		this.xFirstPlay = this.yFirstPlay = this.xSecondPlay = this.ySecondPlay = -1;
+
+		this.gen = 0;
+
+		this.field = new __WEBPACK_IMPORTED_MODULE_0__field_js__["default"](width, this.canvas, this.eventBus);
+	}
+
+	gameStart() {
+		return new Promise(function (resolve, reject) {
+			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/single/create', { width, height, maxPlayers }).then(function (resp) {
+				this.gameID = resp.gameID;
+				this.gameComplete();
+				return resp;
+			}.bind(this)).catch(function (err) {
+				console.log(err.errormessage);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
+			}.bind(this)));
+		}.bind(this));
+	}
+
+	gameComplete() {
+		return __WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchGet('/game/complete?gameID=' + this.gameID).then(function (resp) {
+			this.players = resp.players;
+			this.gen = generatorId(this.players);
+			this.playerID = this.players[0].playerID;
+			this.currentPlayerID = resp.currentPlayerID;
+			this.gameOver = resp.gameOver;
+			this.arrayOfFigures = resp.field;
+			this.setFiguresByArray(this.arrayOfFigures);
+			this.field.drawAllFigures();
+			// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+		}.bind(this)).catch(function (err) {
+			this.user = null;
+			console.log(err.statusText);
+			throw new Error("Can not get response =(");
+		}.bind(this));
+	}
+
+	gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
+		this.exit = exit;
+		let gameID = this.gameID;
+		let playerID = this.playerID;
+		return new Promise(function (resolve, reject) {
+			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/play', { x1, x2, y1, y2, gameID, playerID, currentPlayerID }).then(function (resp) {
+				this.players = resp.players;
+				this.currentPlayerID = resp.currentPlayerID;
+				this.gameOver = resp.gameOver;
+				this.arrayOfFigures = resp.field;
+				this.field.deleteAllFigure();
+				this.field.clearFigures();
+				this.setFiguresByArray(this.arrayOfFigures);
+				this.field.drawAllFigures();
+				// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+				this.field.deleteAllBrightCube();
+				this.field.drawField();
+				if (this.gameOver === true) {
+					this.field.gameOverSingle(this.playerID);
+					debugger;
+					setTimeout(() => {
+						this.canvas.winDiv.hide();
+						this.exit();
+					}, 3000);
+				}
+				this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
+				return resp;
+			}.bind(this)).catch(function (err) {
+				console.log(err.errormessage);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
+			}.bind(this)));
+		}.bind(this));
+	}
+
+	gameStatus(gameID, playerID, currentPlayerID, exit) {
+		this.exit = exit;
+		return new Promise(function (resolve, reject) {
+			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/status', { gameID, playerID, currentPlayerID }).then(function (resp) {
+				this.players = resp.players;
+				this.currentPlayerID = resp.currentPlayerID;
+				this.gameOver = resp.gameOver;
+				this.arrayOfFigures = resp.field;
+				this.field.deleteAllFigure();
+				this.field.clearFigures();
+				this.setFiguresByArray(this.arrayOfFigures);
+				this.field.drawAllFigures();
+				// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+
+				if (this.gameOver === true) {
+					this.field.gameOverSingle(this.playerID);
+					debugger;
+					setTimeout(() => {
+						this.canvas.winDiv.hide();
+						this.exit();
+					}, 3000);
+				}
+				return resp;
+			}.bind(this)).catch(function (err) {
+				console.log(err.errormessage);
+				console.log("err response status " + err.errorMessage);
+				throw new Error(err.errorMessage);
+			}.bind(this)));
+		}.bind(this));
+	}
+
+	start(exit) {
+		this.exit = exit;
+		this.field.deleteAllFigure();
+		this.field.clearFigures();
+		this.field.drawField();
+		this.gameStart();
+
+		this.canvasForClicks.addEventListener('click', { handleEvent: this.updateCanvas.bind(this), exit: this.exit }, false);
+	}
+
+	setFiguresByArray(array) {
+		for (let i = 0; i < width; i++) {
+			for (let j = 0; j < height; j++) {
+				let model = 0;
+				if (array[i][j] >= 0) {
+					model = array[i][j] + 2;
+					this.field.setFigure(i, j, model);
+				}
+			}
+		}
+	}
+
+	findOffset(obj) {
+		let curX = 0;
+		let curY = 0;
+		if (obj.offsetParent) {
+			do {
+				curX += obj.offsetLeft;
+				curY += obj.offsetTop;
+			} while (obj = obj.offsetParent);
+			return { x: curX, y: curY };
+		}
+	}
+
+	updateCanvas(e) {
+		let pos = this.findOffset(this.canvasForClicks);
+		let mouseX = e.pageX - pos.x;
+		let mouseY = e.pageY - pos.y;
+		let XX = (mouseX - x + mouseY - y) * sq;
+		let YY = (mouseY - mouseX + x - y) * sq;
+
+		if (XX < side * width && YY < side * height && XX > 0 && YY > 0) {
+			let idx;
+			let idy;
+			for (let i = 0; i < width; i++) {
+				if (XX > side * i) idx = i;
+			}
+			for (let i = 0; i < height; i++) {
+				if (YY > side * i) idy = i;
+			}
+
+			if (this.field.findById(idx, idy).figure === this.currentPlayerID + 2) {
+				this.field.deleteAllBrightCube();
+				this.field.brightCubes(idx, idy);
+				this.field.drawField();
+
+				this.xFirstPlay = idx;
+				this.yFirstPlay = idy;
+			}
+			if (this.field.findById(idx, idy).brightness === brightLevel) {
+				this.xSecondPlay = idx;
+				this.ySecondPlay = idy;
+
+				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
+			}
+		}
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = Game;
+;
+
+/***/ }),
 /* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -693,31 +890,31 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 			login: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'login', 'href': '/login' }, ['button', 'unauth', 'menu__button'], 'Login'),
 			update: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'update', 'href': '/update' }, ['button', 'auth', 'menu__button'], 'Profile'),
 			rules: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'rules', 'href': '/rules' }, ['button', "every-available", 'menu__button'], 'Rules'),
-			scores: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'scores', 'href': '/scoreboard' }, ['button', 'unauth', 'menu__button'], 'Scoreboard'),
+			scores: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'scores', 'href': '/scoreboard' }, ['button', 'every-available', 'menu__button'], 'Scoreboard'),
 			exit: __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'data-section': 'exit', 'href': '/exit' }, ['button', 'auth', 'menu__button'], 'Exit')
 		};
 		super(menuElems);
 
 		this.bus = eventBus;
 
-		this.bus.on("unauth", function () {
+		this.bus.on("unauth", () => {
 			for (let elem in this.elements) {
-				if (this.elements[elem].el.classList.contains("unauth") || this.elements[elem].el.classList.contains("every-available")) {
-					this.elements[elem].show();
-				} else this.elements[elem].hide();
+				if (!this.elements[elem].el.classList.contains("unauth") && !this.elements[elem].el.classList.contains("every-available")) {
+					this.elements[elem].hide();
+				} else this.elements[elem].show();
 			}
-		}.bind(this));
+		});
 
-		this.bus.on("auth", function () {
+		this.bus.on("auth", () => {
 			for (let elem in this.elements) {
-				if (this.elements[elem].el.classList.contains("auth") || this.elements[elem].el.classList.contains("every-available")) {
-					this.elements[elem].show();
-				} else this.elements[elem].hide();
+				if (!this.elements[elem].el.classList.contains("auth") && !this.elements[elem].el.classList.contains("every-available")) {
+					this.elements[elem].hide();
+				} else this.elements[elem].show();
 			}
-		}.bind(this));
+		});
 
-		this.hide();
 		this.bus.emit("unauth");
+		this.hide();
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = MenuView;
@@ -732,6 +929,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_signUpFileds__ = __webpack_require__(12);
+
 
 
 
@@ -740,47 +939,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	constructor(eventBus, userService, router) {
-		const signUpFields = [{ attrs: {
-				type: "text",
-				size: "128",
-				name: "name",
-				placeholder: "Enter your name",
-				required: "required",
-				class: "form-block__input "
-			} }, { attrs: {
-				type: "email",
-				size: "128",
-				name: "email",
-				placeholder: "Enter your email",
-				required: "required",
-				class: "form-block__input "
-			} }, { attrs: {
-				type: "password",
-				size: "128",
-				name: "password",
-				placeholder: "Enter password",
-				required: "required",
-				class: "form-block__input "
-			} }, { attrs: {
-				type: "password",
-				size: "128",
-				name: "confirm",
-				placeholder: "Confirm password",
-				required: "required",
-				class: "form-block__input "
-			} }, { attrs: {
-				type: "submit",
-				value: "Submit",
-				class: "form-block__button"
-			} }];
-		const form = new __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__["default"](signUpFields);
+		const form = new __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__["default"](__WEBPACK_IMPORTED_MODULE_3__templates_signUpFileds__["default"]);
 		super({ form });
 
 		this.bus = eventBus;
 		this.userService = userService;
 		this.router = router;
-
-		this.hide();
 
 		this.form = form;
 		this.message = new __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__["default"]();
@@ -788,7 +952,7 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		this.message.hide();
 		this.append(this.message);
 
-		this.el.addEventListener("submit", function (event) {
+		this.el.addEventListener("submit", event => {
 			event.preventDefault();
 			const formData = {};
 			const fields = this.el.childNodes.item(0).elements;
@@ -797,19 +961,22 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 				formData[fields[field].name] = fields[field].value;
 			}
 			this.onSubmit(formData);
-		}.bind(this), true);
+		}, true);
+
+		this.hide();
 	}
 
-	onSubmit(formData) {
-		this.userService.signup(formData.name, formData.email, formData.password, formData.confirm).then(function (resp) {
+	async onSubmit(formData) {
+		const resp = await this.userService.signup(formData.name, formData.email, formData.password, formData.confirm);
+		if (resp.ok) {
 			this.form.reset();
 			this.message.clear();
 			this.message.hide();
-			this.bus.emit("auth", resp.username);
+			this.bus.emit("auth", resp.json.username);
 			this.router.goTo("/menu");
-		}.bind(this)).catch(function (err) {
-			this.setErrorText(err);
-		}.bind(this));
+		} else {
+			this.setErrorText(resp);
+		}
 	}
 
 	setErrorText(err) {
@@ -826,9 +993,55 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+const signUpFIelds = [{ attrs: {
+		type: "text",
+		size: "128",
+		name: "name",
+		placeholder: "Enter your name",
+		required: "required",
+		class: "form-block__input "
+	} }, { attrs: {
+		type: "email",
+		size: "128",
+		name: "email",
+		placeholder: "Enter your email",
+		required: "required",
+		class: "form-block__input "
+	} }, { attrs: {
+		type: "password",
+		size: "128",
+		name: "password",
+		placeholder: "Enter password",
+		required: "required",
+		class: "form-block__input "
+	} }, { attrs: {
+		type: "password",
+		size: "128",
+		name: "confirm",
+		placeholder: "Confirm password",
+		required: "required",
+		class: "form-block__input "
+	} }, { attrs: {
+		type: "submit",
+		value: "Submit",
+		class: "form-block__button"
+	} }];
+
+/* harmony default export */ __webpack_exports__["default"] = (signUpFIelds);
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_loginFields__ = __webpack_require__(14);
+
 
 
 
@@ -837,26 +1050,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	constructor(eventBus, userService, router) {
-		const loginFields = [{ attrs: {
-				type: "text",
-				size: "128",
-				name: "username",
-				placeholder: "Enter your name",
-				required: "required",
-				class: "form-block__input"
-			} }, { attrs: {
-				type: "password",
-				size: "128",
-				name: "password",
-				placeholder: "Enter password",
-				required: "required",
-				class: "form-block__input"
-			} }, { attrs: {
-				type: "submit",
-				value: "Submit",
-				class: "form-block__button"
-			} }];
-		const form = new __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__["default"](loginFields);
+		const form = new __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__["default"](__WEBPACK_IMPORTED_MODULE_3__templates_loginFields__["default"]);
 		super({ form });
 
 		this.form = form;
@@ -869,9 +1063,7 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		this.message.hide();
 		this.append(this.message);
 
-		this.hide();
-
-		this.el.addEventListener("submit", function (event) {
+		this.el.addEventListener("submit", event => {
 			event.preventDefault();
 			const formData = {};
 			const fields = this.el.childNodes.item(0).elements;
@@ -880,19 +1072,22 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 				formData[fields[field].name] = fields[field].value;
 			}
 			this.onSubmit(formData);
-		}.bind(this), true);
+		}, true);
+
+		this.hide();
 	}
 
-	onSubmit(formData) {
-		this.userService.login(formData.username, formData.password).then(function (resp) {
+	async onSubmit(formData) {
+		const resp = await this.userService.login(formData.username, formData.password);
+		if (resp.ok) {
 			this.form.reset();
 			this.message.clear();
 			this.message.hide();
-			this.bus.emit("auth", resp.username);
-			this.router.goTo("/menu");
-		}.bind(this)).catch(function (err) {
-			this.setErrorText(err); //нужно поставить ошибку из json
-		}.bind(this));
+			this.bus.emit("auth", resp.json.username);
+			this.bus.emit("openMenu");
+		} else {
+			this.setErrorText(resp);
+		}
 	}
 
 	setErrorText(err) {
@@ -904,7 +1099,43 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+const loginFields = [{
+	attrs: {
+		type: "text",
+		size: "128",
+		name: "username",
+		placeholder: "Enter your name",
+		required: "required",
+		class: "form-block__input"
+	}
+}, {
+	attrs: {
+		type: "password",
+		size: "128",
+		name: "password",
+		placeholder: "Enter password",
+		required: "required",
+		class: "form-block__input"
+	}
+}, {
+	attrs: {
+		type: "submit",
+		value: "Submit",
+		class: "form-block__button"
+	}
+}];
+
+/* harmony default export */ __webpack_exports__["default"] = (loginFields);
+
+/***/ }),
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -929,7 +1160,7 @@ class backButtonView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js_
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -954,6 +1185,7 @@ class profileView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["
 			this.setText(username);
 			this.show();
 		});
+
 		this.hide();
 	}
 
@@ -965,7 +1197,7 @@ class profileView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -987,23 +1219,23 @@ class rulesView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 		this.bus = emitBus;
 
-		this.hide();
-
 		this.bus.on("openRules", () => {
 			this.show();
 		});
+
+		this.hide();
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = rulesView;
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commonView__ = __webpack_require__(1);
 
 
@@ -1022,6 +1254,8 @@ class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"
 			this.update(users);
 			this.show();
 		});
+
+		this.hide();
 	}
 
 	update(users = []) {
@@ -1035,7 +1269,7 @@ class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1112,7 +1346,7 @@ class scoreboardTemplate {
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1120,6 +1354,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_updateFields__ = __webpack_require__(21);
+
 
 
 
@@ -1128,44 +1364,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 	constructor(eventBus, userService, router) {
-		const updateFields = [{ attrs: {
-				type: "text",
-				size: "128",
-				name: "username",
-				placeholder: "Name",
-				required: "",
-				class: "form-block__input"
-			} }, { attrs: {
-				type: "email",
-				size: "128",
-				name: "email",
-				placeholder: "Email",
-				required: "",
-				class: "form-block__input"
-			} }, { attrs: {
-				type: "password",
-				size: "128",
-				name: "password",
-				placeholder: "New password",
-				required: "",
-				class: "form-block__input"
-			} }, { attrs: {
-				type: "password",
-				size: "128",
-				name: "old_password",
-				placeholder: "Old password",
-				required: "required",
-				class: "form-block__input"
-			} }, { attrs: {
-				type: "submit",
-				value: "Submit",
-				class: "form-block__button"
-			} }];
-		const form = new __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__["default"](updateFields);
+		const form = new __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__["default"](__WEBPACK_IMPORTED_MODULE_3__templates_updateFields__["default"]);
 		super({ form });
 
 		this.form = form;
-
 		this.bus = eventBus;
 		this.router = router;
 		this.userService = userService;
@@ -1174,9 +1376,8 @@ class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		this.message.clear();
 		this.message.hide();
 		this.append(this.message);
-		this.hide();
 
-		this.el.addEventListener("submit", function (event) {
+		this.el.addEventListener("submit", event => {
 			event.preventDefault();
 			const formData = {};
 			const fields = this.el.childNodes.item(0).elements;
@@ -1184,30 +1385,34 @@ class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 				formData[fields[field].name] = fields[field].value;
 			}
 			this.onSubmit(formData);
-		}.bind(this), true);
+		}, true);
 
-		this.bus.on("openUpdate", function () {
-			this.userService.getDataFetch().then(function (resp) {
+		this.bus.on("openUpdate", async () => {
+			const resp = await this.userService.getDataFetch();
+			if (resp.ok) {
 				const username = this.form.fields[0].el;
 				const email = this.form.fields[1].el;
-				username.value = resp.username;
-				email.value = resp.email;
-			}.bind(this)).catch(function (err) {
-				this.setErrorText(err);
-			}.bind(this));
-		}.bind(this));
+				username.value = resp.json.username;
+				email.value = resp.json.email;
+			} else {
+				this.setErrorText(resp.json.message);
+			}
+		});
+
+		this.hide();
 	}
 
-	onSubmit(formData) {
-		this.userService.update(formData.username, formData.email, formData.password, formData.old_password).then(function (resp) {
+	async onSubmit(formData) {
+		const resp = await this.userService.update(formData.username, formData.email, formData.password, formData.old_password);
+		if (resp.ok) {
 			this.form.reset();
 			this.message.clear();
 			this.message.hide();
-			this.bus.emit("auth", resp.username);
+			this.bus.emit("auth", resp.json.username);
 			this.router.goTo("/menu");
-		}.bind(this)).catch(function (err) {
-			this.setErrorText(err);
-		}.bind(this));
+		} else {
+			this.setErrorText(resp);
+		}
 	}
 
 	setErrorText(err) {
@@ -1219,7 +1424,58 @@ class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+const updateFields = [{
+	attrs: {
+		type: "text",
+		size: "128",
+		name: "username",
+		placeholder: "Name",
+		class: "form-block__input"
+	}
+}, {
+	attrs: {
+		type: "email",
+		size: "128",
+		name: "email",
+		placeholder: "Email",
+		class: "form-block__input"
+	}
+}, {
+	attrs: {
+		type: "password",
+		size: "128",
+		name: "password",
+		placeholder: "New password",
+		class: "form-block__input"
+	}
+}, {
+	attrs: {
+		type: "password",
+		size: "128",
+		name: "old_password",
+		placeholder: "Old password",
+		required: "required",
+		class: "form-block__input"
+	}
+}, {
+	attrs: {
+		type: "submit",
+		value: "Submit",
+		class: "form-block__button"
+	}
+}];
+
+/* harmony default export */ __webpack_exports__["default"] = (updateFields);
+
+/***/ }),
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1232,12 +1488,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 class CanvasView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
-	constructor(eventMarshrutka) {
+	constructor(eventBus) {
 		const canvas1 = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('canvas', { 'width': '850', 'height': '850' }, ['canv1'], "");
 		const canvas2 = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('canvas', { 'width': '850', 'height': '850' }, ['canv2'], "");
-
 		const winDiv = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('div', {}, ["winDiv"], "");
-		// canvas.style.setProperty("position", "absolute");
+
 		super([canvas1, canvas2, winDiv]);
 
 		this.el.style.setProperty("border", "none");
@@ -1248,12 +1503,12 @@ class CanvasView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 		this.winDiv = winDiv;
 		this.winDiv.hide();
 
-		this.canv = this.canvas2.el;
+		this.canvasForClicks = this.canvas2.el;
 		this.canvasForCubes = this.canvas1.el.getContext('2d');
 		this.canvasForFigure = this.canvas2.el.getContext('2d');
 
-		this.marshrutka = eventMarshrutka;
-		this.marshrutka.on("endOfGame", win => {
+		this.eventBus = eventBus;
+		this.eventBus.on("endOfGame", win => {
 			if (win) {
 				this.winDiv.setText("You win! =)");
 			} else {
@@ -1271,7 +1526,7 @@ class CanvasView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1300,38 +1555,43 @@ class UserService {
   * @param {string} password
   * @param {string} confirm
   */
-	signup(username, email, password, confirm) {
+	async signup(username, email, password, confirm) {
 		//не парсит JSON
-		return new Promise(function (resolve, reject) {
-			if (username.length < 4) {
-				throw new Error("Длина логина должна быть не меньше 4 символов!");
-			}
-			if (username.length > 12) {
-				throw new Error("Длина логина не должна превышать 12 символов!");
-			}
-			if (password.length < 6) {
-				throw new Error("Длина пароля должна быть не меньше 6 символов!");
-			}
-			if (password !== confirm) {
-				throw new Error("Пароли не совпадают!!!");
-			}
-			if (password === username) {
-				throw new Error("Логин и пароль не должны совпадать!");
-			}
+		const response = {
+			ok: false,
+			json: {},
+			message: ""
+		};
+		if (username.length < 4) {
+			response.message = "Длина логина должна быть не меньше 4 символов!";
+			return response;
+		}
+		if (username.length > 12) {
+			response.message = "Длина логина не должна превышать 12 символов!";
+			return response;
+		}
+		if (password.length < 6) {
+			response.message = "Длина пароля должна быть не меньше 6 символов!";
+			return response;
+		}
+		if (password !== confirm) {
+			response.message = "Пароли не совпадают!!!";
+			return response;
+		}
+		if (password === username) {
+			response.message = "Логин и пароль не должны совпадать!";
+			return response;
+		}
 
-			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_up', { username, email, password }).then(function (resp) {
-				console.log("username: " + resp.username);
-				this.user = resp;
-				return resp;
-			}.bind(this)).then(function (resp) {
-				return resp;
-			}.bind(this)).catch(function (err) {
-				//не могу достать errorMessage
-				console.info(err);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
+		const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_in', { login, password });
+		response.json = await resp.json();
+		if (resp.status >= 400) {
+			response.message = response.json.errorMessage;
+			return response;
+		}
+		response.ok = true;
+		this.user = response.json;
+		return response;
 	}
 
 	/**
@@ -1339,31 +1599,37 @@ class UserService {
   * @param {string} login
   * @param {string} password
   */
-	login(login, password) {
-		return new Promise(function (resolve, reject) {
-			if (login.length < 4) {
-				throw new Error("Длина логина должна быть не меньше 4 символов!", null);
-			}
-			if (login.length > 12) {
-				throw new Error("Длина логина не должна превышать 12 символов!", null);
-			}
-			if (password.length < 6) {
-				throw new Error("Длина пароля должна быть не меньше 6 символов!", null);
-			}
-			if (password === login) {
-				throw new Error("Логин и пароль не могут совпадать!", null);
-			}
-			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_in', { login, password }).then(function (resp) {
-				console.log("username: " + resp.username);
-				this.user = resp;
-				return resp;
-			}.bind(this)).catch(function (err) {
-				//не могу достать errorMessage
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
+	async login(login, password) {
+		const response = {
+			ok: false,
+			json: {},
+			message: ""
+		};
+		if (login.length < 4) {
+			response.message = "Длина логина должна быть не меньше 4 символов!";
+			return response;
+		}
+		if (login.length > 12) {
+			response.message = "Длина логина не должна превышать 12 символов!";
+			return response;
+		}
+		if (password.length < 6) {
+			response.message = "Попробуй еще раз! Используйте что-то поумнее";
+			return response;
+		}
+		if (password === login) {
+			response.message = "Логин и пароль не должны совпадать!";
+			return response;
+		}
+		const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_in', { login, password });
+		response.json = await resp.json();
+		if (resp.status >= 400) {
+			response.message = response.json.errorMessage;
+			return response;
+		}
+		response.ok = true;
+		this.user = response.json;
+		return response;
 	}
 
 	/**
@@ -1373,39 +1639,47 @@ class UserService {
   * @param {string} password
   * @param {string} old_password
   */
-	update(username, email, password, old_password) {
+	async update(username, email, password, old_password) {
 		//не парсит JSON
-		return new Promise(function (resolve, reject) {
-			if (username.length < 4) {
-				throw new Error("Длина логина должна быть не меньше 4 символов!");
-			}
-			if (username.length > 12) {
-				throw new Error("Длина логина не должна превышать 12 символов!");
-			}
-			if (password.length < 6) {
-				throw new Error("Длина пароля должна быть не меньше 6 символов!");
-			}
-			if (old_password.length < 6) {
-				throw new Error("Длина пароля должна быть не меньше 6 символов!");
-			}
-			if (password === username) {
-				throw new Error("Логин и пароль не должны совпадать!");
-			}
-			if (old_password === username) {
-				throw new Error("Логин и пароль не должны совпадать!");
-			}
+		const response = {
+			ok: false,
+			json: {},
+			message: ""
+		};
+		if (username.length < 4) {
+			response.message = "Длина логина должна быть не меньше 4 символов!";
+			return response;
+		}
+		if (username.length > 12) {
+			response.message = "Длина логина не должна превышать 12 символов!";
+			return response;
+		}
+		if (password.length < 6) {
+			response.message = "Длина пароля должна быть не меньше 6 символов!";
+			return response;
+		}
+		if (old_password.length < 6) {
+			response.message = "Длина пароля должна быть не меньше 6 символов!";
+			return response;
+		}
+		if (password === username) {
+			response.message = "Логин и пароль не должны совпадать!";
+			return response;
+		}
+		if (old_password === username) {
+			response.message = "Логин и пароль не должны совпадать!";
+			return response;
+		}
 
-			resolve(__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/update', { username, email, password, old_password }).then(function (resp) {
-				this.user = resp;
-				console.log("username: " + resp.username);
-				return resp;
-			}.bind(this)).catch(function (err) {
-				//не могу достать errorMessage
-				console.info(err);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
+		const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/update', { login, password });
+		response.json = await resp.json();
+		if (resp.status >= 400) {
+			response.message = response.json.errorMessage;
+			return response;
+		}
+		response.ok = true;
+		this.user = response.json;
+		return response;
 	}
 
 	/**
@@ -1421,112 +1695,74 @@ class UserService {
   * @param force - пременная для принудительной отправки гет запроса если true
   * @return {Promise} - возвращает функцию колбек с результатом запроса или ошибкой
   */
-	getDataFetch(force = false) {
+	async getDataFetch(force = false) {
+		//нужно ли возвращать проимс?
+		const response = {
+			ok: false,
+			json: {},
+			message: ""
+		};
+
 		if (this.isLoggedIn() && !force) {
-			return new Promise(function (resolve, reject) {
-				resolve(this.user);
-			}.bind(this));
+			response.ok = true;
+			response.json = this.user;
+			return response;
 		}
-		return __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/whoisit').then(function (resp) {
-			this.user = resp;
-			return this.user;
-		}.bind(this)).catch(function (err) {
+
+		const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/whoisit');
+		response.json = await resp.json();
+
+		if (resp.status >= 400) {
 			this.user = null;
-			console.log(err.statusText);
-			throw new Error("Can not get response =(");
-		}.bind(this));
+			this.users = [];
+			response.message = response.json.errorMessage;
+			return response;
+		}
+		response.ok = true;
+		this.user = response.json;
+		return response;
 	}
 
 	/**
   * Разлогинивает
   */
-	async logout() {
+	logout() {
 		if (this.isLoggedIn()) {
 			this.user = null;
 			this.users = [];
-			__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/exit').then(() => {
-				this.getDataFetch();
-			}).catch(function (err) {
-				//получить ошибки с сервера
-				console.log(err.errorMessage); //удаляет куку на клиенте, но при запросе на whoiit возвращает пользователя
-			});
+			__WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/user/exit');
 		}
 	}
 
+	/**
+  * Запрашивает список пользователей
+  */
 	loadUsersList() {
 		return __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('');
 	}
-
-	/**
-  * Загружает список всех пользователей
-  * @param callback
-  */
-	// loadUsersList(callback) {
-	// 	Http.Get('/users', function (err, users) {
-	// 		if (err) {
-	// 			return callback(err, users);
-	// 		}
-	//
-	// 		this.users = users;
-	//
-	// 		if (this.isLoggedIn()) {
-	// 			this.users = this.users.map(user => {
-	// 				if (user.email === this.user.email) {
-	// 					user.me = user;
-	// 				}
-	// 				return user;
-	// 			});
-	// 		}
-	//
-	// 		callback(null, this.users);
-	// 	}.bind(this));
-	// }
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = UserService;
 
 
 /***/ }),
-/* 21 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__blocks_block_block__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_routerFields__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_block_block__ = __webpack_require__(0);
+
 
 
 
 
 class Router {
 	constructor(eventBus, userService) {
-		this.routes = [{
-			url: "/menu",
-			event: "openMenu"
-		}, {
-			url: "/exit",
-			event: "exit"
-		}, {
-			url: "/game",
-			event: "openGame"
-		}, {
-			url: "/update",
-			event: "openUpdate"
-		}, {
-			url: "/scoreboard",
-			event: "openScoreboard"
-		}, {
-			url: "/rules",
-			event: "openRules"
-		}, {
-			url: "/signup",
-			event: "openSignUp"
-		}, {
-			url: "/login",
-			event: "openLogin"
-		}];
-
+		this.routes = __WEBPACK_IMPORTED_MODULE_0__templates_routerFields__["default"];
 		this.bus = eventBus;
 		this.userService = userService;
-		this.app = new __WEBPACK_IMPORTED_MODULE_0__blocks_block_block__["default"](document.body);
+		this.app = new __WEBPACK_IMPORTED_MODULE_1__blocks_block_block__["default"](document.body);
 
 		//реагирует на любые клики. в том числе и сабмиты
 		this.app.on("click", event => {
@@ -1535,60 +1771,37 @@ class Router {
 			if (type === 'a') {
 				event.preventDefault();
 				this.goTo(target.href);
-				return;
 			}
 		}, false);
 
-		window.onpopstate = function () {
+		window.onpopstate = () => {
 			console.log(location.pathname);
 			this.changeState(location.pathname);
-		}.bind(this);
+		};
 	}
 
-	start() {
+	async start() {
 		this._routes = [];
 		this.counter = 0;
-		this.routes.forEach(function (route) {
+		this.routes.forEach(route => {
 			this._routes.push({
 				url_pattern: route.url,
-				emit: function (event) {
+				emit: event => {
 					this.bus.emit(event);
-				}.bind(this)
+				}
 			});
-		}.bind(this));
+		});
 
-		this.userService.getDataFetch().then(function (resp) {
-			this.bus.emit("auth", resp.username);
-
+		const resp = await this.userService.getDataFetch();
+		if (resp.ok) {
+			this.bus.emit("auth", resp.json.username);
 			const slice_Routes = this._routes.slice(0, 6);
-			const idx = slice_Routes.findIndex(function (_route) {
-				return location.pathname.match(_route.url_pattern);
-			});
-			if (idx > -1) {
-				const _route = slice_Routes[idx];
-				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
-				this.changeState(_route.url_pattern);
-			} else {
-				const _route = this._routes[0];
-				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
-				this.changeState(this.routes[0].url);
-			}
-		}.bind(this)).catch(function (err) {
+			this.findNewState(slice_Routes);
+		} else {
 			this.bus.emit("unauth");
 			const slice_Routes = this._routes.slice(4);
-			const idx = slice_Routes.findIndex(function (_route) {
-				return location.pathname.match(_route.url_pattern);
-			});
-			if (idx > -1) {
-				const _route = slice_Routes[idx];
-				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
-				this.changeState(_route.url_pattern);
-			} else {
-				const _route = this._routes[0];
-				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
-				this.changeState(this.routes[0].url);
-			}
-		}.bind(this));
+			this.findNewState(slice_Routes);
+		}
 	}
 
 	goTo(path) {
@@ -1607,38 +1820,93 @@ class Router {
 		const _route = this._routes[idx];
 		_route.emit(this.routes[idx].event);
 	}
+
+	findNewState(slice_Routes) {
+		const idx = slice_Routes.findIndex(function (_route) {
+			return location.pathname.match(_route.url_pattern);
+		});
+		if (idx > -1) {
+			const _route = slice_Routes[idx];
+			window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+			this.changeState(_route.url_pattern);
+		} else {
+			const _route = this._routes[0];
+			window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+			this.changeState(this.routes[0].url);
+		}
+	}
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = Router;
 
 
 /***/ }),
-/* 22 */
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+const fields = [{
+	url: "/menu",
+	event: "openMenu"
+}, {
+	url: "/exit",
+	event: "exit"
+}, {
+	url: "/game",
+	event: "openGame"
+}, {
+	url: "/update",
+	event: "openUpdate"
+}, {
+	url: "/scoreboard",
+	event: "openScoreboard"
+}, {
+	url: "/rules",
+	event: "openRules"
+}, {
+	url: "/signup",
+	event: "openSignUp"
+}, {
+	url: "/login",
+	event: "openLogin"
+}];
+
+/* harmony default export */ __webpack_exports__["default"] = (fields);
+
+/***/ }),
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"./Game/cell.js": 7,
 	"./Game/field.js": 8,
-	"./Game/game.js": 51,
+	"./Game/game.js": 9,
 	"./blocks/block/block.js": 0,
 	"./blocks/form/form.js": 2,
 	"./blocks/message/message.js": 3,
 	"./include.js": 6,
-	"./main.js": 23,
+	"./main.js": 27,
 	"./modules/eventBus.js": 5,
 	"./modules/http.js": 4,
-	"./modules/router.js": 21,
-	"./services/user-service.js": 20,
-	"./templates/scoreBoard.js": 17,
-	"./views/backButtonView.js": 13,
-	"./views/canvasView.js": 19,
+	"./modules/router.js": 24,
+	"./services/user-service.js": 23,
+	"./templates/loginFields.js": 14,
+	"./templates/routerFields.js": 25,
+	"./templates/scoreBoard.js": 19,
+	"./templates/signUpFileds.js": 12,
+	"./templates/updateFields.js": 21,
+	"./views/backButtonView.js": 15,
+	"./views/canvasView.js": 22,
 	"./views/commonView.js": 1,
-	"./views/loginView.js": 12,
+	"./views/loginView.js": 13,
 	"./views/menuView.js": 10,
-	"./views/profileView.js": 14,
-	"./views/rulesView.js": 15,
-	"./views/scoreboardView.js": 16,
+	"./views/profileView.js": 16,
+	"./views/rulesView.js": 17,
+	"./views/scoreboardView.js": 18,
 	"./views/signUpView.js": 11,
-	"./views/updateView.js": 18
+	"./views/updateView.js": 20
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1654,28 +1922,28 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 22;
+webpackContext.id = 26;
 
 /***/ }),
-/* 23 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_signUpView__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_updateView__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__views_canvasView__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_updateView__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__views_canvasView__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__blocks_block_block_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_user_service_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_user_service_js__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__modules_eventBus__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__modules_router__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Game_game__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__modules_router__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Game_game__ = __webpack_require__(9);
 
 /**
  * Основной модуль работатющий со всеми объектами
@@ -1747,15 +2015,8 @@ Views.push(backButtonView);
 Views.push(rulesView);
 Views.push(scoreboardView);
 Views.push(canvas);
-// backButtonView.on("click", function(event) {
-// 	window.history.back();
-// 	event.preventDefault();
-// 	eventBus.emit("openMenu");
-// });
-
 
 eventBus.on("openSignUp", function () {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/signup");
 	Views.forEach(view => {
 		view.hide();
 	});
@@ -1764,7 +2025,6 @@ eventBus.on("openSignUp", function () {
 });
 
 eventBus.on("openLogin", function () {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
 	Views.forEach(view => {
 		view.hide();
 	});
@@ -1773,7 +2033,6 @@ eventBus.on("openLogin", function () {
 });
 
 eventBus.on("openUpdate", function () {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/login");
 	Views.forEach(view => {
 		view.hide();
 	});
@@ -1782,7 +2041,6 @@ eventBus.on("openUpdate", function () {
 });
 
 eventBus.on("openRules", function () {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/rules");
 	Views.forEach(view => {
 		view.hide();
 	});
@@ -1791,23 +2049,19 @@ eventBus.on("openRules", function () {
 });
 
 eventBus.on("openMenu", function () {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/menu");
 	Views.forEach(view => {
 		view.hide();
 	});
 	menuView.show();
 }.bind(this));
 
-//отследить ексепшены при отсутствии интернета
 eventBus.on("exit", function () {
 	userService.logout();
-	profileView.hide();
 	eventBus.emit("unauth");
 	router.goTo('/menu');
 });
 
 eventBus.on("openScoreboard", function () {
-	// window.history.pushState({page: "signUp"}, "SignUP", "/scoreboard");
 	Views.forEach(view => {
 		view.hide();
 	});
@@ -1816,20 +2070,12 @@ eventBus.on("openScoreboard", function () {
 });
 
 eventBus.on("openGame", function () {
-	// if(router.counter === 0) {
-	// 	router.counter +=1;
-	// 	document.location.href = "https://amigolandistr.com/ldownload/amigo_dexp.exe?amigo_install=1&partnerid=848000&ext_partnerid=dse.1%3A848001%2Cdse.2%3A848002%2Chp.1%3A848003%2Chp.2%3A848004%2Cpult.1%3A848005%2Cpult.2%3A848006%2Cvbm.1%3A848007%2Cvbm.2%3A848008%2Cany%3A848009&am_default=1&dse_install=1&hp_install=1&vbm_install=1&attr=900029aosg&rfr=900029&ext_params=old_mr1lad%3D59f3d441704a9916-2446909_2008196_48374651204-2446909_2008196_48374651204-2446909_2008196_48374651204%26old_mr1lext%3D2138_gclid%253DEAIaIQobChMIr9OTy4yS1wIVYRbTCh393A_-EAAYASAAEgLmXfD_BwE%2526url%253Dhttp%25253a%25252f%25252fdexp.amigo.mail.ru%2526_1larg_sub%253D48374651204%2526ext_partnerid%253Ddse.1%25253a848001%252Cdse.2%25253a848002%252Chp.1%25253a848003%252Chp.2%25253a848004%252Cpult.1%25253a848005%252Cpult.2%25253a848006%252Cvbm.1%25253a848007%252Cvbm.2%25253a848008%252Cany%25253a848009%2526partnerid%253D848000%26old_VID%3D32lWLp3cwC1d0000060C14nd%253A%253A178610991%253A";
-	// 	setTimeout(() => {window.open("https://dexp.amigo.mail.ru/?context=prtnrs&_1lr=0-2446909_2008196_48374651204&source2=2138_gclid%3dCjwKCAjwssvPBRBBEiwASFoVd7oYdBEGmfvVx23YcIJB984HYqMOuZwH3cht1gwTgUaiUfE4ENc_sxoCXqMQAvD_BwE%26url%3dhttp%253a%252f%252fdexp.amigo.mail.ru%26_1larg_sub%3d48374651204%26ext_partnerid%3ddse.1%253a848001%2Cdse.2%253a848002%2Chp.1%253a848003%2Chp.2%253a848004%2Cpult.1%253a848005%2Cpult.2%253a848006%2Cvbm.1%253a848007%2Cvbm.2%253a848008%2Cany%253a848009%26partnerid%3d848000&gclid=CjwKCAjwssvPBRBBEiwASFoVd7oYdBEGmfvVx23YcIJB984HYqMOuZwH3cht1gwTgUaiUfE4ENc_sxoCXqMQAvD_BwE&url=http%3a%2f%2fdexp.amigo.mail.ru&ext_partnerid=dse.1%3a848001,dse.2%3a848002,hp.1%3a848003,hp.2%3a848004,pult.1%3a848005,pult.2%3a848006,vbm.1%3a848007,vbm.2%3a848008,any%3a848009&partnerid=848000");
-	// 	}, 500);
-	// }
-	// else {
 	Views.forEach(view => {
 		view.hide();
 	});
 	backButtonView.show();
 	canvas.show();
 	game.start(() => router.goTo('/menu')); //выход в меню
-	// }
 });
 
 app.append(menuView).append(signUpView).append(loginView).append(backButtonView).append(profileView).append(rulesView).append(scoreboardView).append(canvas).append(updateView);
@@ -1837,17 +2083,13 @@ app.append(menuView).append(signUpView).append(loginView).append(backButtonView)
 router.start();
 
 /***/ }),
-/* 24 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./blocks/message/message.css": 25,
-	"./views/viewsCss/backButton.css": 26,
-	"./views/viewsCss/canvas.css": 27,
-	"./views/viewsCss/commonText.css": 28,
-	"./views/viewsCss/commonView.css": 29,
-	"./views/viewsCss/form.css": 30,
-	"./views/viewsCss/login.css": 31,
+	"./views/viewsCss/backButton.css": 29,
+	"./views/viewsCss/canvas.css": 30,
+	"./views/viewsCss/form.css": 31,
 	"./views/viewsCss/menu.css": 32,
 	"./views/viewsCss/section.css": 33,
 	"./views/viewsCss/signUp.css": 34,
@@ -1867,31 +2109,7 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 24;
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
+webpackContext.id = 28;
 
 /***/ }),
 /* 29 */
@@ -1934,247 +2152,6 @@ webpackContext.id = 24;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_http__ = __webpack_require__(4);
-
-
-
-
-
-const x = 425;
-const y = 230;
-const sq = Math.sqrt(2) / 2;
-const side = 66;
-
-const width = 6;
-const height = 6;
-const maxPlayers = 2;
-
-function* generatorId(array) {
-	let i = 0;
-	while (i < array.length) {
-		yield array[i].playerID;
-		i++;
-		if (i === array.length) i = 0;
-	}
-}
-
-class Game {
-	constructor(canvas, eventBus) {
-		this.canvas = canvas;
-		this.canvasForCubes = canvas.canvasForCubes;
-		this.canvasForFigure = canvas.canvasForFigure;
-		this.canv = canvas.canv;
-		this.trolleybus = eventBus;
-
-		this.gameID = 0;
-		this.players = [];
-		this.playerID = 0;
-		this.currentPlayerID = 0;
-		this.gameOver = false;
-		this.arrayOfFigures = [];
-
-		this.xFirstPlay = -1;
-		this.yFirstPlay = -1;
-		this.xSecondPlay = -1;
-		this.ySecondPlay = -1;
-
-		this.gen = 0;
-
-		// this.field = new Field(6, this.canvasForCubes, this.canvasForFigure, this.canvas.winDiv);
-		this.field = new __WEBPACK_IMPORTED_MODULE_0__field_js__["default"](6, this.canvas, this.trolleybus);
-	}
-
-	gameStart() {
-		return new Promise(function (resolve, reject) {
-			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/single/create', { width, height, maxPlayers }).then(function (resp) {
-				this.gameID = resp.gameID;
-				this.gameComplete();
-				return resp;
-			}.bind(this)).catch(function (err) {
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
-	}
-
-	gameComplete() {
-		return __WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchGet('/game/complete?gameID=' + this.gameID).then(function (resp) {
-			this.players = resp.players;
-			this.gen = generatorId(this.players);
-			this.playerID = this.players[0].playerID;
-			this.currentPlayerID = resp.currentPlayerID;
-			this.gameOver = resp.gameOver;
-			this.arrayOfFigures = resp.field;
-			this.setFiguresByArray(this.arrayOfFigures);
-			this.field.drawAllFigures();
-			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-		}.bind(this)).catch(function (err) {
-			this.user = null;
-			console.log(err.statusText);
-			throw new Error("Can not get response =(");
-		}.bind(this));
-	}
-
-	gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
-		this.exit = exit;
-		let gameID = this.gameID;
-		let playerID = this.playerID;
-		return new Promise(function (resolve, reject) {
-			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/play', { x1, x2, y1, y2, gameID, playerID, currentPlayerID }).then(function (resp) {
-				this.players = resp.players;
-				this.currentPlayerID = resp.currentPlayerID;
-				this.gameOver = resp.gameOver;
-				this.arrayOfFigures = resp.field;
-				this.field.deleteAllFigure();
-				this.field.clearFigures();
-				this.setFiguresByArray(this.arrayOfFigures);
-				this.field.drawAllFigures();
-				this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-				this.field.deleteAllBrightCube();
-				this.field.drawField();
-				if (this.gameOver === true) {
-					this.field.gameOver(this.playerID);
-					debugger;
-					setTimeout(() => {
-						this.canvas.winDiv.hide();
-						this.exit();
-					}, 3000);
-				}
-				this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
-				return resp;
-			}.bind(this)).catch(function (err) {
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
-	}
-
-	gameStatus(gameID, playerID, currentPlayerID, exit) {
-		this.exit = exit;
-		return new Promise(function (resolve, reject) {
-			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/status', { gameID, playerID, currentPlayerID }).then(function (resp) {
-				this.players = resp.players;
-				this.currentPlayerID = resp.currentPlayerID;
-				this.gameOver = resp.gameOver;
-				this.arrayOfFigures = resp.field;
-				this.field.deleteAllFigure();
-				this.field.clearFigures();
-				this.setFiguresByArray(this.arrayOfFigures);
-				this.field.drawAllFigures();
-				this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-
-				if (this.gameOver === true) {
-					this.field.gameOver(this.playerID);
-					debugger;
-					setTimeout(() => {
-						this.canvas.winDiv.hide();
-						this.exit();
-					}, 3000);
-				}
-				return resp;
-			}.bind(this)).catch(function (err) {
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
-	}
-
-	start(exit) {
-		this.exit = exit;
-		this.field.deleteAllFigure();
-		this.field.clearFigures();
-		this.field.drawField();
-		this.gameStart();
-
-		this.canv.addEventListener('click', { handleEvent: this.updateCanvas.bind(this), exit: this.exit }, false);
-	}
-
-	setFiguresByArray(array) {
-		for (let i = 0; i < width; i++) {
-			for (let j = 0; j < height; j++) {
-				let model = 0;
-				if (array[i][j] >= 0) {
-					model = array[i][j] + 2;
-					this.field.setFigure(i, j, model);
-				}
-			}
-		}
-	}
-
-	findOffset(obj) {
-		let curX = 0;
-		let curY = 0;
-		if (obj.offsetParent) {
-			do {
-				curX += obj.offsetLeft;
-				curY += obj.offsetTop;
-			} while (obj = obj.offsetParent);
-			return { x: curX, y: curY };
-		}
-	}
-
-	updateCanvas(e) {
-		let pos = this.findOffset(this.canv);
-		let mouseX = e.pageX - pos.x;
-		let mouseY = e.pageY - pos.y;
-		let XX = (mouseX - x + mouseY - y) * sq;
-		let YY = (mouseY - mouseX + x - y) * sq;
-
-		if (XX < side * width && YY < side * height && XX > 0 && YY > 0) {
-			let idx;
-			let idy;
-			for (let i = 0; i < width; i++) {
-				if (XX > side * i) idx = i;
-			}
-			for (let i = 0; i < height; i++) {
-				if (YY > side * i) idy = i;
-			}
-
-			if (this.field.findById(idx, idy).figure === this.currentPlayerID + 2) {
-				this.field.deleteAllBrightCube();
-				this.field.brightCubes(idx, idy);
-				this.field.drawField();
-
-				this.xFirstPlay = idx;
-				this.yFirstPlay = idy;
-			}
-			if (this.field.findById(idx, idy).brightness === 1) {
-				this.xSecondPlay = idx;
-				this.ySecondPlay = idy;
-
-				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
-			}
-		}
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = Game;
-;
 
 /***/ })
 /******/ ]);
