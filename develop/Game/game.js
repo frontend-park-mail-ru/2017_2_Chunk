@@ -1,7 +1,7 @@
 'use strict';
 
 import Field from "./field.js";
-import GameService from "./game-service.js";
+import GameService from "../services/game-service.js";
 
 const x = 425;
 const y = 230;
@@ -38,59 +38,61 @@ export default class Game {
 		this.gameOver = false;
 		this.arrayOfFigures = [];
 
-		this.xFirstPlay = -1;
-		this.yFirstPlay = -1;
-		this.xSecondPlay = -1;
-		this.ySecondPlay = -1;
+		this.coordOfMove = {
+			x1: -1,
+			y1: -1,
+			x2: -1,
+			y2: -1,
+		};
 
-		this.gen = 0;
+		this.generatorID = 0;
 
 		this.field = new Field(width, this.canvas, this.eventBus);
-		this.fetchService = new GameService();
+		this.gameService = new GameService();
 	}
 
 
 	async Start() {
-		this.response = await this.fetchService.start(width, width, maxPlayers);
-		this.gameID = this.response.json.gameID;
+		const response = await this.gameService.start(width, width, maxPlayers);
+		this.gameID = response.json.gameID;
 		this.Complete();
 	}
 
 
 	async Complete() {
-		this.response = await this.fetchService.complete(this.gameID);
-		this.players = this.response.json.players;
-		this.gen = generatorId(this.players);
+		const response = await this.gameService.complete(this.gameID);
+		this.players = response.json.players;
+		this.generatorID = generatorId(this.players);
 		this.playerID = this.players[0].playerID;
-		this.currentPlayerID = this.response.json.currentPlayerID;
-		this.gameOver = this.response.json.gameOver;
-		this.arrayOfFigures = this.response.json.field;
+		this.currentPlayerID = response.json.currentPlayerID;
+		this.gameOver = response.json.gameOver;
+		this.arrayOfFigures = response.json.field;
 		this.setFiguresByArray(this.arrayOfFigures);
 		this.field.drawAllFigures();
 		this.field.drawCountOfFigure(this.players, this.currentPlayerID);
 	}
 
 
-	async Play(x1, y1, x2, y2, currentPlayerID, exit) {
-		let gameID = this.gameID;
-		let playerID = this.playerID;
-		this.response = await this.fetchService.play(x1, x2, y1, y2, gameID, playerID, currentPlayerID);
+	async Play(coord, currentPlayerID, exit) {
+		const gameID = this.gameID;
+		const playerID = this.playerID;
+		const response = await this.gameService.play(coord.x1, coord.x2, coord.y1, coord.y2, gameID, playerID, currentPlayerID);
 		this.stepProcessing(this.response, exit);
 		this.Status(gameID, playerID, this.currentPlayerID, exit);
 	}
 
 
 	async Status(gameID, playerID, currentPlayerID, exit) {
-		this.response = await this.fetchService.status(gameID, playerID, currentPlayerID);
-		this.stepProcessing(this.response, exit);
+		const response = await this.gameService.status(gameID, playerID, currentPlayerID);
+		this.stepProcessing(response, exit);
 	}
 
 
 	stepProcessing(response, exit) {
-		this.players = this.response.json.players;
-		this.currentPlayerID = this.response.json.currentPlayerID;
-		this.gameOver = this.response.json.gameOver;
-		this.arrayOfFigures = this.response.json.field;
+		this.players = response.json.players;
+		this.currentPlayerID = response.json.currentPlayerID;
+		this.gameOver = response.json.gameOver;
+		this.arrayOfFigures = response.json.field;
 		this.field.deleteAllFigure();
 		this.field.clearFigures();
 		this.setFiguresByArray(this.arrayOfFigures);
@@ -145,10 +147,10 @@ export default class Game {
 	}
 
 
-	updateCanvas(e){
+	updateCanvas(event){
 		let pos = this.findOffset(this.canvasForClicks);
-		let mouseX = e.pageX - pos.x;
-		let mouseY = e.pageY - pos.y;
+		let mouseX = event.pageX - pos.x;
+		let mouseY = event.pageY - pos.y;
 		let XX = (mouseX - x + mouseY - y)*sq;
 		let YY = (mouseY - mouseX + x - y)*sq;
 
@@ -167,14 +169,14 @@ export default class Game {
 				this.field.brightCubes(idx, idy);
 				this.field.drawField();
 
-				this.xFirstPlay = idx;
-				this.yFirstPlay = idy;
+				this.coordOfMove.x1 = idx;
+				this.coordOfMove.y1 = idx;
 			}
 			if (this.field.findById(idx, idy).brightness === brightLevel) {
-				this.xSecondPlay = idx;
-				this.ySecondPlay = idy;
+				this.coordOfMove.x2 = idx;
+				this.coordOfMove.y2 = idy;
 
-				this.Play(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
+				this.Play(this.coordOfMove, this.generatorID.next().value, this.exit);
 			}
 		}
 	}

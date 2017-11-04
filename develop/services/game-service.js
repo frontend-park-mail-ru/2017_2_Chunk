@@ -9,6 +9,10 @@ export default class GameService {
             json: {},
             message: "",
         };
+
+        this.gameInfo = {
+
+        }
     }
 
 
@@ -42,8 +46,8 @@ export default class GameService {
     }
 
 
-    async play(x1, x2, y1, y2, gameID, playerID, currentPlayerID) {
-        const resp = await Http.FetchPost('/game/play', {x1, x2, y1, y2, gameID, playerID, currentPlayerID});
+    async play(coord, gameID, playerID, currentPlayerID) {
+        const resp = await Http.FetchPost('/game/play', {x1: coord.x1, x2: coord.x2, y1: coord.y1, y2: coord.y2, gameID, playerID, currentPlayerID});
         this.response.json = await resp.json();
 
         if (resp.status >= 400) {

@@ -694,7 +694,7 @@ class Game {
 
 		this.xFirstPlay = this.yFirstPlay = this.xSecondPlay = this.ySecondPlay = -1;
 
-		this.gen = 0;
+		this.generatorID = 0;
 
 		this.field = new __WEBPACK_IMPORTED_MODULE_0__field_js__["default"](width, this.canvas, this.eventBus);
 	}
@@ -716,7 +716,7 @@ class Game {
 	gameComplete() {
 		return __WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchGet('/game/complete?gameID=' + this.gameID).then(function (resp) {
 			this.players = resp.players;
-			this.gen = generatorId(this.players);
+			this.generatorID = generatorId(this.players);
 			this.playerID = this.players[0].playerID;
 			this.currentPlayerID = resp.currentPlayerID;
 			this.gameOver = resp.gameOver;
@@ -860,7 +860,7 @@ class Game {
 				this.xSecondPlay = idx;
 				this.ySecondPlay = idy;
 
-				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
+				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.generatorID.next().value, this.exit);
 			}
 		}
 	}
