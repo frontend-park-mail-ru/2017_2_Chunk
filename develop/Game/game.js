@@ -1,15 +1,15 @@
 'use strict';
 
 import Field from "./field.js";
-import Http from "../modules/http";
+import GameService from "./game-service.js";
 
 const x = 425;
 const y = 230;
 const sq = Math.sqrt(2)/2;
 const side = 66;
+const brightLevel = 1;
 
 const width = 6;
-const height = 6;
 const maxPlayers = 2;
 
 function* generatorId(array) {
@@ -22,13 +22,14 @@ function* generatorId(array) {
 	}
 }
 
-export default class Game{
+export default class Game {
 	constructor(canvas, eventBus) {
 		this.canvas = canvas;
-		this.canvasForCubes = canvas.canvasForCubes;
-		this.canvasForFigure = canvas.canvasForFigure;
-		this.canv = canvas.canv;
-		this.trolleybus = eventBus;
+
+		this.canvasForCubes = this.canvas.canvasForCubes;
+		this.canvasForFigure = this.canvas.canvasForFigure;
+		this.canvasForClicks = this.canvas.canvasForClicks;
+		this.eventBus = eventBus;
 
 		this.gameID = 0;
 		this.players = [];
@@ -44,124 +45,83 @@ export default class Game{
 
 		this.gen = 0;
 
-		// this.field = new Field(6, this.canvasForCubes, this.canvasForFigure, this.canvas.winDiv);
-		this.field = new Field(6, this.canvas, this.trolleybus);
+		this.field = new Field(width, this.canvas, this.eventBus);
+		this.fetchService = new GameService();
 	}
 
 
-	async gameStart() {
-		const response = await Http.FetchPost('/game/single/create', {width, height, maxPlayers});
-		const resp = await response.json;
-		debugger;
-		if (response.ok) {
-			this.gameID = resp.gameID;
-			this.gameComplete();
-			return resp;
-		}
-		else {
-			//понятия не имею, что за ошибки
-		}
-	};
-
-
-	async gameComplete() {
-		const response = await Http.FetchGet('/game/complete?gameID=' + this.gameID);
-		const resp = await response.json;
-		if (response.ok) {
-			this.players = resp.players;
-			this.gen = generatorId(this.players);
-			this.playerID = this.players[0].playerID;
-			this.currentPlayerID = resp.currentPlayerID;
-			this.gameOver = resp.gameOver;
-			this.arrayOfFigures = resp.field;
-			this.setFiguresByArray(this.arrayOfFigures);
-			this.field.drawAllFigures();
-			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-		}
-		else {
-			//понятия не имею что за ошибки
-		}
+	async Start() {
+		this.response = await this.fetchService.start(width, width, maxPlayers);
+		this.gameID = this.response.json.gameID;
+		this.Complete();
 	}
 
 
-	async gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
-		this.exit = exit;
-		let gameID = this.gameID;
+	async Complete() {
+		this.response = await this.fetchService.complete(this.gameID);
+		this.players = this.response.json.players;
+		this.gen = generatorId(this.players);
+		this.playerID = this.players[0].playerID;
+		this.currentPlayerID = this.response.json.currentPlayerID;
+		this.gameOver = this.response.json.gameOver;
+		this.arrayOfFigures = this.response.json.field;
+		this.setFiguresByArray(this.arrayOfFigures);
+		this.field.drawAllFigures();
+		this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+	}
+
+
+	async Play(x1, y1, x2, y2, currentPlayerID, exit) {
+        let gameID = this.gameID;
 		let playerID = this.playerID;
-		const response = await Http.FetchPost('/game/play', {x1, x2, y1, y2, gameID, playerID, currentPlayerID});
-		const resp = await response.json;
-		if (response.ok) {
-			this.players = resp.players;
-			this.currentPlayerID = resp.currentPlayerID;
-			this.gameOver = resp.gameOver;
-			this.arrayOfFigures = resp.field;
-			this.field.deleteAllFigure();
-			this.field.clearFigures();
-			this.setFiguresByArray(this.arrayOfFigures);
-			this.field.drawAllFigures();
-			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-			this.field.deleteAllBrightCube();
-			this.field.drawField();
-			if (this.gameOver === true) {
-				this.field.gameOver(this.playerID);
-				setTimeout(() => {
-					this.canvas.winDiv.hide();
-					this.exit();
-				}, 3000);
-			}
-			this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
-		}
-		else {
-			//понятия не имею что за ошибки
-		}
+		this.response = await this.fetchService.play(x1, x2, y1, y2, gameID, playerID, currentPlayerID);
+        this.stepProcessing(this.response, exit);
+		this.Status(gameID, playerID, this.currentPlayerID, exit);
 	}
 
 
-	async gameStatus(gameID, playerID, currentPlayerID, exit) {
-		this.exit = exit;
-		const response = await Http.FetchPost('/game/status', {gameID, playerID, currentPlayerID});
-		const resp = await response.json;
-		if (response.ok) {
-			this.players = resp.players;
-			this.currentPlayerID = resp.currentPlayerID;
-			this.gameOver = resp.gameOver;
-			this.arrayOfFigures = resp.field;
-			this.field.deleteAllFigure();
-			this.field.clearFigures();
-			this.setFiguresByArray(this.arrayOfFigures);
-			this.field.drawAllFigures();
-			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-
-			if (this.gameOver === true) {
-				this.field.gameOver(this.playerID);
-				debugger;
-				setTimeout(() => {
-					this.canvas.winDiv.hide();
-					this.exit();
-				}, 3000);
-			}
-			return resp;
-		}
-		else {
-			//понятия не имею что за ошибки
-		}
+	async Status(gameID, playerID, currentPlayerID, exit) {
+		this.response = await this.fetchService.status(gameID, playerID, currentPlayerID);
+		this.stepProcessing(this.response, exit);
 	}
 
 
-	start(exit) {
+	stepProcessing(response, exit) {
+        this.players = this.response.json.players;
+        this.currentPlayerID = this.response.json.currentPlayerID;
+        this.gameOver = this.response.json.gameOver;
+        this.arrayOfFigures = this.response.json.field;
+        this.field.deleteAllFigure();
+        this.field.clearFigures();
+        this.setFiguresByArray(this.arrayOfFigures);
+        this.field.drawAllFigures();
+        this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+        this.field.deleteAllBrightCube();
+        this.field.drawField();
+        if (this.gameOver === true) {
+            this.field.gameOver(this.playerID);
+            setTimeout(() => {
+                this.canvas.winDiv.hide();
+                exit();
+            }, 3000);
+        }
+	}
+
+
+	startGame(exit) {
 		this.exit = exit;
 		this.field.deleteAllFigure();
 		this.field.clearFigures();
 		this.field.drawField();
-		this.gameStart();
+		this.Start();
 
-		this.canv.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
+		this.canvasForClicks.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
 	}
 
 
 	setFiguresByArray(array) {
 		for (let i = 0; i < width; i++) {
-			for (let j = 0; j < height; j++) {
+			for (let j = 0; j < width; j++) {
 				let model = 0;
 				if (array[i][j] >= 0) {
 					model = array[i][j] + 2;
@@ -186,22 +146,20 @@ export default class Game{
 
 
 	updateCanvas(e){
-		let pos = this.findOffset(this.canv);
+		let pos = this.findOffset(this.canvasForClicks);
 		let mouseX = e.pageX - pos.x;
 		let mouseY = e.pageY - pos.y;
 		let XX = (mouseX - x + mouseY - y)*sq;
 		let YY = (mouseY - mouseX + x - y)*sq;
 
-		if (XX < side*width && YY < side*height && XX > 0 && YY > 0) {
+		if (XX < side*width && YY < side*width && XX > 0 && YY > 0) {
 			let idx;
 			let idy;
 			for (let i = 0; i < width; i++) {
 				if (XX > side*i)
 					idx = i;
-			}
-			for (let i = 0; i < height; i++) {
-				if (YY > side*i)
-					idy = i;
+                if (YY > side*i)
+                    idy = i;
 			}
 
 			if (this.field.findById(idx, idy).figure === this.currentPlayerID+2) {
@@ -212,11 +170,11 @@ export default class Game{
 				this.xFirstPlay = idx;
 				this.yFirstPlay = idy;
 			}
-			if (this.field.findById(idx, idy).brightness === 1) {
+			if (this.field.findById(idx, idy).brightness === brightLevel) {
 				this.xSecondPlay = idx;
 				this.ySecondPlay = idy;
 
-				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
+				this.Play(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
 			}
 		}
 	}
