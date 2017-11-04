@@ -142,7 +142,7 @@ eventBus.on("openGame", function () {
 	});
 	backButtonView.show();
 	canvas.show();
-	game.start(() => router.goTo('/menu'));  //выход в меню
+	game.startGame(() => router.goTo('/menu'));  //выход в меню
 });
 
 

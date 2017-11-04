@@ -22,7 +22,7 @@ export default class UserService {
 	 * @param {string} password
 	 * @param {string} confirm
 	 */
-	async signup(username, email, password, confirm) {//не парсит JSON
+	async signup(username, email, password, confirm) {
 		const response = {
 			ok: false,
 			json: {},
@@ -49,7 +49,7 @@ export default class UserService {
 			return response;
 		}
 
-		const resp = await Http.FetchPost('/user/sign_in', {login, password});
+		const resp = await Http.FetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;

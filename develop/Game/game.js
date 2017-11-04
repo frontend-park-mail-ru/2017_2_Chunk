@@ -1,18 +1,16 @@
 'use strict';
 
 import Field from "./field.js";
-import Http from "../modules/http";
+import GameService from "./game-service.js";
 
 const x = 425;
 const y = 230;
 const sq = Math.sqrt(2)/2;
 const side = 66;
+const brightLevel = 1;
 
 const width = 6;
-const height = 6;
 const maxPlayers = 2;
-
-const brightLevel = 1;
 
 function* generatorId(array) {
 	let i = 0;
@@ -24,7 +22,7 @@ function* generatorId(array) {
 	}
 }
 
-export default class Game{
+export default class Game {
 	constructor(canvas, eventBus) {
 		this.canvas = canvas;
 
@@ -40,131 +38,82 @@ export default class Game{
 		this.gameOver = false;
 		this.arrayOfFigures = [];
 
-		this.xFirstPlay = this.yFirstPlay = this.xSecondPlay = this.ySecondPlay = -1;
+		this.xFirstPlay = -1;
+		this.yFirstPlay = -1;
+		this.xSecondPlay = -1;
+		this.ySecondPlay = -1;
 
 		this.gen = 0;
 
 		this.field = new Field(width, this.canvas, this.eventBus);
+		this.fetchService = new GameService();
 	}
 
 
-	gameStart() {
-		return new Promise(function (resolve, reject) {
-			resolve(Http.FetchPost('/game/single/create', {width, height, maxPlayers})
-				.then(function(resp) {
-					this.gameID = resp.gameID;
-					this.gameComplete();
-					return resp;
-				}.bind(this))
-				.catch(function(err) {
-					console.log(err.errormessage);
-					console.log("err response status "  + err.errorMessage);
-					throw new Error(err.errorMessage);
-				}.bind(this)));
-		}.bind(this));
-	};
-
-
-	gameComplete() {
-	return Http.FetchGet('/game/complete?gameID=' + this.gameID)
-		.then(function(resp) {
-			this.players = resp.players;
-			this.gen = generatorId(this.players);
-			this.playerID = this.players[0].playerID;
-			this.currentPlayerID = resp.currentPlayerID;
-			this.gameOver = resp.gameOver;
-			this.arrayOfFigures = resp.field;
-			this.setFiguresByArray(this.arrayOfFigures);
-			this.field.drawAllFigures();
-			// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-		}.bind(this))
-		.catch(function (err) {
-			this.user = null;
-			console.log(err.statusText);
-			throw new Error("Can not get response =(")
-		}.bind(this))
+	async Start() {
+		this.response = await this.fetchService.start(width, width, maxPlayers);
+		this.gameID = this.response.json.gameID;
+		this.Complete();
 	}
 
 
-	gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
-		this.exit = exit;
+	async Complete() {
+		this.response = await this.fetchService.complete(this.gameID);
+		this.players = this.response.json.players;
+		this.gen = generatorId(this.players);
+		this.playerID = this.players[0].playerID;
+		this.currentPlayerID = this.response.json.currentPlayerID;
+		this.gameOver = this.response.json.gameOver;
+		this.arrayOfFigures = this.response.json.field;
+		this.setFiguresByArray(this.arrayOfFigures);
+		this.field.drawAllFigures();
+		this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+	}
+
+
+	async Play(x1, y1, x2, y2, currentPlayerID, exit) {
 		let gameID = this.gameID;
 		let playerID = this.playerID;
-		return new Promise(function (resolve, reject) {
-			resolve(Http.FetchPost('/game/play', {x1, x2, y1, y2, gameID, playerID, currentPlayerID})
-				.then(function(resp) {
-					this.players = resp.players;
-					this.currentPlayerID = resp.currentPlayerID;
-					this.gameOver = resp.gameOver;
-					this.arrayOfFigures = resp.field;
-					this.field.deleteAllFigure();
-					this.field.clearFigures();
-					this.setFiguresByArray(this.arrayOfFigures);
-					this.field.drawAllFigures();
-					// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-					this.field.deleteAllBrightCube();
-					this.field.drawField();
-					if (this.gameOver === true) {
-						this.field.gameOverSingle(this.playerID);
-						debugger;
-						setTimeout(() => {
-							this.canvas.winDiv.hide();
-							this.exit();
-						}, 3000);
-
-					}
-					this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
-					return resp;
-				}.bind(this))
-				.catch(function(err) {
-					console.log(err.errormessage);
-					console.log("err response status "  + err.errorMessage);
-					throw new Error(err.errorMessage);
-				}.bind(this)));
-		}.bind(this));
+		this.response = await this.fetchService.play(x1, x2, y1, y2, gameID, playerID, currentPlayerID);
+		this.stepProcessing(this.response, exit);
+		this.Status(gameID, playerID, this.currentPlayerID, exit);
 	}
 
 
-	gameStatus(gameID, playerID, currentPlayerID, exit) {
-		this.exit = exit;
-		return new Promise(function (resolve, reject) {
-			resolve(Http.FetchPost('/game/status', {gameID, playerID, currentPlayerID})
-				.then(function(resp) {
-					this.players = resp.players;
-					this.currentPlayerID = resp.currentPlayerID;
-					this.gameOver = resp.gameOver;
-					this.arrayOfFigures = resp.field;
-					this.field.deleteAllFigure();
-					this.field.clearFigures();
-					this.setFiguresByArray(this.arrayOfFigures);
-					this.field.drawAllFigures();
-					// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-
-					if (this.gameOver === true) {
-						this.field.gameOverSingle(this.playerID);
-						debugger;
-						setTimeout(() => {
-							this.canvas.winDiv.hide();
-							this.exit();
-						}, 3000);
-					}
-					return resp;
-				}.bind(this))
-				.catch(function(err) {
-					console.log(err.errormessage);
-					console.log("err response status "  + err.errorMessage);
-					throw new Error(err.errorMessage);
-				}.bind(this)));
-		}.bind(this));
+	async Status(gameID, playerID, currentPlayerID, exit) {
+		this.response = await this.fetchService.status(gameID, playerID, currentPlayerID);
+		this.stepProcessing(this.response, exit);
 	}
 
 
-	start(exit) {
+	stepProcessing(response, exit) {
+		this.players = this.response.json.players;
+		this.currentPlayerID = this.response.json.currentPlayerID;
+		this.gameOver = this.response.json.gameOver;
+		this.arrayOfFigures = this.response.json.field;
+		this.field.deleteAllFigure();
+		this.field.clearFigures();
+		this.setFiguresByArray(this.arrayOfFigures);
+		this.field.drawAllFigures();
+		this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+		this.field.deleteAllBrightCube();
+		this.field.drawField();
+		if (this.gameOver === true) {
+			this.field.gameOver(this.playerID);
+			setTimeout(() => {
+				this.canvas.winDiv.hide();
+				exit();
+			}, 3000);
+		}
+	}
+
+
+	startGame(exit) {
 		this.exit = exit;
 		this.field.deleteAllFigure();
 		this.field.clearFigures();
 		this.field.drawField();
-		this.gameStart();
+		this.Start();
 
 		this.canvasForClicks.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
 	}
@@ -172,7 +121,7 @@ export default class Game{
 
 	setFiguresByArray(array) {
 		for (let i = 0; i < width; i++) {
-			for (let j = 0; j < height; j++) {
+			for (let j = 0; j < width; j++) {
 				let model = 0;
 				if (array[i][j] >= 0) {
 					model = array[i][j] + 2;
@@ -203,14 +152,12 @@ export default class Game{
 		let XX = (mouseX - x + mouseY - y)*sq;
 		let YY = (mouseY - mouseX + x - y)*sq;
 
-		if (XX < side*width && YY < side*height && XX > 0 && YY > 0) {
+		if (XX < side*width && YY < side*width && XX > 0 && YY > 0) {
 			let idx;
 			let idy;
 			for (let i = 0; i < width; i++) {
 				if (XX > side*i)
 					idx = i;
-			}
-			for (let i = 0; i < height; i++) {
 				if (YY > side*i)
 					idy = i;
 			}
@@ -227,7 +174,7 @@ export default class Game{
 				this.xSecondPlay = idx;
 				this.ySecondPlay = idy;
 
-				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
+				this.Play(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.gen.next().value, this.exit);
 			}
 		}
 	}

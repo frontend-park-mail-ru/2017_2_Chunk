@@ -4,9 +4,6 @@ import Cell from "./cell.js";
 const sideOfCube = 90;
 const sideOfCanvas = 850;
 const indent = 150;
-const maxStep = 3;
-const identDrawingFigureX = 5;
-const identDrawingFigureY = -65;
 
 export default class Field {
 
@@ -18,13 +15,14 @@ export default class Field {
 		imgUrl.push("images/whitch90-130.png");
 		imgUrl.push("images/jack90-130.png");
 
+		let imgs = [];
+		let ok = 0;
+
 		this.canvasForCubes = canvas.canvasForCubes;
 		this.canvasForFigure = canvas.canvasForFigure;
 		this.winDiv = canvas.winDiv;
 		this.bus = eventBus;
 
-		let imgs = [];
-		let ok = 0;
 		for(let i = 0; i < imgUrl.length; i++) {
 			let img = new Image();
 			imgs.push(img);
@@ -35,7 +33,6 @@ export default class Field {
 			};
 			img.src = imgUrl[i];
 		}
-
 		this.massOfUrl = [];
 		this.massOfUrl = imgs;
 
@@ -108,23 +105,22 @@ export default class Field {
 		this.arrayOfFigures[num]++;
 	}
 
-	//TODO by emmiting
-	// drawCountOfFigure(arrayOfPlayers, id) {
-	// 	this.canvasForCubes.fillStyle = 'white';
-	// 	this.canvasForCubes.font = 'bold 20px sans-serif';
-	// 	let x = 60;
-	// 	let y = 30;
-	// 	let diff = 40;
-	// 	this.canvasForCubes.clearRect(0, 0, 400, 200);
-	// 	for (let i = 0; i < arrayOfPlayers.length; i++) {
-	// 		this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i+2], x, y);
-	// 		this.canvasForCubes.drawImage(this.massOfUrl[i+2], x - diff, y - diff/2-10, 35, 45);
-	// 		y += diff;
-	// 	}
-	// 	this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
-	// }
+	drawCountOfFigure(arrayOfPlayers, id) {
+		this.canvasForCubes.fillStyle = 'white';
+		this.canvasForCubes.font = 'bold 20px sans-serif';
+		let x = 60;
+		let y = 30;
+		let diff = 40;
+		this.canvasForCubes.clearRect(0, 0, 400, 200);
+		for (let i = 0; i < arrayOfPlayers.length; i++) {
+			this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i+2], x, y);
+			this.canvasForCubes.drawImage(this.massOfUrl[i+2], x - diff, y - diff/2-10, 35, 45);
+			y += diff;
+		}
+		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
+	}
 
-	gameOverSingle(playerID) {
+	gameOver(playerID) {
 		let win = false;
 		if (this.arrayOfFigures[playerID+2] > this.arrayOfFigures[playerID+3]) {
 			win = true;
@@ -137,20 +133,14 @@ export default class Field {
 	}
 
 	drawFigures(idx, idy) {
-		this.canvasForFigure.drawImage(
-			this.massOfUrl[this.findById(idx, idy).figure],
-			this.findById(idx, idy).x + identDrawingFigureX,
-			this.findById(idx, idy).y + identDrawingFigureY);
+		this.canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x+5, this.findById(idx, idy).y-70);
 	}
 
 	drawAllFigures() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				if (this.arrayOfCubes[i][j].figure > 1) {
-					this.canvasForFigure.drawImage(
-						this.massOfUrl[this.arrayOfCubes[i][j].figure],
-						this.arrayOfCubes[i][j].x + identDrawingFigureX,
-						this.arrayOfCubes[i][j].y + identDrawingFigureY);
+					this.canvasForFigure.drawImage(this.massOfUrl[this.arrayOfCubes[i][j].figure], this.arrayOfCubes[i][j].x+5, this.arrayOfCubes[i][j].y-65);
 				}
 			}
 		}
@@ -174,8 +164,8 @@ export default class Field {
 			for (let j = 0; j < this.count; j++) {
 				let idx2 = this.arrayOfCubes[i][j].idx;
 				let idy2 = this.arrayOfCubes[i][j].idy;
-				if (Math.abs(idx2 - idx) >= maxStep
-					|| Math.abs(idy2 - idy) >= maxStep
+				if (Math.abs(idx2 - idx) >= 3
+					|| Math.abs(idy2 - idy) >= 3
 					|| this.arrayOfCubes[i][j].figure !== 0
 				) {}
 				else {
