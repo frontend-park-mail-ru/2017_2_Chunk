@@ -19,7 +19,6 @@ export default class Block {
 	 * @param {string[]} [classes=[]] - список имён классов
 	 * @param {string|null} [text=null] - опциональный текст блока
 	 * @return {Block}
-	 * @constructor
 	 */
 	static Create(tagName = 'div', attrs = {}, classes = [], text = null) {
 		const el = document.createElement(tagName);

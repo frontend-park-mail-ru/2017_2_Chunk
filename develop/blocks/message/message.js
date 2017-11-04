@@ -8,7 +8,7 @@ import Block from "../block/block";
  */
 export default class Message extends Block {
 	/**
-	 * Создает элемент div CSS класса message
+	 * Создает корневой элемент элемент div
 	 * @constructor
 	 */
 	constructor() {

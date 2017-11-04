@@ -49,26 +49,25 @@ export default class Game{
 	}
 
 
-	gameStart() {
-		return new Promise(function (resolve, reject) {
-			resolve(Http.FetchPost('/game/single/create', {width, height, maxPlayers})
-				.then(function(resp) {
-					this.gameID = resp.gameID;
-					this.gameComplete();
-					return resp;
-				}.bind(this))
-				.catch(function(err) {
-					console.log(err.errormessage);
-					console.log("err response status "  + err.errorMessage);
-					throw new Error(err.errorMessage);
-				}.bind(this)));
-		}.bind(this));
+	async gameStart() {
+		const response = await Http.FetchPost('/game/single/create', {width, height, maxPlayers});
+		const resp = await response.json;
+		debugger;
+		if (response.ok) {
+			this.gameID = resp.gameID;
+			this.gameComplete();
+			return resp;
+		}
+		else {
+			//понятия не имею, что за ошибки
+		}
 	};
 
 
-	gameComplete() {
-	return Http.FetchGet('/game/complete?gameID=' + this.gameID)
-		.then(function(resp) {
+	async gameComplete() {
+		const response = await Http.FetchGet('/game/complete?gameID=' + this.gameID);
+		const resp = await response.json;
+		if (response.ok) {
 			this.players = resp.players;
 			this.gen = generatorId(this.players);
 			this.playerID = this.players[0].playerID;
@@ -78,85 +77,74 @@ export default class Game{
 			this.setFiguresByArray(this.arrayOfFigures);
 			this.field.drawAllFigures();
 			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-		}.bind(this))
-		.catch(function (err) {
-			this.user = null;
-			console.log(err.statusText);
-			throw new Error("Can not get response =(")
-		}.bind(this))
+		}
+		else {
+			//понятия не имею что за ошибки
+		}
 	}
 
 
-	gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
+	async gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
 		this.exit = exit;
 		let gameID = this.gameID;
 		let playerID = this.playerID;
-		return new Promise(function (resolve, reject) {
-			resolve(Http.FetchPost('/game/play', {x1, x2, y1, y2, gameID, playerID, currentPlayerID})
-				.then(function(resp) {
-					this.players = resp.players;
-					this.currentPlayerID = resp.currentPlayerID;
-					this.gameOver = resp.gameOver;
-					this.arrayOfFigures = resp.field;
-					this.field.deleteAllFigure();
-					this.field.clearFigures();
-					this.setFiguresByArray(this.arrayOfFigures);
-					this.field.drawAllFigures();
-					this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-					this.field.deleteAllBrightCube();
-					this.field.drawField();
-					if (this.gameOver === true) {
-						this.field.gameOver(this.playerID);
-						debugger;
-						setTimeout(() => {
-							this.canvas.winDiv.hide();
-							this.exit();
-						}, 3000);
-
-					}
-					this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
-					return resp;
-				}.bind(this))
-				.catch(function(err) {
-					console.log(err.errormessage);
-					console.log("err response status "  + err.errorMessage);
-					throw new Error(err.errorMessage);
-				}.bind(this)));
-		}.bind(this));
+		const response = await Http.FetchPost('/game/play', {x1, x2, y1, y2, gameID, playerID, currentPlayerID});
+		const resp = await response.json;
+		if (response.ok) {
+			this.players = resp.players;
+			this.currentPlayerID = resp.currentPlayerID;
+			this.gameOver = resp.gameOver;
+			this.arrayOfFigures = resp.field;
+			this.field.deleteAllFigure();
+			this.field.clearFigures();
+			this.setFiguresByArray(this.arrayOfFigures);
+			this.field.drawAllFigures();
+			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+			this.field.deleteAllBrightCube();
+			this.field.drawField();
+			if (this.gameOver === true) {
+				this.field.gameOver(this.playerID);
+				setTimeout(() => {
+					this.canvas.winDiv.hide();
+					this.exit();
+				}, 3000);
+			}
+			this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
+		}
+		else {
+			//понятия не имею что за ошибки
+		}
 	}
 
 
-	gameStatus(gameID, playerID, currentPlayerID, exit) {
+	async gameStatus(gameID, playerID, currentPlayerID, exit) {
 		this.exit = exit;
-		return new Promise(function (resolve, reject) {
-			resolve(Http.FetchPost('/game/status', {gameID, playerID, currentPlayerID})
-				.then(function(resp) {
-					this.players = resp.players;
-					this.currentPlayerID = resp.currentPlayerID;
-					this.gameOver = resp.gameOver;
-					this.arrayOfFigures = resp.field;
-					this.field.deleteAllFigure();
-					this.field.clearFigures();
-					this.setFiguresByArray(this.arrayOfFigures);
-					this.field.drawAllFigures();
-					this.field.drawCountOfFigure(this.players, this.currentPlayerID);
+		const response = await Http.FetchPost('/game/status', {gameID, playerID, currentPlayerID});
+		const resp = await response.json;
+		if (response.ok) {
+			this.players = resp.players;
+			this.currentPlayerID = resp.currentPlayerID;
+			this.gameOver = resp.gameOver;
+			this.arrayOfFigures = resp.field;
+			this.field.deleteAllFigure();
+			this.field.clearFigures();
+			this.setFiguresByArray(this.arrayOfFigures);
+			this.field.drawAllFigures();
+			this.field.drawCountOfFigure(this.players, this.currentPlayerID);
 
-					if (this.gameOver === true) {
-						this.field.gameOver(this.playerID);
-						debugger;
-						setTimeout(() => {
-							this.canvas.winDiv.hide();
-							this.exit();
-						}, 3000);
-					}
-					return resp;
-				}.bind(this))
-				.catch(function(err) {
-					console.log(err.errormessage);
-					console.log("err response status "  + err.errorMessage);
-					throw new Error(err.errorMessage);
-				}.bind(this)));
-		}.bind(this));
+			if (this.gameOver === true) {
+				this.field.gameOver(this.playerID);
+				debugger;
+				setTimeout(() => {
+					this.canvas.winDiv.hide();
+					this.exit();
+				}, 3000);
+			}
+			return resp;
+		}
+		else {
+			//понятия не имею что за ошибки
+		}
 	}
 
 

@@ -3,8 +3,16 @@
 import routerFields from "../templates/routerFields"
 import Block from "../blocks/block/block"
 
-
+/**
+ * Модуль, предоставляющий интерфейс для работы с событиями
+ * @module Router
+ */
 export default class Router {
+	/**
+	 * @param {class} eventBus - общий для всех модулей объект класс
+	 * @param {class} userService - общий для всех модулей класс
+	 * @constructor
+	 */
 	constructor(eventBus, userService) {
 		this.routes = routerFields;
 		this.bus = eventBus;
@@ -26,6 +34,7 @@ export default class Router {
 			this.changeState(location.pathname);
 		};
 	}
+
 
 
 	async start() {

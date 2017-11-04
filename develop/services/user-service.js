@@ -1,7 +1,5 @@
 'use strict';
 
-//по урлу exit не поулчается выйти
-
 import Http from "../modules/http";
 
 /**
@@ -22,12 +20,14 @@ export default class UserService {
 	 * @param {string} password
 	 * @param {string} confirm
 	 */
-	async signup(username, email, password, confirm) {//не парсит JSON
+	async signup(username, email, password, confirm) {
+
 		const response = {
 			ok: false,
 			json: {},
 			message: "",
 		};
+
 		if (username.length < 4) {
 			response.message = "Длина логина должна быть не меньше 4 символов!";
 			return response;
@@ -49,12 +49,13 @@ export default class UserService {
 			return response;
 		}
 
-		const resp = await Http.FetchPost('/user/sign_in', {login, password});
+		const resp = await Http.FetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
 		}
+
 		response.ok = true;
 		this.user = response.json;
 		return response;
@@ -67,19 +68,13 @@ export default class UserService {
 	 * @param {string} password
 	 */
 	async login(login, password) {
+
 		const response = {
 			ok: false,
 			json: {},
 			message: "",
 		};
-		if (login.length < 4) {
-			response.message = "Длина логина должна быть не меньше 4 символов!";
-			return response;
-		}
-		if (login.length > 12) {
-			response.message = "Длина логина не должна превышать 12 символов!";
-			return response;
-		}
+
 		if (password.length < 6) {
 			response.message = "Попробуй еще раз! Используйте что-то поумнее";
 			return response;
@@ -88,12 +83,14 @@ export default class UserService {
 			response.message = "Логин и пароль не должны совпадать!";
 			return response;
 		}
+
 		const resp = await Http.FetchPost('/user/sign_in', {login, password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
 		}
+
 		response.ok = true;
 		this.user = response.json;
 		return response;
@@ -113,6 +110,7 @@ export default class UserService {
 			json: {},
 			message: "",
 		};
+
 		if (username.length < 4) {
 			response.message = "Длина логина должна быть не меньше 4 символов!";
 			return response;
@@ -140,10 +138,12 @@ export default class UserService {
 
 		const resp = await Http.FetchPost('/user/update', {login, password});
 		response.json = await resp.json();
+
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
 		}
+
 		response.ok = true;
 		this.user = response.json;
 		return response;
@@ -186,6 +186,7 @@ export default class UserService {
 			response.message = response.json.errorMessage;
 			return response;
 		}
+
 		response.ok = true;
 		this.user = response.json;
 		return response;
