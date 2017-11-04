@@ -15,31 +15,10 @@ export default class Router {
 	 */
 	constructor(eventBus, userService) {
 		this.routes = routerFields;
+		this._routes = [];
 		this.bus = eventBus;
 		this.userService = userService;
-		this.app = new Block(document.body);
 
-		//реагирует на любые клики. в том числе и сабмиты
-		this.app.on("click", (event) => {
-			const target = event.target;
-			const type = target.tagName.toLowerCase();
-			if (type === 'a'){
-				event.preventDefault();
-				this.goTo(target.href);
-			}
-		}, false);
-
-		window.onpopstate = () => {
-			console.log(location.pathname);
-			this.changeState(location.pathname);
-		};
-	}
-
-
-
-	async start() {
-		this._routes = [];
-		this.counter = 0;
 		this.routes.forEach((route) => {
 			this._routes.push({
 				url_pattern: route.url,
@@ -48,6 +27,16 @@ export default class Router {
 				}
 			});
 		});
+
+		window.onpopstate = () => {
+			console.log(location.pathname);
+			this.changeState(location.pathname);
+		};
+	}
+
+
+	async start() {
+		this.addHrefListeners();
 
 		const resp = await this.userService.getDataFetch();
 		if (resp.ok) {
@@ -60,6 +49,18 @@ export default class Router {
 			const slice_Routes = this._routes.slice(4);
 			this.findNewState(slice_Routes);
 		}
+	}
+
+
+	addHrefListeners() {
+		this.hrefs = Array.from(document.getElementsByTagName("a"));
+		this.hrefs.forEach((href) => {
+			href.addEventListener("click", (event) => {
+				const target = event.target;
+				event.preventDefault();
+				this.goTo(target.href);
+			})
+		});
 	}
 
 

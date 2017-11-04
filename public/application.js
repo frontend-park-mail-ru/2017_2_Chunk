@@ -138,7 +138,6 @@ class Block {
 	/**
   * Добавляет к текущему блоку дочерний
   * @param {Block} block
-  * @return {Block}
   */
 	append(block) {
 		this.el.appendChild(block.el);
@@ -148,7 +147,6 @@ class Block {
 	/**
   * Удаляет у текущего блока дочерний
   * @param {Block} block
-  * @return {Block}
   */
 	remove(block) {
 		this.el.removeChild(block.el);
@@ -1824,29 +1822,10 @@ class Router {
   */
 	constructor(eventBus, userService) {
 		this.routes = __WEBPACK_IMPORTED_MODULE_0__templates_routerFields__["default"];
+		this._routes = [];
 		this.bus = eventBus;
 		this.userService = userService;
-		this.app = new __WEBPACK_IMPORTED_MODULE_1__blocks_block_block__["default"](document.body);
 
-		//реагирует на любые клики. в том числе и сабмиты
-		this.app.on("click", event => {
-			const target = event.target;
-			const type = target.tagName.toLowerCase();
-			if (type === 'a') {
-				event.preventDefault();
-				this.goTo(target.href);
-			}
-		}, false);
-
-		window.onpopstate = () => {
-			console.log(location.pathname);
-			this.changeState(location.pathname);
-		};
-	}
-
-	async start() {
-		this._routes = [];
-		this.counter = 0;
 		this.routes.forEach(route => {
 			this._routes.push({
 				url_pattern: route.url,
@@ -1855,6 +1834,15 @@ class Router {
 				}
 			});
 		});
+
+		window.onpopstate = () => {
+			console.log(location.pathname);
+			this.changeState(location.pathname);
+		};
+	}
+
+	async start() {
+		this.addHrefListeners();
 
 		const resp = await this.userService.getDataFetch();
 		if (resp.ok) {
@@ -1866,6 +1854,17 @@ class Router {
 			const slice_Routes = this._routes.slice(4);
 			this.findNewState(slice_Routes);
 		}
+	}
+
+	addHrefListeners() {
+		this.hrefs = Array.from(document.getElementsByTagName("a"));
+		this.hrefs.forEach(href => {
+			href.addEventListener("click", event => {
+				const target = event.target;
+				event.preventDefault();
+				this.goTo(target.href);
+			});
+		});
 	}
 
 	goTo(path) {
@@ -2047,9 +2046,9 @@ const userService = new __WEBPACK_IMPORTED_MODULE_10__services_user_service_js__
 
 const eventBus = new __WEBPACK_IMPORTED_MODULE_11__modules_eventBus__["default"]();
 
-const router = new __WEBPACK_IMPORTED_MODULE_12__modules_router__["default"](eventBus, userService);
-
 const app = new __WEBPACK_IMPORTED_MODULE_9__blocks_block_block_js__["default"](document.body);
+
+const router = new __WEBPACK_IMPORTED_MODULE_12__modules_router__["default"](eventBus, userService);
 
 const menuView = new __WEBPACK_IMPORTED_MODULE_0__views_menuView__["default"](eventBus, router);
 

@@ -45,6 +45,5 @@ module.exports = {
         "newline-per-chained-call": 1,
         "guard-for-in": 0,
         "import/no-extraneous-dependencies": 0
-
     }
 };

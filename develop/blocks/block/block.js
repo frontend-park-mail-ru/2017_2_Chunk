@@ -67,7 +67,6 @@ export default class Block {
 	/**
 	 * Добавляет к текущему блоку дочерний
 	 * @param {Block} block
-	 * @return {Block}
 	 */
 	append(block) {
 		this.el.appendChild(block.el);
@@ -77,7 +76,6 @@ export default class Block {
 	/**
 	 * Удаляет у текущего блока дочерний
 	 * @param {Block} block
-	 * @return {Block}
 	 */
 	remove(block) {
 		this.el.removeChild(block.el);

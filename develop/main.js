@@ -37,9 +37,9 @@ const userService = new UserService();
 
 const eventBus = new EventBus();
 
-const router = new Router(eventBus, userService);
-
 const app = new Block(document.body);
+
+const router = new Router(eventBus, userService);
 
 const menuView = new MenuView(eventBus, router);
 
@@ -48,7 +48,6 @@ const signUpView = new SignUpView(eventBus, userService, router);
 const loginView = new LoginView(eventBus, userService, router);
 
 const updateView = new UpdateView(eventBus, userService, router);
-
 
 const profileView = new ProfileView(eventBus);
 
@@ -63,7 +62,6 @@ const canvas = new Canvas(eventBus);
 const game = new Game(canvas, eventBus);
 
 
-
 const Views = [];
 Views.push(menuView);
 Views.push(signUpView);
@@ -73,7 +71,6 @@ Views.push(backButtonView);
 Views.push(rulesView);
 Views.push(scoreboardView);
 Views.push(canvas);
-
 
 
 eventBus.on("openSignUp", function() {
