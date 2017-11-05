@@ -44,15 +44,16 @@ export default class Game {
 
 		this.field = new Field(width, this.canvas, this.eventBus);
 		this.gameService = new GameService();
-	}
+		this.canvasForClicks.addEventListener('click', this.updateCanvas, false);
+    }
 
 
 	async Start() {
 		const хранилище = window.localStorage;
 		debugger;
 		if (!хранилище["gameID"]) {
-            await this.gameService.start(width, width, maxPlayers);
-            хранилище.setItem("gameID", `${this.gameService.gameData.gameID}`);
+            const response = await this.gameService.start(width, width, maxPlayers);
+            хранилище.setItem("gameID", `${response.gameData.gameID}`);
         }
         else
         	this.gameService.gameData.gameID = хранилище["gameID"];
@@ -61,41 +62,36 @@ export default class Game {
 
 
 	async Complete() {
-		await this.gameService.complete();
-		this.generatorID = generatorId(this.gameService.gameData.players);
-		this.setFiguresByArray(this.gameService.gameData.arrayOfFigures);
+		const response = await this.gameService.complete();
+		this.generatorID = generatorId(response.gameData.players);
+		this.setFiguresByArray(response.gameData.arrayOfFigures);
 		this.field.drawAllFigures();
-		this.field.drawCountOfFigure(this.gameService.gameData);
+		this.field.drawCountOfFigure(response.gameData);
 	}
 
 
-	async Play(coord, currentPlayerID, exit) {
-		await this.gameService.play(coord, currentPlayerID);
-		this.Status(exit);
+	async Play(coord, currentPlayerID) {
+        const response = await this.gameService.play(coord, currentPlayerID);
+		this.stepProcessing(response);
+		this.Status();
 	}
 
 
-	async Status(exit) {
-		await this.gameService.status();
-		this.stepProcessing(exit);
+	async Status() {
+        const response = await this.gameService.status();
+		this.stepProcessing(response);
 	}
 
 
-	stepProcessing(exit) {
-		this.field.deleteAllFigure();
-		this.field.clearFigures();
-		this.setFiguresByArray(this.gameService.gameData.arrayOfFigures);
-		this.field.drawAllFigures();
-		this.field.drawCountOfFigure(this.gameService.gameData);
-		this.field.deleteAllBrightCube();
-		this.field.drawField();
-		if (this.gameService.gameData.gameOver === true) {
+	stepProcessing(response) {
+		this.field.stepProcessing(response);
+		if (response.gameData.gameOver === true) {
 			const хранилище = window.localStorage;
 			хранилище.removeItem("gameID");
-			this.field.gameOver(this.gameService.gameData.playerID);
+			this.field.gameOver(response.gameData.playerID);
 			setTimeout(() => {
 				this.canvas.winDiv.hide();
-				exit();
+				this.exit();
 			}, 3000);
 		}
 	}
@@ -103,12 +99,10 @@ export default class Game {
 
 	startGame(exit) {
 		this.exit = exit;
-		this.field.deleteAllFigure();
-		this.field.clearFigures();
-		this.field.deleteAllBrightCube();
-		this.field.drawField();
+		this.field.startGame();
 		this.Start();
 
+<<<<<<< HEAD
 
 	}
 
@@ -123,6 +117,8 @@ export default class Game {
 				}
 			}
 		}
+=======
+>>>>>>> 49a7344bfdea554dd164f25cee59b7cd0addef07
 	}
 
 
@@ -157,9 +153,7 @@ export default class Game {
 			}
 
 			if (this.field.findById(idx, idy).figure === this.gameService.gameData.currentPlayerID+2) {
-				this.field.deleteAllBrightCube();
-				this.field.brightCubes(idx, idy);
-				this.field.drawField();
+				this.field.bright(idx, idy);
 
 				this.coordOfMove.x1 = idx;
 				this.coordOfMove.y1 = idy;
@@ -170,8 +164,12 @@ export default class Game {
 
 				const currentPlayerID = this.generatorID.next().value;
 
+<<<<<<< HEAD
 				debugger;
 				this.Play(this.coordOfMove, currentPlayerID, this.exit);
+=======
+				this.Play(this.coordOfMove, currentPlayerID);
+>>>>>>> 49a7344bfdea554dd164f25cee59b7cd0addef07
 			}
 		}
 	}

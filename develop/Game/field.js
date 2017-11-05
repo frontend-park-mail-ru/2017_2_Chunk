@@ -190,4 +190,40 @@ export default class Field {
 			}
 		}
 	}
+
+    setFiguresByArray(array) {
+        for (let i = 0; i < this.count; i++) {
+            for (let j = 0; j < this.count; j++) {
+                let model = 0;
+                if (array[i][j] >= 0) {
+                    model = array[i][j] + 2;
+                    this.arrayOfCubes.setFigure(i, j, model);
+                }
+            }
+        }
+    }
+
+    startGame() {
+        this.arrayOfCubes.deleteAllFigure();
+        this.arrayOfCubes.clearFigures();
+        this.arrayOfCubes.deleteAllBrightCube();
+        this.arrayOfCubes.drawField();
+	}
+
+	bright(idx, idy) {
+        this.arrayOfCubes.deleteAllBrightCube();
+        this.arrayOfCubes.brightCubes(idx, idy);
+        this.arrayOfCubes.drawField();
+	}
+
+	stepProcessing(response) {
+        this.arrayOfCubes.deleteAllFigure();
+        this.arrayOfCubes.clearFigures();
+        this.arrayOfCubes.setFiguresByArray(response.gameData.arrayOfFigures);
+        this.arrayOfCubes.drawAllFigures();
+        this.arrayOfCubes.drawCountOfFigure(response.gameData);
+        this.arrayOfCubes.deleteAllBrightCube();
+        this.arrayOfCubes.drawField();
+	}
+
 }
