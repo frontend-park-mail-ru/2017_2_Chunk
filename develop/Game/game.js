@@ -48,8 +48,7 @@ export default class Game {
 	async Start() {
 		const хранилище = window.localStorage;
 		if (!хранилище["gameID"]) {
-            const response = await this.gameService.start(width, width, maxPlayers);
-            this.gameService.gameData.gameID = response.json.gameID;
+            await this.gameService.start(width, width, maxPlayers);
             хранилище.setItem("gameID", `${this.gameService.gameData.gameID}`);
         }
         else
@@ -59,44 +58,33 @@ export default class Game {
 
 
 	async Complete() {
-		const response = await this.gameService.complete(this.gameService.gameData.gameID);
-		this.gameService.gameData.players = response.json.players;
+		await this.gameService.complete();
 		this.generatorID = generatorId(this.gameService.gameData.players);
-		this.gameService.gameData.playerID = this.gameService.gameData.players[0].playerID;
-		this.gameService.gameData.currentPlayerID = response.json.currentPlayerID;
-		this.gameService.gameData.gameOver = response.json.gameOver;
-		this.gameService.gameData.arrayOfFigures = response.json.field;
 		this.setFiguresByArray(this.gameService.gameData.arrayOfFigures);
 		this.field.drawAllFigures();
-		this.field.drawCountOfFigure(this.gameService.gameData.players, this.gameService.gameData.currentPlayerID);
+		this.field.drawCountOfFigure(this.gameService.gameData);
 	}
 
 
 	async Play(coord, currentPlayerID, exit) {
-		const gameID = this.gameService.gameData.gameID;
-		const playerID = this.gameService.gameData.playerID;
-		const response = await this.gameService.play(coord, gameID, playerID, currentPlayerID);
-		this.stepProcessing(response, exit);
-		this.Status(gameID, playerID, this.gameService.gameData.currentPlayerID, exit);
+		await this.gameService.play(coord, currentPlayerID);
+		this.stepProcessing(exit);
+		this.Status(exit);
 	}
 
 
-	async Status(gameID, playerID, currentPlayerID, exit) {
-		const response = await this.gameService.status(gameID, playerID, currentPlayerID);
-		this.stepProcessing(response, exit);
+	async Status(exit) {
+		await this.gameService.status();
+		this.stepProcessing(exit);
 	}
 
 
-	stepProcessing(response, exit) {
-		this.gameService.gameData.players = response.json.players;
-		this.gameService.gameData.currentPlayerID = response.json.currentPlayerID;
-		this.gameService.gameData.gameOver = response.json.gameOver;
-		this.gameService.gameData.arrayOfFigures = response.json.field;
+	stepProcessing(exit) {
 		this.field.deleteAllFigure();
 		this.field.clearFigures();
 		this.setFiguresByArray(this.gameService.gameData.arrayOfFigures);
 		this.field.drawAllFigures();
-		this.field.drawCountOfFigure(this.gameService.gameData.players, this.gameService.gameData.currentPlayerID);
+		this.field.drawCountOfFigure(this.gameService.gameData);
 		this.field.deleteAllBrightCube();
 		this.field.drawField();
 		if (this.gameService.gameData.gameOver === true) {
@@ -115,6 +103,7 @@ export default class Game {
 		this.exit = exit;
 		this.field.deleteAllFigure();
 		this.field.clearFigures();
+		this.field.deleteAllBrightCube();
 		this.field.drawField();
 		this.Start();
 
@@ -177,7 +166,9 @@ export default class Game {
 				this.coordOfMove.x2 = idx;
 				this.coordOfMove.y2 = idy;
 
-				this.Play(this.coordOfMove, this.generatorID.next().value, this.exit);
+				const currentPlayerID = this.generatorID.next().value;
+
+				this.Play(this.coordOfMove, currentPlayerID, this.exit);
 			}
 		}
 	}
