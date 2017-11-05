@@ -1,6 +1,5 @@
 .canv1 {
     position: absolute;
-
     left: auto;
     top: auto;
     /*background-image: url("../../image/background2.png");*/
@@ -16,7 +15,6 @@
 .winDiv {
     background-color: rgba(0, 0, 0, 0.87);
     transition: all .12s;
-
     text-align: center;
     font-size: calc(16px + 2vh);
     color: white;
