@@ -13,7 +13,6 @@ export default class CanvasView extends CommonView {
 		super([canvas1, canvas2, winDiv]);
 
 		this.el.style.setProperty("border", "none");
-		this.el.style.setProperty("background-image", "./image/cats.jpg");
 
 		this.canvas1 = canvas1;
 		this.canvas2 = canvas2;

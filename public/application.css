@@ -37,12 +37,11 @@
     position: absolute;
     left: auto;
     top: auto;
-    background-image: url(./background2-8bc754cd26eed4f4513e64c7ec343099.png);
+    /*background-image: url("../../image/background2.png");*/
 }
 
 .canv2 {
     /*max-height: 80vh;*/
-
     position: absolute;
     left: auto;
     top: auto;
