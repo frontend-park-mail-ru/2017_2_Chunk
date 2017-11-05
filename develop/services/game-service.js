@@ -26,11 +26,11 @@ export default class GameService {
 
         if (resp.status >= 400) {
             this.response.message = this.response.json.errorMessage;
-            // return this.response;
+            return this.response;
         }
 
 	    this.gameData.gameID = this.response.json.gameID;
-	    // return this.response;
+	    return this.response;
     }
 
 
@@ -40,12 +40,12 @@ export default class GameService {
 
         if (resp.status >= 400) {
             this.response.message = this.response.json.errorMessage;
-            // return this.response;
+            return this.response;
         }
 
 	    this.updateGameData(this.response);
 	    this.gameData.playerID = this.gameData.players[0].playerID;
-        // return this.response;
+        return this.response;
     }
 
 
@@ -61,11 +61,11 @@ export default class GameService {
 
         if (resp.status >= 400) {
             this.response.message = this.response.json.errorMessage;
-            // return this.response;
+            return this.response;
         }
 
 	    this.updateGameData(this.response);
-        // return this.response;
+        return this.response;
     }
 
 
@@ -78,11 +78,11 @@ export default class GameService {
 
         if (resp.status >= 400) {
             this.response.message = this.response.json.errorMessage;
-            // return this.response;
+            return this.response;
         }
 
 		this.updateGameData(this.response);
-        // return this.response;
+        return this.response;
     }
 
     updateGameData (response) {
