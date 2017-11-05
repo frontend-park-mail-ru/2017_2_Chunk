@@ -19,7 +19,9 @@ module.exports = {
 		aggregateTimeout: 1000
 	},
 
-	devtool: NODE_ENV === 'development' ? "source-map" : null,
+	// devtool: NODE_ENV === 'development' ? "source-map" : null,
+	devtool: false,
+
 
 	module: {
 		rules: [{
