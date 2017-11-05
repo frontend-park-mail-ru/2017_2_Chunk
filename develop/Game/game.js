@@ -29,6 +29,8 @@ export default class Game {
 		this.canvasForCubes = this.canvas.canvasForCubes;
 		this.canvasForFigure = this.canvas.canvasForFigure;
 		this.canvasForClicks = this.canvas.canvasForClicks;
+
+		this.canvasForClicks.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
 		this.eventBus = eventBus;
 
 		this.coordOfMove = {
@@ -47,6 +49,7 @@ export default class Game {
 
 	async Start() {
 		const хранилище = window.localStorage;
+		debugger;
 		if (!хранилище["gameID"]) {
             await this.gameService.start(width, width, maxPlayers);
             хранилище.setItem("gameID", `${this.gameService.gameData.gameID}`);
@@ -68,7 +71,6 @@ export default class Game {
 
 	async Play(coord, currentPlayerID, exit) {
 		await this.gameService.play(coord, currentPlayerID);
-		this.stepProcessing(exit);
 		this.Status(exit);
 	}
 
@@ -107,7 +109,7 @@ export default class Game {
 		this.field.drawField();
 		this.Start();
 
-		this.canvasForClicks.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
+
 	}
 
 
@@ -168,6 +170,7 @@ export default class Game {
 
 				const currentPlayerID = this.generatorID.next().value;
 
+				debugger;
 				this.Play(this.coordOfMove, currentPlayerID, this.exit);
 			}
 		}
