@@ -116,6 +116,9 @@ eventBus.on("openMenu", function() {
 	Views.forEach((view) => {
 		view.hide();
 	});
+	const browserStorage = window.localStorage;
+	if (browserStorage["gameID"])
+		browserStorage.removeItem("gameID");
 	menuView.show();
 }.bind(this));
 

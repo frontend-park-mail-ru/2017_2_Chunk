@@ -412,8 +412,8 @@ function requireAll(r) {
   r.keys().forEach(r);
 }
 
-requireAll(__webpack_require__(26));
-requireAll(__webpack_require__(28));
+requireAll(__webpack_require__(27));
+requireAll(__webpack_require__(29));
 
 /***/ }),
 /* 7 */
@@ -462,9 +462,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const sideOfCube = 90;
 const sideOfCanvas = 850;
 const indent = 150;
-const maxStep = 3;
-const identDrawingFigureX = 5;
-const identDrawingFigureY = -65;
+const maxMove = 3;
+const brightOn = 1;
+const brightOff = 0;
+const figureIndentX = 5;
+const figureIndentY = -65;
 
 class Field {
 
@@ -476,13 +478,14 @@ class Field {
 		imgUrl.push("images/whitch90-130.png");
 		imgUrl.push("images/jack90-130.png");
 
+		let imgs = [];
+		let ok = 0;
+
 		this.canvasForCubes = canvas.canvasForCubes;
 		this.canvasForFigure = canvas.canvasForFigure;
 		this.winDiv = canvas.winDiv;
 		this.bus = eventBus;
 
-		let imgs = [];
-		let ok = 0;
 		for (let i = 0; i < imgUrl.length; i++) {
 			let img = new Image();
 			imgs.push(img);
@@ -492,7 +495,6 @@ class Field {
 			};
 			img.src = imgUrl[i];
 		}
-
 		this.massOfUrl = [];
 		this.massOfUrl = imgs;
 
@@ -530,13 +532,10 @@ class Field {
 	}
 
 	drawField() {
-		this.canvasForCubes.fillStyle = 'white';
-		this.canvasForCubes.font = 'bold 30px sans-serif';
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let br = this.arrayOfCubes[i][j].brightness;
 				this.canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
-				this.canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x + sideOfCube / 2 - 20, this.arrayOfCubes[i][j].y + sideOfCube / 2);
 			}
 		}
 	}
@@ -564,23 +563,22 @@ class Field {
 		this.arrayOfFigures[num]++;
 	}
 
-	//TODO by emmiting
-	// drawCountOfFigure(arrayOfPlayers, id) {
-	// 	this.canvasForCubes.fillStyle = 'white';
-	// 	this.canvasForCubes.font = 'bold 20px sans-serif';
-	// 	let x = 60;
-	// 	let y = 30;
-	// 	let diff = 40;
-	// 	this.canvasForCubes.clearRect(0, 0, 400, 200);
-	// 	for (let i = 0; i < arrayOfPlayers.length; i++) {
-	// 		this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i+2], x, y);
-	// 		this.canvasForCubes.drawImage(this.massOfUrl[i+2], x - diff, y - diff/2-10, 35, 45);
-	// 		y += diff;
-	// 	}
-	// 	this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
-	// }
+	drawCountOfFigure(arrayOfPlayers, id) {
+		this.canvasForCubes.fillStyle = 'white';
+		this.canvasForCubes.font = 'bold 20px sans-serif';
+		let x = 60;
+		let y = 30;
+		let diff = 40;
+		this.canvasForCubes.clearRect(0, 0, 400, 200);
+		for (let i = 0; i < arrayOfPlayers.length; i++) {
+			this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i + 2], x, y);
+			this.canvasForCubes.drawImage(this.massOfUrl[i + 2], x - diff, y - diff / 2 - 10, 35, 45);
+			y += diff;
+		}
+		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
+	}
 
-	gameOverSingle(playerID) {
+	gameOver(playerID) {
 		let win = false;
 		if (this.arrayOfFigures[playerID + 2] > this.arrayOfFigures[playerID + 3]) {
 			win = true;
@@ -593,14 +591,14 @@ class Field {
 	}
 
 	drawFigures(idx, idy) {
-		this.canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x + identDrawingFigureX, this.findById(idx, idy).y + identDrawingFigureY);
+		this.canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x + figureIndentX, this.findById(idx, idy).y + figureIndentY);
 	}
 
 	drawAllFigures() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				if (this.arrayOfCubes[i][j].figure > 1) {
-					this.canvasForFigure.drawImage(this.massOfUrl[this.arrayOfCubes[i][j].figure], this.arrayOfCubes[i][j].x + identDrawingFigureX, this.arrayOfCubes[i][j].y + identDrawingFigureY);
+					this.drawFigures(i, j);
 				}
 			}
 		}
@@ -609,7 +607,7 @@ class Field {
 	deleteAllFigure() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
-				this.arrayOfCubes[i][j].setFigure(0);
+				this.deleteFigure(i, j);
 			}
 		}
 		this.resetArrayOfFigure();
@@ -624,10 +622,10 @@ class Field {
 			for (let j = 0; j < this.count; j++) {
 				let idx2 = this.arrayOfCubes[i][j].idx;
 				let idy2 = this.arrayOfCubes[i][j].idy;
-				if (Math.abs(idx2 - idx) >= maxStep || Math.abs(idy2 - idy) >= maxStep || this.arrayOfCubes[i][j].figure !== 0) {} else {
-					this.arrayOfCubes[i][j].setBrightness(1);
+				if (Math.abs(idx2 - idx) >= maxMove || Math.abs(idy2 - idy) >= maxMove || this.arrayOfCubes[i][j].figure !== 0) {} else {
+					this.arrayOfCubes[i][j].setBrightness(brightOn);
 				}
-				this.findById(idx, idy).setBrightness(0);
+				this.findById(idx, idy).setBrightness(brightOff);
 			}
 		}
 	}
@@ -635,7 +633,7 @@ class Field {
 	deleteAllBrightCube() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
-				this.arrayOfCubes[i][j].setBrightness(0);
+				this.arrayOfCubes[i][j].setBrightness(brightOff);
 			}
 		}
 	}
@@ -650,7 +648,7 @@ class Field {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_http__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_game_service_js__ = __webpack_require__(10);
 
 
 
@@ -660,12 +658,10 @@ const x = 425;
 const y = 230;
 const sq = Math.sqrt(2) / 2;
 const side = 66;
+const brightLevel = 1;
 
 const width = 6;
-const height = 6;
 const maxPlayers = 2;
-
-const brightLevel = 1;
 
 function* generatorId(array) {
 	let i = 0;
@@ -685,131 +681,91 @@ class Game {
 		this.canvasForClicks = this.canvas.canvasForClicks;
 		this.eventBus = eventBus;
 
-		this.gameID = 0;
-		this.players = [];
-		this.playerID = 0;
-		this.currentPlayerID = 0;
-		this.gameOver = false;
-		this.arrayOfFigures = [];
-
-		this.xFirstPlay = this.yFirstPlay = this.xSecondPlay = this.ySecondPlay = -1;
+		this.coordOfMove = {
+			x1: -1,
+			x2: -1,
+			y1: -1,
+			y2: -1
+		};
 
 		this.generatorID = 0;
 
 		this.field = new __WEBPACK_IMPORTED_MODULE_0__field_js__["default"](width, this.canvas, this.eventBus);
+		this.gameService = new __WEBPACK_IMPORTED_MODULE_1__services_game_service_js__["default"]();
 	}
 
-	gameStart() {
-		return new Promise(function (resolve, reject) {
-			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/single/create', { width, height, maxPlayers }).then(function (resp) {
-				this.gameID = resp.gameID;
-				this.gameComplete();
-				return resp;
-			}.bind(this)).catch(function (err) {
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
+	async Start() {
+		const хранилище = window.localStorage;
+		if (!хранилище["gameID"]) {
+			const response = await this.gameService.start(width, width, maxPlayers);
+			this.gameService.gameData.gameID = response.json.gameID;
+			хранилище.setItem("gameID", `${this.gameService.gameData.gameID}`);
+		} else this.gameService.gameData.gameID = хранилище["gameID"];
+		this.Complete();
 	}
 
-	gameComplete() {
-		return __WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchGet('/game/complete?gameID=' + this.gameID).then(function (resp) {
-			this.players = resp.players;
-			this.generatorID = generatorId(this.players);
-			this.playerID = this.players[0].playerID;
-			this.currentPlayerID = resp.currentPlayerID;
-			this.gameOver = resp.gameOver;
-			this.arrayOfFigures = resp.field;
-			this.setFiguresByArray(this.arrayOfFigures);
-			this.field.drawAllFigures();
-			// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-		}.bind(this)).catch(function (err) {
-			this.user = null;
-			console.log(err.statusText);
-			throw new Error("Can not get response =(");
-		}.bind(this));
+	async Complete() {
+		const response = await this.gameService.complete(this.gameService.gameData.gameID);
+		this.gameService.gameData.players = response.json.players;
+		this.generatorID = generatorId(this.gameService.gameData.players);
+		this.gameService.gameData.playerID = this.gameService.gameData.players[0].playerID;
+		this.gameService.gameData.currentPlayerID = response.json.currentPlayerID;
+		this.gameService.gameData.gameOver = response.json.gameOver;
+		this.gameService.gameData.arrayOfFigures = response.json.field;
+		this.setFiguresByArray(this.gameService.gameData.arrayOfFigures);
+		this.field.drawAllFigures();
+		this.field.drawCountOfFigure(this.gameService.gameData.players, this.gameService.gameData.currentPlayerID);
 	}
 
-	gamePlay(x1, y1, x2, y2, currentPlayerID, exit) {
-		this.exit = exit;
-		let gameID = this.gameID;
-		let playerID = this.playerID;
-		return new Promise(function (resolve, reject) {
-			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/play', { x1, x2, y1, y2, gameID, playerID, currentPlayerID }).then(function (resp) {
-				this.players = resp.players;
-				this.currentPlayerID = resp.currentPlayerID;
-				this.gameOver = resp.gameOver;
-				this.arrayOfFigures = resp.field;
-				this.field.deleteAllFigure();
-				this.field.clearFigures();
-				this.setFiguresByArray(this.arrayOfFigures);
-				this.field.drawAllFigures();
-				// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-				this.field.deleteAllBrightCube();
-				this.field.drawField();
-				if (this.gameOver === true) {
-					this.field.gameOverSingle(this.playerID);
-					debugger;
-					setTimeout(() => {
-						this.canvas.winDiv.hide();
-						this.exit();
-					}, 3000);
-				}
-				this.gameStatus(gameID, playerID, this.currentPlayerID, this.exit);
-				return resp;
-			}.bind(this)).catch(function (err) {
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
+	async Play(coord, currentPlayerID, exit) {
+		const gameID = this.gameService.gameData.gameID;
+		const playerID = this.gameService.gameData.playerID;
+		const response = await this.gameService.play(coord, gameID, playerID, currentPlayerID);
+		this.stepProcessing(response, exit);
+		this.Status(gameID, playerID, this.gameService.gameData.currentPlayerID, exit);
 	}
 
-	gameStatus(gameID, playerID, currentPlayerID, exit) {
-		this.exit = exit;
-		return new Promise(function (resolve, reject) {
-			resolve(__WEBPACK_IMPORTED_MODULE_1__modules_http__["default"].FetchPost('/game/status', { gameID, playerID, currentPlayerID }).then(function (resp) {
-				this.players = resp.players;
-				this.currentPlayerID = resp.currentPlayerID;
-				this.gameOver = resp.gameOver;
-				this.arrayOfFigures = resp.field;
-				this.field.deleteAllFigure();
-				this.field.clearFigures();
-				this.setFiguresByArray(this.arrayOfFigures);
-				this.field.drawAllFigures();
-				// this.field.drawCountOfFigure(this.players, this.currentPlayerID);
-
-				if (this.gameOver === true) {
-					this.field.gameOverSingle(this.playerID);
-					debugger;
-					setTimeout(() => {
-						this.canvas.winDiv.hide();
-						this.exit();
-					}, 3000);
-				}
-				return resp;
-			}.bind(this)).catch(function (err) {
-				console.log(err.errormessage);
-				console.log("err response status " + err.errorMessage);
-				throw new Error(err.errorMessage);
-			}.bind(this)));
-		}.bind(this));
+	async Status(gameID, playerID, currentPlayerID, exit) {
+		const response = await this.gameService.status(gameID, playerID, currentPlayerID);
+		this.stepProcessing(response, exit);
 	}
 
-	start(exit) {
+	stepProcessing(response, exit) {
+		this.gameService.gameData.players = response.json.players;
+		this.gameService.gameData.currentPlayerID = response.json.currentPlayerID;
+		this.gameService.gameData.gameOver = response.json.gameOver;
+		this.gameService.gameData.arrayOfFigures = response.json.field;
+		this.field.deleteAllFigure();
+		this.field.clearFigures();
+		this.setFiguresByArray(this.gameService.gameData.arrayOfFigures);
+		this.field.drawAllFigures();
+		this.field.drawCountOfFigure(this.gameService.gameData.players, this.gameService.gameData.currentPlayerID);
+		this.field.deleteAllBrightCube();
+		this.field.drawField();
+		if (this.gameService.gameData.gameOver === true) {
+			const хранилище = window.localStorage;
+			хранилище.removeItem("gameID");
+			this.field.gameOver(this.gameService.gameData.playerID);
+			setTimeout(() => {
+				this.canvas.winDiv.hide();
+				exit();
+			}, 3000);
+		}
+	}
+
+	startGame(exit) {
 		this.exit = exit;
 		this.field.deleteAllFigure();
 		this.field.clearFigures();
 		this.field.drawField();
-		this.gameStart();
+		this.Start();
 
 		this.canvasForClicks.addEventListener('click', { handleEvent: this.updateCanvas.bind(this), exit: this.exit }, false);
 	}
 
 	setFiguresByArray(array) {
 		for (let i = 0; i < width; i++) {
-			for (let j = 0; j < height; j++) {
+			for (let j = 0; j < width; j++) {
 				let model = 0;
 				if (array[i][j] >= 0) {
 					model = array[i][j] + 2;
@@ -831,45 +787,135 @@ class Game {
 		}
 	}
 
-	updateCanvas(e) {
+	updateCanvas(event) {
 		let pos = this.findOffset(this.canvasForClicks);
-		let mouseX = e.pageX - pos.x;
-		let mouseY = e.pageY - pos.y;
+		let mouseX = event.pageX - pos.x;
+		let mouseY = event.pageY - pos.y;
 		let XX = (mouseX - x + mouseY - y) * sq;
 		let YY = (mouseY - mouseX + x - y) * sq;
 
-		if (XX < side * width && YY < side * height && XX > 0 && YY > 0) {
+		if (XX < side * width && YY < side * width && XX > 0 && YY > 0) {
 			let idx;
 			let idy;
 			for (let i = 0; i < width; i++) {
 				if (XX > side * i) idx = i;
-			}
-			for (let i = 0; i < height; i++) {
 				if (YY > side * i) idy = i;
 			}
 
-			if (this.field.findById(idx, idy).figure === this.currentPlayerID + 2) {
+			if (this.field.findById(idx, idy).figure === this.gameService.gameData.currentPlayerID + 2) {
 				this.field.deleteAllBrightCube();
 				this.field.brightCubes(idx, idy);
 				this.field.drawField();
 
-				this.xFirstPlay = idx;
-				this.yFirstPlay = idy;
+				this.coordOfMove.x1 = idx;
+				this.coordOfMove.y1 = idy;
 			}
 			if (this.field.findById(idx, idy).brightness === brightLevel) {
-				this.xSecondPlay = idx;
-				this.ySecondPlay = idy;
+				this.coordOfMove.x2 = idx;
+				this.coordOfMove.y2 = idy;
 
-				this.gamePlay(this.xFirstPlay, this.yFirstPlay, this.xSecondPlay, this.ySecondPlay, this.generatorID.next().value, this.exit);
+				this.Play(this.coordOfMove, this.generatorID.next().value, this.exit);
 			}
 		}
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = Game;
-;
+
 
 /***/ }),
 /* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http__ = __webpack_require__(4);
+
+
+
+
+class GameService {
+    constructor() {
+        this.response = {
+            ok: false,
+            json: {},
+            message: ""
+        };
+
+        this.gameData = {
+            gameID: 0,
+            players: [],
+            playerID: 0,
+            currentPlayerID: 0,
+            gameOver: false,
+            arrayOfFigures: []
+        };
+    }
+
+    async start(width, height, maxPlayers) {
+        const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/game/single/create', { width, height, maxPlayers });
+        this.response.json = await resp.json();
+
+        if (resp.status >= 400) {
+            this.response.message = this.response.json.errorMessage;
+            return this.response;
+        }
+
+        this.response.ok = true;
+        this.user = this.response.json;
+        return this.response;
+    }
+
+    async complete(gameID) {
+        const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/game/complete?gameID=' + gameID);
+        this.response.json = await resp.json();
+
+        if (resp.status >= 400) {
+            this.response.message = this.response.json.errorMessage;
+            return this.response;
+        }
+
+        this.response.ok = true;
+        this.user = this.response.json;
+        return this.response;
+    }
+
+    async play(coord, gameID, playerID, currentPlayerID) {
+        const x1 = coord.x1;
+        const x2 = coord.x2;
+        const y1 = coord.y1;
+        const y2 = coord.y2;
+        const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/game/play', { x1, x2, y1, y2, gameID, playerID, currentPlayerID });
+        this.response.json = await resp.json();
+
+        if (resp.status >= 400) {
+            this.response.message = this.response.json.errorMessage;
+            return this.response;
+        }
+
+        this.response.ok = true;
+        this.user = this.response.json;
+        return this.response;
+    }
+
+    async status(gameID, playerID, currentPlayerID) {
+        const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/game/status', { gameID, playerID, currentPlayerID });
+        this.response.json = await resp.json();
+
+        if (resp.status >= 400) {
+            this.response.message = this.response.json.errorMessage;
+            return this.response;
+        }
+
+        this.response.ok = true;
+        this.user = this.response.json;
+        return this.response;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["default"] = GameService;
+
+
+/***/ }),
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -921,7 +967,7 @@ class MenuView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -929,7 +975,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_signUpFileds__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_signUpFileds__ = __webpack_require__(13);
 
 
 
@@ -988,7 +1034,7 @@ class signUpView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1032,7 +1078,7 @@ const signUpFIelds = [{ attrs: {
 /* harmony default export */ __webpack_exports__["default"] = (signUpFIelds);
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1040,7 +1086,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_loginFields__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_loginFields__ = __webpack_require__(15);
 
 
 
@@ -1099,7 +1145,7 @@ class LoginView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1135,7 +1181,7 @@ const loginFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (loginFields);
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1149,7 +1195,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 class backButtonView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"] {
 	constructor() {
-		const backButton = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'href': '/menu' }, ["back__button"], 'Back');
+		const backButton = __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["default"].Create('a', { 'href': '/menu' }, ["back__button"], 'Menu');
 		super(backButton.el);
 
 		this.button = backButton;
@@ -1160,7 +1206,7 @@ class backButtonView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js_
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1197,7 +1243,7 @@ class profileView extends __WEBPACK_IMPORTED_MODULE_1__blocks_block_block_js__["
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1230,12 +1276,12 @@ class rulesView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_scoreBoard__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commonView__ = __webpack_require__(1);
 
 
@@ -1269,7 +1315,7 @@ class ScoreboardView extends __WEBPACK_IMPORTED_MODULE_1__commonView__["default"
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1346,7 +1392,7 @@ class scoreboardTemplate {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1354,7 +1400,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commonView__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_form_form_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__blocks_message_message_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_updateFields__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_updateFields__ = __webpack_require__(22);
 
 
 
@@ -1424,7 +1470,7 @@ class updateView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1475,7 +1521,7 @@ const updateFields = [{
 /* harmony default export */ __webpack_exports__["default"] = (updateFields);
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1526,7 +1572,7 @@ class CanvasView extends __WEBPACK_IMPORTED_MODULE_0__commonView__["default"] {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1556,7 +1602,6 @@ class UserService {
   * @param {string} confirm
   */
 	async signup(username, email, password, confirm) {
-		//не парсит JSON
 		const response = {
 			ok: false,
 			json: {},
@@ -1583,7 +1628,7 @@ class UserService {
 			return response;
 		}
 
-		const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_in', { login, password });
+		const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/user/sign_up', { username, email, password });
 		response.json = await resp.json();
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
@@ -1745,12 +1790,12 @@ class UserService {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_routerFields__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_routerFields__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__blocks_block_block__ = __webpack_require__(0);
 
 
@@ -1840,7 +1885,7 @@ class Router {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1876,7 +1921,7 @@ const fields = [{
 /* harmony default export */ __webpack_exports__["default"] = (fields);
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -1887,26 +1932,27 @@ var map = {
 	"./blocks/form/form.js": 2,
 	"./blocks/message/message.js": 3,
 	"./include.js": 6,
-	"./main.js": 27,
+	"./main.js": 28,
 	"./modules/eventBus.js": 5,
 	"./modules/http.js": 4,
-	"./modules/router.js": 24,
-	"./services/user-service.js": 23,
-	"./templates/loginFields.js": 14,
-	"./templates/routerFields.js": 25,
-	"./templates/scoreBoard.js": 19,
-	"./templates/signUpFileds.js": 12,
-	"./templates/updateFields.js": 21,
-	"./views/backButtonView.js": 15,
-	"./views/canvasView.js": 22,
+	"./modules/router.js": 25,
+	"./services/game-service.js": 10,
+	"./services/user-service.js": 24,
+	"./templates/loginFields.js": 15,
+	"./templates/routerFields.js": 26,
+	"./templates/scoreBoard.js": 20,
+	"./templates/signUpFileds.js": 13,
+	"./templates/updateFields.js": 22,
+	"./views/backButtonView.js": 16,
+	"./views/canvasView.js": 23,
 	"./views/commonView.js": 1,
-	"./views/loginView.js": 13,
-	"./views/menuView.js": 10,
-	"./views/profileView.js": 16,
-	"./views/rulesView.js": 17,
-	"./views/scoreboardView.js": 18,
-	"./views/signUpView.js": 11,
-	"./views/updateView.js": 20
+	"./views/loginView.js": 14,
+	"./views/menuView.js": 11,
+	"./views/profileView.js": 17,
+	"./views/rulesView.js": 18,
+	"./views/scoreboardView.js": 19,
+	"./views/signUpView.js": 12,
+	"./views/updateView.js": 21
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -1922,27 +1968,27 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 26;
+webpackContext.id = 27;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_signUpView__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_updateView__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__views_canvasView__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menuView__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_signUpView__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_loginView__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_backButtonView__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_profileView__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_rulesView__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_scoreboardView__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_updateView__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__views_canvasView__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__blocks_block_block_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_user_service_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_user_service_js__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__modules_eventBus__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__modules_router__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__modules_router__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Game_game__ = __webpack_require__(9);
 
 /**
@@ -2052,6 +2098,8 @@ eventBus.on("openMenu", function () {
 	Views.forEach(view => {
 		view.hide();
 	});
+	const browserStorage = window.localStorage;
+	if (browserStorage["gameID"]) browserStorage.removeItem("gameID");
 	menuView.show();
 }.bind(this));
 
@@ -2075,7 +2123,7 @@ eventBus.on("openGame", function () {
 	});
 	backButtonView.show();
 	canvas.show();
-	game.start(() => router.goTo('/menu')); //выход в меню
+	game.startGame(() => router.goTo('/menu')); //выход в меню
 });
 
 app.append(menuView).append(signUpView).append(loginView).append(backButtonView).append(profileView).append(rulesView).append(scoreboardView).append(canvas).append(updateView);
@@ -2083,17 +2131,17 @@ app.append(menuView).append(signUpView).append(loginView).append(backButtonView)
 router.start();
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./views/viewsCss/backButton.css": 29,
-	"./views/viewsCss/canvas.css": 30,
-	"./views/viewsCss/form.css": 31,
-	"./views/viewsCss/menu.css": 32,
-	"./views/viewsCss/section.css": 33,
-	"./views/viewsCss/signUp.css": 34,
-	"./views/viewsCss/view.css": 35
+	"./views/viewsCss/backButton.css": 30,
+	"./views/viewsCss/canvas.css": 31,
+	"./views/viewsCss/form.css": 32,
+	"./views/viewsCss/menu.css": 33,
+	"./views/viewsCss/section.css": 34,
+	"./views/viewsCss/signUp.css": 35,
+	"./views/viewsCss/view.css": 36
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -2109,13 +2157,7 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 28;
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
+webpackContext.id = 29;
 
 /***/ }),
 /* 30 */
@@ -2149,6 +2191,12 @@ webpackContext.id = 28;
 
 /***/ }),
 /* 35 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
