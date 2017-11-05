@@ -13,8 +13,8 @@ module.exports = {
 		path: __dirname + '/public',
 	},
 
-	watch: NODE_ENV === 'development',
-	// watch: false,
+	// watch: NODE_ENV === 'development',
+	watch: false,
 	watchOptions: {
 		aggregateTimeout: 1000
 	},
