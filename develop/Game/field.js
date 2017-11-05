@@ -204,26 +204,26 @@ export default class Field {
     }
 
     startGame() {
-        this.arrayOfCubes.deleteAllFigure();
-        this.arrayOfCubes.clearFigures();
-        this.arrayOfCubes.deleteAllBrightCube();
-        this.arrayOfCubes.drawField();
+        this.deleteAllFigure();
+        this.clearFigures();
+        this.deleteAllBrightCube();
+        this.drawField();
 	}
 
 	bright(idx, idy) {
-        this.arrayOfCubes.deleteAllBrightCube();
-        this.arrayOfCubes.brightCubes(idx, idy);
-        this.arrayOfCubes.drawField();
+        this.deleteAllBrightCube();
+        this.brightCubes(idx, idy);
+        this.drawField();
 	}
 
 	stepProcessing(response) {
-        this.arrayOfCubes.deleteAllFigure();
-        this.arrayOfCubes.clearFigures();
-        this.arrayOfCubes.setFiguresByArray(response.gameData.arrayOfFigures);
-        this.arrayOfCubes.drawAllFigures();
-        this.arrayOfCubes.drawCountOfFigure(response.gameData);
-        this.arrayOfCubes.deleteAllBrightCube();
-        this.arrayOfCubes.drawField();
+        this.deleteAllFigure();
+        this.clearFigures();
+        this.setFiguresByArray(response.gameData.arrayOfFigures);
+        this.drawAllFigures();
+        this.drawCountOfFigure(response.gameData);
+        this.deleteAllBrightCube();
+        this.drawField();
 	}
 
 }
