@@ -50,7 +50,7 @@
   "scripts": {
     "compile-pug": "pug --client --no-debug ./public/templates/recordIndex.pug",
     "build": "babel public -d public_ES",
-    "start": "node ./server/index.js",
+    "start": "webpack && node ./server/index.js",
     "lint": "eslint ./**/*.js"
   }
 }
