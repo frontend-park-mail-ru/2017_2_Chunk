@@ -9,6 +9,15 @@ export default class GameService {
             json: {},
             message: "",
         };
+
+        this.gameData = {
+            gameID: 0,
+            players: [],
+            playerID: 0,
+            currentPlayerID: 0,
+            gameOver: false,
+            arrayOfFigures: [],
+        }
     }
 
 
@@ -42,7 +51,11 @@ export default class GameService {
     }
 
 
-    async play(x1, x2, y1, y2, gameID, playerID, currentPlayerID) {
+    async play(coord, gameID, playerID, currentPlayerID) {
+        const x1 = coord.x1;
+        const x2 = coord.x2;
+        const y1 = coord.y1;
+        const y2 = coord.y2;
         const resp = await Http.FetchPost('/game/play', {x1, x2, y1, y2, gameID, playerID, currentPlayerID});
         this.response.json = await resp.json();
 

@@ -35,10 +35,6 @@ app.get('*', (request, response) => {
 	response.redirect("/menu")
 });
 
-app.get('/cool', function(request, response) {
-	response.send(cool());
-});
-
 
 app.listen(process.env.PORT || 8081, function () {
 	console.log("Server run!");

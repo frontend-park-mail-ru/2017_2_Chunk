@@ -4,6 +4,11 @@ import Cell from "./cell.js";
 const sideOfCube = 90;
 const sideOfCanvas = 850;
 const indent = 150;
+const maxMove = 3;
+const brightOn = 1;
+const brightOff = 0;
+const figureIndentX = 5;
+const figureIndentY = -65;
 
 export default class Field {
 
@@ -70,13 +75,13 @@ export default class Field {
 	}
 
 	drawField () {
-		this.canvasForCubes.fillStyle = 'white';
-		this.canvasForCubes.font = 'bold 30px sans-serif';
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				let br = this.arrayOfCubes[i][j].brightness;
-				this.canvasForCubes.drawImage(this.massOfUrl[br], this.arrayOfCubes[i][j].x, this.arrayOfCubes[i][j].y);
-				this.canvasForCubes.fillText(this.arrayOfCubes[i][j].idx + ";" + this.arrayOfCubes[i][j].idy, this.arrayOfCubes[i][j].x+sideOfCube/2-20, this.arrayOfCubes[i][j].y+sideOfCube/2);
+				this.canvasForCubes.drawImage(
+					this.massOfUrl[br],
+					this.arrayOfCubes[i][j].x,
+					this.arrayOfCubes[i][j].y);
 			}
 		}
 	}
@@ -126,8 +131,6 @@ export default class Field {
 			win = true;
 		}
 		this.bus.emit("endOfGame", win);
-		// if (win) alert("Вы выиграли!! :)");
-		// else alert("Вы проиграли :(");
 	}
 
 	deleteFigure(idx, idy) {
@@ -135,14 +138,17 @@ export default class Field {
 	}
 
 	drawFigures(idx, idy) {
-		this.canvasForFigure.drawImage(this.massOfUrl[this.findById(idx, idy).figure], this.findById(idx, idy).x+5, this.findById(idx, idy).y-70);
+		this.canvasForFigure.drawImage(
+			this.massOfUrl[this.findById(idx, idy).figure],
+			this.findById(idx, idy).x + figureIndentX,
+			this.findById(idx, idy).y + figureIndentY);
 	}
 
 	drawAllFigures() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				if (this.arrayOfCubes[i][j].figure > 1) {
-					this.canvasForFigure.drawImage(this.massOfUrl[this.arrayOfCubes[i][j].figure], this.arrayOfCubes[i][j].x+5, this.arrayOfCubes[i][j].y-65);
+					this.drawFigures(i, j);
 				}
 			}
 		}
@@ -151,7 +157,7 @@ export default class Field {
 	deleteAllFigure() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
-				this.arrayOfCubes[i][j].setFigure(0);
+				this.deleteFigure(i, j);
 			}
 		}
 		this.resetArrayOfFigure();
@@ -166,14 +172,14 @@ export default class Field {
 			for (let j = 0; j < this.count; j++) {
 				let idx2 = this.arrayOfCubes[i][j].idx;
 				let idy2 = this.arrayOfCubes[i][j].idy;
-				if (Math.abs(idx2 - idx) >= 3
-					|| Math.abs(idy2 - idy) >= 3
+				if (Math.abs(idx2 - idx) >= maxMove
+					|| Math.abs(idy2 - idy) >= maxMove
 					|| this.arrayOfCubes[i][j].figure !== 0
 				) {}
 				else {
-					this.arrayOfCubes[i][j].setBrightness(1);
+					this.arrayOfCubes[i][j].setBrightness(brightOn);
 				}
-				this.findById(idx, idy).setBrightness(0);
+				this.findById(idx, idy).setBrightness(brightOff);
 			}
 		}
 	}
@@ -181,7 +187,7 @@ export default class Field {
 	deleteAllBrightCube () {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
-				this.arrayOfCubes[i][j].setBrightness(0);
+				this.arrayOfCubes[i][j].setBrightness(brightOff);
 			}
 		}
 	}

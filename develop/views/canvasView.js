@@ -3,7 +3,6 @@ import CommonView from "./commonView";
 import Block from "../blocks/block/block.js";
 
 
-
 export default class CanvasView extends CommonView {
 	constructor(eventBus) {
 		const canvas1 = Block.Create('canvas', {'width': '850', 'height': '850'}, ['canv1'], "");
