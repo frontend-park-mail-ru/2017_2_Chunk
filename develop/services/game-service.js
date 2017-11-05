@@ -43,11 +43,8 @@ export default class GameService {
             // return this.response;
         }
 
-	    this.gameData.players = this.response.json.players;
+	    this.updateGameData(this.response);
 	    this.gameData.playerID = this.gameData.players[0].playerID;
-	    this.gameData.currentPlayerID = this.response.json.currentPlayerID;
-	    this.gameData.gameOver = this.response.json.gameOver;
-	    this.gameData.arrayOfFigures = this.response.json.field;
         // return this.response;
     }
 
@@ -67,11 +64,7 @@ export default class GameService {
             // return this.response;
         }
 
-	    this.gameData.players = this.response.json.players;
-	    this.gameData.currentPlayerID = this.response.json.currentPlayerID;
-	    this.gameData.gameOver = this.response.json.gameOver;
-	    this.gameData.arrayOfFigures = this.response.json.field;
-
+	    this.updateGameData(this.response);
         // return this.response;
     }
 
@@ -88,11 +81,14 @@ export default class GameService {
             // return this.response;
         }
 
-	    this.gameData.players = this.response.json.players;
-	    this.gameData.currentPlayerID = this.response.json.currentPlayerID;
-	    this.gameData.gameOver = this.response.json.gameOver;
-	    this.gameData.arrayOfFigures = this.response.json.field;
-
+		this.updateGameData(this.response);
         // return this.response;
+    }
+
+    updateGameData (response) {
+	    this.gameData.players = response.json.players;
+	    this.gameData.currentPlayerID = response.json.currentPlayerID;
+	    this.gameData.gameOver = response.json.gameOver;
+	    this.gameData.arrayOfFigures = response.json.field;
     }
 }
