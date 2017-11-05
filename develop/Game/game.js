@@ -42,7 +42,8 @@ export default class Game {
 
 		this.field = new Field(width, this.canvas, this.eventBus);
 		this.gameService = new GameService();
-	}
+        this.canvasForClicks.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
+    }
 
 
 	async Start() {
@@ -107,7 +108,6 @@ export default class Game {
 		this.field.drawField();
 		this.Start();
 
-		this.canvasForClicks.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
 	}
 
 
