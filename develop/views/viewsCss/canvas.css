@@ -1,5 +1,6 @@
 .canv1 {
     position: absolute;
+
     left: auto;
     top: auto;
     /*background-image: url("../../image/background2.png");*/
@@ -21,12 +22,10 @@
     color: white;
     opacity: 0.8;
     border: 0.1em solid transparent;
-    height: 1em;
+    /*height: 3em;*/
     position: fixed;
     max-width: 150px;
-    right: 50%;
-    top: 50%;
-    padding: 0.4em;
+    padding: 0.2em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     width: 20em;
