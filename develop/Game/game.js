@@ -101,24 +101,6 @@ export default class Game {
 		this.exit = exit;
 		this.field.startGame();
 		this.Start();
-
-<<<<<<< HEAD
-
-	}
-
-
-	setFiguresByArray(array) {
-		for (let i = 0; i < width; i++) {
-			for (let j = 0; j < width; j++) {
-				let model = 0;
-				if (array[i][j] >= 0) {
-					model = array[i][j] + 2;
-					this.field.setFigure(i, j, model);
-				}
-			}
-		}
-=======
->>>>>>> 49a7344bfdea554dd164f25cee59b7cd0addef07
 	}
 
 
@@ -164,12 +146,8 @@ export default class Game {
 
 				const currentPlayerID = this.generatorID.next().value;
 
-<<<<<<< HEAD
-				debugger;
-				this.Play(this.coordOfMove, currentPlayerID, this.exit);
-=======
+
 				this.Play(this.coordOfMove, currentPlayerID);
->>>>>>> 49a7344bfdea554dd164f25cee59b7cd0addef07
 			}
 		}
 	}
