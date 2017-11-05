@@ -4,33 +4,33 @@
  *@module main
  */
 
-import MenuView from "./views/menuView";
+import MenuView from './views/menuView';
 
-import SignUpView from "./views/signUpView";
+import SignUpView from './views/signUpView';
 
-import LoginView from "./views/loginView";
+import LoginView from './views/loginView';
 
-import BackButtonView from "./views/backButtonView";
+import BackButtonView from './views/backButtonView';
 
-import ProfileView from "./views/profileView";
+import ProfileView from './views/profileView';
 
-import RulesView from "./views/rulesView";
+import RulesView from './views/rulesView';
 
-import ScoreboardView from "./views/scoreboardView";
+import ScoreboardView from './views/scoreboardView';
 
-import UpdateView from "./views/updateView";
+import UpdateView from './views/updateView';
 
-import Canvas from "./views/canvasView";
+import Canvas from './views/canvasView';
 
-import Block from "./blocks/block/block.js";
+import Block from './blocks/block/block.js';
 
-import UserService from "./services/user-service.js";
+import UserService from './services/user-service.js';
 
-import EventBus from "./modules/eventBus";
+import EventBus from './modules/eventBus';
 
-import Router from "./modules/router";
+import Router from './modules/router';
 
-import Game from "./Game/game";
+import Game from './Game/game';
 
 
 const userService = new UserService();
@@ -73,7 +73,7 @@ Views.push(scoreboardView);
 Views.push(canvas);
 
 
-eventBus.on("openSignUp", function() {
+eventBus.on('openSignUp', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -82,7 +82,7 @@ eventBus.on("openSignUp", function() {
 });
 
 
-eventBus.on("openLogin", function() {
+eventBus.on('openLogin', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -91,7 +91,7 @@ eventBus.on("openLogin", function() {
 });
 
 
-eventBus.on("openUpdate", function() {
+eventBus.on('openUpdate', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -100,7 +100,7 @@ eventBus.on("openUpdate", function() {
 });
 
 
-eventBus.on("openRules", function() {
+eventBus.on('openRules', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -109,25 +109,24 @@ eventBus.on("openRules", function() {
 });
 
 
-eventBus.on("openMenu", function() {
+eventBus.on('openMenu', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
 	const browserStorage = window.localStorage;
-	if (browserStorage["gameID"])
-		browserStorage.removeItem("gameID");
+	if (browserStorage.gameID) { browserStorage.removeItem('gameID'); }
 	menuView.show();
-}.bind(this));
+});
 
 
-eventBus.on("exit", function () {
+eventBus.on('exit', function () {
 	userService.logout();
-	eventBus.emit("unauth");
+	eventBus.emit('unauth');
 	router.goTo('/menu');
 });
 
 
-eventBus.on("openScoreboard", function () {
+eventBus.on('openScoreboard', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
@@ -136,13 +135,13 @@ eventBus.on("openScoreboard", function () {
 });
 
 
-eventBus.on("openGame", function () {
+eventBus.on('openGame', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
 	backButtonView.show();
 	canvas.show();
-	game.startGame(() => router.goTo('/menu'));  //выход в меню
+	game.startGame(() => router.goTo('/menu')); // выход в меню
 });
 
 

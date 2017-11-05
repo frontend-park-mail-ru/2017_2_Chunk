@@ -1,7 +1,7 @@
 'use strict';
-const backendUrl = "https://backend-java-spring.herokuapp.com";
+const backendUrl = 'https://backend-java-spring.herokuapp.com';
 const baseUrl = `${window.location.protocol}//${window.location.host}`;
-console.log("baseUrl = ", baseUrl);
+console.log('baseUrl = ', baseUrl);
 
 
 /**
@@ -17,13 +17,13 @@ export default class Http {
 	static FetchGet(address) {
 		const url = backendUrl + address;
 		const myHeaders = new Headers();
-		myHeaders.append("Content-Type", 'application/json; charset=utf-8');
+		myHeaders.append('Content-Type', 'application/json; charset=utf-8');
 		return fetch(url, {
 			method: 'GET',
 			mode: 'cors',
 			credentials: 'include',
 			headers: myHeaders,
-		})
+		});
 	}
 
 
@@ -36,14 +36,14 @@ export default class Http {
 	static FetchPost(address, body) {
 		const url = backendUrl + address;
 		const myHeaders = new Headers();
-		myHeaders.set("Content-Type", "application/json; charset=utf-8");
+		myHeaders.set('Content-Type', 'application/json; charset=utf-8');
 		return fetch(url, {
 			method: 'POST',
 			mode: 'cors',
 			credentials: 'include',
 			body: JSON.stringify(body),
 			headers: myHeaders
-		})
+		});
 	}
 }
 Http.BaseUrl = null;

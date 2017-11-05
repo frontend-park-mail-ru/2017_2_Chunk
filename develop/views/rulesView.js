@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import CommonView from "./commonView";
-import Block from "../blocks/block/block.js";
+import CommonView from './commonView';
+import Block from '../blocks/block/block.js';
 
 
 export default class rulesView extends CommonView {
@@ -14,7 +14,7 @@ export default class rulesView extends CommonView {
 
 		this.bus = emitBus;
 
-		this.bus.on("openRules", () => {
+		this.bus.on('openRules', () => {
 			this.show();
 		});
 

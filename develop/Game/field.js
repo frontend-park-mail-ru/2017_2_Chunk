@@ -1,5 +1,5 @@
 'use strict';
-import Cell from "./cell.js";
+import Cell from './cell.js';
 
 const sideOfCube = 90;
 const sideOfCanvas = 850;
@@ -12,15 +12,15 @@ const figureIndentY = -65;
 
 export default class Field {
 
-	constructor (count, canvas, eventBus) {
+	constructor(count, canvas, eventBus) {
 		this.count = count;
-		let imgUrl = [];
-		imgUrl.push("images/cube.png");
-		imgUrl.push("images/cubeBr.png");
-		imgUrl.push("images/whitch90-130.png");
-		imgUrl.push("images/jack90-130.png");
+		const imgUrl = [];
+		imgUrl.push('images/cube.png');
+		imgUrl.push('images/cubeBr.png');
+		imgUrl.push('images/whitch90-130.png');
+		imgUrl.push('images/jack90-130.png');
 
-		let imgs = [];
+		const imgs = [];
 		let ok = 0;
 
 		this.canvasForCubes = canvas.canvasForCubes;
@@ -28,12 +28,12 @@ export default class Field {
 		this.winDiv = canvas.winDiv;
 		this.bus = eventBus;
 
-		for(let i = 0; i < imgUrl.length; i++) {
-			let img = new Image();
+		for (let i = 0; i < imgUrl.length; i++) {
+			const img = new Image();
 			imgs.push(img);
 			img.onload = function () {
 				ok++;
-				if (ok >= imgUrl.length){
+				if (ok >= imgUrl.length) {
 				}
 			};
 			img.src = imgUrl[i];
@@ -50,9 +50,9 @@ export default class Field {
 	}
 
 	setCoordinatesOnField() {
-		let startOfFieldX = sideOfCanvas/2 - sideOfCube/2;
-		let startOfFieldY = indent + (sideOfCanvas-indent - sideOfCube*this.count)/2;
-		let cubes = [];
+		const startOfFieldX = sideOfCanvas / 2 - sideOfCube / 2;
+		const startOfFieldY = indent + (sideOfCanvas - indent - sideOfCube * this.count) / 2;
+		const cubes = [];
 		for (let i = 0; i < this.count; i++) {
 			cubes[i] = [];
 		}
@@ -66,18 +66,18 @@ export default class Field {
 				cubes[i][j].setBrightness(0);
 				cubes[i][j].setId(i, j);
 				cubes[i][j].setCoordinates(x, y);
-				x -= sideOfCube/2+2;
-				y += sideOfCube/2+2;
+				x -= sideOfCube / 2 + 2;
+				y += sideOfCube / 2 + 2;
 			}
-			diff += sideOfCube/2+2;
+			diff += sideOfCube / 2 + 2;
 		}
 		return cubes;
 	}
 
-	drawField () {
+	drawField() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
-				let br = this.arrayOfCubes[i][j].brightness;
+				const br = this.arrayOfCubes[i][j].brightness;
 				this.canvasForCubes.drawImage(
 					this.massOfUrl[br],
 					this.arrayOfCubes[i][j].x,
@@ -93,8 +93,7 @@ export default class Field {
 	findById(idx, idy) {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
-				if (this.arrayOfCubes[i][j].idx === idx && this.arrayOfCubes[i][j].idy === idy)
-					return this.arrayOfCubes[i][j];
+				if (this.arrayOfCubes[i][j].idx === idx && this.arrayOfCubes[i][j].idy === idy) { return this.arrayOfCubes[i][j]; }
 			}
 		}
 	}
@@ -113,24 +112,24 @@ export default class Field {
 	drawCountOfFigure(arrayOfPlayers, id) {
 		this.canvasForCubes.fillStyle = 'white';
 		this.canvasForCubes.font = 'bold 20px sans-serif';
-		let x = 60;
+		const x = 60;
 		let y = 30;
-		let diff = 40;
+		const diff = 40;
 		this.canvasForCubes.clearRect(0, 0, 400, 200);
 		for (let i = 0; i < arrayOfPlayers.length; i++) {
-			this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i+2], x, y);
-			this.canvasForCubes.drawImage(this.massOfUrl[i+2], x - diff, y - diff/2-10, 35, 45);
+			this.canvasForCubes.fillText(arrayOfPlayers[i].username + ' : ' + this.arrayOfFigures[i + 2], x, y);
+			this.canvasForCubes.drawImage(this.massOfUrl[i + 2], x - diff, y - diff / 2 - 10, 35, 45);
 			y += diff;
 		}
-		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
+		this.canvasForCubes.fillText('Ходит игрок : ' + arrayOfPlayers[id].username, x, y);
 	}
 
 	gameOver(playerID) {
 		let win = false;
-		if (this.arrayOfFigures[playerID+2] > this.arrayOfFigures[playerID+3]) {
+		if (this.arrayOfFigures[playerID + 2] > this.arrayOfFigures[playerID + 3]) {
 			win = true;
 		}
-		this.bus.emit("endOfGame", win);
+		this.bus.emit('endOfGame', win);
 	}
 
 	deleteFigure(idx, idy) {
@@ -170,13 +169,12 @@ export default class Field {
 	brightCubes(idx, idy) {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
-				let idx2 = this.arrayOfCubes[i][j].idx;
-				let idy2 = this.arrayOfCubes[i][j].idy;
+				const idx2 = this.arrayOfCubes[i][j].idx;
+				const idy2 = this.arrayOfCubes[i][j].idy;
 				if (Math.abs(idx2 - idx) >= maxMove
 					|| Math.abs(idy2 - idy) >= maxMove
 					|| this.arrayOfCubes[i][j].figure !== 0
-				) {}
-				else {
+				) {} else {
 					this.arrayOfCubes[i][j].setBrightness(brightOn);
 				}
 				this.findById(idx, idy).setBrightness(brightOff);
@@ -184,7 +182,7 @@ export default class Field {
 		}
 	}
 
-	deleteAllBrightCube () {
+	deleteAllBrightCube() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
 				this.arrayOfCubes[i][j].setBrightness(brightOff);

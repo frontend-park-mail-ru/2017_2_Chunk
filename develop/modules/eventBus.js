@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  * Модуль, предоставляющий интерфейс для работы с событиями
@@ -28,7 +28,7 @@ export default class EventBus {
 	emit(event, data) {
 		this.listeners[event].forEach((listener) => {
 			listener(data);
-		})
+		});
 	}
 }
 

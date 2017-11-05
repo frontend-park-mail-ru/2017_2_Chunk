@@ -1,37 +1,37 @@
-"use strict";
+'use strict';
 
 const fields = [
 	{
-		url: "/menu",
-		event: "openMenu"
+		url: '/menu',
+		event: 'openMenu'
 	},
 	{
-		url: "/exit",
-		event: "exit"
+		url: '/exit',
+		event: 'exit'
 	},
 	{
-		url: "/game",
-		event: "openGame"
+		url: '/game',
+		event: 'openGame'
 	},
 	{
-		url: "/update",
-		event: "openUpdate"
+		url: '/update',
+		event: 'openUpdate'
 	},
 	{
-		url: "/scoreboard",
-		event: "openScoreboard"
+		url: '/scoreboard',
+		event: 'openScoreboard'
 	},
 	{
-		url: "/rules",
-		event: "openRules"
+		url: '/rules',
+		event: 'openRules'
 	},
 	{
-		url: "/signup",
-		event: "openSignUp"
+		url: '/signup',
+		event: 'openSignUp'
 	},
 	{
-		url: "/login",
-		event: "openLogin"
+		url: '/login',
+		event: 'openLogin'
 	},
 ];
 

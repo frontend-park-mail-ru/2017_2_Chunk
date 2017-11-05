@@ -1,6 +1,6 @@
-"use strict";
-import CommonView from "./commonView";
-import Block from "../blocks/block/block.js";
+'use strict';
+import CommonView from './commonView';
+import Block from '../blocks/block/block.js';
 
 
 export default class profileView extends Block {
@@ -9,8 +9,8 @@ export default class profileView extends Block {
 		super(profile.el);
 
 		this.bus = eventBus;
-		this.bus.on("unauth", () => {this.hide()});
-		this.bus.on("auth", (username) => {
+		this.bus.on('unauth', () => { this.hide(); });
+		this.bus.on('auth', (username) => {
 			this.setText(username);
 			this.show();
 		});

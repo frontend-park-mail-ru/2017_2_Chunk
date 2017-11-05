@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import ScoreboardTemplate from "../templates/scoreBoard";
-import CommonView from "./commonView";
+import ScoreboardTemplate from '../templates/scoreBoard';
+import CommonView from './commonView';
 
 
 export default class ScoreboardView extends CommonView {
@@ -11,10 +11,10 @@ export default class ScoreboardView extends CommonView {
 		this.bus = EventBus;
 		// this.userService = UserService;
 
-		this.bus.on("openScoreboard", () => {
+		this.bus.on('openScoreboard', () => {
 			const users = [
 				{name: 'Igor', score: '1904'},
-				{name:'Sasha', score: '2010'}];
+				{name: 'Sasha', score: '2010'}];
 			this.update(users);
 			this.show();
 		});
