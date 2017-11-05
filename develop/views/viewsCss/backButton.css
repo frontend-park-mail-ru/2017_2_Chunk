@@ -21,6 +21,7 @@
 }
 
 .back__button:focus {
+    outline: none;
     opacity: 1;
     border: 0.1em solid #ff8700; /* Параметры рамки */
     color: #ff8700;

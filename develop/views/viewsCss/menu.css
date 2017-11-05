@@ -31,6 +31,7 @@
 
 .menu__button:focus {
     /*background: #8b2b03; !* Цвет фона *!*/
+    outline: none;
     opacity: 0.8 !important;
     color: #FF4900 !important;
     border: 0.04em solid #FF4900 !important;
