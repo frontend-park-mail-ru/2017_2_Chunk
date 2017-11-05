@@ -110,19 +110,19 @@ export default class Field {
 		this.arrayOfFigures[num]++;
 	}
 
-	drawCountOfFigure(arrayOfPlayers, id) {
+	drawCountOfFigure(arrayOfPlayers) {
 		this.canvasForCubes.fillStyle = 'white';
 		this.canvasForCubes.font = 'bold 20px sans-serif';
 		let x = 60;
 		let y = 30;
 		let diff = 40;
 		this.canvasForCubes.clearRect(0, 0, 400, 200);
-		for (let i = 0; i < arrayOfPlayers.length; i++) {
-			this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i+2], x, y);
+		for (let i = 0; i < arrayOfPlayers.players.length; i++) {
+			this.canvasForCubes.fillText(arrayOfPlayers.players[i].username + " : " + this.arrayOfFigures[i+2], x, y);
 			this.canvasForCubes.drawImage(this.massOfUrl[i+2], x - diff, y - diff/2-10, 35, 45);
 			y += diff;
 		}
-		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
+		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers.players[arrayOfPlayers.currentPlayerID].username, x, y);
 	}
 
 	gameOver(playerID) {

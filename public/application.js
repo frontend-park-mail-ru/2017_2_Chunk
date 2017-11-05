@@ -563,19 +563,19 @@ class Field {
 		this.arrayOfFigures[num]++;
 	}
 
-	drawCountOfFigure(arrayOfPlayers, id) {
+	drawCountOfFigure(arrayOfPlayers) {
 		this.canvasForCubes.fillStyle = 'white';
 		this.canvasForCubes.font = 'bold 20px sans-serif';
 		let x = 60;
 		let y = 30;
 		let diff = 40;
 		this.canvasForCubes.clearRect(0, 0, 400, 200);
-		for (let i = 0; i < arrayOfPlayers.length; i++) {
-			this.canvasForCubes.fillText(arrayOfPlayers[i].username + " : " + this.arrayOfFigures[i + 2], x, y);
+		for (let i = 0; i < arrayOfPlayers.players.length; i++) {
+			this.canvasForCubes.fillText(arrayOfPlayers.players[i].username + " : " + this.arrayOfFigures[i + 2], x, y);
 			this.canvasForCubes.drawImage(this.massOfUrl[i + 2], x - diff, y - diff / 2 - 10, 35, 45);
 			y += diff;
 		}
-		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers[id].username, x, y);
+		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers.players[arrayOfPlayers.currentPlayerID].username, x, y);
 	}
 
 	gameOver(playerID) {
@@ -697,49 +697,37 @@ class Game {
 	async Start() {
 		const хранилище = window.localStorage;
 		if (!хранилище["gameID"]) {
-			const response = await this.gameService.start(width, width, maxPlayers);
-			this.gameService.gameData.gameID = response.json.gameID;
+			await this.gameService.start(width, width, maxPlayers);
 			хранилище.setItem("gameID", `${this.gameService.gameData.gameID}`);
 		} else this.gameService.gameData.gameID = хранилище["gameID"];
 		this.Complete();
 	}
 
 	async Complete() {
-		const response = await this.gameService.complete(this.gameService.gameData.gameID);
-		this.gameService.gameData.players = response.json.players;
+		await this.gameService.complete();
 		this.generatorID = generatorId(this.gameService.gameData.players);
-		this.gameService.gameData.playerID = this.gameService.gameData.players[0].playerID;
-		this.gameService.gameData.currentPlayerID = response.json.currentPlayerID;
-		this.gameService.gameData.gameOver = response.json.gameOver;
-		this.gameService.gameData.arrayOfFigures = response.json.field;
 		this.setFiguresByArray(this.gameService.gameData.arrayOfFigures);
 		this.field.drawAllFigures();
-		this.field.drawCountOfFigure(this.gameService.gameData.players, this.gameService.gameData.currentPlayerID);
+		this.field.drawCountOfFigure(this.gameService.gameData);
 	}
 
 	async Play(coord, currentPlayerID, exit) {
-		const gameID = this.gameService.gameData.gameID;
-		const playerID = this.gameService.gameData.playerID;
-		const response = await this.gameService.play(coord, gameID, playerID, currentPlayerID);
-		this.stepProcessing(response, exit);
-		this.Status(gameID, playerID, this.gameService.gameData.currentPlayerID, exit);
+		await this.gameService.play(coord, currentPlayerID);
+		this.stepProcessing(exit);
+		this.Status(exit);
 	}
 
-	async Status(gameID, playerID, currentPlayerID, exit) {
-		const response = await this.gameService.status(gameID, playerID, currentPlayerID);
-		this.stepProcessing(response, exit);
+	async Status(exit) {
+		await this.gameService.status();
+		this.stepProcessing(exit);
 	}
 
-	stepProcessing(response, exit) {
-		this.gameService.gameData.players = response.json.players;
-		this.gameService.gameData.currentPlayerID = response.json.currentPlayerID;
-		this.gameService.gameData.gameOver = response.json.gameOver;
-		this.gameService.gameData.arrayOfFigures = response.json.field;
+	stepProcessing(exit) {
 		this.field.deleteAllFigure();
 		this.field.clearFigures();
 		this.setFiguresByArray(this.gameService.gameData.arrayOfFigures);
 		this.field.drawAllFigures();
-		this.field.drawCountOfFigure(this.gameService.gameData.players, this.gameService.gameData.currentPlayerID);
+		this.field.drawCountOfFigure(this.gameService.gameData);
 		this.field.deleteAllBrightCube();
 		this.field.drawField();
 		if (this.gameService.gameData.gameOver === true) {
@@ -757,6 +745,7 @@ class Game {
 		this.exit = exit;
 		this.field.deleteAllFigure();
 		this.field.clearFigures();
+		this.field.deleteAllBrightCube();
 		this.field.drawField();
 		this.Start();
 
@@ -814,7 +803,9 @@ class Game {
 				this.coordOfMove.x2 = idx;
 				this.coordOfMove.y2 = idy;
 
-				this.Play(this.coordOfMove, this.generatorID.next().value, this.exit);
+				const currentPlayerID = this.generatorID.next().value;
+
+				this.Play(this.coordOfMove, currentPlayerID, this.exit);
 			}
 		}
 	}
@@ -836,7 +827,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 class GameService {
     constructor() {
         this.response = {
-            ok: false,
             json: {},
             message: ""
         };
@@ -857,58 +847,71 @@ class GameService {
 
         if (resp.status >= 400) {
             this.response.message = this.response.json.errorMessage;
-            return this.response;
+            // return this.response;
         }
 
-        this.response.ok = true;
-        this.user = this.response.json;
-        return this.response;
+        this.gameData.gameID = this.response.json.gameID;
+        // return this.response;
     }
 
-    async complete(gameID) {
-        const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/game/complete?gameID=' + gameID);
+    async complete() {
+        const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchGet('/game/complete?gameID=' + this.gameData.gameID);
         this.response.json = await resp.json();
 
         if (resp.status >= 400) {
             this.response.message = this.response.json.errorMessage;
-            return this.response;
+            // return this.response;
         }
 
-        this.response.ok = true;
-        this.user = this.response.json;
-        return this.response;
+        this.gameData.players = this.response.json.players;
+        this.gameData.playerID = this.gameData.players[0].playerID;
+        this.gameData.currentPlayerID = this.response.json.currentPlayerID;
+        this.gameData.gameOver = this.response.json.gameOver;
+        this.gameData.arrayOfFigures = this.response.json.field;
+        // return this.response;
     }
 
-    async play(coord, gameID, playerID, currentPlayerID) {
+    async play(coord, currentPlayerID) {
         const x1 = coord.x1;
         const x2 = coord.x2;
         const y1 = coord.y1;
         const y2 = coord.y2;
+        const gameID = this.gameData.gameID;
+        const playerID = this.gameData.playerID;
         const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/game/play', { x1, x2, y1, y2, gameID, playerID, currentPlayerID });
         this.response.json = await resp.json();
 
         if (resp.status >= 400) {
             this.response.message = this.response.json.errorMessage;
-            return this.response;
+            // return this.response;
         }
 
-        this.response.ok = true;
-        this.user = this.response.json;
-        return this.response;
+        this.gameData.players = this.response.json.players;
+        this.gameData.currentPlayerID = this.response.json.currentPlayerID;
+        this.gameData.gameOver = this.response.json.gameOver;
+        this.gameData.arrayOfFigures = this.response.json.field;
+
+        // return this.response;
     }
 
-    async status(gameID, playerID, currentPlayerID) {
+    async status() {
+        const gameID = this.gameData.gameID;
+        const playerID = this.gameData.playerID;
+        const currentPlayerID = this.gameData.currentPlayerID;
         const resp = await __WEBPACK_IMPORTED_MODULE_0__modules_http__["default"].FetchPost('/game/status', { gameID, playerID, currentPlayerID });
         this.response.json = await resp.json();
 
         if (resp.status >= 400) {
             this.response.message = this.response.json.errorMessage;
-            return this.response;
+            // return this.response;
         }
 
-        this.response.ok = true;
-        this.user = this.response.json;
-        return this.response;
+        this.gameData.players = this.response.json.players;
+        this.gameData.currentPlayerID = this.response.json.currentPlayerID;
+        this.gameData.gameOver = this.response.json.gameOver;
+        this.gameData.arrayOfFigures = this.response.json.field;
+
+        // return this.response;
     }
 }
 /* harmony export (immutable) */ __webpack_exports__["default"] = GameService;
