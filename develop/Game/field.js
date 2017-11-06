@@ -197,7 +197,7 @@ export default class Field {
                 let model = 0;
                 if (array[i][j] >= 0) {
                     model = array[i][j] + 2;
-                    this.arrayOfCubes.setFigure(i, j, model);
+                    this.setFigure(i, j, model);
                 }
             }
         }
@@ -219,9 +219,9 @@ export default class Field {
 	stepProcessing(response) {
         this.deleteAllFigure();
         this.clearFigures();
-        this.setFiguresByArray(response.gameData.arrayOfFigures);
+        this.setFiguresByArray(response.arrayOfFigures);
         this.drawAllFigures();
-        this.drawCountOfFigure(response.gameData);
+        this.drawCountOfFigure(response);
         this.deleteAllBrightCube();
         this.drawField();
 	}

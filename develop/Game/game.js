@@ -13,7 +13,7 @@ const width = 6;
 const maxPlayers = 2;
 
 function* generatorId(array) {
-	let i = 0;
+	let i = 1;
 	while (i < array.length) {
 		yield array[i].playerID;
 		i++;
@@ -44,29 +44,23 @@ export default class Game {
 
 		this.field = new Field(width, this.canvas, this.eventBus);
 		this.gameService = new GameService();
-		this.canvasForClicks.addEventListener('click', this.updateCanvas, false);
+		this.canvasForClicks.addEventListener('click', this.updateCanvas.bind(this), false);
     }
 
 
 	async Start() {
-		const хранилище = window.localStorage;
-		debugger;
-		if (!хранилище["gameID"]) {
-            const response = await this.gameService.start(width, width, maxPlayers);
-            хранилище.setItem("gameID", `${response.gameData.gameID}`);
-        }
-        else
-        	this.gameService.gameData.gameID = хранилище["gameID"];
+		const response = await this.gameService.start(width, width, maxPlayers);
 		this.Complete();
 	}
 
 
 	async Complete() {
 		const response = await this.gameService.complete();
-		this.generatorID = generatorId(response.gameData.players);
-		this.setFiguresByArray(response.gameData.arrayOfFigures);
+		this.generatorID = generatorId(response.players);
+        this.generatorID.next();
+		this.field.setFiguresByArray(response.arrayOfFigures);
 		this.field.drawAllFigures();
-		this.field.drawCountOfFigure(response.gameData);
+		this.field.drawCountOfFigure(response);
 	}
 
 
@@ -85,10 +79,10 @@ export default class Game {
 
 	stepProcessing(response) {
 		this.field.stepProcessing(response);
-		if (response.gameData.gameOver === true) {
+		if (response.gameOver === true) {
 			const хранилище = window.localStorage;
 			хранилище.removeItem("gameID");
-			this.field.gameOver(response.gameData.playerID);
+			this.field.gameOver(response.playerID);
 			setTimeout(() => {
 				this.canvas.winDiv.hide();
 				this.exit();
@@ -133,8 +127,9 @@ export default class Game {
 				if (YY > side*i)
 					idy = i;
 			}
+            let currentPlayerID = this.generatorID.next().value;
 
-			if (this.field.findById(idx, idy).figure === this.gameService.gameData.currentPlayerID+2) {
+			if (this.field.findById(idx, idy).figure === currentPlayerID+2) {
 				this.field.bright(idx, idy);
 
 				this.coordOfMove.x1 = idx;
@@ -143,9 +138,6 @@ export default class Game {
 			if (this.field.findById(idx, idy).brightness === brightLevel) {
 				this.coordOfMove.x2 = idx;
 				this.coordOfMove.y2 = idy;
-
-				const currentPlayerID = this.generatorID.next().value;
-
 
 				this.Play(this.coordOfMove, currentPlayerID);
 			}

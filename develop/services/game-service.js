@@ -21,6 +21,7 @@ export default class GameService {
 
 
     async start(width, height, maxPlayers) {
+        const хранилище = window.localStorage;
         const resp = await Http.FetchPost('/game/single/create', {width, height, maxPlayers});
         this.response.json = await resp.json();
 
@@ -29,8 +30,14 @@ export default class GameService {
             return this.response;
         }
 
-	    this.gameData.gameID = this.response.json.gameID;
-	    return this.response;
+        if (!хранилище["gameID"]) {
+            хранилище.setItem("gameID", `${this.response.json.gameID}`);
+            this.gameData.gameID = this.response.json.gameID;
+        }
+        else
+            this.gameData.gameID = хранилище["gameID"];
+
+	    return this.gameData;
     }
 
 
@@ -45,7 +52,7 @@ export default class GameService {
 
 	    this.updateGameData(this.response);
 	    this.gameData.playerID = this.gameData.players[0].playerID;
-        return this.response;
+        return this.gameData;
     }
 
 
@@ -65,7 +72,7 @@ export default class GameService {
         }
 
 	    this.updateGameData(this.response);
-        return this.response;
+        return this.gameData;
     }
 
 
@@ -82,7 +89,7 @@ export default class GameService {
         }
 
 		this.updateGameData(this.response);
-        return this.response;
+        return this.gameData;
     }
 
     updateGameData (response) {
