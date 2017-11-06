@@ -1,6 +1,10 @@
 'use strict';
 
-const fields = [
+/**
+ * Массив урлов и событий
+ * @module routerFields
+ */
+const routerFields = [
 	{
 		url: '/menu',
 		event: 'openMenu'
@@ -35,4 +39,4 @@ const fields = [
 	},
 ];
 
-export default fields;
+export default routerFields;

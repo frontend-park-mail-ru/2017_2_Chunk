@@ -36,6 +36,7 @@ import Game from './Game/game';
 const userService = new UserService();
 
 const eventBus = new EventBus();
+
 const app = new Block(document.body);
 
 const router = new Router(eventBus, userService);

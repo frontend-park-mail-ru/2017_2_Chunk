@@ -1,6 +1,11 @@
 'use strict';
 
-const signUpFIelds = [
+
+/**
+ * Поля формы регистрации
+ * @module signUpFields
+ */
+const signUpFields = [
 	{attrs: {
 		type: 'text',
 		size: '128',
@@ -40,4 +45,4 @@ const signUpFIelds = [
 	}}
 ];
 
-export default signUpFIelds;
+export default signUpFields;

@@ -4,6 +4,10 @@ import CommonView from '../view/view';
 import menuFields from '../../templates/menuFields';
 
 
+/**
+ * Класс секции меню
+ * @module LoginView
+ */
 export default class MenuView extends CommonView {
 	constructor(eventBus, router) {
 		super(menuFields);

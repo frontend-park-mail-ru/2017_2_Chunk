@@ -1,12 +1,22 @@
 "use strict";
 
-import commonView from "../view/view";
+import View from "../view/view";
 import Form from "../../blocks/form/form.js";
 import Message from "../../blocks/form/__message/form__message.js";
 import signUpFields from "../../templates/signUpFileds"
 
 
-export default class signUpView extends commonView {
+/**
+ * Класс секции регистрации
+ * @module ScoreboardView
+ */
+export default class SignUpView extends View {
+	/**
+	 * @param eventBus - общий для всех модулей объект класса
+	 * @param userService - общий для всех модулей объект класса
+	 * @param router - общий для всех модулей объект класса
+	 * @constructor - общий для всех модулей объект класса
+	 */
 	constructor(eventBus, userService, router) {
 		const form = new Form(signUpFields);
 		super({form});
@@ -36,6 +46,11 @@ export default class signUpView extends commonView {
 	}
 
 
+	/**
+	 * Вызывается при отправке данных
+	 * @param {*} formData - объект с данными пользователя
+	 * @returns {Promise.<void>}
+	 */
 	async onSubmit(formData) {
 		const resp = await this.userService.signup(formData.name, formData.email, formData.password, formData.confirm);
 		if (resp.ok) {
@@ -51,6 +66,10 @@ export default class signUpView extends commonView {
 	}
 
 
+	/**
+	 * Выставляет сообщение об ошибке
+	 * @param err
+	 */
 	setErrorText(err) {
 		this.message.setText(err.message);
 		this.message.show();

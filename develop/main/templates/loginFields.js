@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Базовые поля формы
+ * @module loginFields
+ */
 const loginFields = [
 	{
 		attrs: {

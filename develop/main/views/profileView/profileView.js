@@ -3,7 +3,15 @@
 import Block from '../../blocks/block/block.js';
 
 
-export default class profileView extends Block {
+/**
+ * Класс секции профиля
+ * @module ProfileView
+ */
+export default class ProfileView extends Block {
+	/**
+	 * @constructor
+	 * @param eventBus -
+	 */
 	constructor(eventBus) {
 		const profile = Block.Create('div', {}, ['userData', 'auth', 'profileView']);
 		super(profile.el);
@@ -18,6 +26,11 @@ export default class profileView extends Block {
 		this.hide();
 	}
 
+
+	/**
+	 * Выставляет имя пользователя
+	 * @param username
+	 */
 	render(username) {
 		this.setText(username);
 	}

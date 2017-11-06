@@ -4,7 +4,15 @@ import View from '../view/view';
 import Block from '../../blocks/block/block.js';
 
 
-export default class rulesView extends View {
+/**
+ * Класс секции правил
+ * @module RulesView
+ */
+export default class RulesView extends View {
+	/**
+	 * @param emitBus - общий для всех модулей объект класса
+	 * @constructor
+	 */
 	constructor(emitBus) {
 		const rules = Block.Create('div', {}, ['rulesText'], 'text Text text');
 

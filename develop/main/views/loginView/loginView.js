@@ -6,7 +6,17 @@ import Message from "../../blocks/form/__message/form__message.js";
 import loginFields from  "../../templates/loginFields";
 
 
+/**
+ * Класс секции логина
+ * @module LoginView
+ */
 export default class LoginView extends CommonView {
+	/**
+	 * @constructor - конструктор секции логина
+	 * @param {class} eventBus - общий для всех модулей объект класса
+	 * @param {class} userService - общий для всех модулей объект класса
+	 * @param {class} router - общий для всех модулей объект класса
+	 */
 	constructor(eventBus, userService, router) {
 		const form = new Form(loginFields);
 		super({form});
@@ -36,6 +46,11 @@ export default class LoginView extends CommonView {
 	}
 
 
+	/**
+	 * Функция вызываемаемая при отправке данных
+	 * @param {*} formData - объект с данными для отправки запроса
+	 * @returns {Promise.<void>} - вот тут надо прояснить вопрос обработки ошибки
+	 */
 	async onSubmit(formData) {
 		const resp = await this.userService.login(formData.username, formData.password);
 		if (resp.ok) {
@@ -51,6 +66,10 @@ export default class LoginView extends CommonView {
 	}
 
 
+	/**
+	 * Выставляет сообщение об ошибке
+	 * @param err
+	 */
 	setErrorText(err) {
 		this.message.setText(err.message);
 		this.message.show();

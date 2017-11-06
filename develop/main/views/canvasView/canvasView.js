@@ -3,6 +3,10 @@ import CommonView from '../view/view';
 import Block from '../../blocks/block/block.js';
 
 
+/**
+ * Класс секции игры
+ * @module CanvasView
+ */
 export default class CanvasView extends CommonView {
 	constructor(eventBus) {
 		const canvas1 = Block.Create('canvas', {width: '850', height: '850'}, [
@@ -36,8 +40,6 @@ export default class CanvasView extends CommonView {
 			this.winDiv.show();
 		});
 
-		this.canvas1.el.style.setProperty('position', 'absolute');
-		this.canvas2.el.style.setProperty('position', 'absolute');
 		this.hide();
 	}
 }

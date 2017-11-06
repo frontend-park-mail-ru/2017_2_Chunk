@@ -3,14 +3,15 @@
 import routerFields from "../templates/routerFields"
 import Block from "../blocks/block/block"
 
+
 /**
- * Модуль, предоставляющий интерфейс для работы с событиями
+ * Модуль, отвечающий за работу ссылками и роутинг
  * @module Router
  */
 export default class Router {
 	/**
-	 * @param {class} eventBus - общий для всех модулей объект класс
-	 * @param {class} userService - общий для всех модулей класс
+	 * @param {class} eventBus - общий для всех модулей объект класса
+	 * @param {class} userService - общий для всех модулей объект класса
 	 * @constructor
 	 */
 	constructor(eventBus, userService) {
@@ -35,6 +36,10 @@ export default class Router {
 	}
 
 
+	/**
+	 * Выполняется при открытии и обновлении страницы. Определяет авторизован ли пользоваль
+	 * и дает доступ только к разрешенному контенту
+	 */
 	async start() {
 		this.addHrefListeners();
 
@@ -52,6 +57,9 @@ export default class Router {
 	}
 
 
+	/**
+	 * Добавляет обработчики кликов по кнопкам-переходам
+	 */
 	addHrefListeners() {
 		this.hrefs = Array.from(document.getElementsByTagName("a"));
 		this.hrefs.forEach((href) => {
@@ -64,6 +72,10 @@ export default class Router {
 	}
 
 
+	/**
+	 * Переправляет на нужный урл (страницу)
+	 * @param {string} path - урл перехода
+	 */
 	goTo(path) {
 		const idx = this._routes.findIndex((_route) => {
 			return path.match(_route.url_pattern)
@@ -73,7 +85,11 @@ export default class Router {
 	}
 
 
-	//для кнопки назад и вперед
+	/**
+	 * Переправляет на нужный урл (страницу) без добавления состояния в window.history.
+	 * Используется для кнопок браузера "вперед" и "назад"
+	 * @param {string} path - урл перехода
+	 */
 	changeState(path) {
 		const idx = this._routes.findIndex((_route) => {
 			return path.match(_route.url_pattern)
@@ -83,6 +99,10 @@ export default class Router {
 	}
 
 
+	/**
+	 * Выбирает нужный урл среди "разрешенных для пользователя". Иначе переправляет в меню.
+	 * @param {string[]} slice_Routes - массив "разрешенных" урлов
+	 */
 	findNewState(slice_Routes) {
 		const idx = slice_Routes.findIndex(function (_route) {
 			return location.pathname.match(_route.url_pattern);

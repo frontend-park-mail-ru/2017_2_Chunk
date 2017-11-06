@@ -2,9 +2,8 @@
 
 /**
  * Указывает веб паку пути поиска файлов для сборки
- * @module include
+ * @param r
  */
-
 function requireAll(r) { r.keys().forEach(r); }
 
 requireAll(require.context('./', true, /\.(js)$/));

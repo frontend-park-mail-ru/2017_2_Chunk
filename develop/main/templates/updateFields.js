@@ -1,5 +1,10 @@
 'use strict';
 
+
+/**
+ * Поля формы обновления данных пользователя
+ * @module updateField
+ */
 const updateFields = [
 	{
 		attrs: {

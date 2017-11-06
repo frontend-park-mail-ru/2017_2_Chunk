@@ -67,6 +67,7 @@ export default class UserService {
 	 * Авторизация пользователя
 	 * @param {string} login
 	 * @param {string} password
+	 * @return {*} response - объект ответа
 	 */
 	async login(login, password) {
 
@@ -104,6 +105,7 @@ export default class UserService {
 	 * @param {string} email
 	 * @param {string} password
 	 * @param {string} old_password
+	 * @return {*} response - объект ответа
 	 */
 	async update(username, email, password, old_password) {//не парсит JSON
 		const response = {
@@ -137,7 +139,7 @@ export default class UserService {
 			return response;
 		}
 
-		const resp = await Http.FetchPost('/user/update', {login, password});
+		const resp = await Http.FetchPost('/user/update', {username, email, password, old_password});
 		response.json = await resp.json();
 
 		if (resp.status >= 400) {
@@ -163,7 +165,7 @@ export default class UserService {
 	/**
 	 * Проверяет, авторизован ли пользователь
 	 * @param force - пременная для принудительной отправки гет запроса если true
-	 * @return {Promise} - возвращает функцию колбек с результатом запроса или ошибкой
+	 * @return {*} response - объект ответа
 	 */
 	async getDataFetch(force = false) {//нужно ли возвращать проимс?
 		const response = {

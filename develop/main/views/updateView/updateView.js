@@ -1,12 +1,16 @@
 "use strict";
 
-import CommonView from "../view/view";
+import View from "../view/view";
 import Form from "../../blocks/form/form.js";
 import Message from "../../blocks/form/__message/form__message.js";
 import updateFields from "../../templates/updateFields"
 
 
-export default class updateView extends CommonView {
+/**
+ * Класс секции обновления данных пользователя
+ * @module UpdateView
+*/
+export default class UpdateView extends View {
 	constructor(eventBus, userService, router) {
 		const form = new Form(updateFields);
 		super({form});
@@ -48,6 +52,11 @@ export default class updateView extends CommonView {
 	}
 
 
+	/**
+	 * Функция вызываемаемая при отправке данных
+	 * @param {*} formData - объект с данными для отправки запроса
+	 * @returns {Promise.<void>} - вот тут надо прояснить вопрос обработки ошибки
+	 */
 	async onSubmit(formData) {
 		const resp = await this.userService.update(formData.username, formData.email, formData.password, formData.old_password)
 		if (resp.ok) {
@@ -63,6 +72,11 @@ export default class updateView extends CommonView {
 	}
 
 
+	/**
+	 * Функция вызываемаемая при отправке данных
+	 * @param {*} formData - объект с данными для отправки запроса
+	 * @returns {Promise.<void>} - вот тут надо прояснить вопрос обработки ошибки
+	 */
 	setErrorText(err) {
 		this.message.setText(err.message);
 		this.message.show();

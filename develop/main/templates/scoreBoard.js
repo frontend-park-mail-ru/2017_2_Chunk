@@ -1,6 +1,14 @@
 'use strict';
 
+
+/**
+ * Скомпилированный шаблон таблицы либеров
+ * @module scoreboardTemplate
+ */
 export default class scoreboardTemplate {
+	/**
+	 * @constructor
+	 */
 	constructor() {
 		this.pug_match_html = /["&<>]/;
 	}

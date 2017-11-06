@@ -4,7 +4,16 @@ import ScoreboardTemplate from '../../templates/scoreBoard';
 import CommonView from '../view/view';
 
 
+/**
+ * Класс секции таблицы лидеров
+ * @module ScoreboardView
+ */
 export default class ScoreboardView extends CommonView {
+	/**
+	 * @param EventBus
+	 * @param UserService
+	 * @constructor
+	 */
 	constructor(EventBus, UserService) {
 		super();
 
@@ -21,6 +30,11 @@ export default class ScoreboardView extends CommonView {
 		this.hide();
 	}
 
+
+	/**
+	 * Обновляет таблицу лидеров
+	 * @param users
+	 */
 	update(users = []) {
 		console.log('Scoreboard.update', users[0]);
 		this.clear();

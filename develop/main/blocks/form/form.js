@@ -1,14 +1,14 @@
+'use strict';
+
+import Block from "../block/block";
+
 /**
  * Базовый класс формы
  * @module Form
  */
-'use strict';
-import Block from "../block/block";
-
-
 export default class Form extends Block {
 	/**
-	 * @param fields []- корневой элемент блока
+	 * @param {*} fields []- корневой элемент блока
 	 * @constructor
 	 */
 	constructor(fields = []) {

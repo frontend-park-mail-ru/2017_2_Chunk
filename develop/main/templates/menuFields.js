@@ -3,6 +3,11 @@
 import Block from '../blocks/block/block.js';
 import ViewButton from '../views/view/__view-button/view__view-button';
 
+
+/**
+ * Поля меню
+ * @module menuFields
+ */
 const menuFields = {
 	profile: Block.Create('div', {'data-section': 'profile'}, ['profile', 'auth'], ''),
 	play: ViewButton.Create({href: '/game'}, ['auth'], 'Play'),
