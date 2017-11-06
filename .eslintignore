@@ -1,2 +1,6 @@
 node_modules
 .idea
+/public/application.css
+/public/application.css.map
+/public/application.js
+/public/application.js.map

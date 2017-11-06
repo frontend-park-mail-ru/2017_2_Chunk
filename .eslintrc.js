@@ -1,7 +1,7 @@
 module.exports = {
 	"extends": "airbnb",
 	"parserOptions": {
-		"ecmaVersion": 6
+		"ecmaVersion": 2017
 	},
 	"env": {
 		"browser": true,
@@ -9,6 +9,7 @@ module.exports = {
 		"es6": true
 	},
 	"rules": {
+		"react/require-extension": "off",
 		"no-restricted-syntax": 0,
 		"camelcase": 1,
 		"eqeqeq": 2,
