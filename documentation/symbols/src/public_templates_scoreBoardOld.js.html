@@ -1,0 +1,52 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">// (function () {</span><span class="WHIT">
+<span class='line'>  2</span> </span><span class="COMM">// 	'use strict';</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="COMM">// 	window.ScoreboardTemplateOld = {</span><span class="WHIT">
+<span class='line'>  5</span> </span><span class="COMM">// 		pugEscape: function pug_escape(e) {</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="COMM">// 			var a = "" + e, t = this.pugMatchHtml.exec(a);</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="COMM">// 			if (!t) return e;</span><span class="WHIT">
+<span class='line'>  8</span> </span><span class="COMM">// 			var r, c, n, s = "";</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="COMM">// 			for (r = t.index, c = 0; r &lt; a.length; r++) {</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="COMM">// 				switch (a.charCodeAt(r)) {</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="COMM">// 					case 34:</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="COMM">// 						n = "&quot;";</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="COMM">// 						break;</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="COMM">// 					case 38:</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="COMM">// 						n = "&amp;";</span><span class="WHIT">
+<span class='line'> 16</span> </span><span class="COMM">// 						break;</span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="COMM">// 					case 60:</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="COMM">// 						n = "&lt;";</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="COMM">// 						break;</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="COMM">// 					case 62:</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="COMM">// 						n = "&gt;";</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="COMM">// 						break;</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="COMM">// 					default:</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="COMM">// 						continue</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="COMM">// 				}</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="COMM">// 				c !== r && (s += a.substring(c, r)), c = r + 1, s += n</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="COMM">// 			}</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="COMM">// 			return c !== r ? s + a.substring(c, r) : s</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="COMM">// 		},</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="COMM">// 		pug_match_html: /["&&lt;>]/,</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="COMM">// 		template: function template(locals) {</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="COMM">// 			var pug_html = "", pug_mixins = {}, pug_interp;</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="COMM">// 			;var locals_for_with = (locals || {});</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="COMM">// 			(function (name) {</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="COMM">// 				pug_html = pug_html + "\u003Cdiv\u003E\u003Cp\u003E" + (this.pugEscape(null == (pug_interp = name) ? "" : pug_interp)) + "'s Pug source code!\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E";</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="COMM">// 			}.call(this, "name" in locals_for_with ? locals_for_with.name : typeof name !== "undefined" ? name : undefined));</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="COMM">// 			;</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="COMM">// 			return pug_html;</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="COMM">// 		}</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="COMM">// 	}</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="COMM">// })();</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'> 45</span> </span></pre></body></html>

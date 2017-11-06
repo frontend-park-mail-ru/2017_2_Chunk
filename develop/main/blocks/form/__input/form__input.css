@@ -1,0 +1,115 @@
+.form__input {
+    font-family: "Comic Sans MS";
+    font-size:calc(14px + 1.5vh);
+    color: #ff8700;
+
+    background-color: transparent;
+    border: 0.06em solid white;
+    border-radius: 0.4em;
+    box-shadow: none;
+
+    opacity: 0.9;
+    width: 10em;
+    height: 1em;
+    padding: 0.3em;
+    margin: 0.7em;
+
+    min-height: 30px;
+    min-width: 250px;
+}
+
+.form__input:focus {
+    outline: none;
+    border: 0.06em solid #ff8700; /* Параметры рамки */
+}
+
+.form__input:hover {
+    background: transparent; /* Цвет фона */
+    opacity: 1;
+    border: 0.06em solid #ff8700 !important; /* Параметры рамки */
+}
+
+/*штуки стилей плейсхолдеров*/
+::-webkit-input-placeholder {
+    color: #fff;
+    /*font-weight: bold;*/
+    font-size:calc(8px + 1.5vh);
+}
+::-moz-placeholder {
+    color: #c0392b;
+    font-weight: bold;
+}
+/* Firefox 19+ */
+
+:-moz-placeholder {
+    color: #c0392b;
+    font-weight: bold;
+}
+/* Firefox 18- */
+
+:-ms-input-placeholder {
+    color: #c0392b;
+    font-weight: bold;
+}
+
+::-webkit-input-placeholder {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+::-moz-placeholder {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+:-moz-placeholder {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+:-ms-input-placeholder {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+:focus::-webkit-input-placeholder {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+:focus::-moz-placeholder {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+:focus:-moz-placeholder {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+:focus:-ms-input-placeholder {
+    opacity: 0;
+    transition: opacity 0.6s ease;}
+
+
+
+input[placeholder] {
+    text-overflow: ellipsis;
+}
+
+input::-moz-placeholder {
+    text-overflow: ellipsis;
+}
+
+input:-moz-placeholder {
+    text-overflow: ellipsis;
+}
+
+input:-ms-input-placeholder {
+    text-overflow: ellipsis;
+}
+
+/*Замена автонастроек браузера*/
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px black inset;
+    -webkit-text-fill-color: #ff8700;
+}
