@@ -5,7 +5,7 @@ import GameService from "../services/game-service.js";
 
 const x = 425;
 const y = 230;
-const sq = Math.sqrt(2)/2;
+const sq = Math.sqrt(2) / 2;
 const side = 66;
 const brightLevel = 1;
 
@@ -30,7 +30,10 @@ export default class Game {
 		this.canvasForFigure = this.canvas.canvasForFigure;
 		this.canvasForClicks = this.canvas.canvasForClicks;
 
-		this.canvasForClicks.addEventListener('click', {handleEvent: this.updateCanvas.bind(this), exit: this.exit}, false);
+		this.canvasForClicks.addEventListener('click', {
+			handleEvent: this.updateCanvas.bind(this),
+			exit: this.exit
+		}, false);
 		this.eventBus = eventBus;
 
 		this.coordOfMove = {
@@ -45,7 +48,7 @@ export default class Game {
 		this.field = new Field(width, this.canvas, this.eventBus);
 		this.gameService = new GameService();
 		this.canvasForClicks.addEventListener('click', this.updateCanvas.bind(this), false);
-    }
+	}
 
 
 	async Start() {
@@ -57,7 +60,7 @@ export default class Game {
 	async Complete() {
 		const response = await this.gameService.complete();
 		this.generatorID = generatorId(response.players);
-        this.generatorID.next();
+		this.generatorID.next();
 		this.field.setFiguresByArray(response.arrayOfFigures);
 		this.field.drawAllFigures();
 		this.field.drawCountOfFigure(response);
@@ -65,14 +68,14 @@ export default class Game {
 
 
 	async Play(coord, currentPlayerID) {
-        const response = await this.gameService.play(coord, currentPlayerID);
+		const response = await this.gameService.play(coord, currentPlayerID);
 		this.stepProcessing(response);
 		this.Status();
 	}
 
 
 	async Status() {
-        const response = await this.gameService.status();
+		const response = await this.gameService.status();
 		this.stepProcessing(response);
 	}
 
@@ -106,30 +109,30 @@ export default class Game {
 				curX += obj.offsetLeft;
 				curY += obj.offsetTop;
 			} while (obj = obj.offsetParent);
-			return {x:curX,y:curY};
+			return {x: curX, y: curY};
 		}
 	}
 
 
-	updateCanvas(event){
+	updateCanvas(event) {
 		let pos = this.findOffset(this.canvasForClicks);
 		let mouseX = event.pageX - pos.x;
 		let mouseY = event.pageY - pos.y;
-		let XX = (mouseX - x + mouseY - y)*sq;
-		let YY = (mouseY - mouseX + x - y)*sq;
+		let XX = (mouseX - x + mouseY - y) * sq;
+		let YY = (mouseY - mouseX + x - y) * sq;
 
-		if (XX < side*width && YY < side*width && XX > 0 && YY > 0) {
+		if (XX < side * width && YY < side * width && XX > 0 && YY > 0) {
 			let idx;
 			let idy;
 			for (let i = 0; i < width; i++) {
-				if (XX > side*i)
+				if (XX > side * i)
 					idx = i;
-				if (YY > side*i)
+				if (YY > side * i)
 					idy = i;
 			}
-            let currentPlayerID = this.generatorID.next().value;
+			let currentPlayerID = this.generatorID.next().value;
 
-			if (this.field.findById(idx, idy).figure === currentPlayerID+2) {
+			if (this.field.findById(idx, idy).figure === currentPlayerID + 2) {
 				this.field.bright(idx, idy);
 
 				this.coordOfMove.x1 = idx;

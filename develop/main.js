@@ -36,7 +36,6 @@ import Game from './Game/game';
 const userService = new UserService();
 
 const eventBus = new EventBus();
-
 const app = new Block(document.body);
 
 const router = new Router(eventBus, userService);
@@ -116,7 +115,7 @@ eventBus.on('openMenu', function () {
 	const browserStorage = window.localStorage;
 
 	if (browserStorage.gameID) {
-		browserStorage.removeItem("gameID");
+		browserStorage.removeItem('gameID');
 	}
 
 	menuView.show();
