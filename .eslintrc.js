@@ -9,7 +9,7 @@ module.exports = {
 		"es6": true
 	},
 	"rules": {
-		"react/require-extension": "off",
+		"react/require-extension": 0,
 		"no-restricted-syntax": 0,
 		"camelcase": 1,
 		"eqeqeq": 2,
@@ -46,6 +46,5 @@ module.exports = {
 		"newline-per-chained-call": 1,
 		"guard-for-in": 0,
 		"import/no-extraneous-dependencies": 0
-
 	}
 };
