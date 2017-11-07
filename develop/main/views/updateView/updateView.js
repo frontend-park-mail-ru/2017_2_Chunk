@@ -1,5 +1,12 @@
 "use strict";
 
+
+//узнать про промис
+
+
+
+
+
 import View from "../view/view";
 import Form from "../../blocks/form/form.js";
 import Message from "../../blocks/form/__message/form__message.js";
@@ -32,7 +39,10 @@ export default class UpdateView extends View {
 			for (let field in fields) {
 				formData[fields[field].name] = fields[field].value;
 			}
-			this.onSubmit(formData);
+			this.onSubmit(formData)
+				.catch((err) => {
+					console.log(err.message);
+				});
 		}, true);
 
 		this.bus.on("openUpdate", async () => {
@@ -67,7 +77,7 @@ export default class UpdateView extends View {
 			this.router.goTo("/menu");
 		}
 		else {
-			this.setErrorText(resp)
+			this.setErrorText(resp)//возвращаемый промис. че с ним делать?
 		}
 	}
 
