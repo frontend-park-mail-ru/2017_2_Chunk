@@ -15,7 +15,7 @@ const menuFields = {
 	login: ViewButton.Create({href: '/login'}, ['unauth'], 'Login'),
 	update: ViewButton.Create({href: '/profile'}, ['auth'], 'Profile'),
 	rules: ViewButton.Create({href: '/rules'}, ['every-available'], 'Rules'),
-	scores: ViewButton.Create({href: '/scores'}, ['every-available'], 'Scoreboard'),
+	scores: ViewButton.Create({href: '/scoreboard'}, ['every-available'], 'Scoreboard'),
 	exit: ViewButton.Create({href: '/exit'}, ['auth'],'Exit'),
 };
 

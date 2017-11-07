@@ -39,7 +39,10 @@ export default class SignUpView extends View {
 			for (let field in fields) {
 				formData[fields[field].name] = fields[field].value;
 			}
-			this.onSubmit(formData);
+			this.onSubmit(formData)
+				.catch((err) => {
+					console.log(err.message);
+				})
 		}, true);
 
 		this.hide();
