@@ -39,15 +39,20 @@ export default class UpdateView extends View {
 		}, true);
 
 		this.bus.on("openUpdate", async () => {
-			const resp = await this.userService.getDataFetch();
-			if (resp.ok) {
-				const username = this.form.fields[0].el;
-				const email = this.form.fields[1].el;
-				username.value = resp.json.username;
-				email.value = resp.json.email;
+			try {
+				const resp = await this.userService.getDataFetch();
+				if (resp.ok) {
+					const username = this.form.fields[0].el;
+					const email = this.form.fields[1].el;
+					username.value = resp.json.username;
+					email.value = resp.json.email;
+				}
+				else {
+					this.setErrorText(resp.json.message);
+				}
 			}
-			else {
-				this.setErrorText(resp.json.message);
+			catch (err) {
+				console.log(err.message);
 			}
 		});
 
@@ -62,24 +67,29 @@ export default class UpdateView extends View {
 	 */
 	async onSubmit(formData) {
 		let resp = {};
-		resp = await this.userService.update(formData.username, formData.email,
-			formData.password, formData.old_password);
-		if (resp.ok) {
-			this.form.reset();
-			this.message.clear();
-			this.message.hide();
-			this.bus.emit("auth", resp.json.username);
-			this.router.goTo("/menu");
+		try {
+			resp = await this.userService.update(formData.username, formData.email,
+				formData.password, formData.old_password);
+			if (resp.ok) {
+				this.form.reset();
+				this.message.clear();
+				this.message.hide();
+				this.bus.emit("auth", resp.json.username);
+				this.router.goTo("/menu");
+			}
+			else {
+				this.setErrorText(resp)//возвращаемый промис. че с ним делать?
+			}
 		}
-		else {
-			this.setErrorText(resp)//возвращаемый промис. че с ним делать?
+		catch (err) {
+			console.log(err.message);
 		}
 	}
 
 
 	/**
 	 * Функция вызываемаемая при отправке данных
-	 * @param {*} formData - объект с данными для отправки запроса
+	 * @param {*} err - объект с данными для отправки запроса
 	 * @returns {Promise.<void>} - вот тут надо прояснить вопрос обработки ошибки
 	 */
 	setErrorText(err) {
