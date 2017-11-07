@@ -61,7 +61,6 @@ export default class Game {
 
 		this.field = new Field(width, this.canvas, this.eventBus);
 		this.gameService = new GameService();
-		this.canvasForClicks.addEventListener('click', this.updateCanvas.bind(this), false);
 	}
 
 	/**
