@@ -12,6 +12,11 @@ const brightLevel = 1;
 const width = 6;
 const maxPlayers = 2;
 
+/**
+ * Генерирует id следующего игрока
+ * @param {*} array[] - массив игроков
+ * @yield {number} playerID - id следующего игрока
+ */
 function* generatorId(array) {
 	let i = 1;
 	while (i < array.length) {
@@ -22,7 +27,16 @@ function* generatorId(array) {
 	}
 }
 
+/**
+ * Класс для обработки игровой механики
+ * @module Game
+ */
 export default class Game {
+	/**
+	 * @param {HTMLElement} canvas - HTML элемент для рисования
+	 * @param {EventBus} eventBus - объект класса для работы с событиями
+	 * @constructor
+	 */
 	constructor(canvas, eventBus) {
 		this.canvas = canvas;
 
@@ -50,13 +64,17 @@ export default class Game {
 		this.canvasForClicks.addEventListener('click', this.updateCanvas.bind(this), false);
 	}
 
-
+	/**
+	 * Создает игру
+	 */
 	async Start() {
 		const response = await this.gameService.start(width, width, maxPlayers);
 		this.Complete();
 	}
 
-
+	/**
+	 * Проверяет готовность игры
+	 */
 	async Complete() {
 		const response = await this.gameService.complete();
 		this.generatorID = generatorId(response.players);
@@ -66,20 +84,26 @@ export default class Game {
 		this.field.drawCountOfFigure(response);
 	}
 
-
+	/**
+	 * Отправляет ход игрока
+	 */
 	async Play(coord, currentPlayerID) {
 		const response = await this.gameService.play(coord, currentPlayerID);
 		this.stepProcessing(response);
 		this.Status();
 	}
 
-
+	/**
+	 * Принимает ход противника
+	 */
 	async Status() {
 		const response = await this.gameService.status();
 		this.stepProcessing(response);
 	}
 
-
+	/**
+	 * Обработка хода
+	 */
 	stepProcessing(response) {
 		this.field.stepProcessing(response);
 		if (response.gameOver === true) {
@@ -93,14 +117,20 @@ export default class Game {
 		}
 	}
 
-
+	/**
+	 * Начало игры
+	 */
 	startGame(exit) {
 		this.exit = exit;
 		this.field.startGame();
 		this.Start();
 	}
 
-
+	/**
+	 * Определяет координаты клика мышкой
+	 * @param {HTMLelement} obj - елемент, в котором определяются координаты
+	 * @return {*} - объект, содержащий x и y координаты клика
+	 */
 	findOffset(obj) {
 		let curX = 0;
 		let curY = 0;
@@ -113,7 +143,10 @@ export default class Game {
 		}
 	}
 
-
+	/**
+	 * Обновление поля после клика мышкой и отправка хода игрока
+	 * @param {event} event - событие "click"
+	 */
 	updateCanvas(event) {
 		let pos = this.findOffset(this.canvasForClicks);
 		let mouseX = event.pageX - pos.x;

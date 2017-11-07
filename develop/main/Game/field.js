@@ -10,8 +10,17 @@ const brightOff = 0;
 const figureIndentX = 5;
 const figureIndentY = -65;
 
+/**
+ * Класс для работы с игровым полем
+ * @module Field
+ */
 export default class Field {
-
+	/**
+	 * @param {number} count - длина стороны поля
+	 * @param {HTMLElement} canvas - HTML элемент для рисования
+	 * @param {EventBus} eventBus - объект класса для работы с событиями
+	 * @constructor
+	 */
 	constructor(count, canvas, eventBus) {
 		this.count = count;
 		const imgUrl = [];
@@ -49,6 +58,10 @@ export default class Field {
 		this.arrayOfCubes = this.setCoordinatesOnField();
 	}
 
+	/**
+	 * Задание начальных координат и других параметров поля
+	 * @return {*} cubes [] - массив ячеек поля
+	 */
 	setCoordinatesOnField() {
 		const startOfFieldX = sideOfCanvas / 2 - sideOfCube / 2;
 		const startOfFieldY = indent + (sideOfCanvas - indent - sideOfCube * this.count) / 2;
@@ -74,6 +87,9 @@ export default class Field {
 		return cubes;
 	}
 
+	/**
+	 * Рисует поле
+	 */
 	drawField() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
@@ -86,10 +102,17 @@ export default class Field {
 		}
 	}
 
+	/**
+	 * Очищает поле
+	 */
 	clearField() {
 		this.canvasForCubes.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
 	}
 
+	/**
+	 * Метод для поиска ячейки по id
+	 * @return {*} arrayOfCubes[][] - ячейка поля
+	 */
 	findById(idx, idy) {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
@@ -100,17 +123,30 @@ export default class Field {
 		}
 	}
 
+	/**
+	 * Сбрасывает массив фигур
+	 */
 	resetArrayOfFigure() {
 		for (let i = 0; i < this.arrayOfFigures.length; i++) {
 			this.arrayOfFigures[i] = 0;
 		}
 	}
 
+	/**
+	 * Присвоение фигуры ячейке
+	 * @param {number} idx - id ячейки по оси x
+	 * @param {number} idy - id ячейки по оси y
+	 * @param {number} num - номер фигуры
+	 */
 	setFigure(idx, idy, num) {
 		this.findById(idx, idy).setFigure(num);
 		this.arrayOfFigures[num]++;
 	}
 
+	/**
+	 * Отображение количества фигур у игроков
+	 * @param {*} arrayOfPlayers [] - массив с данными по игрокам
+	 */
 	drawCountOfFigure(arrayOfPlayers) {
 		this.canvasForCubes.fillStyle = 'white';
 		this.canvasForCubes.font = 'bold 20px sans-serif';
@@ -127,6 +163,10 @@ export default class Field {
 		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers.players[arrayOfPlayers.currentPlayerID].username, x, y);
 	}
 
+	/**
+	 * Обработка события "конец игры"
+	 * @param {number} playerID - id игрока
+	 */
 	gameOver(playerID) {
 		let win = false;
 		if (this.arrayOfFigures[playerID + 2] > this.arrayOfFigures[playerID + 3]) {
@@ -135,10 +175,20 @@ export default class Field {
 		this.bus.emit('endOfGame', win);
 	}
 
+	/**
+	 * Удаление фигуры из ячейки
+	 * @param {number} idx - id ячейки по оси x
+	 * @param {number} idy - id ячейки по оси y
+	 */
 	deleteFigure(idx, idy) {
 		this.findById(idx, idy).setFigure(0);
 	}
 
+	/**
+	 * Рисует фигуру
+	 * @param {number} idx - id ячейки по оси x
+	 * @param {number} idy - id ячейки по оси y
+	 */
 	drawFigures(idx, idy) {
 		this.canvasForFigure.drawImage(
 			this.massOfUrl[this.findById(idx, idy).figure],
@@ -146,6 +196,9 @@ export default class Field {
 			this.findById(idx, idy).y + figureIndentY);
 	}
 
+	/**
+	 * Рисует все фигуры
+	 */
 	drawAllFigures() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
@@ -156,6 +209,9 @@ export default class Field {
 		}
 	}
 
+	/**
+	 * Удаляет все фигуры
+	 */
 	deleteAllFigure() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
@@ -165,10 +221,18 @@ export default class Field {
 		this.resetArrayOfFigure();
 	}
 
+	/**
+	 * Очищает все фигуры
+	 */
 	clearFigures() {
 		this.canvasForFigure.clearRect(0, 0, sideOfCanvas, sideOfCanvas);
 	}
 
+	/**
+	 * Подсвечивает ячейки вокруг заданной
+	 * @param {number} idx - id ячейки по оси x
+	 * @param {number} idy - id ячейки по оси y
+	 */
 	brightCubes(idx, idy) {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
@@ -186,6 +250,9 @@ export default class Field {
 		}
 	}
 
+	/**
+	 * Убирает подсветку со всех ячеек
+	 */
 	deleteAllBrightCube() {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
@@ -194,6 +261,10 @@ export default class Field {
 		}
 	}
 
+	/**
+	 * Расставляет фигуры по ячейкам согласно заданному массиву
+	 * @param {number} array[] - массив с фигурами
+	 */
 	setFiguresByArray(array) {
 		for (let i = 0; i < this.count; i++) {
 			for (let j = 0; j < this.count; j++) {
@@ -206,6 +277,9 @@ export default class Field {
 		}
 	}
 
+	/**
+	 * Подготовка поля для начала игры
+	 */
 	startGame() {
 		this.deleteAllFigure();
 		this.clearFigures();
@@ -213,12 +287,21 @@ export default class Field {
 		this.drawField();
 	}
 
+	/**
+	 * Подсвечивает ячейки вокруг заданной и рисует обновленное поле
+	 * @param {number} idx - id ячейки по оси x
+	 * @param {number} idy - id ячейки по оси y
+	 */
 	bright(idx, idy) {
 		this.deleteAllBrightCube();
 		this.brightCubes(idx, idy);
 		this.drawField();
 	}
 
+	/**
+	 * Обработка хода
+	 * @param {*} response - объект с новым состоянием игры
+	 */
 	stepProcessing(response) {
 		this.deleteAllFigure();
 		this.clearFigures();
