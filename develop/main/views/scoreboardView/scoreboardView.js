@@ -1,21 +1,21 @@
 'use strict';
 
 import ScoreboardTemplate from '../../templates/scoreBoard';
-import CommonView from '../view/view';
+import View from '../view/view';
 
 
 /**
  * Класс секции таблицы лидеров
  * @module ScoreboardView
  */
-export default class ScoreboardView extends CommonView {
+export default class ScoreboardView extends View {
 	/**
 	 * @param EventBus
 	 * @param UserService
 	 * @constructor
 	 */
 	constructor(EventBus, UserService) {
-		super();
+		super({});
 
 		this.bus = EventBus;
 

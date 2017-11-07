@@ -3,10 +3,6 @@
 
 //узнать про промис
 
-
-
-
-
 import View from "../view/view";
 import Form from "../../blocks/form/form.js";
 import Message from "../../blocks/form/__message/form__message.js";
@@ -40,9 +36,6 @@ export default class UpdateView extends View {
 				formData[fields[field].name] = fields[field].value;
 			}
 			this.onSubmit(formData)
-				.catch((err) => {
-					console.log(err.message);
-				});
 		}, true);
 
 		this.bus.on("openUpdate", async () => {
@@ -68,7 +61,9 @@ export default class UpdateView extends View {
 	 * @returns {Promise.<void>} - вот тут надо прояснить вопрос обработки ошибки
 	 */
 	async onSubmit(formData) {
-		const resp = await this.userService.update(formData.username, formData.email, formData.password, formData.old_password)
+		let resp = {};
+		resp = await this.userService.update(formData.username, formData.email,
+			formData.password, formData.old_password);
 		if (resp.ok) {
 			this.form.reset();
 			this.message.clear();

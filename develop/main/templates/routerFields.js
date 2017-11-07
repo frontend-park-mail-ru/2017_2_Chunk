@@ -18,7 +18,7 @@ const routerFields = [
 		event: 'openGame'
 	},
 	{
-		url: '/update',
+		url: '/profile',
 		event: 'openUpdate'
 	},
 	{
