@@ -156,11 +156,11 @@ export default class Field {
 		this.canvasForCubes.clearRect(0, 0, 400, 200);
 
 		for (let i = 0; i < arrayOfPlayers.players.length; i++) {
-			this.canvasForCubes.fillText(arrayOfPlayers.players[i].username + " : " + this.arrayOfFigures[i + 2], x, y);
+			this.canvasForCubes.fillText(arrayOfPlayers.players[i].username + ' : ' + this.arrayOfFigures[i + 2], x, y);
 			this.canvasForCubes.drawImage(this.massOfUrl[i + 2], x - diff, y - diff / 2 - 10, 35, 45);
 			y += diff;
 		}
-		this.canvasForCubes.fillText("Ходит игрок : " + arrayOfPlayers.players[arrayOfPlayers.currentPlayerID].username, x, y);
+		this.canvasForCubes.fillText('Ходит игрок : ' + arrayOfPlayers.players[arrayOfPlayers.currentPlayerID].username, x, y);
 	}
 
 	/**

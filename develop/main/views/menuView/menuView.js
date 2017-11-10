@@ -10,6 +10,7 @@ import menuFields from '../../templates/menuFields';
  */
 export default class MenuView extends CommonView {
 	constructor(eventBus, router) {
+
 		super(menuFields);
 
 		this.bus = eventBus;

@@ -4,8 +4,12 @@
     align-items: center;
     justify-content: space-around;
     min-width: 300px;
-    font-size:calc(14px + 1.5vh);
+    font-family: "Comic Sans MS";
+    font-size: calc(14px + 1.5vh);
     margin: 1.5% auto;
     padding-top: 1%;
     padding-bottom: 1%;
+    border-radius: 0.8em;
+
+    transition: all .5s;
 }

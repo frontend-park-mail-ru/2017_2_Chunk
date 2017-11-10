@@ -16,6 +16,7 @@
 
     background-color: transparent;
     cursor: pointer;
+    transition: all .1s;
 }
 
 

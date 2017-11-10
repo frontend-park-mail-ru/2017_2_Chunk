@@ -16,7 +16,8 @@ const menuFields = {
 	update: ViewButton.Create({href: '/profile'}, ['auth'], 'Profile'),
 	rules: ViewButton.Create({href: '/rules'}, ['every-available'], 'Rules'),
 	scores: ViewButton.Create({href: '/scoreboard'}, ['every-available'], 'Scoreboard'),
-	exit: ViewButton.Create({href: '/exit'}, ['auth'],'Exit'),
+	exit: ViewButton.Create({href: '/exit'}, ['auth'], 'Exit'),
+	theme: Block.Create('button', {}, ['menuView__themeButton', 'every-available'], 'Theme'),
 };
 
 export default menuFields;

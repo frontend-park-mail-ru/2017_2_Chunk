@@ -1,6 +1,7 @@
 'use strict';
 
 import Block from '../../blocks/block/block.js';
+import ViewButton from '../view/__view-button/view__view-button';
 
 
 /**
@@ -22,7 +23,6 @@ export default class ProfileView extends Block {
 			this.setText(username);
 			this.show();
 		});
-
 		this.hide();
 	}
 

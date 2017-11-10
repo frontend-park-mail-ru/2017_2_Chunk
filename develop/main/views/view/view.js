@@ -1,4 +1,6 @@
 "use strict";
+
+//key frames
 import Block from "../../blocks/block/block.js";
 
 
@@ -12,7 +14,7 @@ export default class View extends Block {
 	 * @constructor
 	 */
 	constructor(blocks) {
-		const block = Block.Create('section', {}, ['view', 'view_theme']);
+		const block = Block.Create('section', {}, ['view', 'view_theme-black-orange']);
 
 		super(block.el);
 

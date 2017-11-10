@@ -1,21 +1,19 @@
 .backButtonView {
+    position: absolute;
+    right: 73%;
+    top: 3%;
+
     background-color: rgba(0, 0, 0, 0.87);
-    transition: all .12s;
+    transition: all .2s;
 
     text-align: center;
     font-size: calc(16px + 1.5vh);
     color: white;
-    opacity: 0.8;
-    border: 0.1em solid transparent;
-    height: 1em;
-    position: fixed;
-    max-width: 150px;
-    right: 73%;
-    top: 3%;
-    padding: 0.4em;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    width: 20em;
+    opacity: 1;
+    border: 0.1em solid white;
+
+    padding: 0.1em 1em;
+
     border-radius: 0.4em;
     box-shadow: none;
 }
@@ -29,4 +27,5 @@
 
 .backButtonView:hover {
     color: #ff8700;
+    border: 0.1em solid #ff8700; /* Параметры рамки */
 }

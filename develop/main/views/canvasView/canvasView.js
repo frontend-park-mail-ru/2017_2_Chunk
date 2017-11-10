@@ -17,13 +17,24 @@ export default class CanvasView extends CommonView {
 		], '');
 		const winDiv = Block.Create('div', {}, ['canvasView__winDiv'], '');
 
-		super([canvas1, canvas2, winDiv]);
+		const connect = Block.Create('button', {}, ['canvasView__webSocketButton'], 'Connect');
+
+		const disconnect = Block.Create('button', {}, ['canvasView__webSocketButton'], 'Disconnect');
+
+		const sendMessage = Block.Create('button', {}, ['canvasView__webSocketButton'], 'Send message');
+
+		super([connect, disconnect, sendMessage]);
 
 		this.el.classList.add('canvasView');
 
 		this.canvas1 = canvas1;
 		this.canvas2 = canvas2;
 		this.winDiv = winDiv;
+		this.socket = {
+			'connect': connect,
+			'disconnect': disconnect,
+			'sendMessage': sendMessage
+		};
 		this.winDiv.hide();
 
 		this.canvasForClicks = this.canvas2.el;

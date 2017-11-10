@@ -1,0 +1,40 @@
+.menuView__themeButton {
+    position: absolute;
+
+    left: 78%;
+    top: 10%;
+    border: 0.1em solid white;
+    font-size: calc(16px + 1.5vh);
+    text-align: center;
+    opacity: 1;
+    padding: 0.1em 1em;
+
+    margin: 0.7em;
+    color: white;
+
+    border-radius: 0.4em;
+    box-shadow: none;
+
+    background-color: transparent;
+    cursor: pointer;
+
+    transition: all .2s;
+    outline: none;
+
+}
+
+
+/*.menuView__theme-button:focus {*/
+    /*outline: none;*/
+    /*opacity: 0.8 !important;*/
+    /*color: #FF4900 !important;*/
+    /*border: 0.04em solid #FF4900 !important;*/
+/*}*/
+
+
+.menuView__theme-button:hover {
+    outline: none;
+    opacity: 1;
+    color: #ff8700 ; /* Цвет ссылки */
+    border: 0.1em solid #ff8700;
+}

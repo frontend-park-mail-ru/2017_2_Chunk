@@ -1,6 +1,6 @@
 'use strict';
 
-import Http from "../modules/http";
+import Http from '../modules/http';
 
 /**
  * Сервис для работы игры
@@ -10,7 +10,7 @@ export default class GameService {
 	constructor() {
 		this.response = {
 			json: {},
-			message: "",
+			message: '',
 		};
 
 		this.gameData = {
@@ -20,7 +20,7 @@ export default class GameService {
 			currentPlayerID: 0,
 			gameOver: false,
 			arrayOfFigures: [],
-		}
+		};
 	}
 
 	/**
@@ -40,12 +40,10 @@ export default class GameService {
 			return this.response;
 		}
 
-		if (!хранилище["gameID"]) {
-			хранилище.setItem("gameID", `${this.response.json.gameID}`);
+		if (!хранилище.gameID) {
+			хранилище.setItem('gameID', `${this.response.json.gameID}`);
 			this.gameData.gameID = this.response.json.gameID;
-		}
-		else
-			this.gameData.gameID = хранилище["gameID"];
+		} else { this.gameData.gameID = хранилище.gameID; }
 
 		return this.gameData;
 	}

@@ -1,7 +1,9 @@
 'use strict';
 
-import Field from "./field.js";
-import GameService from "../services/game-service.js";
+import Field from './field.js';
+import GameService from '../services/game-service.js';
+import WebSocket from '../modules/webSocket';
+
 
 const x = 425;
 const y = 230;
@@ -22,8 +24,7 @@ function* generatorId(array) {
 	while (i < array.length) {
 		yield array[i].playerID;
 		i++;
-		if (i === array.length)
-			i = 0;
+		if (i === array.length) { i = 0; }
 	}
 }
 
@@ -48,6 +49,22 @@ export default class Game {
 			handleEvent: this.updateCanvas.bind(this),
 			exit: this.exit
 		}, false);
+
+
+		//создание сокета
+		//метод блока подписки на событие
+		this.canvas.socket.connect.on('click', () => {
+			this.socket = new WebSocket();
+		});
+
+		this.canvas.socket.disconnect.on('click', () => {
+			this.socket.close();
+		});
+
+		this.canvas.socket.sendMessage.on('click', () => {
+			this.socket.send("Hello!");
+		});
+
 		this.eventBus = eventBus;
 
 		this.coordOfMove = {
@@ -108,7 +125,7 @@ export default class Game {
 		this.field.stepProcessing(response);
 		if (response.gameOver === true) {
 			const хранилище = window.localStorage;
-			хранилище.removeItem("gameID");
+			хранилище.removeItem('gameID');
 			this.field.gameOver(response.playerID);
 			setTimeout(() => {
 				this.canvas.winDiv.hide();
@@ -148,22 +165,20 @@ export default class Game {
 	 * @param {event} event - событие "click"
 	 */
 	updateCanvas(event) {
-		let pos = this.findOffset(this.canvasForClicks);
-		let mouseX = event.pageX - pos.x;
-		let mouseY = event.pageY - pos.y;
-		let XX = (mouseX - x + mouseY - y) * sq;
-		let YY = (mouseY - mouseX + x - y) * sq;
+		const pos = this.findOffset(this.canvasForClicks);
+		const mouseX = event.pageX - pos.x;
+		const mouseY = event.pageY - pos.y;
+		const XX = (mouseX - x + mouseY - y) * sq;
+		const YY = (mouseY - mouseX + x - y) * sq;
 
 		if (XX < side * width && YY < side * width && XX > 0 && YY > 0) {
 			let idx;
 			let idy;
 			for (let i = 0; i < width; i++) {
-				if (XX > side * i)
-					idx = i;
-				if (YY > side * i)
-					idy = i;
+				if (XX > side * i) { idx = i; }
+				if (YY > side * i) { idy = i; }
 			}
-			let currentPlayerID = this.generatorID.next().value;
+			const currentPlayerID = this.generatorID.next().value;
 
 			if (this.field.findById(idx, idy).figure === currentPlayerID + 2) {
 				this.field.bright(idx, idy);

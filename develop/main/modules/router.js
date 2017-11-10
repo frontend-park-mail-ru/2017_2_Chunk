@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import routerFields from "../templates/routerFields"
-import Block from "../blocks/block/block"
+import routerFields from '../templates/routerFields';
+import Block from '../blocks/block/block';
 
 
 /**
@@ -24,7 +24,7 @@ export default class Router {
 			this._routes.push({
 				url_pattern: route.url,
 				emit: (event) => {
-					this.bus.emit(event)
+					this.bus.emit(event);
 				}
 			});
 		});
@@ -45,12 +45,11 @@ export default class Router {
 
 		const resp = await this.userService.getDataFetch();
 		if (resp.ok) {
-			this.bus.emit("auth", resp.json.username);
+			this.bus.emit('auth', resp.json.username);
 			const slice_Routes = this._routes.slice(0, 6);
 			this.findNewState(slice_Routes);
-		}
-		else {
-			this.bus.emit("unauth");
+		} else {
+			this.bus.emit('unauth');
 			const slice_Routes = this._routes.slice(4);
 			this.findNewState(slice_Routes);
 		}
@@ -61,13 +60,13 @@ export default class Router {
 	 * Добавляет обработчики кликов по кнопкам-переходам
 	 */
 	addHrefListeners() {
-		this.hrefs = Array.from(document.getElementsByTagName("a"));
+		this.hrefs = Array.from(document.getElementsByTagName('a'));
 		this.hrefs.forEach((href) => {
-			href.addEventListener("click", (event) => {
+			href.addEventListener('click', (event) => {
 				const target = event.target;
 				event.preventDefault();
 				this.goTo(target.href);
-			})
+			});
 		});
 	}
 
@@ -77,9 +76,7 @@ export default class Router {
 	 * @param {string} path - урл перехода
 	 */
 	goTo(path) {
-		const idx = this._routes.findIndex((_route) => {
-			return path.match(_route.url_pattern)
-		});
+		const idx = this._routes.findIndex((_route) => path.match(_route.url_pattern));
 		window.history.pushState({page: this.routes[idx].url}, this.routes[idx].url, this.routes[idx].url);
 		this._routes[idx].emit(this.routes[idx].event);
 	}
@@ -91,9 +88,7 @@ export default class Router {
 	 * @param {string} path - урл перехода
 	 */
 	changeState(path) {
-		const idx = this._routes.findIndex((_route) => {
-			return path.match(_route.url_pattern)
-		});
+		const idx = this._routes.findIndex((_route) => path.match(_route.url_pattern));
 		const _route = this._routes[idx];
 		_route.emit(this.routes[idx].event);
 	}
@@ -111,8 +106,7 @@ export default class Router {
 			const _route = slice_Routes[idx];
 			window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
 			this.changeState(_route.url_pattern);
-		}
-		else {
+		} else {
 			const _route = this._routes[0];
 			window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
 			this.changeState(this.routes[0].url);
