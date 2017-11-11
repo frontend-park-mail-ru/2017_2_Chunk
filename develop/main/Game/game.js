@@ -50,21 +50,6 @@ export default class Game {
 			exit: this.exit
 		}, false);
 
-
-		//создание сокета
-		//метод блока подписки на событие
-		this.canvas.socket.connect.on('click', () => {
-			this.socket = new WebSocket();
-		});
-
-		this.canvas.socket.disconnect.on('click', () => {
-			this.socket.close();
-		});
-
-		this.canvas.socket.sendMessage.on('click', () => {
-			this.socket.send("Hello!");
-		});
-
 		this.eventBus = eventBus;
 
 		this.coordOfMove = {

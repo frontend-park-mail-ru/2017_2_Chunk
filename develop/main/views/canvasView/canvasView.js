@@ -23,7 +23,7 @@ export default class CanvasView extends CommonView {
 
 		const sendMessage = Block.Create('button', {}, ['canvasView__webSocketButton'], 'Send message');
 
-		super([connect, disconnect, sendMessage]);
+		super([canvas1, canvas2, winDiv]);
 
 		this.el.classList.add('canvasView');
 
