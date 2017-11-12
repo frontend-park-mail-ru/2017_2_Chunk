@@ -1,5 +1,4 @@
 .view__view-button {
-    border: 0.04em solid white;
     font-size:calc(14px + 1.5vh);
     text-align: center;
     opacity: 1;
@@ -9,11 +8,12 @@
     margin: 0.7em;
     min-height: 30px;
     min-width: 260px;
-    color: white;
 
     border-radius: 0.4em;
     box-shadow: none;
 
+    border-width: 0.04em;
+    border-style: solid;
     background-color: transparent;
     cursor: pointer;
     transition: all .1s;

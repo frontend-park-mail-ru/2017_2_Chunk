@@ -5,7 +5,7 @@ export default class webSocket {
 		this.socket = new WebSocket('ws://backend-java-spring.herokuapp.com');
 
 		this.socket.onopen = () => {
-			alert("Соединение установлено.");
+			alert('Соединение установлено.');
 		};
 
 		this.socket.onclose = (event) => {
@@ -18,11 +18,11 @@ export default class webSocket {
 		};
 
 		this.socket.onmessage = (event) => {
-			alert("Получены данные " + event.data);
+			alert('Получены данные ' + event.data);
 		};
 
 		this.socket.onerror = (error) => {
-			alert("Ошибка " + error.message);
+			alert('Ошибка ' + error.message);
 		};
 	}
 

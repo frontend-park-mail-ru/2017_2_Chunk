@@ -43,12 +43,20 @@ export default class Router {
 	async start() {
 		this.addHrefListeners();
 
-		const resp = await this.userService.getDataFetch();
-		if (resp.ok) {
-			this.bus.emit('auth', resp.json.username);
-			const slice_Routes = this._routes.slice(0, 6);
-			this.findNewState(slice_Routes);
-		} else {
+		try {
+			const resp = await this.userService.getDataFetch();
+			if (resp.ok) {
+				this.bus.emit('auth', resp.json.username);
+				const slice_Routes = this._routes.slice(0, 6);
+				this.findNewState(slice_Routes);
+			}
+			else {
+				this.bus.emit('unauth');
+				const slice_Routes = this._routes.slice(4);
+				this.findNewState(slice_Routes);
+			}
+		}
+		catch (err) {
 			this.bus.emit('unauth');
 			const slice_Routes = this._routes.slice(4);
 			this.findNewState(slice_Routes);

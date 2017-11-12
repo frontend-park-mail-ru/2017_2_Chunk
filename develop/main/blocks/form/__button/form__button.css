@@ -1,22 +1,21 @@
 .form__button {
     font-family: "Comic Sans MS";
-    color: white;
+    background-color: transparent;
     display: block;
     width: 10em;
     font-size:calc(14px + 1.5vh);
     margin: 0 auto;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
-    background-color: rgba(0, 0, 0, 0.87);
     opacity: 1;
-    border: 0.05em solid white;
+    border-radius: 0.4em;
+    border-style: solid;
     height: 1.6em;
     /*padding: 0.3em;*/
 
     min-height: 30px;
     min-width: 250px;
 
-    border-radius: 0.4em;
     box-shadow: none;
     cursor: pointer;
 
@@ -26,11 +25,12 @@
     /*background: #8b2b03; !* Цвет фона *!*/
     outline: none;
     opacity: 1;
-    border: 0.1em solid #ff8700 !important; /* Параметры рамки */
+    border-color: #FF4900 !important; /* Параметры рамки */
 }
 
 .form__button:hover {
     /*background: #8b2b03; !* Цвет фона *!*/
     opacity: 1;
-    border: 0.05em solid white; /* Параметры рамки */
+    color: #ff8700;
+    border-color: #ff8700; /* Параметры рамки */
 }

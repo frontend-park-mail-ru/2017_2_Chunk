@@ -28,6 +28,8 @@ export default class ViewButton extends Block {
 	static Create (attrs = {}, classes = [], text) {
 		const _classes = classes;
 		_classes.push('view__view-button');
+		_classes.push('view__view-button_theme-black-orange');
+
 		const button = Block.Create('a', attrs, _classes, text);
 		return new ViewButton(button);
 	}

@@ -39,6 +39,8 @@ const eventBus = new EventBus();
 
 const app = new Block(document.body);
 
+app.el.classList.add('main_theme-black-orange');
+
 const router = new Router(eventBus, userService);
 
 const menuView = new MenuView(eventBus, router);

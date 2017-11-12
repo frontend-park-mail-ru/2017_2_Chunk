@@ -14,7 +14,8 @@ export default class View extends Block {
 	 * @constructor
 	 */
 	constructor(blocks) {
-		const block = Block.Create('section', {}, ['view', 'view_theme-black-orange']);
+		const block = Block.Create('section', {}, ['view', 'view_theme-black-orange',
+			'main_font-theme-black-orange']);
 
 		super(block.el);
 

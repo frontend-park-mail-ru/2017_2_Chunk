@@ -12,7 +12,7 @@ const signUpFields = [
 		name: 'name',
 		placeholder: 'Enter your name',
 		required: 'required',
-		class: 'form__input ',
+		class: 'form__input view__view-button_theme-black-orange',
 	}},
 	{attrs: {
 		type: 'email',
@@ -20,7 +20,7 @@ const signUpFields = [
 		name: 'email',
 		placeholder: 'Enter your email',
 		required: 'required',
-		class: 'form__input ',
+		class: 'form__input view__view-button_theme-black-orange',
 	}},
 	{attrs: {
 		type: 'password',
@@ -28,7 +28,7 @@ const signUpFields = [
 		name: 'password',
 		placeholder: 'Enter password',
 		required: 'required',
-		class: 'form__input ',
+		class: 'form__input view__view-button_theme-black-orange',
 	}},
 	{attrs: {
 		type: 'password',
@@ -36,12 +36,12 @@ const signUpFields = [
 		name: 'confirm',
 		placeholder: 'Confirm password',
 		required: 'required',
-		class: 'form__input ',
+		class: 'form__input view__view-button_theme-black-orange',
 	}},
 	{attrs: {
 		type: 'submit',
 		value: 'Submit',
-		class: 'form__button',
+		class: 'form__button view__view-button_theme-black-orange',
 	}}
 ];
 

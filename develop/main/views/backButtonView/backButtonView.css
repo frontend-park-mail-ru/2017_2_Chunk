@@ -3,7 +3,7 @@
     right: 73%;
     top: 3%;
 
-    background-color: rgba(0, 0, 0, 0.87);
+    background-color: transparent;
     transition: all .2s;
 
     text-align: center;
@@ -21,11 +21,11 @@
 .backButtonView:focus {
     outline: none;
     opacity: 1;
-    border: 0.1em solid #ff8700; /* Параметры рамки */
+    border: 0.1em solid #ff8700 !important; /* Параметры рамки */
     color: #ff8700;
 }
 
 .backButtonView:hover {
     color: #ff8700;
-    border: 0.1em solid #ff8700; /* Параметры рамки */
+    border: 0.1em solid #ff8700 !important; /* Параметры рамки */
 }

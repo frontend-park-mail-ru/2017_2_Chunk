@@ -12,7 +12,7 @@ const loginFields = [
 			name: 'username',
 			placeholder: 'Enter your name',
 			required: 'required',
-			class: 'form__input',
+			class: 'form__input view__view-button_theme-black-orange',
 		}
 	},
 	{
@@ -22,14 +22,14 @@ const loginFields = [
 			name: 'password',
 			placeholder: 'Enter password',
 			required: 'required',
-			class: 'form__input',
+			class: 'form__input view__view-button_theme-black-orange',
 		}
 	},
 	{
 		attrs: {
 			type: 'submit',
 			value: 'Submit',
-			class: 'form__button',
+			class: 'form__button view__view-button_theme-black-orange',
 		}
 	}
 ];
