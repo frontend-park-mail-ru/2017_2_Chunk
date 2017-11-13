@@ -22,13 +22,15 @@ import UpdateView from './views/updateView/updateView';
 
 import Canvas from './views/canvasView/canvasView';
 
+import LobbyView from './views/lobbyView/lobbyView'
+
 import Block from './blocks/block/block.js';
 
 import UserService from './services/user-service.js';
 
 import EventBus from './modules/eventBus';
 
-import Router from './modules/router';
+import Router from './modules/router/router';
 
 import Game from './Game/game';
 
@@ -61,6 +63,9 @@ const scoreboardView = new ScoreboardView(eventBus, userService);
 
 const canvas = new Canvas(eventBus);
 
+const lobbyView = new LobbyView(eventBus);
+
+
 const game = new Game(canvas, eventBus);
 
 
@@ -73,6 +78,7 @@ Views.push(backButtonView);
 Views.push(rulesView);
 Views.push(scoreboardView);
 Views.push(canvas);
+Views.push(lobbyView);
 
 
 eventBus.on('openSignUp', function () {
@@ -151,6 +157,16 @@ eventBus.on('openGame', function () {
 });
 
 
+eventBus.on('openLobby', function () {
+	Views.forEach((view) => {
+		view.hide();
+	});
+	backButtonView.show();
+	lobbyView.show();
+});
+
+
+
 app
 	.append(menuView)
 	.append(signUpView)
@@ -160,6 +176,7 @@ app
 	.append(rulesView)
 	.append(scoreboardView)
 	.append(canvas)
+	.append(lobbyView)
 	.append(updateView);
 
 

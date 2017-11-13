@@ -18,6 +18,10 @@ const routerFields = [
 		event: 'openGame'
 	},
 	{
+		url: '/lobby',
+		event: 'openLobby'
+	},
+	{
 		url: '/profile',
 		event: 'openUpdate'
 	},

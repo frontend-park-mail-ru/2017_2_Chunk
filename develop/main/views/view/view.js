@@ -10,7 +10,7 @@ import Block from "../../blocks/block/block.js";
  */
 export default class View extends Block {
 	/**
-	 * @param {Block} blocks
+	 * @param {*} blocks
 	 * @constructor
 	 */
 	constructor(blocks) {

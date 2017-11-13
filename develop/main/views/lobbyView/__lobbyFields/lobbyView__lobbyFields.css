@@ -1,0 +1,17 @@
+.lobbyView__lobbyFields__gameList {
+    overflow: auto;
+    height: 50vh;
+}
+
+.lobbyView__lobbyFields__header {
+    text-align: center;
+}
+
+.lobbyView__lobbyFields__createGame {
+    margin: auto !important;
+}
+
+.lobbyView__lobbyFields {
+    margin: 0.4em;
+}
+

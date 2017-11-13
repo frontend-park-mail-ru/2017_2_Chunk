@@ -1,4 +1,5 @@
 .view__view-button {
+    box-sizing: border-box;
     font-size:calc(14px + 1.5vh);
     text-align: center;
     opacity: 1;

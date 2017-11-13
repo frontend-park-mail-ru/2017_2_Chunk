@@ -18,6 +18,7 @@ app.use('/signup', express.static('./public'));
 app.use('/login', express.static('./public'));
 app.use('/update', express.static('./public'));
 app.use('/game', express.static('./public'));
+app.use('/lobby', express.static('./public'));
 app.use('/rules', express.static('./public'));
 app.use('/scoreboard', express.static('./public'));
 app.use('/exit', express.static('./public'));

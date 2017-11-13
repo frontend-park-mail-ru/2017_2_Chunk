@@ -1,7 +1,7 @@
 'use strict';
 
 import View from '../view/view';
-import menuFields from '../../templates/menuFields';
+import menuFields from './__fields/menuView__fields';
 
 
 /**
@@ -53,7 +53,6 @@ export default class MenuView extends View {
 				elem.classList.add('view__view-button_theme-white-black');
 			});
 			const fonts = Array.from(document.getElementsByClassName('main_font-theme-black-orange'));
-			debugger;
 			fonts.forEach((font) => {
 				font.classList.remove('main_font-theme-black-orange');
 				font.classList.add('main_font-theme-white-black');

@@ -1,0 +1,4 @@
+.lobbyView__lobbyFields__gameDataField__fields {
+    font-size: calc(14px + 0.3vh) !important;
+    margin: 0.5em;
+}

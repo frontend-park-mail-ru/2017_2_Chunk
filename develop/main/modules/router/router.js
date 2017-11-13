@@ -1,7 +1,7 @@
 'use strict';
 
-import routerFields from '../templates/routerFields';
-import Block from '../blocks/block/block';
+import routerFields from './__fields/router__fields';
+import Block from '../../blocks/block/block';
 
 
 /**
@@ -47,12 +47,12 @@ export default class Router {
 			const resp = await this.userService.getDataFetch();
 			if (resp.ok) {
 				this.bus.emit('auth', resp.json.username);
-				const slice_Routes = this._routes.slice(0, 6);
+				const slice_Routes = this._routes.slice(0, 7);
 				this.findNewState(slice_Routes);
 			}
 			else {
 				this.bus.emit('unauth');
-				const slice_Routes = this._routes.slice(4);
+				const slice_Routes = this._routes.slice(5);
 				this.findNewState(slice_Routes);
 			}
 		}
