@@ -8,22 +8,22 @@ import ViewButton from '../../../../view/__view-button/view__view-button';
  * @module gameDataFields
  */
 export default class GameDataFields {
-	constructor() {
+	constructor(data) {
 		this.fields = {
-			gameId: Block.Create('div', {}, ['gameId',
-				'lobbyView__lobbyFields__gameDataField__fields'], 'gameId = 32'),
-			playersNumber: Block.Create('div', {}, ['playersNumber',
-				'lobbyView__lobbyFields__gameDataField__fields'], 'Players: 2'),
-			botsNumber: Block.Create('div', {}, ['botsNumber',
-				'lobbyView__lobbyFields__gameDataField__fields'], 'Bots: 2'),
-			totalPLayersNumber: Block.Create('div', {}, ['totalPLayersNumber',
-				'lobbyView__lobbyFields__gameDataField__fields'], 'Total players: 4'),
-			voyeursNumber: Block.Create('div', {}, ['voyeursNumber',
-				'lobbyView__lobbyFields__gameDataField__fields'], 'Voyeurs: 0'),
-			fieldSize: Block.Create('div', {}, ['filedSize',
-				'lobbyView__lobbyFields__gameDataField__fields'], 'Field size: 10x10'),
+			gameId: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__gameId',
+				'lobbyView__lobbyFields__gameDataField__fields'], `gameId: ${data.gameId}`),
+			playersNumber: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__playersNumber',
+				'lobbyView__lobbyFields__gameDataField__fields'], `Players: ${data.playersNumber}`),
+			botsNumber: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__botsNumber',
+				'lobbyView__lobbyFields__gameDataField__fields'], `Bots: ${data.botsNumber}`),
+			totalPLayersNumber: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__totalPLayersNumber',
+				'lobbyView__lobbyFields__gameDataField__fields'], `Total players: ${data.totalPLayersNumber}`),
+			voyeursNumber: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__voyeursNumber',
+				'lobbyView__lobbyFields__gameDataField__fields'], `Voyeurs: ${data.voyeursNumber}`),
+			fieldSize: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__fieldSize',
+				'lobbyView__lobbyFields__gameDataField__fields'], `Field size: ${data.fieldSize} x ${data.fieldSize}`),
 			// voyeurButton: ViewButton.Create({href: '/game'}, ['auth'], 'Play');
-			playButton: ViewButton.Create({href: '/gameInfo'}, ['playButton',
+			playButton: ViewButton.Create({href: '/gameInfo'}, ['lobbyView__lobbyFields__gameDataField__fields__playButton',
 				'lobbyView__lobbyFields__gameDataField__fields'], 'Play'),
 		}
 	}

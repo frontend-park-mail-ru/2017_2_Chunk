@@ -47,7 +47,7 @@ const updateFields = [
 		attrs: {
 			type: 'submit',
 			value: 'Submit',
-			class: 'form__button',
+			class: 'form__button view__view-button_theme-black-orange',
 		}
 	}
 ];

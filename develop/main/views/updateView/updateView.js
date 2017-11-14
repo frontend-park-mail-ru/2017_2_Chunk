@@ -4,7 +4,7 @@
 import View from '../view/view';
 import Form from '../../blocks/form/form.js';
 import Message from '../../blocks/form/__message/form__message.js';
-import updateFields from '../../templates/updateFields'
+import updateFields from './__fields/updateView__fields';
 
 
 /**

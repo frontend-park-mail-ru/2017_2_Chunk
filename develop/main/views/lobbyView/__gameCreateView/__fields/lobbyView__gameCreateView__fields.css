@@ -1,0 +1,12 @@
+.lobbyView__gameCreateView__fields {
+    margin: 1em !important;
+}
+
+.lobbyView__gameCreateView__fields__header {
+    color: #ff8700;
+    text-align: center;
+}
+
+.lobbyView__gameCreateView__fields__playButton {
+    margin-bottom: 2em !important;
+}

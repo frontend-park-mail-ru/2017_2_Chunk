@@ -22,7 +22,9 @@ import UpdateView from './views/updateView/updateView';
 
 import Canvas from './views/canvasView/canvasView';
 
-import LobbyView from './views/lobbyView/lobbyView'
+import LobbyView from './views/lobbyView/lobbyView';
+
+import GameCreateView from './views/lobbyView/__gameCreateView/lobbyView__gameCreateView';
 
 import Block from './blocks/block/block.js';
 
@@ -37,7 +39,7 @@ import Game from './Game/game';
 
 const userService = new UserService();
 
-const eventBus = new EventBus();
+const eventBus = EventBus;
 
 const app = new Block(document.body);
 
@@ -65,6 +67,7 @@ const canvas = new Canvas(eventBus);
 
 const lobbyView = new LobbyView(eventBus);
 
+const gameCreateView = new GameCreateView();
 
 const game = new Game(canvas, eventBus);
 
@@ -79,6 +82,7 @@ Views.push(rulesView);
 Views.push(scoreboardView);
 Views.push(canvas);
 Views.push(lobbyView);
+Views.push(gameCreateView);
 
 
 eventBus.on('openSignUp', function () {
@@ -161,6 +165,7 @@ eventBus.on('openLobby', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
+	lobbyView.el.classList.remove('lobbyView_filter-smooth');
 	backButtonView.show();
 	lobbyView.show();
 });
@@ -177,7 +182,8 @@ app
 	.append(scoreboardView)
 	.append(canvas)
 	.append(lobbyView)
-	.append(updateView);
+	.append(updateView)
+	.append(gameCreateView);
 
 
 router.start();

@@ -1,20 +1,3 @@
-/*.lobbyView {*/
-    /*display: grid;*/
-    /*grid-template-areas:*/
-            /*"_header _header"*/
-            /*"gameList ."*/
-            /*"_footer _footer";*/
-/*}*/
+.lobbyView {
 
-/*.lobbyView > .lobbyView__lobbyFields__header {*/
-    /*grid-area: _header;*/
-/*}*/
-
-/*.lobbyView > .lobbyView__lobbyFields__gameList {*/
-    /*grid-area: gameList;*/
-/*}*/
-
-/*.lobbyView > .lobbyView__lobbyFields__createGame {*/
-    /*grid-area: _footer;*/
-/*}*/
-
+}

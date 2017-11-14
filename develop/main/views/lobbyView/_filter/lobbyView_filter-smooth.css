@@ -1,0 +1,4 @@
+.lobbyView_filter-smooth {
+    filter: blur(3px);
+    transition: 1.2s;
+}

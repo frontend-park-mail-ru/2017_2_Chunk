@@ -4,7 +4,7 @@
  * Модуль, предоставляющий интерфейс для работы с событиями
  * @module EventBus
  */
-export default class EventBus {
+export default new class EventBus {
 	constructor() {
 		this.listeners = {};
 	}

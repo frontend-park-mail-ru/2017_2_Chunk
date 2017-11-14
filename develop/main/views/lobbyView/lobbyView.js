@@ -1,7 +1,8 @@
 'use strict';
 import View from '../view/view';
 import lobbyFields from './__lobbyFields/lobbyView__lobbyFields';
-import LobbyGameData from './__lobbyFields/__gameDataField/lobbyView__lobbyFields__gameDataField'
+import LobbyGameData from './__lobbyFields/__gameDataField/lobbyView__lobbyFields__gameDataField';
+import GameCreateView from './__gameCreateView/lobbyView__gameCreateView'
 
 /**
  * Класс секции меню
@@ -14,11 +15,65 @@ export default class LobbyView extends View {
 		this.bus = eventBus;
 		this.el.classList.add('lobbyView');
 		this.hide();
-		debugger;
-		const lobbyGameData = new LobbyGameData();
-		const lobbyGameData2 = new LobbyGameData();
-		// console.log(lobbyGameData === lobbyGameData2);
+		this.gameList = {};
+		const fields = {
+			gameId: 0,
+			playersNumber: 2,
+			botsNumber: 2,
+			totalPLayersNumber: 4,
+			voyeursNumber: 0,
+			fieldSize: 12,
+		};
+
+		const fields2 = {
+			gameId: 1,
+			playersNumber: 2,
+			botsNumber: 2,
+			totalPLayersNumber: 4,
+			voyeursNumber: 0,
+			fieldSize: 15,
+		};
+
+		const fields3 = {
+			gameId: 1,
+			playersNumber: 1,
+			botsNumber: 1,
+			totalPLayersNumber: 2,
+			voyeursNumber: 0,
+			fieldSize: 18,
+		};
+
+		this.addGameNode(fields);
+		this.addGameNode(fields2);
+		this.removeGameNode(fields.gameId);
+		this.updateGameNode(fields3);
+		this.addGameNode(fields);
+		this.addGameNode(fields2);
+
+		this.fields.createGame.on('click', () => {
+			this.bus.emit('openCreateGame');
+		});
+
+		this.bus.on('openCreateGame', () => {
+			this.el.classList.add('lobbyView_filter-smooth');
+		})
+	};
+
+	addGameNode(data) {
+		const lobbyGameData = new LobbyGameData(data);
+		this.gameList[data.gameId] = lobbyGameData;
 		this.elements.gameList.append(lobbyGameData);
-		this.elements.gameList.append(lobbyGameData2);
+	}
+
+	removeGameNode(gameId) {
+		const lobbyGameData = this.gameList[gameId];
+		delete this.gameList[gameId];
+		this.elements.gameList.remove(lobbyGameData);
+	}
+
+	updateGameNode(data) {
+		const lobbyGameData = this.gameList[data.gameId];
+		lobbyGameData.updateGameData(data);
 	}
 }
+

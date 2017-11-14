@@ -8,19 +8,16 @@ import GameDataFields from './__fields/lobbyView__lobbyFields__gameDataField__fi
  * Базовый класс поля с данными одной игры
  * @module LobbyGameData
  */
-
-
-
 export default class LobbyGameData extends Block {
 	/**
+	 * {*} data - данные об игре
 	 * @constructor
 	 */
-	constructor() {
+	constructor(data) {
 		const block = Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField']);
 		super(block.el);
 		this.fields = {};
-		debugger;
-		const gameDataFields = new GameDataFields();
+		const gameDataFields = new GameDataFields(data);
 		this.fields = gameDataFields.fields;
 		for (let field in this.fields) {
 			this.append(this.fields[field]);
@@ -28,28 +25,9 @@ export default class LobbyGameData extends Block {
 	}
 
 
-	/**
-	 * Вызывается при отправке формы
-	 * @param {Function} callback - колбек функция
-	 */
-	onSubmit(callback) {
-		this.el.addEventListener('submit', (event) => {
-			event.preventDefault();
-			const formdata = {};
-			const elements = this.el.elements;
-			//запись элементов формы в formdata
-			for (let element in elements) {
-				formdata[elements[element].name] = elements[element].value;
-			}
-
-			callback(formdata);
-		});
-	}
-
-	/**
-	 * Сбрасывает атрибуты HTMLElement
-	 */
-	reset() {
-		this.el.reset();
+	updateGameData(data) {
+		for (let key in data) {
+			this.fields[key].el.innerHTML = this.fields[key].el.innerHTML.replace(/\d+/g, data[key]);
+		}
 	}
 }
