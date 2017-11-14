@@ -1,4 +1,8 @@
 .gamePrepareView__fields__playersList {
+    background-color: #1d1f20;
+    border-radius: 0.5em;
     overflow: auto;
     height: 70vh;
+    width: 70vh;
+
 }
