@@ -23,7 +23,7 @@ export default class GameDataFields {
 			fieldSize: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__fieldSize',
 				'lobbyView__lobbyFields__gameDataField__fields'], `Field size: ${data.fieldSize} x ${data.fieldSize}`),
 			// voyeurButton: ViewButton.Create({href: '/game'}, ['auth'], 'Play');
-			playButton: ViewButton.Create({href: '/gameInfo'}, ['lobbyView__lobbyFields__gameDataField__fields__playButton',
+			playButton: ViewButton.Create({href: '/waiting-hall'}, ['lobbyView__lobbyFields__gameDataField__fields__playButton',
 				'lobbyView__lobbyFields__gameDataField__fields'], 'Play'),
 		}
 	}

@@ -16,6 +16,7 @@ export default class LobbyView extends View {
 		this.el.classList.add('lobbyView');
 		this.hide();
 		this.gameList = {};
+		//для тестов!!!
 		const fields = {
 			gameId: 0,
 			playersNumber: 2,
@@ -43,20 +44,25 @@ export default class LobbyView extends View {
 			fieldSize: 18,
 		};
 
+
 		this.addGameNode(fields);
 		this.addGameNode(fields2);
 		this.removeGameNode(fields.gameId);
 		this.updateGameNode(fields3);
 		this.addGameNode(fields);
 		this.addGameNode(fields2);
-
+		//конец тестов
 		this.fields.createGame.on('click', () => {
-			this.bus.emit('openCreateGame');
+			this.bus.emit('openCreateGameBanner');
 		});
 
-		this.bus.on('openCreateGame', () => {
+		this.bus.on('openCreateGameBanner', () => {
 			this.el.classList.add('lobbyView_filter-smooth');
-		})
+		});
+
+		// this.bus.on('closeCreateGameBanner', () => {
+		// 	this.el.classList.remove('lobbyView_filter-smooth');
+		// })
 	};
 
 	addGameNode(data) {

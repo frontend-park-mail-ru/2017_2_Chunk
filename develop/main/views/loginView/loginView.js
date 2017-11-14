@@ -2,7 +2,7 @@
 import CommonView from '../view/view';
 import Form from '../../blocks/form/form.js';
 import Message from '../../blocks/form/__message/form__message.js';
-import loginFields from '../../templates/loginFields';
+import loginFields from './__fields/loginView__fields';
 
 
 /**

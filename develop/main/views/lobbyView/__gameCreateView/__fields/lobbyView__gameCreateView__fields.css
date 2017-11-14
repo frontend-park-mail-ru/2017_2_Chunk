@@ -8,5 +8,5 @@
 }
 
 .lobbyView__gameCreateView__fields__playButton {
-    margin-bottom: 2em !important;
+    display: block;
 }

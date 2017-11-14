@@ -26,6 +26,8 @@ import LobbyView from './views/lobbyView/lobbyView';
 
 import GameCreateView from './views/lobbyView/__gameCreateView/lobbyView__gameCreateView';
 
+import GamePrepareView from './views/gamePrepareView/gamePrepareView';
+
 import Block from './blocks/block/block.js';
 
 import UserService from './services/user-service.js';
@@ -69,6 +71,8 @@ const lobbyView = new LobbyView(eventBus);
 
 const gameCreateView = new GameCreateView();
 
+const gamePrepareView = new GamePrepareView();
+
 const game = new Game(canvas, eventBus);
 
 
@@ -83,6 +87,7 @@ Views.push(scoreboardView);
 Views.push(canvas);
 Views.push(lobbyView);
 Views.push(gameCreateView);
+Views.push(gamePrepareView);
 
 
 eventBus.on('openSignUp', function () {
@@ -170,6 +175,14 @@ eventBus.on('openLobby', function () {
 	lobbyView.show();
 });
 
+eventBus.on('openWaitingHall', function () {
+	Views.forEach((view) => {
+		view.hide();
+	});
+	backButtonView.show();
+	gamePrepareView.show();
+});
+
 
 
 app
@@ -183,7 +196,8 @@ app
 	.append(canvas)
 	.append(lobbyView)
 	.append(updateView)
-	.append(gameCreateView);
+	.append(gameCreateView)
+	.append(gamePrepareView);
 
 
 router.start();

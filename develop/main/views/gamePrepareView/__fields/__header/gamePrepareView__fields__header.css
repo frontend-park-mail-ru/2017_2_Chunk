@@ -1,0 +1,42 @@
+.gamePrepareView__fields__header {
+    box-sizing: border-box;
+    /*background-color: #4d4d4d;*/
+    background-color: #1d1f20;
+    width: 70vh;
+    /*height: 20vh;*/
+    margin: 1em;
+    padding: 0.4em;
+    border-radius: 0.5em;
+
+    display: grid;
+    grid-template-areas:
+            "place1 place2"
+            "place3 place4"
+            "place5 place6"
+            "place7 place8"
+            "place9 place9";
+}
+
+.gamePrepareView__fields__header > .gamePrepareView__fields__header__fields__gameId {
+    grid-area: place1;
+}
+
+.gamePrepareView__fields__header > .gamePrepareView__fields__header__fields__fieldSize {
+    grid-area: place2;
+}
+
+.gamePrepareView__fields__header > .gamePrepareView__fields__header__fields__playersNumber{
+    grid-area: place3;
+}
+
+.gamePrepareView__fields__header > .gamePrepareView__fields__header__fields__voyeursNumber{
+    grid-area: place4;
+}
+
+.gamePrepareView__fields__header > .gamePrepareView__fields__header__fields__botsNumber{
+    grid-area: place5;
+}
+
+.gamePrepareView__fields__header > .gamePrepareView__fields__header__fields__totalPLayersNumber{
+    grid-area: place7;
+}

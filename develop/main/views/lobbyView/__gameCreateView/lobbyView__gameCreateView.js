@@ -24,9 +24,17 @@ export default class GameCreateView extends Block {
 			this.append(this.fields[field]);
 		}
 
-		this.bus.on('openCreateGame', () => {
+
+		this.bus.on('openCreateGameBanner', () => {
 			this.show();
-			console.log('opencreategame');
+			const background = document.getElementsByClassName('lobbyView')[0];
+			background.addEventListener('click', function(event) {
+				console.log('click background');
+			});
+		});
+
+		this.bus.on('closeCreateGameBanner', () => {
+			this.hide();
 		});
 
 		this.hide();

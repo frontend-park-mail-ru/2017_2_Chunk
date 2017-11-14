@@ -1,6 +1,7 @@
 'use strict';
 import Block from '../../../../blocks/block/block.js';
 import ViewButton from '../../../view/__view-button/view__view-button';
+import Button from '../../../../blocks/button/button'
 
 
 /**
@@ -29,7 +30,7 @@ export default class GameCreateFields {
 				ViewButton.Create({href: '/game-info'}, ['lobbyView__gameCreateView__fields__playButton',
 					'lobbyView__gameCreateView__fields'], 'Single play'),
 			playButtonWithFriends:
-				ViewButton.Create({href: '/game-info'}, ['lobbyView__gameCreateView__fields__playButton',
+				ViewButton.Create({href: '/waiting-hall'}, ['lobbyView__gameCreateView__fields__playButton',
 					'lobbyView__gameCreateView__fields'], 'Play with friends')
 		};
 		this.addRadioPLayers();
@@ -40,6 +41,7 @@ export default class GameCreateFields {
 	addRadioPLayers() {
 		const choice = {
 			players2: Block.Create('input', {
+					'required': 'required',
 					'name': 'playerNumber',
 					'id': 'playersNumber2',
 					'type': 'radio',

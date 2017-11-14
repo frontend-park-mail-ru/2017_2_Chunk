@@ -47,18 +47,18 @@ export default class Router {
 			const resp = await this.userService.getDataFetch();
 			if (resp.ok) {
 				this.bus.emit('auth', resp.json.username);
-				const slice_Routes = this._routes.slice(0, 7);
+				const slice_Routes = this._routes.slice(0, 8);
 				this.findNewState(slice_Routes);
 			}
 			else {
 				this.bus.emit('unauth');
-				const slice_Routes = this._routes.slice(5);
+				const slice_Routes = this._routes.slice(6);
 				this.findNewState(slice_Routes);
 			}
 		}
 		catch (err) {
 			this.bus.emit('unauth');
-			const slice_Routes = this._routes.slice(4);
+			const slice_Routes = this._routes.slice(6);
 			this.findNewState(slice_Routes);
 		}
 	}

@@ -1,0 +1,20 @@
+.gamePrepareView__fields__playersList__string {
+    display: grid;
+    grid-template-columns: 20vh 20vh 20vh;
+    grid-template-areas:
+            "place1 place2 place3";
+
+
+}
+
+.gamePrepareView__fields__playersList__string > .gamePrepareView__fields__playersList__string__userId {
+    grid-area: place1;
+}
+
+.gamePrepareView__fields__playersList__string > .gamePrepareView__fields__playersList__string__username {
+    grid-area: place2;
+}
+
+.gamePrepareView__fields__playersList__string > .gamePrepareView__fields__playersList__string__userEmail {
+    grid-area: place3;
+}
