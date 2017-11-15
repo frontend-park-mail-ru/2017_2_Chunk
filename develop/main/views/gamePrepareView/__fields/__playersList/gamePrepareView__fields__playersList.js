@@ -12,7 +12,7 @@ export default class PlayersList extends Block {
 		const block = Block.Create('div', {}, ['gamePrepareView__fields__playersList']);
 		super(block.el);
 		const header = {
-			userId: 'User id',
+			userID: 'User ID',
 			username: 'Username',
 			email: 'Email',
 		};
@@ -22,12 +22,19 @@ export default class PlayersList extends Block {
 	addPlayer(data) {
 		const string = new PLayerListString(data);
 		this.strings = {};
-		this.strings[data.userId] = string;
+		this.strings[data.userID] = string;
 		this.append(string);
 	}
 
-	removePlayer(userId) {
-		this.remove(this.strings[userId]);
-		delete this.strings[userId];
+	removePlayer(userID) {
+		this.remove(this.strings[userID]);
+		delete this.strings[userID];
+	}
+
+	clear() {
+		for (let key in this.string) {
+			this.removePlayer(key);
+			delete this.strings[key];
+		}
 	}
 }

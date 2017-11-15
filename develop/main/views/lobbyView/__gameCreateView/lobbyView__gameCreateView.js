@@ -20,6 +20,11 @@ export default class GameCreateView extends Block {
 		this.bus = eventBus;
 		const gameDataFields = new GameCreateViewFields();
 		this.fields = gameDataFields.fields;
+
+
+		this.hide();
+
+
 		for (let field in this.fields) {
 			this.append(this.fields[field]);
 		}
@@ -27,8 +32,9 @@ export default class GameCreateView extends Block {
 
 		this.bus.on('openCreateGameBanner', () => {
 			this.show();
+			console.log('click background before');
 			const background = document.getElementsByClassName('lobbyView')[0];
-			background.addEventListener('click', function(event) {
+			background.addEventListener('click', function (event) {
 				console.log('click background');
 			});
 		});
@@ -37,6 +43,16 @@ export default class GameCreateView extends Block {
 			this.hide();
 		});
 
-		this.hide();
+		this.el.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const data = {
+				code: '100',
+				numberOfPlayers: '2',
+				maxX: 5,
+				maxY: 5,
+			};
+			this.bus.emit('createGame', data);
+			this.hide();
+		});
 	}
 }

@@ -11,8 +11,8 @@ export default class PlayersListString extends Block {
 		const block = Block.Create('div', {}, ['gamePrepareView__fields__playersList__string']);
 		super(block.el);
 		this.fields = {
-			userId: Block.Create('div', {}, ['gamePrepareView__fields__playersList__string__fields__userId',
-				'gamePrepareView__fields__playersList__string__fields'], `${data.userId}`),
+			userID: Block.Create('div', {}, ['gamePrepareView__fields__playersList__string__fields__userId',
+				'gamePrepareView__fields__playersList__string__fields'], `${data.userID}`),
 			username: Block.Create('div', {}, ['gamePrepareView__fields__playersList__string__fields__username',
 				'gamePrepareView__fields__playersList__string__fields'], `${data.username}`),
 			userEmail: Block.Create('div', {}, ['gamePrepareView__fields__playersList__string__fields__email',

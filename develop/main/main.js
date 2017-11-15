@@ -67,7 +67,7 @@ const scoreboardView = new ScoreboardView(eventBus, userService);
 
 const canvas = new Canvas(eventBus);
 
-const lobbyView = new LobbyView(eventBus);
+const lobbyView = new LobbyView();
 
 const gameCreateView = new GameCreateView();
 

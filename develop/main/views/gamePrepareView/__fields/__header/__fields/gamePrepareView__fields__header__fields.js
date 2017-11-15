@@ -9,8 +9,8 @@ import Block from '../../../../../blocks/block/block.js';
 export default class headerFields {
 	constructor(data) {
 		this.fields = {
-			gameId: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__gameId',
-				'gamePrepareView__fields__header__fields'], `GameId: ${data.gameId}`),
+			gameID: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__gameId',
+				'gamePrepareView__fields__header__fields'], `GameId: ${data.gameID}`),
 			playersNumber: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__playersNumber',
 				'gamePrepareView__fields__header__fields'], `Players: ${data.playersNumber}`),
 			botsNumber: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__botsNumber',

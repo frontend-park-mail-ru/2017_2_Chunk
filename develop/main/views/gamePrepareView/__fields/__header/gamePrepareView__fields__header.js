@@ -19,7 +19,7 @@ export default class GamePrepareViewHeader extends Block {
 		super(block.el);
 		this.fields = {};
 		const data = {
-			gameId: 0,
+			gameID: 0,
 			playersNumber: 0,
 			botsNumber: 0,
 			totalPLayersNumber: 0,
@@ -35,7 +35,20 @@ export default class GamePrepareViewHeader extends Block {
 
 	updateGameData(data) {
 		for (let key in data) {
-			this.fields[key].el.innerHTML = this.fields[key].el.innerHTML.replace(/\d+/g, data[key]);
+			if (key in this.fields)
+				this.fields[key].el.innerHTML = this.fields[key].el.innerHTML.replace(/\d+/g, data[key]);
 		}
+	}
+
+	clear() {
+		const data = {
+			gameID: 0,
+			playersNumber: 0,
+			botsNumber: 0,
+			totalPLayersNumber: 0,
+			voyeursNumber: 0,
+			fieldSize: 0,
+		};
+		this.updateGameData(data);
 	}
 }

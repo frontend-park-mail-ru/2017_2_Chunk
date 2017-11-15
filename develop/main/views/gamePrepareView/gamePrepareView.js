@@ -15,11 +15,17 @@ export default class gamePrepareView extends View {
 		this.bus = eventBus;
 		this.el.classList.add('gamePrepareView');
 		this.hide();
-		const player = {
-			userId: '12',
-			username: 'Igorian',
-			email: 'igorian@mail.ru'
-		};
-		this.fields.playersList.addPlayer(player);
+
+		this.bus.on('socketCode101', (data) => {
+			debugger;
+			this.fields.header.updateGameData(data);
+			this.fields.playersList.addPlayer(data.player);
+		})
 	};
+
+	hide() {
+		super.hide();
+		this.fields.playersList.clear();
+		this.fields.header.clear();
+	}
 }

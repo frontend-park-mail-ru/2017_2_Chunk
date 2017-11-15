@@ -33,6 +33,15 @@ export default class Router {
 			console.log(location.pathname);
 			this.changeState(location.pathname);
 		};
+
+
+		this.bus.on('createGame', () => {
+			this.goTo('/waiting-hall');
+		});
+
+		this.bus.on('connectGame', () => {
+			this.goTo('/waiting-hall');
+		})
 	}
 
 
