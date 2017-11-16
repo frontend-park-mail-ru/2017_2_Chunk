@@ -20,7 +20,7 @@ import ScoreboardView from './views/scoreboardView/scoreboardView';
 
 import UpdateView from './views/updateView/updateView';
 
-import Canvas from './views/canvasView/canvasView';
+// import Canvas from './views/canvasView/canvasView';
 
 import LobbyView from './views/lobbyView/lobbyView';
 
@@ -36,7 +36,11 @@ import EventBus from './modules/eventBus';
 
 import Router from './modules/router/router';
 
-import Game from './Game/game';
+// import Game from './Game/game';
+
+import ThreeView from "./views/threeView.js"
+
+import Game3D from "./game3D/main";
 
 
 const userService = new UserService();
@@ -65,7 +69,7 @@ const backButtonView = new BackButtonView();
 
 const scoreboardView = new ScoreboardView(eventBus, userService);
 
-const canvas = new Canvas(eventBus);
+// const canvas = new Canvas(eventBus);
 
 const lobbyView = new LobbyView();
 
@@ -73,7 +77,11 @@ const gameCreateView = new GameCreateView();
 
 const gamePrepareView = new GamePrepareView();
 
-const game = new Game(canvas, eventBus);
+// const game = new Game(canvas, eventBus);
+
+const gameContainer = new ThreeView();
+
+const game3D = new Game3D(gameContainer);
 
 
 const Views = [];
@@ -84,10 +92,11 @@ Views.push(updateView);
 Views.push(backButtonView);
 Views.push(rulesView);
 Views.push(scoreboardView);
-Views.push(canvas);
+// Views.push(canvas);
 Views.push(lobbyView);
 Views.push(gameCreateView);
 Views.push(gamePrepareView);
+// Views.push(gameContainer);
 
 
 eventBus.on('openSignUp', function () {
@@ -156,13 +165,21 @@ eventBus.on('openScoreboard', function () {
 });
 
 
-eventBus.on('openGame', function () {
+// eventBus.on('openGame', function () {
+// 	Views.forEach((view) => {
+// 		view.hide();
+// 	});
+// 	backButtonView.show();
+// 	canvas.show();
+// 	game.startGame(() => router.goTo('/menu')); // выход в меню
+// }
+
+eventBus.on("openGame", () => {
 	Views.forEach((view) => {
 		view.hide();
 	});
-	backButtonView.show();
-	canvas.show();
-	game.startGame(() => router.goTo('/menu')); // выход в меню
+	debugger;
+	gameContainer.show();
 });
 
 
@@ -192,11 +209,12 @@ app
 	.append(profileView)
 	.append(rulesView)
 	.append(scoreboardView)
-	.append(canvas)
 	.append(lobbyView)
 	.append(updateView)
 	.append(gameCreateView)
-	.append(gamePrepareView);
+	.append(gamePrepareView)
+	.append(gameContainer);
+// .append(canvas)
 
 
 router.start();

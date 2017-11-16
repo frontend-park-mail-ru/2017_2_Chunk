@@ -28,6 +28,7 @@ export default class LoginView extends CommonView {
 		this.el.addEventListener('submit', (event) => {
 			event.preventDefault();
 			const formData = {};
+			debugger;
 			const fields = this.form.fields;
 			for (let field in fields) {
 				formData[fields[field].el.name] = fields[field].el.value;
