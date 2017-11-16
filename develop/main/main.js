@@ -170,7 +170,6 @@ eventBus.on('openLobby', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
-	lobbyView.el.classList.remove('lobbyView_filter-smooth');
 	backButtonView.show();
 	lobbyView.show();
 });

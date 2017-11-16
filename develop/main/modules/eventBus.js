@@ -17,6 +17,15 @@ export default new class EventBus {
 	on(event, listener) {
 		this.listeners[event] = this.listeners[event] || [];
 		this.listeners[event].push(listener);
+	};
+
+	/**
+	 * Отписывается от события
+	 * @param {string} event - название события
+	 */
+	off(event) {
+		this.listeners[event] = this.listeners[event] || [];
+		delete this.listeners[event];
 	}
 
 

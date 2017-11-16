@@ -41,6 +41,10 @@ export default class Router {
 
 		this.bus.on('connectGame', () => {
 			this.goTo('/waiting-hall');
+		});
+
+		this.bus.on('socketClose', () => {
+			this.goTo('/menu');
 		})
 	}
 

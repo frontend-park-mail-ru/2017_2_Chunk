@@ -24,8 +24,8 @@ export default class GamePrepareViewHeader extends Block {
 	}
 
 
-	updateGameData(data) {
-		this.headerFields.update()
+	updateGameData(socketReceiveData) {
+		this.headerFields.update(socketReceiveData);
 	}
 
 

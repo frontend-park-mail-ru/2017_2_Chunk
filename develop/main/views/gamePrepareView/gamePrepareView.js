@@ -16,23 +16,18 @@ export default class gamePrepareView extends View {
 		this.el.classList.add('gamePrepareView');
 		this.hide();
 
-		this.bus.on('socketCode101', (socketReceiveData) => {
-			this.fields.playersList.addPlayer(socketReceiveData.player);
-			const socketSendData = {
-				code: '104',
-				gameID: socketReceiveData.gameID,
-			};
-			debugger;
-			this.bus.emit('getGameInfo', socketSendData);
-		});
-
-		this.bus.on('socketCode104', (socketReceiveData) => {
-			debugger;
-			this.fields.header.updateGameData(socketReceiveData);
-		});
+		this.addPlayer();
+		this.removePLayer();
 
 		this.bus.on('socketClose', () => {
 			this.hide();
+		});
+
+		this.bus.on('connectGame', () => {
+			this.updateGameDataSlave();
+		});
+		this.bus.on('createGame', () => {
+			this.updateGameDataMaster();
 		});
 	};
 
@@ -40,5 +35,51 @@ export default class gamePrepareView extends View {
 		super.hide();
 		this.fields.playersList.clear();
 		this.fields.header.clear();
+		this.bus.off('socketCode104');
 	}
+
+
+	//добавление пользователя
+	addPlayer() {
+		this.bus.on('socketCode101', (socketReceiveData) => {
+			this.fields.playersList.addPlayer(socketReceiveData.player);
+			const socketSendData = {
+				code: '104',
+				gameID: socketReceiveData.gameID,
+			};
+			this.bus.emit('getGameInfo', socketSendData);
+		});
+	}
+
+	//удаление пользователя
+	removePLayer() {
+		this.bus.on('socketCode103', (socketReceiveData) => {
+			this.fields.playersList.removePlayer(socketReceiveData.player);
+			const socketSendData = {
+				code: '104',
+				gameID: socketReceiveData.gameID,
+			};
+			this.bus.emit('getGameInfo', socketSendData);
+		});
+	}
+
+
+	updateGameDataMaster() {
+		this.bus.on('socketCode104', (socketReceiveData) => {
+			this.fields.header.updateGameData(socketReceiveData);
+		});
+	};
+
+
+	updateGameDataSlave() {
+		debugger;
+		this.bus.on('socketCode104', (socketReceiveData) => {
+			this.fields.header.updateGameData(socketReceiveData);
+			debugger;
+			socketReceiveData.game.gamers.forEach((gamer) => {
+				this.fields.playersList.addPlayer(gamer);
+			});
+		});
+	}
+
 }

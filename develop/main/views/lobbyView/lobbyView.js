@@ -40,7 +40,6 @@ export default class LobbyView extends View {
 			for (const gameID in this.gameList) {
 				this.removeGameNode(gameID);
 			}
-			this.bus.emit('openMenu');
 		});
 		this.hide();
 		// this.bus.on('closeCreateGameBanner', () => {
@@ -51,6 +50,7 @@ export default class LobbyView extends View {
 
 	show() {
 		super.show();
+		this.el.classList.remove('lobbyView_filter-smooth');
 		if (!this.webSocket)
 			this.webSocket = new WebSocket();
 	}
