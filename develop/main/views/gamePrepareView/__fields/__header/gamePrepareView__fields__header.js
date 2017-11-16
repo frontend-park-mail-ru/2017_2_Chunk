@@ -1,7 +1,6 @@
-
 'use strict';
 import Block from '../../../../blocks/block/block';
-import HeaderFields from'./__fields/gamePrepareView__fields__header__fields';
+import HeaderFields from './__fields/gamePrepareView__fields__header__fields';
 import eventBus from '../../../../modules/eventBus';
 
 
@@ -18,37 +17,19 @@ export default class GamePrepareViewHeader extends Block {
 		const block = Block.Create('div', {}, ['gamePrepareView__fields__header']);
 		super(block.el);
 		this.fields = {};
-		const data = {
-			gameID: 0,
-			playersNumber: 0,
-			botsNumber: 0,
-			totalPLayersNumber: 0,
-			voyeursNumber: 0,
-			fieldSize: 0,
-		};
-		const headerFields = new HeaderFields(data);
-		this.fields = headerFields.fields;
-		for (let field in this.fields) {
-			this.append(this.fields[field]);
+		this.headerFields = new HeaderFields();
+		for (let field in this.headerFields.fields) {
+			this.append(this.headerFields.fields[field]);
 		}
 	}
+
 
 	updateGameData(data) {
-		for (let key in data) {
-			if (key in this.fields)
-				this.fields[key].el.innerHTML = this.fields[key].el.innerHTML.replace(/\d+/g, data[key]);
-		}
+		this.headerFields.update()
 	}
 
+
 	clear() {
-		const data = {
-			gameID: 0,
-			playersNumber: 0,
-			botsNumber: 0,
-			totalPLayersNumber: 0,
-			voyeursNumber: 0,
-			fieldSize: 0,
-		};
-		this.updateGameData(data);
+		this.headerFields.clear();
 	}
 }

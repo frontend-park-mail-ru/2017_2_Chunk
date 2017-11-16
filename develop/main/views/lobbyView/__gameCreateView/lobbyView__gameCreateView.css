@@ -7,4 +7,5 @@
     background-color: #3d3d3e;
     opacity: 0.9;
     /*z-index: 2;*/
+    transition: all 6s !important;
 }

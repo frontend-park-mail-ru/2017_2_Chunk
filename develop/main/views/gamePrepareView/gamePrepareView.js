@@ -16,11 +16,24 @@ export default class gamePrepareView extends View {
 		this.el.classList.add('gamePrepareView');
 		this.hide();
 
-		this.bus.on('socketCode101', (data) => {
+		this.bus.on('socketCode101', (socketReceiveData) => {
+			this.fields.playersList.addPlayer(socketReceiveData.player);
+			const socketSendData = {
+				code: '104',
+				gameID: socketReceiveData.gameID,
+			};
 			debugger;
-			this.fields.header.updateGameData(data);
-			this.fields.playersList.addPlayer(data.player);
-		})
+			this.bus.emit('getGameInfo', socketSendData);
+		});
+
+		this.bus.on('socketCode104', (socketReceiveData) => {
+			debugger;
+			this.fields.header.updateGameData(socketReceiveData);
+		});
+
+		this.bus.on('socketClose', () => {
+			this.hide();
+		});
 	};
 
 	hide() {

@@ -28,10 +28,10 @@ export default class GameCreateFields {
 			// voyeurButton: ViewButton.Create({href: '/game'}, ['auth'], 'Play');
 			playButtonSingle:
 				Block.Create('input', {type: 'submit', value: 'Single play'}, ['lobbyView__gameCreateView__fields__playButton',
-					'lobbyView__gameCreateView__fields']),
+					'lobbyView__gameCreateView__fields', 'view__view-button']),
 			playButtonWithFriends:
 				Block.Create('input', {type: 'submit', value: 'Play with friends'}, ['lobbyView__gameCreateView__fields__playButton',
-					'lobbyView__gameCreateView__fields'])
+					'lobbyView__gameCreateView__fields', 'view__view-button'])
 		};
 		this.addRadioPLayers();
 		this.addRadioFieldSize();
@@ -69,6 +69,7 @@ export default class GameCreateFields {
 	addRadioFieldSize() {
 		const choice = {
 			fieldSize10: Block.Create('input', {
+					'required': 'required',
 					'name': 'fieldSize',
 					'id': 'fieldSize10',
 					'type': 'radio',

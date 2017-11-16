@@ -19,6 +19,7 @@ export default class webSocket {
 				alert('Обрыв соединения');
 			}
 			alert('Код: ' + event.code + ' причина: ' + event.reason);
+			this.bus.emit('socketClose');
 		};
 
 		this.socket.onmessage = (event) => {
@@ -36,6 +37,10 @@ export default class webSocket {
 		});
 
 		this.bus.on('connectGame', (data) => {
+			this.socket.send(JSON.stringify(data));
+		});
+
+		this.bus.on('getGameInfo', (data) => {
 			this.socket.send(JSON.stringify(data));
 		});
 

@@ -23,12 +23,13 @@ export default class LobbyView extends View {
 		this.bus.on('openCreateGameBanner', () => {
 			this.el.classList.add('lobbyView_filter-smooth');
 		});
-
-		this.bus.on('socketCode104', (data) => {
+		this.bus.on('closeCreateGameBanner', () => {
+			this.el.classList.remove('lobbyView_filter-smooth');
+		});
+		this.bus.on('socketCode106', (data) => {
 			debugger;
 			this.addGameNode(data);
 		});
-
 		this.bus.on('socketCode111', (data) => {
 			data.games.forEach((gameData) => {
 				this.addGameNode(gameData);
@@ -39,6 +40,7 @@ export default class LobbyView extends View {
 			for (const gameID in this.gameList) {
 				this.removeGameNode(gameID);
 			}
+			this.bus.emit('openMenu');
 		});
 		this.hide();
 		// this.bus.on('closeCreateGameBanner', () => {
@@ -53,11 +55,6 @@ export default class LobbyView extends View {
 			this.webSocket = new WebSocket();
 	}
 
-
-	hide() {
-		super.hide();
-		//
-	}
 
 
 	addGameNode(data) {

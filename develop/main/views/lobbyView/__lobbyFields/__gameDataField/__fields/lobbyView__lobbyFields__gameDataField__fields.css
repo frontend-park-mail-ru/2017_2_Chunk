@@ -3,6 +3,11 @@
     margin: 0.1em;
 }
 
-.playButton {
-    background-color: #014f77 !important;
+.lobbyView__lobbyFields__gameDataField__fields__playButton {
+    background-color: #00537d !important;
+    margin: auto !important;
+}
+
+.lobbyView__lobbyFields__gameDataField__fields__playButton:hover {
+    border-color: #ff8700 !important;
 }

@@ -43,8 +43,6 @@
 
 .lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__playButton{
     grid-area: place9;
-    margin: auto;
-    background-color: #00537d;
 }
 
 

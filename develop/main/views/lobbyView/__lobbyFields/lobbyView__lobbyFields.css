@@ -1,6 +1,10 @@
 .lobbyView__lobbyFields__gameList {
+    box-sizing: border-box;
+    background-color: #bdbdbd24;
+    border-radius: 0.4em;
     overflow: auto;
     height: 70vh;
+    width: 70vh;
 }
 
 .lobbyView__lobbyFields__header {
@@ -8,7 +12,7 @@
 }
 
 .lobbyView__lobbyFields__createGame {
-    margin: auto !important;
+    margin: 0.5em auto !important;
 }
 
 .lobbyView__lobbyFields {
