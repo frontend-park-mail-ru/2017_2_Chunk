@@ -1,10 +1,9 @@
 .lobbyView__lobbyFields__gameList {
     box-sizing: border-box;
-    background-color: #bdbdbd24;
+    /*background-color: #bdbdbd24;*/
     border-radius: 0.4em;
     overflow: auto;
     height: 70vh;
-    width: 70vh;
 }
 
 .lobbyView__lobbyFields__header {

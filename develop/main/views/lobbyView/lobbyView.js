@@ -27,10 +27,14 @@ export default class LobbyView extends View {
 			this.el.classList.remove('lobbyView_filter-smooth');
 		});
 		this.bus.on('socketCode106', (data) => {
+			this.addGameNode(data.game);
+		});
+		this.bus.on('socketCode110', (socketReceiveData) => {
 			debugger;
-			this.addGameNode(data);
+			this.removeGameNode(socketReceiveData.gameID);
 		});
 		this.bus.on('socketCode111', (data) => {
+			debugger;
 			data.games.forEach((gameData) => {
 				this.addGameNode(gameData);
 			});

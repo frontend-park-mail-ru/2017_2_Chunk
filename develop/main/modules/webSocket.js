@@ -49,13 +49,12 @@ export default class webSocket {
 		this.socket.onerror = (error) => {
 			alert('Ошибка ' + error.message);
 		};
-
 		this.bus.on('openMenu', () => {
 			this.bus.emit('socketClose');
 		});
 		this.bus.on('socketClose', () => {
 			this.socket.close();
-		})
+		});
 	}
 
 
