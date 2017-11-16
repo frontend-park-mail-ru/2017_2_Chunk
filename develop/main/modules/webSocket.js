@@ -59,13 +59,13 @@ export default class webSocket {
 
 	socketCallbacks() {
 		this.socket.onopen = () => {
-			alert('Соединение установлено.');
 			this.getFullGameList();
 			this.subscribeNewGameNode();
 		};
 		this.socket.onclose = (event) => {
 			if (event.wasClean) {
 			} else {
+
 			}
 			alert('Код: ' + event.code + ' причина: ' + event.reason);
 
@@ -76,7 +76,6 @@ export default class webSocket {
 			this.bus.emit(`socketCode${data.code}`, (data))
 		};
 		this.socket.onerror = (error) => {
-			alert('Ошибка ' + error.message);
 		};
 		this.bus.on('openMenu', () => {
 			this.bus.emit('socketClose');
