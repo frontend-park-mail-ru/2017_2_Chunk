@@ -21,7 +21,7 @@ export default class PlayersList extends Block {
 
 	addPlayer(data) {
 		const string = new PLayerListString(data);
-		this.strings = {};
+		this.strings = this.strings || {};
 		this.strings[data.userID] = string;
 		this.append(string);
 	}
@@ -32,9 +32,8 @@ export default class PlayersList extends Block {
 	}
 
 	clear() {
-		for (let key in this.string) {
+		for (let key in this.strings) {
 			this.removePlayer(key);
-			delete this.strings[key];
 		}
 	}
 }

@@ -30,6 +30,8 @@ export default class GameCreateView extends Block {
 	}
 
 
+
+	//определяет отктрытие баннера и закрытие по клику вокруг банера
 	stateCreateBanner() {
 		this.bus.on('openCreateGameBanner', () => {
 			this.show();
@@ -59,6 +61,7 @@ export default class GameCreateView extends Block {
 				maxX: 5,
 				maxY: 5,
 			};
+
 			this.bus.emit('createGame', data);
 			this.hide();
 		});

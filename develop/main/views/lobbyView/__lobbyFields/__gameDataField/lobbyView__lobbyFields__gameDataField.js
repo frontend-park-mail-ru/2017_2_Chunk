@@ -17,28 +17,37 @@ export default class LobbyGameData extends Block {
 	constructor(data) {
 		const block = Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField']);
 		super(block.el);
-		this.fields = {};
 		this.bus = eventBus;
 		this.gameID = data.gameID;
-		const gameDataFields = new GameDataFields(data);
-		this.fields = gameDataFields.fields;
-		for (let field in this.fields) {
-			this.append(this.fields[field]);
+		this.gameDataFields = new GameDataFields(data);
+		for (let field in this.gameDataFields.fields) {
+			this.append(this.gameDataFields.fields[field]);
 		}
 
-		this.fields.playButton.on('click', () => {
+		this.gameDataFields.fields.playButton.on('click', () => {
 			const data = {
 				code: '101',
 				gameID: `${this.gameID}`,
 			};
 			this.bus.emit('connectGame', data);
-		})
+		});
+
+		this.bus.on('socketCode103', (socketResponse) => {
+			debugger;
+			if(socketResponse.gameID === this.gameID) {
+				let gamersNumberHtml = this.gameDataFields.fields.gamersNumber.el;
+				debugger;
+				let gamersNumber = +gamersNumberHtml.innerHTML.match(/\d+/)[0];
+				gamersNumber -= 1;
+				gamersNumberHtml.innerHTML = gamersNumberHtml.innerHTML.replace(/\d+/g, gamersNumber);
+			}
+		});
 	}
 
 
-	updateGameData(data) {
-		for (let key in data) {
-			this.fields[key].el.innerHTML = this.fields[key].el.innerHTML.replace(/\d+/g, data[key]);
-		}
+
+
+	updateGameData(socketResponse) {
+		this.gameDataFields.update(socketResponse)
 	}
 }

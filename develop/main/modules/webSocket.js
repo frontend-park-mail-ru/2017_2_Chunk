@@ -26,7 +26,7 @@ export default class webSocket {
 	}
 
 
-	socketCallbacks() {
+	socketCallbacksAlert() {
 		this.socket.onopen = () => {
 			alert('Соединение установлено.');
 			this.getFullGameList();
@@ -43,6 +43,35 @@ export default class webSocket {
 		};
 		this.socket.onmessage = (event) => {
 			alert('Получены данные ' + event.data);
+			const data = JSON.parse(event.data);
+			this.bus.emit(`socketCode${data.code}`, (data))
+		};
+		this.socket.onerror = (error) => {
+			alert('Ошибка ' + error.message);
+		};
+		this.bus.on('openMenu', () => {
+			this.bus.emit('socketClose');
+		});
+		this.bus.on('socketClose', () => {
+			this.socket.close();
+		});
+	};
+
+	socketCallbacks() {
+		this.socket.onopen = () => {
+			alert('Соединение установлено.');
+			this.getFullGameList();
+			this.subscribeNewGameNode();
+		};
+		this.socket.onclose = (event) => {
+			if (event.wasClean) {
+			} else {
+			}
+			alert('Код: ' + event.code + ' причина: ' + event.reason);
+
+			this.bus.emit('socketClose');
+		};
+		this.socket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
 			this.bus.emit(`socketCode${data.code}`, (data))
 		};
