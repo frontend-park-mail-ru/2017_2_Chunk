@@ -96,7 +96,7 @@ Views.push(scoreboardView);
 Views.push(lobbyView);
 Views.push(gameCreateView);
 Views.push(gamePrepareView);
-// Views.push(gameContainer);
+Views.push(gameContainer);
 
 
 eventBus.on('openSignUp', function () {

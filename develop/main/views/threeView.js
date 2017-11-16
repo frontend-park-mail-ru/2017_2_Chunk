@@ -11,6 +11,11 @@ export default class ThreeView extends CommonView {
 		this.hide();
 	}
 
+	hide() {
+		debugger;
+		super.hide();
+	}
+
 	getElement() {
 		return this.el;
 	}
