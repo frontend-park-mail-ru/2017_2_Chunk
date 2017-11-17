@@ -42,6 +42,9 @@ import ThreeView from "./views/threeView.js"
 
 import Game3D from "./game3D/main";
 
+import ServiceWorker from '../../public/serviceWorker';
+
+
 
 const userService = new UserService();
 
@@ -82,6 +85,8 @@ const gamePrepareView = new GamePrepareView();
 const gameContainer = new ThreeView();
 
 const game3D = new Game3D(gameContainer);
+
+const serviceWorker = ServiceWorker;
 
 
 const Views = [];
@@ -216,5 +221,16 @@ app
 	.append(gameContainer);
 // .append(canvas)
 
+
+if ('serviceWorker' in navigator) {
+	const serviceWorker = navigator.serviceWorker;
+	navigator.serviceWorker.register('/serviceWorker.js')
+		.then((reg) => {
+			console.log('Succeeded registration' + reg.scope);
+		})
+		.catch((err) => {
+			console.log('Registration error');
+		});
+}
 
 router.start();
