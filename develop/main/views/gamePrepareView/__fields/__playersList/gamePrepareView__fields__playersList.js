@@ -27,13 +27,15 @@ export default class PlayersList extends Block {
 	}
 
 	removePlayer(userID) {
-		this.remove(this.strings[userID]);
-		delete this.strings[userID];
+		if (userID !== 'User ID') {
+			this.remove(this.strings[userID]);
+			delete this.strings[userID];
+		}
 	}
 
 	clear() {
 		for (let key in this.strings) {
-			this.removePlayer(key);
+				this.removePlayer(key);
 		}
 	}
 }

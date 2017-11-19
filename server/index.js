@@ -18,7 +18,7 @@ const options = {
 };
 
 // Отдаёт статику при совпадении имён
-app.use('/menu/', express.static('./public'));
+app.use('/menu', express.static('./public'));
 app.use('/signup', express.static('./public'));
 app.use('/login', express.static('./public'));
 app.use('/update', express.static('./public'));
@@ -26,6 +26,7 @@ app.use('/game', express.static('./public'));
 app.use('/lobby', express.static('./public'));
 app.use('/rules', express.static('./public'));
 app.use('/scoreboard', express.static('./public'));
+app.use('/waiting-hall', express.static('./public'));
 app.use('/exit', express.static('./public'));
 app.use('/', express.static('./public'));
 
@@ -33,10 +34,6 @@ app.use('/', express.static('./public'));
 app.use(bodyParser.json()); // С помощью какой-то древней магии парсит тело запроса,
 app.use(cookieParser()); // всё то же волшебство, но уже для кук
 
-//
-// app.get('/', (request, response) => {
-// 	response.redirect('/menu');
-// });
 
 // app.get('*', (request, response) => {
 // 	response.redirect('/menu');

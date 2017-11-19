@@ -170,15 +170,6 @@ eventBus.on('openScoreboard', function () {
 });
 
 
-// eventBus.on('openGame', function () {
-// 	Views.forEach((view) => {
-// 		view.hide();
-// 	});
-// 	backButtonView.show();
-// 	canvas.show();
-// 	game.startGame(() => router.goTo('/menu')); // выход в меню
-// }
-
 eventBus.on("openGame", () => {
 	Views.forEach((view) => {
 		view.hide();
@@ -224,13 +215,23 @@ app
 
 if ('serviceWorker' in navigator) {
 	const serviceWorker = navigator.serviceWorker;
-	navigator.serviceWorker.register('/serviceWorker.js')
+	navigator.serviceWorker.register('/serviceWorker.js', {scope: '/'})
 		.then((reg) => {
-			console.log('Succeeded registration' + reg.scope);
+			console.log('Succeeded registration ' + reg.scope);
 		})
 		.catch((err) => {
 			console.log('Registration error');
 		});
 }
+//
+//
+// if (window.Worker) {
+// 	const gameWorker = new Worker('worker.js')
+//
+//
+// }
 
 router.start();
+
+
+

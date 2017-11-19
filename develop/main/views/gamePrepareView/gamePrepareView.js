@@ -32,7 +32,6 @@ export default class gamePrepareView extends View {
 	};
 
 	show() {
-		debugger;
 		super.show();
 		this.active = true;
 	}
@@ -53,7 +52,6 @@ export default class gamePrepareView extends View {
 	//добавление пользователя
 	addPlayer() {
 		this.bus.on('socketCode101', (socketReceiveData) => {
-			debugger;
 			this.fields.playersList.addPlayer(socketReceiveData.player);
 			this.clear = false;
 			const socketSendData = {
@@ -68,7 +66,6 @@ export default class gamePrepareView extends View {
 	//удаление пользователя
 	removePLayer() {
 		this.bus.on('socketCode103', (socketReceiveData) => {
-			debugger;
 			if(this.active) {
 				this.fields.playersList.removePlayer(socketReceiveData.player.userID);
 				const socketSendData = {
@@ -92,7 +89,6 @@ export default class gamePrepareView extends View {
 	updateGameDataSlave() {
 		this.bus.on('socketCode104', (socketReceiveData) => {
 			this.fields.header.updateGameData(socketReceiveData);
-			debugger;
 			socketReceiveData.game.gamers.forEach((gamer) => {
 				if (gamer.userID !== this.userID)
 					this.fields.playersList.addPlayer(gamer);
