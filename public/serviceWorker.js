@@ -1,16 +1,12 @@
 self.addEventListener('install', (event) => {
-	// let serviceWorkerVersion = '1';
-	// const myStorage = Window.localStorage;
-	// if(myStorage['serviceWorkerVersion']) {
-	// 	serviceWorkerVersion = myStorage['serviceWorkerVersion'];
-	// 	// serviceWorkerVersion += 1;
-	// 	myStorage['serviceWorkerVersion'] =  `${serviceWorkerVersion}`;
-	// }
 	event.waitUntil(
 		caches.open('12')
 			.then((cache) => {
 				console.log('cache open');
 				return cache.addAll([
+					'menu/application.css',
+					'menu/application.js',
+					'menu/index.html',
 					// '/login/application.css',
 					// '/login/application.js',
 					// '/login/index.html',
@@ -41,10 +37,6 @@ self.addEventListener('install', (event) => {
 					'application.css',
 					'application.js',
 					'index.html',
-					'login/',
-					'login/application.css',
-					'login/application.js',
-					'login/index.html',
 				]);
 			})
 	)
@@ -53,11 +45,15 @@ self.addEventListener('fetch', (event) => {
 	event.respondWith(
 		caches.match(event.request)
 			.then((cachedResponse) => {
-			debugger;
+				debugger;
 				if (cachedResponse) {
 					return cachedResponse;
 				}
 				return fetch(event.request);
+			})
+			.catch((error) => {
+				debugger;
+				console.log(error);
 			})
 	)
 });

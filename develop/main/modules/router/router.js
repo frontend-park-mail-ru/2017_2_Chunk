@@ -30,10 +30,32 @@ export default class Router {
 		});
 
 		window.onpopstate = () => {
-			console.log(location.pathname);
-			this.changeState(location.pathname);
+			const resp = this.userService.isLoggedIn();
+			if (resp) {
+				const slice_Routes = this._routes.slice(0, 8);
+				const isValid = slice_Routes.some((_route) => {
+						return location.pathname.match(_route.url_pattern);
+					});
+				if (isValid)
+					this.changeState(location.pathname);
+				else
+					this.changeState(this._routes[0])
+			}
+			else {
+				const slice_Routes = this._routes.slice(6);
+				const isValid = slice_Routes.some((_route) => {
+						return location.pathname.match(_route.url_pattern);
+					});
+				if (isValid)
+					this.changeState(location.pathname);
+				else
+					this.changeState(this._routes[0]);
+			}
 		};
 
+		this.bus.on('goToMenu', () => {
+			this.goTo('/menu');
+		});
 
 		this.bus.on('createGame', () => {
 			this.goTo('/waiting-hall');
@@ -56,7 +78,6 @@ export default class Router {
 	 */
 	async start() {
 		this.addHrefListeners();
-
 		try {
 			const resp = await this.userService.getDataFetch();
 			if (resp.ok) {

@@ -21,6 +21,16 @@ export default class webSocket {
 		this.bus.on('getGameInfo', (data) => {
 			this.socket.send(JSON.stringify(data));
 		});
+
+		this.bus.on('webSocketMessage', (data) => {
+			this.socket.send(JSON.stringify(message));
+		});
+		//how to use it?
+		// const data = {
+		// 	code: 123,
+		// 	message: 'bla bla bla'
+		// };
+		// this.bus.emit('webSocketMessage', data)
 	}
 
 
@@ -31,8 +41,9 @@ export default class webSocket {
 		};
 		this.socket.onclose = (event) => {
 			if (event.wasClean) {
+				console.log('web socket close is clean');
 			} else {
-
+				console.log('web socket close is not clean');
 			}
 			alert('Код: ' + event.code + ' причина: ' + event.reason);
 			this.bus.emit('socketClose');
@@ -42,6 +53,7 @@ export default class webSocket {
 			this.bus.emit(`socketCode${data.code}`, (data))
 		};
 		this.socket.onerror = (error) => {
+			console.log('web socket error!');
 		};
 		this.bus.on('openMenu', () => {
 			this.bus.emit('socketClose');
