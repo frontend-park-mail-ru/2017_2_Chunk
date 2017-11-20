@@ -58,8 +58,8 @@ export default class GameCreateView extends Block {
 			const data = {
 				code: '100',
 				numberOfPlayers: '2',
-				maxX: 5,
-				maxY: 5,
+				maxX: 8,
+				maxY: 8,
 			};
 
 			this.bus.emit('createGame', data);
