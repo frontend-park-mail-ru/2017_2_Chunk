@@ -21,20 +21,21 @@ export default class PlayersList extends Block {
 
 	addPlayer(data) {
 		const string = new PLayerListString(data);
-		this.strings = {};
+		this.strings = this.strings || {};
 		this.strings[data.userID] = string;
 		this.append(string);
 	}
 
 	removePlayer(userID) {
-		this.remove(this.strings[userID]);
-		delete this.strings[userID];
+		if (userID !== 'User ID') {
+			this.remove(this.strings[userID]);
+			delete this.strings[userID];
+		}
 	}
 
 	clear() {
-		for (let key in this.string) {
-			this.removePlayer(key);
-			delete this.strings[key];
+		for (let key in this.strings) {
+				this.removePlayer(key);
 		}
 	}
 }

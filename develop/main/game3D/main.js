@@ -71,7 +71,7 @@ export default class Game3D {
 		this.controls.maxDistance = 200.0;
 		this.controls.autoRotate = false;
 
-		document.addEventListener('click', this.onDocumentMouseMove.bind(this), false);
+		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 
 		this.mouse = new THREE.Vector2();
 		this.raycaster = new THREE.Raycaster();

@@ -12,11 +12,11 @@ export default class GameDataFields {
 		this.fields = {
 			gameID: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__gameId',
 				'lobbyView__lobbyFields__gameDataField__fields'], `GameId: ${data.gameID}`),
-			numberOfPlayers: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__playersNumber',
+			gamersNumber: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__playersNumber',
 				'lobbyView__lobbyFields__gameDataField__fields'], `Players: ${data.gamers.length}`),
 			botsNumber: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__botsNumber',
 				'lobbyView__lobbyFields__gameDataField__fields'], `Bots: ${data.bots.length}`),
-			totalPLayersNumber: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__totalPLayersNumber',
+			numberOfPlayers: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__totalPLayersNumber',
 				'lobbyView__lobbyFields__gameDataField__fields'], `Total players: ${data.numberOfPlayers}`),
 			watchers: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__voyeursNumber',
 				'lobbyView__lobbyFields__gameDataField__fields'], `Watchers: ${data.watchers}`),
@@ -26,6 +26,16 @@ export default class GameDataFields {
 			playButton: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__playButton',
 				'lobbyView__lobbyFields__gameDataField__fields', 'view__view-button'], 'Play'),
 		}
+	}
+
+	update(socketReceiveData) {
+		debugger;
+		this.fields.gameID.el.innerHTML = this.fields.gameID.el.innerHTML.replace(/\d+/g, socketReceiveData.gameID);
+		this.fields.gamersNumber.el.innerHTML = this.fields.gamersNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.gamers.length);
+		this.fields.botsNumber.el.innerHTML = this.fields.botsNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.bots.length);
+		this.fields.numberOfPlayers.el.innerHTML = this.fields.numberOfPlayers.el.innerHTML.replace(/\d+/g, socketReceiveData.numberOfPlayers);
+		this.fields.watchers.el.innerHTML = this.fields.watchers.el.innerHTML.replace(/\d+/g, socketReceiveData.watchers);
+		this.fields.fieldSize.el.innerHTML = this.fields.fieldSize.el.innerHTML.replace(/\d+/g, socketReceiveData.field.maxX);
 	}
 }
 

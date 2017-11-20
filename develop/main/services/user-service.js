@@ -46,6 +46,10 @@ export default class UserService {
 			response.message = 'Логин и пароль не должны совпадать!';
 			return response;
 		}
+		if (!navigator.onLine) {
+			response.message = 'Internet connections error!';
+			return response;
+		}
 		const resp = await Http.FetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
@@ -76,6 +80,10 @@ export default class UserService {
 		}
 		if (password === login) {
 			response.message = 'Логин и пароль не должны совпадать!';
+			return response;
+		}
+		if (!navigator.onLine) {
+			response.message = 'Internet connections error!';
 			return response;
 		}
 		const resp = await Http.FetchPost('/user/sign_in', {login, password});
@@ -128,6 +136,10 @@ export default class UserService {
 			response.message = 'Логин и пароль не должны совпадать!';
 			return response;
 		}
+		if (!navigator.onLine) {
+			response.message = 'Internet connections error!';
+			return response;
+		}
 		const resp = await Http.FetchPost('/user/update', {username, email, password, old_password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
@@ -165,6 +177,10 @@ export default class UserService {
 			response.json = this.user;
 			return response;
 		}
+		if (!navigator.onLine) {
+			response.message = 'Internet connections error!';
+			return response;
+		}
 		const resp = await Http.FetchGet('/user/whoisit');
 		response.json = await resp.json();
 		if (resp.status >= 400) {
@@ -183,11 +199,12 @@ export default class UserService {
 	 * Разлогинивает
 	 */
 	logout() {
-		if (this.isLoggedIn()) {
-			this.user = null;
-			this.users = [];
-			Http.FetchGet('/user/exit');
-		}
+		if (navigator.onLine)
+			if (this.isLoggedIn()) {
+				this.user = null;
+				this.users = [];
+				Http.FetchGet('/user/exit');
+			}
 	}
 
 

@@ -44,7 +44,8 @@ export default class Router {
 		});
 
 		this.bus.on('socketClose', () => {
-			this.goTo('/menu');
+			if (!location.pathname.match('/menu'))
+				this.goTo('/menu');
 		})
 	}
 

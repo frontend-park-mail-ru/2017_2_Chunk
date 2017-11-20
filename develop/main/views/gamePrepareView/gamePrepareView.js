@@ -14,15 +14,14 @@ export default class gamePrepareView extends View {
 		this.fields = gamePrepareFields;
 		this.bus = eventBus;
 		this.el.classList.add('gamePrepareView');
+		this.clear = false;
+		this.active = false;
 		this.hide();
 		this.addPlayer();
 		this.removePLayer();
 		this.gameClose();
 		this.bus.on('socketCode112', (socketResponse) => {
 			this.userID = socketResponse.userID;
-		});
-		this.bus.on('socketClose', () => {
-			this.hide();
 		});
 		this.bus.on('connectGame', () => {
 			this.updateGameDataSlave();
@@ -32,11 +31,20 @@ export default class gamePrepareView extends View {
 		});
 	};
 
+	show() {
+		super.show();
+		this.active = true;
+	}
+
 
 	hide() {
 		super.hide();
-		this.fields.playersList.clear();
-		this.fields.header.clear();
+		if(!this.clear) {
+			this.fields.playersList.clear();
+			this.fields.header.clear();
+		}
+		this.clear = true;
+		this.active = false;
 		this.bus.off('socketCode104');
 	}
 
@@ -45,6 +53,7 @@ export default class gamePrepareView extends View {
 	addPlayer() {
 		this.bus.on('socketCode101', (socketReceiveData) => {
 			this.fields.playersList.addPlayer(socketReceiveData.player);
+			this.clear = false;
 			const socketSendData = {
 				code: '104',
 				gameID: socketReceiveData.gameID,
@@ -57,13 +66,14 @@ export default class gamePrepareView extends View {
 	//удаление пользователя
 	removePLayer() {
 		this.bus.on('socketCode103', (socketReceiveData) => {
-			debugger;
-			this.fields.playersList.removePlayer(socketReceiveData.player.userID);
-			const socketSendData = {
-				code: '104',
-				gameID: socketReceiveData.gameID,
-			};
-			this.bus.emit('getGameInfo', socketSendData);
+			if(this.active) {
+				this.fields.playersList.removePlayer(socketReceiveData.player.userID);
+				const socketSendData = {
+					code: '104',
+					gameID: socketReceiveData.gameID,
+				};
+				this.bus.emit('getGameInfo', socketSendData);
+			}
 		});
 	}
 
@@ -71,15 +81,14 @@ export default class gamePrepareView extends View {
 	updateGameDataMaster() {
 		this.bus.on('socketCode104', (socketReceiveData) => {
 			this.fields.header.updateGameData(socketReceiveData);
+			this.clear = false;
 		});
 	};
 
 
 	updateGameDataSlave() {
-		debugger;
 		this.bus.on('socketCode104', (socketReceiveData) => {
 			this.fields.header.updateGameData(socketReceiveData);
-			debugger;
 			socketReceiveData.game.gamers.forEach((gamer) => {
 				if (gamer.userID !== this.userID)
 					this.fields.playersList.addPlayer(gamer);
