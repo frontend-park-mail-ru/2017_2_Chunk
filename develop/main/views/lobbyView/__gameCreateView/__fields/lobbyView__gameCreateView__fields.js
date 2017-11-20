@@ -77,7 +77,7 @@ export default class GameCreateFields {
 				},
 				['lobbyView__gameCreateView__fields__choiceRadio',], ''),
 			label2: Block.Create('label', {'for': 'fieldSize10'},
-				['lobbyView__gameCreateView__fields__choiceRadio_label',], '10'),
+				['lobbyView__gameCreateView__fields__choiceRadio_label',], '8'),
 			fieldSize15: Block.Create('input', {
 					'name': 'fieldSize',
 					'id': 'fieldSize15',
@@ -86,7 +86,7 @@ export default class GameCreateFields {
 				},
 				['lobbyView__gameCreateView__fields__choiceRadio',], ''),
 			label4: Block.Create('label', {'for': 'fieldSize15'},
-				['lobbyView__gameCreateView__fields__choiceRadio_label',], '15'),
+				['lobbyView__gameCreateView__fields__choiceRadio_label',], '12'),
 		};
 		for (const field in choice) {
 			this.fields.fieldSize.append(choice[field]);

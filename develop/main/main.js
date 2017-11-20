@@ -100,7 +100,6 @@ Views.push(backMenuButtonView);
 Views.push(backButtonView);
 Views.push(rulesView);
 Views.push(scoreboardView);
-// Views.push(canvas);
 Views.push(lobbyView);
 Views.push(gameCreateView);
 Views.push(gamePrepareView);
@@ -169,7 +168,7 @@ eventBus.on('openScoreboard', function () {
 		view.hide();
 	});
 	scoreboardView.show();
-	backMenuButtonView.show();menu
+	backMenuButtonView.show();
 });
 
 
