@@ -163,19 +163,11 @@ eventBus.on('exit', function () {
 
 
 eventBus.on('openScoreboard', function () {
-<<<<<<< HEAD
-	Views.forEach((view) => {
-		view.hide();
-	});
-	scoreboardView.show();
-	backMenuButtonView.show();
-=======
     Views.forEach((view) => {
         view.hide();
     });
     scoreboardView.show();
     backMenuButtonView.show();
->>>>>>> 4dd8f358ab76588e11122417a46bef7a9d2ec35e
 });
 
 
