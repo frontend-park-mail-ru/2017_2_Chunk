@@ -45,14 +45,14 @@ self.addEventListener('fetch', (event) => {
 	event.respondWith(
 		caches.match(event.request)
 			.then((cachedResponse) => {
-				debugger;
+				//debugger;
 				if (cachedResponse) {
 					return cachedResponse;
 				}
 				return fetch(event.request);
 			})
 			.catch((error) => {
-				debugger;
+				//debugger;
 				console.log(error);
 			})
 	)

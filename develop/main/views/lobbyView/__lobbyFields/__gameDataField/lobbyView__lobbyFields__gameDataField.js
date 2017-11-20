@@ -33,10 +33,10 @@ export default class LobbyGameData extends Block {
 		});
 
 		this.bus.on('socketCode103', (socketResponse) => {
-			debugger;
+			// debugger;
 			if(socketResponse.gameID === this.gameID) {
 				let gamersNumberHtml = this.gameDataFields.fields.gamersNumber.el;
-				debugger;
+				// debugger;
 				let gamersNumber = +gamersNumberHtml.innerHTML.match(/\d+/)[0];
 				gamersNumber -= 1;
 				gamersNumberHtml.innerHTML = gamersNumberHtml.innerHTML.replace(/\d+/g, gamersNumber);

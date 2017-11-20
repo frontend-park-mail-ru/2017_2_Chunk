@@ -29,7 +29,7 @@ export default class GameDataFields {
 	}
 
 	update(socketReceiveData) {
-		debugger;
+		// debugger;
 		this.fields.gameID.el.innerHTML = this.fields.gameID.el.innerHTML.replace(/\d+/g, socketReceiveData.gameID);
 		this.fields.gamersNumber.el.innerHTML = this.fields.gamersNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.gamers.length);
 		this.fields.botsNumber.el.innerHTML = this.fields.botsNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.bots.length);
