@@ -23,3 +23,5 @@ export const COLORS = {
 	PLAYER_1:   0x7A6014,
 	PLAYER_2:   0x492C70
 };
+
+export const SPEED = 0.1;

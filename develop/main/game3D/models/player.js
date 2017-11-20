@@ -28,6 +28,7 @@ export default class Player {
 		);
 
 		this.x = x;
+		this.y = tools.PLAYER_HEIGHT / 2 * 1.05;
 		this.z = z;
 	}
 }

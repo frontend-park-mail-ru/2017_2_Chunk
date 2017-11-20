@@ -1,4 +1,3 @@
-
 /**
  * Основной модуль работатющий со всеми объектами
  *@module main
@@ -107,112 +106,121 @@ Views.push(gameContainer);
 
 
 eventBus.on('openSignUp', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
-	signUpView.show();
-	backMenuButtonView.show();
+    Views.forEach((view) => {
+        view.hide();
+    });
+    signUpView.show();
+    backMenuButtonView.show();
 });
 
 
 eventBus.on('openLogin', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
-	loginView.show();
-	backMenuButtonView.show();
+    Views.forEach((view) => {
+        view.hide();
+    });
+    loginView.show();
+    backMenuButtonView.show();
 });
 
 
 eventBus.on('openUpdate', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
-	updateView.show();
-	backMenuButtonView.show();
+    Views.forEach((view) => {
+        view.hide();
+    });
+    updateView.show();
+    backMenuButtonView.show();
 });
 
 
 eventBus.on('openRules', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
-	rulesView.show();
-	backMenuButtonView.show();
+    Views.forEach((view) => {
+        view.hide();
+    });
+    rulesView.show();
+    backMenuButtonView.show();
 });
 
 
 eventBus.on('openMenu', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
-	const browserStorage = window.localStorage;
+    Views.forEach((view) => {
+        view.hide();
+    });
+    const browserStorage = window.localStorage;
 
-	if (browserStorage.gameID) {
-		browserStorage.removeItem('gameID');
-	}
+    if (browserStorage.gameID) {
+        browserStorage.removeItem('gameID');
+    }
 
-	menuView.show();
+    menuView.show();
 });
 
 
 eventBus.on('exit', function () {
-	userService.logout();
-	eventBus.emit('unauth');
-	router.goTo('/menu');
+    userService.logout();
+    eventBus.emit('unauth');
+    router.goTo('/menu');
 });
 
 
 eventBus.on('openScoreboard', function () {
+<<<<<<< HEAD
 	Views.forEach((view) => {
 		view.hide();
 	});
 	scoreboardView.show();
 	backMenuButtonView.show();
+=======
+    Views.forEach((view) => {
+        view.hide();
+    });
+    scoreboardView.show();
+    backMenuButtonView.show();
+>>>>>>> 4dd8f358ab76588e11122417a46bef7a9d2ec35e
 });
 
 
 eventBus.on("openGame", () => {
-	Views.forEach((view) => {
-		view.hide();
-	});
-	debugger;
-	gameContainer.show();
+    Views.forEach((view) => {
+        view.hide();
+    });
+    //debugger;
+    gameContainer.show();
+    backMenuButtonView.show();
 });
 
 
 eventBus.on('openLobby', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
-	backMenuButtonView.show();
-	lobbyView.show();
+    Views.forEach((view) => {
+        view.hide();
+    });
+    backMenuButtonView.show();
+    lobbyView.show();
 });
 
 eventBus.on('openWaitingHall', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
-	backButtonView.show();
-	gamePrepareView.show();
+    Views.forEach((view) => {
+        view.hide();
+    });
+    backButtonView.show();
+    gamePrepareView.show();
 });
 
 
 
 app
-	.append(menuView)
-	.append(signUpView)
-	.append(loginView)
-	.append(backMenuButtonView)
-	.append(backButtonView)
-	.append(profileView)
-	.append(rulesView)
-	.append(scoreboardView)
-	.append(lobbyView)
-	.append(updateView)
-	.append(gameCreateView)
-	.append(gamePrepareView)
-	.append(gameContainer);
+    .append(menuView)
+    .append(signUpView)
+    .append(loginView)
+    .append(backMenuButtonView)
+    .append(backButtonView)
+    .append(profileView)
+    .append(rulesView)
+    .append(scoreboardView)
+    .append(lobbyView)
+    .append(updateView)
+    .append(gameCreateView)
+    .append(gamePrepareView)
+    .append(gameContainer);
 
 
 // if ('serviceWorker' in navigator) {
@@ -234,6 +242,3 @@ app
 // }
 
 router.start();
-
-
-
