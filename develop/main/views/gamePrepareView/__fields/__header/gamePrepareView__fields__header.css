@@ -41,3 +41,7 @@
 .gamePrepareView__fields__header > .gamePrepareView__fields__header__fields__totalPLayersNumber{
     grid-area: place7;
 }
+
+.gamePrepareView__fields__header > .gamePrepareView__fields__header__fields__masterUsername{
+    grid-area: place8;
+}

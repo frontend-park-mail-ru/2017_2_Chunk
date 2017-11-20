@@ -33,7 +33,10 @@ export default class LobbyGameData extends Block {
 		});
 
 		this.bus.on('socketCode103', (socketResponse) => {
+<<<<<<< HEAD
 			// debugger;
+=======
+>>>>>>> e2b9b3f35b415701fe381fb6bbc3ea94211823f1
 			if(socketResponse.gameID === this.gameID) {
 				let gamersNumberHtml = this.gameDataFields.fields.gamersNumber.el;
 				// debugger;

@@ -16,20 +16,17 @@ export default class gamePrepareView extends View {
 		this.el.classList.add('gamePrepareView');
 		this.clear = false;
 		this.active = false;
-		this.hide();
 		this.addPlayer();
+		this.addBot();
 		this.removePLayer();
 		this.gameClose();
-		this.bus.on('socketCode112', (socketResponse) => {
-			this.userID = socketResponse.userID;
-		});
-		this.bus.on('connectGame', () => {
-			this.updateGameDataSlave();
-		});
-		this.bus.on('createGame', () => {
-			this.updateGameDataMaster();
-		});
+		this.gameStatusEvents();
+		this.buttonsEvents();
+		this.whoIsItEvent();
+		this.source = 'socket';
+		this.hide();
 	};
+
 
 	show() {
 		super.show();
@@ -39,7 +36,7 @@ export default class gamePrepareView extends View {
 
 	hide() {
 		super.hide();
-		if(!this.clear) {
+		if (!this.clear) {
 			this.fields.playersList.clear();
 			this.fields.header.clear();
 		}
@@ -51,26 +48,39 @@ export default class gamePrepareView extends View {
 
 	//добавление пользователя
 	addPlayer() {
-		this.bus.on('socketCode101', (socketReceiveData) => {
-			this.fields.playersList.addPlayer(socketReceiveData.player);
+		this.bus.on('socketCode101', (socketResponse) => {
+			this.fields.playersList.addPlayer(socketResponse.player);
 			this.clear = false;
-			const socketSendData = {
+			const socketRequest = {
 				code: '104',
-				gameID: socketReceiveData.gameID,
+				gameID: socketResponse.gameID,
 			};
-			this.bus.emit('getGameInfo', socketSendData);
+			this.bus.emit('getGameInfo', socketRequest);
 		});
+	}
+
+
+	addBot() {
+		this.bus.on('socketCode108', (socketResponse) => {
+			this.fields.playersList.addPlayer(socketResponse.player);
+			this.clear = false;
+			const socketRequest = {
+				code: '104',
+				gameID: socketResponse.gameID,
+			};
+			this.bus.emit('getGameInfo', socketRequest);
+		})
 	}
 
 
 	//удаление пользователя
 	removePLayer() {
 		this.bus.on('socketCode103', (socketReceiveData) => {
-			if(this.active) {
+			if (this.active) {
 				this.fields.playersList.removePlayer(socketReceiveData.player.userID);
 				const socketSendData = {
 					code: '104',
-					gameID: socketReceiveData.gameID,
+					gameID: socketReceiveData.gameID
 				};
 				this.bus.emit('getGameInfo', socketSendData);
 			}
@@ -80,15 +90,18 @@ export default class gamePrepareView extends View {
 
 	updateGameDataMaster() {
 		this.bus.on('socketCode104', (socketReceiveData) => {
-			this.fields.header.updateGameData(socketReceiveData);
+			this.fields.header.updateGameData(socketReceiveData.game);
 			this.clear = false;
+			this.gameInfo = socketReceiveData;
 		});
 	};
 
 
 	updateGameDataSlave() {
 		this.bus.on('socketCode104', (socketReceiveData) => {
-			this.fields.header.updateGameData(socketReceiveData);
+			this.fields.header.updateGameData(socketReceiveData.game);
+			this.clear = false;
+			this.gameInfo = socketReceiveData;
 			socketReceiveData.game.gamers.forEach((gamer) => {
 				if (gamer.userID !== this.userID)
 					this.fields.playersList.addPlayer(gamer);
@@ -102,4 +115,41 @@ export default class gamePrepareView extends View {
 			this.bus.emit('openLobby');
 		});
 	};
+
+
+	gameStatusEvents() {
+		this.bus.on('connectGame', () => {
+			this.updateGameDataSlave();
+		});
+		this.bus.on('createGame', () => {
+			this.updateGameDataMaster();
+		});
+		this.bus.on('socketCode200', () => {
+			this.bus.emit('goToGame');
+		})
+	}
+
+
+	buttonsEvents() {
+		this.fields.addBot.on('click', () => {
+			const request = {
+				code: '108',
+				lvlbot: '1',
+			};
+			this.bus.emit(`${this.source}Message`, (request));
+		});
+		this.fields.startGame.on('click', () => {
+			const request = {
+				code: '105',
+			};
+			this.bus.emit(`${this.source}Message`, (request));
+		});
+	}
+
+
+	whoIsItEvent() {
+		this.bus.on('socketCode112', (socketResponse) => {
+			this.userID = socketResponse.userID;
+		});
+	}
 }

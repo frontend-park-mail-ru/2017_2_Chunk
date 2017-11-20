@@ -9,6 +9,8 @@ import Block from '../../../../../blocks/block/block.js';
 export default class headerFields {
 	constructor() {
 		this.fields = {
+			creator: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__masterUsername',
+				'gamePrepareView__fields__header__fields'], `Creator: `),
 			gameID: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__gameId',
 				'gamePrepareView__fields__header__fields'], `GameId: 0`),
 			gamersNumber: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__playersNumber',
@@ -27,12 +29,19 @@ export default class headerFields {
 
 
 	update(socketReceiveData) {
+		const masterID = socketReceiveData.masterID;
+		const masterInfo = socketReceiveData.gamers.filter((gamer) => {
+			return gamer.userID === masterID;
+		})[0];
+		const masterUsername = masterInfo.username;
+
+		this.fields.creator.el.innerHTML = `Creator: ${masterUsername}`;
 		this.fields.gameID.el.innerHTML = this.fields.gameID.el.innerHTML.replace(/\d+/g, socketReceiveData.gameID);
-		this.fields.gamersNumber.el.innerHTML = this.fields.gamersNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.game.gamers.length);
-		this.fields.botsNumber.el.innerHTML = this.fields.botsNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.game.bots.length);
-		this.fields.numberOfPlayers.el.innerHTML = this.fields.numberOfPlayers.el.innerHTML.replace(/\d+/g, socketReceiveData.game.numberOfPlayers);
-		this.fields.watchers.el.innerHTML = this.fields.watchers.el.innerHTML.replace(/\d+/g, socketReceiveData.game.watchers);
-		this.fields.fieldSize.el.innerHTML = this.fields.fieldSize.el.innerHTML.replace(/\d+/g, socketReceiveData.game.field.maxX);
+		this.fields.gamersNumber.el.innerHTML = this.fields.gamersNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.gamers.length);
+		this.fields.botsNumber.el.innerHTML = this.fields.botsNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.bots.length);
+		this.fields.numberOfPlayers.el.innerHTML = this.fields.numberOfPlayers.el.innerHTML.replace(/\d+/g, socketReceiveData.numberOfPlayers);
+		this.fields.watchers.el.innerHTML = this.fields.watchers.el.innerHTML.replace(/\d+/g, socketReceiveData.watchers);
+		this.fields.fieldSize.el.innerHTML = this.fields.fieldSize.el.innerHTML.replace(/\d+/g, socketReceiveData.field.maxX);
 	}
 
 

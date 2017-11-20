@@ -1,4 +1,5 @@
 'use strict';
+import CommonView from '../view/view';
 import Block from '../../blocks/block/block.js';
 
 
@@ -11,12 +12,10 @@ export default class backButtonView extends Block {
 	 * @constructor - конструктор класса кнопки возврата в меню
 	 */
 	constructor() {
-		const backButton = Block.Create('div', {}, ['backButtonView', 'view__view-button_theme-black-orange'], 'Back');
+		const backButton = Block.Create('a', {href: '/menu'}, ['backMenuButtonView', 'view__view-button_theme-black-orange'], 'Menu');
 		super(backButton.el);
+
 		this.button = backButton;
 		this.hide();
-		this.button.on('click', () => {
-			window.history.back();
-		})
 	}
 }

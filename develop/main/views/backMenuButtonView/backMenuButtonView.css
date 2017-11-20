@@ -1,10 +1,8 @@
-.backButtonView {
-
+.backMenuButtonView {
     position: absolute;
     right: 73%;
     top: 3%;
 
-    cursor: pointer;
     background-color: transparent;
     transition: all .2s;
 
@@ -12,23 +10,22 @@
     font-size: calc(16px + 1.5vh);
     color: white;
     opacity: 1;
-
-    padding: 0.1em 1em;
     border: 0.1em solid white !important;
 
+    padding: 0.1em 1em;
 
     border-radius: 0.4em;
     box-shadow: none;
 }
 
-.backButtonView:focus {
+.backMenuButtonView:focus {
     outline: none;
     opacity: 1;
     border: 0.1em solid #ff8700 !important; /* Параметры рамки */
     color: #ff8700;
 }
 
-.backButtonView:hover {
+.backMenuButtonView:hover {
     color: #ff8700;
     border: 0.1em solid #ff8700 !important; /* Параметры рамки */
 }

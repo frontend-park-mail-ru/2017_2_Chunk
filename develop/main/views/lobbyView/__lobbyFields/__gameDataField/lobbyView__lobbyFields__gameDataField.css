@@ -41,6 +41,10 @@
     grid-area: place7;
 }
 
+.lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__masterUsername{
+    grid-area: place8;
+}
+
 .lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__playButton{
     grid-area: place9;
 }

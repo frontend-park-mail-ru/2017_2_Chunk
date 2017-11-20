@@ -6,8 +6,8 @@ export default class webSocket {
 	constructor() {
 		this.bus = eventBus;
 		this.socket = new WebSocket('wss://backend-java-spring.herokuapp.com/play');
-		this.socketCallbacks();
 		this.gameHandler();
+		this.socketCallbacks();
 	}
 
 
@@ -21,9 +21,8 @@ export default class webSocket {
 		this.bus.on('getGameInfo', (data) => {
 			this.socket.send(JSON.stringify(data));
 		});
-
-		this.bus.on('webSocketMessage', (data) => {
-			this.socket.send(JSON.stringify(message));
+		this.bus.on('socketMessage', (socketRequest) => {
+			this.socket.send(JSON.stringify(socketRequest));
 		});
 		//how to use it?
 		// const data = {
@@ -36,8 +35,17 @@ export default class webSocket {
 
 	socketCallbacks() {
 		this.socket.onopen = () => {
+			console.log('web socket open');
 			this.getFullGameList();
 			this.subscribeNewGameNode();
+			const keepAlive = {
+				code: 0,
+			};
+			const emitKeepAlive = () => {
+				this.bus.emit('socketMessage', keepAlive);
+				console.log('keepAlive');
+			};
+			this.interval = setInterval(emitKeepAlive, 30000);
 		};
 		this.socket.onclose = (event) => {
 			if (event.wasClean) {
@@ -45,14 +53,17 @@ export default class webSocket {
 			} else {
 				console.log('web socket close is not clean');
 			}
+			clearInterval(this.interval);
 			alert('Код: ' + event.code + ' причина: ' + event.reason);
 			this.bus.emit('socketClose');
 		};
 		this.socket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
+			console.log(data);
 			this.bus.emit(`socketCode${data.code}`, (data))
 		};
 		this.socket.onerror = (error) => {
+			clearInterval(this.interval);
 			console.log('web socket error!');
 		};
 		this.bus.on('openMenu', () => {
