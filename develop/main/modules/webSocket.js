@@ -22,8 +22,12 @@ export default class webSocket {
 			this.socket.send(JSON.stringify(data));
 		});
 
-		this.bus.on('webSocketMessage', (data) => {
-			this.socket.send(JSON.stringify(message));
+		this.bus.on('socketMessage', (socketRequest) => {
+			const request = {
+				code: '108',
+				lvlbot: '1',
+			};
+			this.socket.send(JSON.stringify(request));
 		});
 		//how to use it?
 		// const data = {
@@ -36,6 +40,7 @@ export default class webSocket {
 
 	socketCallbacks() {
 		this.socket.onopen = () => {
+			console.log('web socket open');
 			this.getFullGameList();
 			this.subscribeNewGameNode();
 		};
@@ -50,6 +55,7 @@ export default class webSocket {
 		};
 		this.socket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
+			console.log(data);
 			this.bus.emit(`socketCode${data.code}`, (data))
 		};
 		this.socket.onerror = (error) => {
