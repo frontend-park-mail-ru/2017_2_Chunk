@@ -1,6 +1,6 @@
 self.addEventListener('install', (event) => {
 	event.waitUntil(
-		caches.open('14')
+		caches.open('15')
 			.then((cache) => {
 				console.log('cache open');
 				return cache.addAll([
@@ -51,7 +51,6 @@ self.addEventListener('fetch', (event) => {
 	event.respondWith(
 		caches.match(event.request)
 			.then((cachedResponse) => {
-				debugger;
 				if (cachedResponse) {
 					return cachedResponse;
 				}
@@ -61,7 +60,6 @@ self.addEventListener('fetch', (event) => {
 					})
 			})
 			.catch((error) => {
-				debugger;
 				console.log(error);
 			})
 	)
