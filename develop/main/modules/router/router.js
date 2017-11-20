@@ -58,6 +58,10 @@ export default class Router {
 			this.goTo('/menu');
 		});
 
+		this.bus.on('goToGame', () => {
+			this.goTo('/game');
+		});
+
 		this.bus.on('createGame', () => {
 			this.goTo('/waiting-hall');
 		});

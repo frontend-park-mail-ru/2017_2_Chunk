@@ -124,7 +124,9 @@ export default class gamePrepareView extends View {
 		this.bus.on('createGame', () => {
 			this.updateGameDataMaster();
 		});
-		this.bus.on('socketCode200')
+		this.bus.on('socketCode200', () => {
+			this.bus.emit('goToGame');
+		})
 	}
 
 
