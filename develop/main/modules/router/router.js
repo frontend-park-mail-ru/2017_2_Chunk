@@ -31,25 +31,26 @@ export default class Router {
 
 		window.onpopstate = () => {
 			const resp = this.userService.isLoggedIn();
+			const locationPath = location.pathname;
 			if (resp) {
 				const slice_Routes = this._routes.slice(0, 8);
 				const isValid = slice_Routes.some((_route) => {
-						return location.pathname.match(_route.url_pattern);
+						return locationPath.match(_route.url_pattern);
 					});
 				if (isValid)
-					this.changeState(location.pathname);
+					this.changeState(locationPath);
 				else
-					this.changeState(this._routes[0])
+					this.goTo(this._routes[0])
 			}
 			else {
 				const slice_Routes = this._routes.slice(6);
 				const isValid = slice_Routes.some((_route) => {
-						return location.pathname.match(_route.url_pattern);
+						return locationPath.match(_route.url_pattern);
 					});
 				if (isValid)
-					this.changeState(location.pathname);
+					this.changeState(locationPath);
 				else
-					this.changeState(this._routes[0]);
+					this.goTo(this._routes[0]);
 			}
 		};
 

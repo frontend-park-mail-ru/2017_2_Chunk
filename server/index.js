@@ -4,6 +4,7 @@ const express = require('express'); // Веб-фреймворк
 const morgan = require('morgan'); // Выводит информацию о пришедшем запросе в консоль
 const bodyParser = require('body-parser'); // Парсер для тела запроса
 const cookieParser = require('cookie-parser'); // Парсер для куков
+const fallback = require('express-history-api-fallback');
 //Переход на https
 // const fs = require('fs');
 // const key = fs.readFileSync('./server/encryption/private.key');
@@ -19,27 +20,29 @@ const app = express();
 
 // Отдаёт статику при совпадении имён
 let options = {
-	redirect: true,
+	redirect: false,
 };
 
-app.use('/menu', express.static('public', options));
-app.use('/signup', express.static('./public', options));
-app.use('/login', express.static('./public', options));
-app.use('/update', express.static('./public', options));
-app.use('/game', express.static('./public', options));
-app.use('/lobby', express.static('./public', options));
-app.use('/rules', express.static('./public', options));
-app.use('/scoreboard', express.static('./public', options));
-app.use('/waiting-hall', express.static('./public', options));
-app.use('/exit', express.static('./public', options));
-app.use('/', express.static('./public', options));
+app.use(express.static('./public'));
+// app.use('/signup', express.static('./public', options));
+// app.use('/login', express.static('public', options));
+// app.use('/update', express.static('./public', options));
+// app.use('/game', express.static('./public', options));
+// app.use('/lobby', express.static('./public', options));
+// app.use('/rules', express.static('./public', options));
+// app.use('/scoreboard', express.static('./public', options));
+// app.use('/waiting-hall', express.static('./public', options));
+// app.use('/exit', express.static('./public', options));
+// app.use('/', express.static('./public', options));
+
+app.use(fallback('index.html', { root: 'public' }));
 
 
 app.use(bodyParser.json()); // С помощью какой-то древней магии парсит тело запроса,
 app.use(cookieParser()); // всё то же волшебство, но уже для кук
 
 
-// app.get('*', (request, response) => {
+// app.get('/menu', (request, response) => {
 // 	response.redirect('/menu');
 // });
 

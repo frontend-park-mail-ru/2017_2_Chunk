@@ -1,42 +1,42 @@
 self.addEventListener('install', (event) => {
 	event.waitUntil(
-		caches.open('12')
+		caches.open('14')
 			.then((cache) => {
 				console.log('cache open');
 				return cache.addAll([
-					'menu/',
+					'menu',
 					'menu/application.css',
 					'menu/application.js',
 					'menu/index.html',
-					'login/',
+					'login',
 					'login/application.css',
 					'login/application.js',
 					'login/index.html',
-					'signup/',
+					'signup',
 					'signup/application.css',
 					'signup/application.js',
 					'signup/index.html',
-					'update/',
+					'update',
 					'update/application.css',
 					'update/application.js',
 					'update/index.html',
-					'game/',
+					'game',
 					'game/application.css',
 					'game/application.js',
 					'game/index.html',
-					'lobby/',
+					'lobby',
 					'lobby/application.css',
 					'lobby/application.js',
 					'lobby/index.html',
-					'rules/',
+					'rules',
 					'rules/application.css',
 					'rules/application.js',
 					'rules/index.html',
-					'scoreboard/',
+					'scoreboard',
 					'scoreboard/application.css',
 					'scoreboard/application.js',
 					'scoreboard/index.html',
-					'waiting-hall/',
+					'waiting-hall',
 					'waiting-hall/application.css',
 					'waiting-hall/application.js',
 					'waiting-hall/index.html',
@@ -55,7 +55,10 @@ self.addEventListener('fetch', (event) => {
 				if (cachedResponse) {
 					return cachedResponse;
 				}
-				return fetch(event.request);
+				return fetch(event.request)
+					.then((response) => {
+						return response;
+					})
 			})
 			.catch((error) => {
 				debugger;
