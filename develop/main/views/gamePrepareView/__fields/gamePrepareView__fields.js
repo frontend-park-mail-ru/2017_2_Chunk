@@ -17,6 +17,8 @@ const gamePrepareFields = {
 	playersList: new PlayList(),
 	startGame: Block.Create('div', {},
 		['gamePrepareView__fields__starGameButton', 'view__view-button'], 'Start game'),
+	addBot: Block.Create('div', {},
+		['gamePrepareView__fields__addBotButton', 'view__view-button'], 'Add bot'),
 };
 
 export default gamePrepareFields;

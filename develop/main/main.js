@@ -10,6 +10,8 @@ import SignUpView from './views/signUpView/signUpView';
 
 import LoginView from './views/loginView/loginView';
 
+import BackMenuButtonView from './views/backMenuButtonView/backMenuButtonView';
+
 import BackButtonView from './views/backButtonView/backButtonView';
 
 import ProfileView from './views/profileView/profileView';
@@ -19,8 +21,6 @@ import RulesView from './views/rulesView/rulesView';
 import ScoreboardView from './views/scoreboardView/scoreboardView';
 
 import UpdateView from './views/updateView/updateView';
-
-// import Canvas from './views/canvasView/canvasView';
 
 import LobbyView from './views/lobbyView/lobbyView';
 
@@ -68,6 +68,8 @@ const profileView = new ProfileView(eventBus);
 
 const rulesView = new RulesView(eventBus);
 
+const backMenuButtonView = new BackMenuButtonView();
+
 const backButtonView = new BackButtonView();
 
 const scoreboardView = new ScoreboardView(eventBus, userService);
@@ -94,6 +96,7 @@ Views.push(menuView);
 Views.push(signUpView);
 Views.push(loginView);
 Views.push(updateView);
+Views.push(backMenuButtonView);
 Views.push(backButtonView);
 Views.push(rulesView);
 Views.push(scoreboardView);
@@ -109,7 +112,7 @@ eventBus.on('openSignUp', function () {
 		view.hide();
 	});
 	signUpView.show();
-	backButtonView.show();
+	backMenuButtonView.show();
 });
 
 
@@ -118,7 +121,7 @@ eventBus.on('openLogin', function () {
 		view.hide();
 	});
 	loginView.show();
-	backButtonView.show();
+	backMenuButtonView.show();
 });
 
 
@@ -127,7 +130,7 @@ eventBus.on('openUpdate', function () {
 		view.hide();
 	});
 	updateView.show();
-	backButtonView.show();
+	backMenuButtonView.show();
 });
 
 
@@ -136,7 +139,7 @@ eventBus.on('openRules', function () {
 		view.hide();
 	});
 	rulesView.show();
-	backButtonView.show();
+	backMenuButtonView.show();
 });
 
 
@@ -166,7 +169,7 @@ eventBus.on('openScoreboard', function () {
 		view.hide();
 	});
 	scoreboardView.show();
-	backButtonView.show();
+	backMenuButtonView.show();menu
 });
 
 
@@ -183,7 +186,7 @@ eventBus.on('openLobby', function () {
 	Views.forEach((view) => {
 		view.hide();
 	});
-	backButtonView.show();
+	backMenuButtonView.show();
 	lobbyView.show();
 });
 
@@ -201,6 +204,7 @@ app
 	.append(menuView)
 	.append(signUpView)
 	.append(loginView)
+	.append(backMenuButtonView)
 	.append(backButtonView)
 	.append(profileView)
 	.append(rulesView)
@@ -210,7 +214,6 @@ app
 	.append(gameCreateView)
 	.append(gamePrepareView)
 	.append(gameContainer);
-// .append(canvas)
 
 
 // if ('serviceWorker' in navigator) {

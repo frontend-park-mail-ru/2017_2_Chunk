@@ -32,7 +32,6 @@ export default class Router {
 		window.onpopstate = () => {
 			const resp = this.userService.isLoggedIn();
 			const locationPath = location.pathname;
-			debugger;
 			if (resp) {
 				const slice_Routes = this._routes.slice(0, 8);
 				const isValid = slice_Routes.some((_route) => {

@@ -17,6 +17,42 @@ export default class LobbyView extends View {
 		this.bus = eventBus;
 		this.el.classList.add('lobbyView');
 		this.gameList = {};
+		this.gameCreateBannerEvent();
+		this.socketEvent();
+		this.hide();
+	};
+
+
+	show() {
+		super.show();
+		this.el.classList.remove('lobbyView_filter-smooth');
+		if (!this.webSocket)
+			this.webSocket = new WebSocket();
+	}
+
+
+	addGameNode(data) {
+		const lobbyGameData = new LobbyGameData(data);
+		this.gameList[data.gameID] = lobbyGameData;
+		this.elements.gameList.append(lobbyGameData);
+	}
+
+
+	removeGameNode(gameID) {
+		debugger;
+		const lobbyGameData = this.gameList[gameID];
+		delete this.gameList[gameID];
+		this.elements.gameList.remove(lobbyGameData);
+	}
+
+
+	updateGameNode(data) {
+		const lobbyGameData = this.gameList[data.gameID];
+		lobbyGameData.updateGameData(data);
+	}
+
+
+	gameCreateBannerEvent() {
 		this.fields.createGame.on('click', () => {
 			this.bus.emit('openCreateGameBanner');
 		});
@@ -26,6 +62,10 @@ export default class LobbyView extends View {
 		this.bus.on('closeCreateGameBanner', () => {
 			this.el.classList.remove('lobbyView_filter-smooth');
 		});
+	}
+
+
+	socketEvent() {
 		//обновление информации о всех играх
 		this.bus.on('socketCode106', (data) => {
 			debugger;
@@ -54,40 +94,6 @@ export default class LobbyView extends View {
 				this.removeGameNode(gameID);
 			}
 		});
-		this.hide();
-		// this.bus.on('closeCreateGameBanner', () => {
-		// 	this.el.classList.remove('lobbyView_filter-smooth');
-		// })
-	};
-
-
-	show() {
-		super.show();
-		this.el.classList.remove('lobbyView_filter-smooth');
-		if (!this.webSocket)
-			this.webSocket = new WebSocket();
-	}
-
-
-
-	addGameNode(data) {
-		const lobbyGameData = new LobbyGameData(data);
-		this.gameList[data.gameID] = lobbyGameData;
-		this.elements.gameList.append(lobbyGameData);
-	}
-
-
-	removeGameNode(gameID) {
-		debugger;
-		const lobbyGameData = this.gameList[gameID];
-		delete this.gameList[gameID];
-		this.elements.gameList.remove(lobbyGameData);
-	}
-
-
-	updateGameNode(data) {
-		const lobbyGameData = this.gameList[data.gameID];
-		lobbyGameData.updateGameData(data);
 	}
 }
 
