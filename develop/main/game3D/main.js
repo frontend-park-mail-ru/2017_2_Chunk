@@ -20,7 +20,7 @@ export default class Game3D {
 
 		this.camera = new THREE.PerspectiveCamera(
 			45,
-			window.innerWidth / window.innerHeight,
+			window.screen.width / window.screen.height,
 			0.1,
 			1000
 		);
@@ -43,7 +43,7 @@ export default class Game3D {
 
 		this.renderer = new THREE.WebGLRenderer( {antialias: true} );
 		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this.renderer.setSize(window.screen.width, window.screen.height);
 		container.getElement().appendChild( this.renderer.domElement );
 
 

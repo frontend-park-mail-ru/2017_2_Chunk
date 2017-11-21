@@ -9,7 +9,7 @@ export default class ThreeView extends CommonView {
 
 	    const winDiv = Block.Create('div', {}, ['canvasView__winDiv'], '');
 	    const playersDiv = Block.Create('div', {}, [], '');
-	    super([gameContainer, winDiv, playersDiv]);
+	    super([gameContainer]);
 	    this.el.style.setProperty("border", "none");
 	    this.el.classList.add('treeView');
 
