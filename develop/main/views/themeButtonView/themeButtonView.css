@@ -1,10 +1,10 @@
 .themeButtonView {
     box-sizing: border-box;
     border: 0.1em solid white;
-    font-size: calc(16px + 1.2vh);
+    font-size: calc(16px + 1.1vh);
     text-align: center;
     opacity: 1;
-    padding: 0.1em 1em;
+    padding: 0.1em 0.5em;
 
     color: white;
     border-radius: 0.4em;

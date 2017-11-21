@@ -18,7 +18,6 @@ export default class themeButtonView extends Block {
 		this.themeButton.on('click', () => {
 			this.changeTheme();
 		});
-		debugger;
 		this.hide();
 	}
 

@@ -1,7 +1,7 @@
 'use strict';
 
-import CommonView from "./view/view";
-import Block from "../blocks/block/block.js";
+import CommonView from "../view/view";
+import Block from "../../blocks/block/block.js";
 
 export default class ThreeView extends CommonView {
     constructor(eventBus) {

@@ -7,8 +7,8 @@
     font-family: "Comic Sans MS";
     font-size: calc(14px + 1.5vh);
     margin: auto;
-    padding-top: 1%;
-    padding-bottom: 1%;
+    /*padding-top: 1%;*/
+    /*padding-bottom: 1%;*/
     border-radius: 0.8em;
     border: solid #ff8700;
     transition: all .5s;

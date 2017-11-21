@@ -3,14 +3,14 @@
     transition: all .2s;
 
     text-align: center;
-    font-size: calc(16px + 1.5vh);
+    font-size: calc(16px + 1.1vh);
     color: white;
     opacity: 1;
     border: 0.1em solid white !important;
     margin: auto;
     cursor: pointer;
 
-    padding: 0.1em 1em;
+    padding: 0.1em 0.5em;
 
     border-radius: 0.4em;
     box-shadow: none;

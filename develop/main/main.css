@@ -2,17 +2,18 @@ body {
     /*background: url('./image/galaxy4.jpg');*/
     /*background-size: auto;*/
     font-family: "Comic Sans MS";
-    width: 98%;
-    height: 95%;
+    box-sizing: border-box;
+    margin: 0 !important;
+    width: 100vw;
+    height: 100vh;
     position: fixed;
-
     display: grid;
     grid-template-areas:
             "place1 place2 place3"
             "place4 place5 place6"
             "place7 place8 place9";
     grid-template-columns: 1fr 3fr 1fr;
-    grid-template-rows: 15vh 10vh auto;
+    grid-template-rows: 6vh 5vh auto;
 }
 
 .hidden {

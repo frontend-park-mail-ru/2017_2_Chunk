@@ -39,7 +39,7 @@ import EventBus from './modules/eventBus';
 
 import Router from './modules/router/router';
 
-import ThreeView from "./views/threeView.js"
+import ThreeView from "./views/treeView/threeView.js"
 
 import Game3D from "./game3D/main";
 
