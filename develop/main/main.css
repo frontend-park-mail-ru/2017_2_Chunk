@@ -5,13 +5,40 @@ body {
     width: 98%;
     height: 95%;
     position: fixed;
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    overflow: auto;
+
+    display: grid;
+    grid-template-areas:
+            "place1 place2 place3"
+            "place4 place5 place6"
+            "place7 place8 place9";
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 15vh 10vh auto;
 }
 
 .hidden {
     opacity: 0;
 }
+
+body > .gameName{
+    grid-area: place2;
+}
+
+body > .profileView{
+    grid-area: place3;
+}
+
+body > .themeButtonView{
+    grid-area: place6;
+}
+
+body > .backMenuButtonView {
+    grid-area: place4;
+}
+body > .backButtonView {
+    grid-area: place4;
+}
+
+body > .view{
+    grid-area: place8;
+}
+

@@ -1,5 +1,6 @@
 .lobbyView__gameCreateView__fields {
-    margin: 1em !important;
+    margin: 1em auto !important;
+    padding: 0.1em 0.4em;
 }
 
 .lobbyView__gameCreateView__fields__header {

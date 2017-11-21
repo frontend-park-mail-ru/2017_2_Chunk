@@ -1,0 +1,5 @@
+.gameNameView {
+    margin: auto;
+    font-size: calc(14px + 3vh);
+    color: white;
+}
