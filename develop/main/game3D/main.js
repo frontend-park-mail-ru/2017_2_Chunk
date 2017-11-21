@@ -42,7 +42,7 @@ export default class Game3D {
 		this.indicator = false;
 
 		this.renderer = new THREE.WebGLRenderer( {antialias: true} );
-		this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
+		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 		container.getElement().appendChild( this.renderer.domElement );
 

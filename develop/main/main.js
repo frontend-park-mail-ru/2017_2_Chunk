@@ -168,7 +168,7 @@ eventBus.on('openScoreboard', function () {
         view.hide();
     });
     scoreboardView.show();
-    backMenuButtonView.show();menu
+    backMenuButtonView.show();
 });
 
 
@@ -178,6 +178,7 @@ eventBus.on("openGame", () => {
     });
     //debugger;
     gameContainer.show();
+    backMenuButtonView.show();
 });
 
 
