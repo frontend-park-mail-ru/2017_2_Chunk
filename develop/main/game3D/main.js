@@ -144,7 +144,7 @@ export default class Game3D {
 		//То самое движения, для которого нужен включенный индикатор.
 		this.moving();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-ё
+
 		// Зацикливание
 		requestAnimationFrame(this.animate.bind(this));
 		this.render();
