@@ -43,7 +43,7 @@ export default class Game3D {
 
 		this.renderer = new THREE.WebGLRenderer( {antialias: true} );
 		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
-		this.renderer.setSize( window.innerWidth, window.innerHeight );
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		container.getElement().appendChild( this.renderer.domElement );
 
 		this.p = -10;
@@ -143,7 +143,8 @@ export default class Game3D {
 
 		//То самое движения, для которого нужен включенный индикатор.
 		this.moving();
-
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+ё
 		// Зацикливание
 		requestAnimationFrame(this.animate.bind(this));
 		this.render();
