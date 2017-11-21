@@ -40,13 +40,12 @@ export default class Game3D {
 		this.diff = 0;
 		// Индикатор движения для движения, разрешает движение только после хода.
 		this.indicator = false;
+		this.raycasterIndicator = false;
 
 		this.renderer = new THREE.WebGLRenderer( {antialias: true} );
 		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		container.getElement().appendChild( this.renderer.domElement );
-
-		this.p = -10;
 
 		this.renderer.render(this.scene, this.camera);
 
@@ -58,11 +57,11 @@ export default class Game3D {
 		this.controls.maxDistance = 200.0;
 		this.controls.autoRotate = false;
 
-		const listener = this.onDocumentMouseMove.bind(this);
+		// const listener = this.onDocumentMouseMove.bind(this);
 
 		// container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
-		container.getElement().removeEventListener('mousedown', listener, false);
-		container.getElement().addEventListener('mouseup', listener, false);
+		container.getElement().addEventListener('click', this.raycasterFalse.bind(this), false);
+		container.getElement().addEventListener('mouseup', this.raycasterTrue.bind(this), false);
 
 		this.mouse = new THREE.Vector2();
 		this.raycaster = new THREE.Raycaster();
@@ -101,6 +100,16 @@ export default class Game3D {
 		this.bus.on('socketCode307', (data) => {
 			// console.log(data);
 		});
+	}
+
+	raycasterTrue() {
+		this.raycasterIndicator = true;
+		console.log("true" + this.raycasterIndicator);
+	}
+
+	raycasterFalse() {
+		this.raycasterIndicator = false;
+		console.log("false" + this.raycasterIndicator);
 	}
 
 	makeBinArray(size) {
