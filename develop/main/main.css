@@ -1,6 +1,6 @@
 body {
-    /*background: url('./image/galaxy4.jpg');*/
-    /*background-size: auto;*/
+    background: url('./image/galaxy.jpg') no-repeat;
+    background-size: 100vw 100vh;
     font-family: "Comic Sans MS";
     box-sizing: border-box;
     margin: 0 !important;
