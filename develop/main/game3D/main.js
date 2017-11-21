@@ -64,16 +64,26 @@ export default class Game3D {
 		this.raycaster = new THREE.Raycaster();
 
         this.bus.on('socketCode200', (data) => {
-            console.log(data);
             this.startArray = data.game.field.field;
+            this.gamers = data.game.gamers;
+            this.countPlayers = this.gamers.length;
             this.addMeshes();
+	        this.bus.emit('showPlayers', this.playerString());
+	        let info = {
+	        	code: 112
+	        };
+	        this.bus.emit('socketMessage', info);
+	        this.bus.on('socketCode112', (data) => {
+		        this.userID = data.userID;
+		        this.figureType = this.detectFigureByUserID(this.userID);
+	        });
             this.animate();
         });
         this.bus.on('socketCode201', (data) => {
-            console.log(data);
+	        this.fullStep(data.step.src, data.step.dst);
         });
         this.bus.on('socketCode204', (data) => {
-            console.log(data);
+            // console.log(data);
         });
 	}
 
@@ -83,6 +93,14 @@ export default class Game3D {
 			array[i] = [];
 		}
 		return array;
+	}
+
+	detectFigureByUserID(userID) {
+		for (let i = 0; i < this.gamers.length; i++) {
+			if (this.gamers[i].userID === userID){
+				return i;
+			}
+		}
 	}
 
 	// Создает двумерный массив клеточек поля и расстявляет по нему фигуры в соответствии с массивом.
@@ -162,7 +180,7 @@ export default class Game3D {
 
                 // Если нажали на фигурку, у которой наш цвет, то-есть первого игрока
                 if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-                    intersects[0].object.material.color.getHex() === tools.COLORS.PLAYER_1 &&
+                    intersects[0].object.material.color.getHex() === tools.PLAYER_COLORS[this.figureType] &&
                     //Проверяем, можно ли изменять первую точку.
                     //Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
                     !Object.isFrozen(this.point1)) {
@@ -198,26 +216,14 @@ export default class Game3D {
                         this.vector.z = this.point2.z - this.point1.z;
                         this.distance = this.calculateDistance(this.point1, this.point2);
 
-                        let point1 = {
-                        	x: this.point1.x,
-							y: this.point1.z
-						};
-
-                        let point2 = {
-                            x: this.point2.x,
-                            y: this.point2.z
-                        };
-
                         let step = {
                         	code: 201,
 							step: {
-                        		src: point1,
-								dst: point2
+                        		src: this.point1,
+								dst: this.point2
 							}
 						};
                         this.bus.emit('socketMessage', step);
-
-                        this.fullStep(this.point1, this.point2);
                     }
                 }
                 this.INTERSECTED.material.emissive.setHex(tools.HOVER_COLOR);
@@ -250,6 +256,8 @@ export default class Game3D {
 		}
 		//если клетка находится через одну, то включаем индикатор для движения фигуры.
 		else {
+			this.point1 = point1;
+			this.point2 = point2;
 			this.indicator = true;
 		}
 	}
@@ -375,5 +383,28 @@ export default class Game3D {
         this.moveOrClone(point1, point2);
         //удаляем все возможные для хода клетки.
         this.deleteAllStepEnable();
+	}
+
+	countFigure() {
+		let countFigure = [];
+		for (let i = 0; i < this.countPlayers; i++) {
+			countFigure[i] = 0;
+		}
+		for (let i = 0; i < tools.PLANE_SIZE; i++) {
+			for (let j = 0; j < tools.PLANE_SIZE; j++) {
+				if (this.arrayOfPlane[i][j].figure > 0) {
+					countFigure[this.arrayOfPlane[i][j].figure-1]++;
+				}
+			}
+		}
+		return countFigure;
+	}
+
+	playerString() {
+		let playerString = '';
+		for (let i = 0; i < this.countPlayers; i++) {
+			playerString += this.gamers[i].username + ": " + this.countFigure()[i] + "\n";
+		}
+		return playerString;
 	}
 }

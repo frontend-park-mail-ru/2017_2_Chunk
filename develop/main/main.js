@@ -83,7 +83,7 @@ const gamePrepareView = new GamePrepareView();
 
 // const game = new Game(canvas, eventBus);
 
-const gameContainer = new ThreeView();
+const gameContainer = new ThreeView(eventBus);
 
 const game3D = new Game3D(gameContainer);
 

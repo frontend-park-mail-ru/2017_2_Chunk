@@ -11,12 +11,12 @@ export default class Player {
 		);
 		if (colorpl === 1) {
 			this.material = new THREE.MeshLambertMaterial({
-				color: tools.COLORS.PLAYER_1
+				color: tools.PLAYER_COLORS[0]
 			});
 			this.color = 1;
 		} else {
 			this.material = new THREE.MeshLambertMaterial({
-				color: tools.COLORS.PLAYER_2
+				color: tools.PLAYER_COLORS[1]
 			});
 			this.color = 2;
 		}
