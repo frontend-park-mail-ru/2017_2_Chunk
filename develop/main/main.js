@@ -176,7 +176,7 @@ eventBus.on("openGame", () => {
     Views.forEach((view) => {
         view.hide();
     });
-    debugger;
+    //debugger;
     gameContainer.show();
 });
 

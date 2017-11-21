@@ -8,31 +8,11 @@ import OrbitControl from 'three-orbitcontrols';
 import Point from "./models/point.js";
 import eventBus from "../modules/eventBus";
 
-let testArray = [
-	[1,0,0,0,0,0,0,2],
-	[0,0,0,0,0,0,0,0],
-	[0,2,0,2,0,0,0,0],
-	[0,0,2,0,0,0,0,0],
-	[0,0,0,0,1,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[2,0,0,0,0,0,0,1]
-];
 
 export default class Game3D {
 
 	constructor(container) {
 		this.bus = eventBus;
-
-        this.bus.on('socketCode200', (data) => {
-			console.log(data);
-		});
-        this.bus.on('socketCode201', (data) => {
-            console.log(data);
-        });
-        this.bus.on('socketCode204', (data) => {
-            console.log(data);
-        });
 
 		this.scene = new THREE.Scene();
 		let axes = new THREE.AxisHelper(20);
@@ -66,13 +46,11 @@ export default class Game3D {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 		container.getElement().appendChild( this.renderer.domElement );
 
-		this.addMeshes();
-
 		this.p = -10;
 
 		this.renderer.render(this.scene, this.camera);
 
-		this.controls = new OrbitControl( this.camera, this.renderer.domElement );
+		this.controls = new OrbitControl(this.camera, this.renderer.domElement);
 		this.controls.maxPolarAngle = Math.PI * 0.495;
 		this.controls.target.set(0, 23, 0);
 		this.controls.enablePan = true;
@@ -84,7 +62,19 @@ export default class Game3D {
 
 		this.mouse = new THREE.Vector2();
 		this.raycaster = new THREE.Raycaster();
-		this.animate();
+
+        this.bus.on('socketCode200', (data) => {
+            console.log(data);
+            this.startArray = data.game.field.field;
+            this.addMeshes();
+            this.animate();
+        });
+        this.bus.on('socketCode201', (data) => {
+            console.log(data);
+        });
+        this.bus.on('socketCode204', (data) => {
+            console.log(data);
+        });
 	}
 
 	makeBinArray(size) {
@@ -100,7 +90,7 @@ export default class Game3D {
 		for (let i = 0; i < tools.PLANE_SIZE; i++) {
 			for (let j = 0; j < tools.PLANE_SIZE; j++) {
 				this.arrayOfPlane[i][j] = new PlaneCell(i, j);
-				this.arrayOfPlane[i][j].figure = testArray[i][j];
+				this.arrayOfPlane[i][j].figure = this.startArray[i][j];
 				this.cellContainer.add(this.arrayOfPlane[i][j].mesh);
 			}
 		}
@@ -150,7 +140,6 @@ export default class Game3D {
 		}
 
         this.playerChoice();
-		// console.log(this.camera.position.x.toString() + " " + this.camera.position.y.toString() + " " + this.camera.position.z.toString());
 
 		//То самое движения, для которого нужен включенный индикатор.
 		this.moving();
@@ -208,14 +197,24 @@ export default class Game3D {
                         this.vector.z = this.point2.z - this.point1.z;
                         this.distance = this.calculateDistance(this.point1, this.point2);
 
+                        let point1 = {
+                        	x: this.point1.x,
+							y: this.point1.z
+						};
+
+                        let point2 = {
+                            x: this.point2.x,
+                            y: this.point2.z
+                        };
+
                         let step = {
                         	code: 201,
 							step: {
-                        		src: this.point1,
-								dst: this.point2
+                        		src: point1,
+								dst: point2
 							}
 						};
-                        // this.bus.emit('webSocketMessage', step);
+                        this.bus.emit('socketMessage', step);
 
                         this.fullStep(this.point1, this.point2);
                     }

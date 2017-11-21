@@ -39,7 +39,7 @@ export default class LobbyView extends View {
 
 
     removeGameNode(gameID) {
-        debugger;
+        //debugger;
         const lobbyGameData = this.gameList[gameID];
         delete this.gameList[gameID];
         this.elements.gameList.remove(lobbyGameData);
@@ -68,7 +68,7 @@ export default class LobbyView extends View {
     socketEvent() {
         //обновление информации о всех играх
         this.bus.on('socketCode106', (data) => {
-            debugger;
+            //debugger;
             if (this.gameList[data.game.gameID]) {
                 this.updateGameNode(data.game);
             }
@@ -78,7 +78,7 @@ export default class LobbyView extends View {
         });
         //удаление игры
         this.bus.on('socketCode110', (socketReceiveData) => {
-            debugger;
+            //debugger;
             this.removeGameNode(socketReceiveData.gameID);
         });
         //запрос всей информации об играх
