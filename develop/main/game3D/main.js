@@ -15,8 +15,8 @@ export default class Game3D {
 		this.bus = eventBus;
 
 		this.scene = new THREE.Scene();
-		let axes = new THREE.AxisHelper(20);
-		this.scene.add(axes);
+		// let axes = new THREE.AxisHelper(20);
+		// this.scene.add(axes);
 
 		this.camera = new THREE.PerspectiveCamera(
 			45,
@@ -58,7 +58,11 @@ export default class Game3D {
 		this.controls.maxDistance = 200.0;
 		this.controls.autoRotate = false;
 
-		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
+		const listener = this.onDocumentMouseMove.bind(this);
+
+		// container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
+		container.getElement().removeEventListener('mousedown', listener, false);
+		container.getElement().addEventListener('mouseup', listener, false);
 
 		this.mouse = new THREE.Vector2();
 		this.raycaster = new THREE.Raycaster();
@@ -82,9 +86,21 @@ export default class Game3D {
         this.bus.on('socketCode201', (data) => {
 	        this.fullStep(data.step.src, data.step.dst);
         });
+		this.bus.on('socketCode203', (data) => {
+			// console.log(data);
+		});
         this.bus.on('socketCode204', (data) => {
             // console.log(data);
         });
+		this.bus.on('socketCode209', (data) => {
+			// console.log(data);
+		});
+		this.bus.on('socketCode306', (data) => {
+			// console.log(data);
+		});
+		this.bus.on('socketCode307', (data) => {
+			// console.log(data);
+		});
 	}
 
 	makeBinArray(size) {
