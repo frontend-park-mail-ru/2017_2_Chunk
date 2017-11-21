@@ -84,7 +84,10 @@ const gameCreateView = new GameCreateView();
 
 const gamePrepareView = new GamePrepareView();
 
-const gameContainer = new ThreeView();
+// const game = new Game(canvas, eventBus);
+
+const gameContainer = new ThreeView(eventBus);
+
 
 const game3D = new Game3D(gameContainer);
 
@@ -185,7 +188,6 @@ eventBus.on("openGame", () => {
         view.hide();
     });
 	gameContainer.show();
-    backMenuButtonView.show();
 });
 
 
