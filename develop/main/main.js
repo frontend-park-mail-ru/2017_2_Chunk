@@ -228,6 +228,33 @@ app
     .append(gamePrepareView)
     .append(gameContainer);
 
+// debugger;
+
+
+
+var i = 0;
+var count = 1;
+var saveNode = undefined;
+const nodeList = Array.from(document.getElementsByTagName("link"));
+nodeList.forEach((node) => {
+	if (node.rel === 'shortcut icon') {
+		saveNode = node;
+		setInterval(nextIco, 200);
+	}
+});
+
+function nextIco() {
+	console.log('set interval');
+	console.log(i);
+	saveNode.href = `./images/dancing-groot/${i}.gif`;
+	if (i === 0)
+		count = 1;
+	else if (i === 10)
+		count = -1;
+	i += count;
+}
+
+
 
 // if ('serviceWorker' in navigator) {
 // 	const serviceWorker = navigator.serviceWorker;
