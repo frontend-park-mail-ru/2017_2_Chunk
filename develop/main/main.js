@@ -265,7 +265,6 @@ app
 const workerRequest = {
 	data: "bla bla bal"
 };
-
-eventBus.emit('workerPostMessage', workerRequest);
+eventBus.emit('workerMessage', workerRequest);
 
 router.start();
