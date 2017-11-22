@@ -41,6 +41,7 @@ export default class Game3D {
 		// Индикатор движения для движения, разрешает движение только после хода.
 		this.indicator = false;
 		this.raycasterIndicator = false;
+        this.queue = [];
 
 		this.renderer = new THREE.WebGLRenderer( {antialias: true, alpha: true} );
 		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
@@ -51,11 +52,12 @@ export default class Game3D {
 
 		this.controls = new OrbitControl(this.camera, this.renderer.domElement);
 		this.controls.maxPolarAngle = Math.PI * 0.495;
-		this.controls.target.set(0, 23, 0);
+		this.controls.target.set(20, 5, 20);
 		this.controls.enablePan = true;
 		this.controls.minDistance = 40.0;
 		this.controls.maxDistance = 200.0;
 		this.controls.autoRotate = false;
+		this.controls.enableKeys = false;
 
 		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('mousedown', this.raycasterFalse.bind(this), false);
