@@ -88,6 +88,19 @@ export default class gamePrepareView extends View {
 	}
 
 
+	gameStatusEvents() {
+		this.bus.on('connectGame', () => {
+			this.updateGameDataSlave();
+		});
+		this.bus.on('createGame', () => {
+			this.updateGameDataMaster();
+		});
+		this.bus.on('socketCode200', () => {
+			this.bus.emit('goToGame');
+		})
+	}
+
+
 	updateGameDataMaster() {
 		this.bus.on('socketCode104', (socketReceiveData) => {
 			this.fields.header.updateGameData(socketReceiveData.game);

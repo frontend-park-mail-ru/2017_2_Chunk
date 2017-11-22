@@ -20,7 +20,7 @@ export default class Game3D {
 
 		this.camera = new THREE.PerspectiveCamera(
 			45,
-			window.innerWidth / window.innerHeight,
+			window.screen.availWidth / window.screen.availHeight,
 			0.1,
 			1000
 		);
@@ -42,9 +42,9 @@ export default class Game3D {
 		this.indicator = false;
 		this.raycasterIndicator = false;
 
-		this.renderer = new THREE.WebGLRenderer( {antialias: true} );
+		this.renderer = new THREE.WebGLRenderer( {antialias: true, alpha: true} );
 		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
 		container.getElement().appendChild( this.renderer.domElement );
 
 		this.renderer.render(this.scene, this.camera);
@@ -57,10 +57,8 @@ export default class Game3D {
 		this.controls.maxDistance = 200.0;
 		this.controls.autoRotate = false;
 
-		// const listener = this.onDocumentMouseMove.bind(this);
-
-		// container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
-		container.getElement().addEventListener('click', this.raycasterFalse.bind(this), false);
+		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
+		container.getElement().addEventListener('mousedown', this.raycasterFalse.bind(this), false);
 		container.getElement().addEventListener('mouseup', this.raycasterTrue.bind(this), false);
 
 		this.mouse = new THREE.Vector2();
@@ -104,12 +102,12 @@ export default class Game3D {
 
 	raycasterTrue() {
 		this.raycasterIndicator = true;
-		console.log("true" + this.raycasterIndicator);
+		//console.log("true" + this.raycasterIndicator);
 	}
 
 	raycasterFalse() {
 		this.raycasterIndicator = false;
-		console.log("false" + this.raycasterIndicator);
+		//console.log("false" + this.raycasterIndicator);
 	}
 
 	makeBinArray(size) {
@@ -195,68 +193,71 @@ export default class Game3D {
 
 	playerChoice() {
         // Выбор объектов
-        this.raycaster.setFromCamera(this.mouse, this.camera);
-        let intersects = this.raycaster.intersectObjects(this.playerContainer.children.concat(this.cellContainer.children));
-        if (intersects.length > 0) {
-            if (this.INTERSECTED !== intersects[0].object) {
-                if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
-                this.INTERSECTED = intersects[0].object;
-                this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+        // console.log("here " + this.raycasterIndicator);
+		if (this.raycasterIndicator) {
+            this.raycaster.setFromCamera(this.mouse, this.camera);
+            let intersects = this.raycaster.intersectObjects(this.playerContainer.children.concat(this.cellContainer.children));
+            if (intersects.length > 0) {
+                if (this.INTERSECTED !== intersects[0].object) {
+                    if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+                    this.INTERSECTED = intersects[0].object;
+                    this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
 
-                // Если нажали на фигурку, у которой наш цвет, то-есть первого игрока
-                if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-                    intersects[0].object.material.color.getHex() === tools.PLAYER_COLORS[this.figureType] &&
-                    //Проверяем, можно ли изменять первую точку.
-                    //Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
-                    !Object.isFrozen(this.point1)) {
-                    // Тут определяются номера по х и z фигуры, на которую нажали.
-                    for (let i = 0; i < tools.PLANE_SIZE; i++) {
-                        if (intersects[0].object.position.x > i*tools.PLANE_X)
-                            this.point1.x = i;
-                        if (intersects[0].object.position.z > i*tools.PLANE_Z)
-                            this.point1.z = i;
+                    // Если нажали на фигурку, у которой наш цвет, то-есть первого игрока
+                    if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
+                        intersects[0].object.material.color.getHex() === tools.PLAYER_COLORS[this.figureType] &&
+                        //Проверяем, можно ли изменять первую точку.
+                        //Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
+                        !Object.isFrozen(this.point1)) {
+                        // Тут определяются номера по х и z фигуры, на которую нажали.
+                        for (let i = 0; i < tools.PLANE_SIZE; i++) {
+                            if (intersects[0].object.position.x > i * tools.PLANE_X)
+                                this.point1.x = i;
+                            if (intersects[0].object.position.z > i * tools.PLANE_Z)
+                                this.point1.z = i;
+                        }
+                        // Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
+                        this.makeStepEnable(this.point1.x, this.point1.z);
                     }
-                    // Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
-                    this.makeStepEnable(this.point1.x, this.point1.z);
+
+                    // Если нажата клетка
+                    if (intersects[0].object.geometry.type === 'PlaneGeometry') {
+                        let idx = 0;
+                        let idz = 0;
+                        //Также, не очень изящно, определяем ее целые координаты.
+                        for (let i = 0; i < tools.PLANE_SIZE; i++) {
+                            if (intersects[0].object.position.x > i * tools.PLANE_X)
+                                idx = i;
+                            if (intersects[0].object.position.z > i * tools.PLANE_Z)
+                                idz = i;
+                        }
+                        //Проверяем, что она доступна для хода
+                        if (this.arrayOfPlane[idx][idz].stepEnable) {
+                            //Если да, то вторая точка
+                            this.point2.x = idx;
+                            this.point2.z = idz;
+
+                            this.vector.x = this.point2.x - this.point1.x;
+                            this.vector.z = this.point2.z - this.point1.z;
+                            this.distance = this.calculateDistance(this.point1, this.point2);
+
+                            let step = {
+                                code: 201,
+                                step: {
+                                    src: this.point1,
+                                    dst: this.point2
+                                }
+                            };
+                            this.bus.emit('socketMessage', step);
+                        }
+                    }
+                    this.INTERSECTED.material.emissive.setHex(tools.HOVER_COLOR);
                 }
-
-                // Если нажата клетка
-                if(intersects[0].object.geometry.type === 'PlaneGeometry') {
-                    let idx = 0;
-                    let idz = 0;
-                    //Также, не очень изящно, определяем ее целые координаты.
-                    for (let i = 0; i < tools.PLANE_SIZE; i++) {
-                        if (intersects[0].object.position.x > i*tools.PLANE_X)
-                            idx = i;
-                        if (intersects[0].object.position.z > i*tools.PLANE_Z)
-                            idz = i;
-                    }
-                    //Проверяем, что она доступна для хода
-                    if (this.arrayOfPlane[idx][idz].stepEnable) {
-                        //Если да, то вторая точка
-                        this.point2.x = idx;
-                        this.point2.z = idz;
-
-                        this.vector.x = this.point2.x - this.point1.x;
-                        this.vector.z = this.point2.z - this.point1.z;
-                        this.distance = this.calculateDistance(this.point1, this.point2);
-
-                        let step = {
-                        	code: 201,
-							step: {
-                        		src: this.point1,
-								dst: this.point2
-							}
-						};
-                        this.bus.emit('socketMessage', step);
-                    }
-                }
-                this.INTERSECTED.material.emissive.setHex(tools.HOVER_COLOR);
             }
-        }
-        else {
-            if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
-            this.INTERSECTED = null;
+            else {
+                if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+                this.INTERSECTED = null;
+            }
         }
 	}
 

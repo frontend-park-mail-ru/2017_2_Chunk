@@ -1,7 +1,7 @@
 'use strict';
 
-import CommonView from "./view/view";
-import Block from "../blocks/block/block.js";
+import CommonView from "../view/view";
+import Block from "../../blocks/block/block.js";
 
 export default class ThreeView extends CommonView {
     constructor(eventBus) {
@@ -9,8 +9,9 @@ export default class ThreeView extends CommonView {
 
 	    const winDiv = Block.Create('div', {}, ['canvasView__winDiv'], '');
 	    const playersDiv = Block.Create('div', {}, [], '');
-	    super([gameContainer, winDiv, playersDiv]);
+	    super([gameContainer]);
 	    this.el.style.setProperty("border", "none");
+	    this.el.classList.add('treeView');
 
 	    this.winDiv = winDiv;
 	    this.playersDiv = playersDiv;

@@ -1,11 +1,15 @@
 .lobbyView__gameCreateView {
     position: absolute;
     align-self: center;
-    box-sizing: border-box;
+    box-sizing: content-box;
     font-size: calc(14px + 1.2vh) !important;
     border-radius: 0.5em;
     background-color: #3d3d3e;
     opacity: 0.9;
-    /*z-index: 2;*/
+    margin: auto;
+    width: 15em;
+    height: 14em;
+    z-index: 2;
     transition: all 6s !important;
+    top: 0; left: 0; bottom: 0; right: 0;
 }
