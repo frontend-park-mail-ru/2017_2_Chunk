@@ -38,7 +38,7 @@ export default class webWorker {
 
 
 	workerCallbacks() {
-		this.worker.onmessage = (workerResponse) => {//возвращает массив аргументов
+		this.worker.onmessage = (workerResponse) => {//возвращает не массив ха - ха!
 			console.log('Worker response!' , workerResponse);
 		}
 	}
