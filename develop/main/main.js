@@ -232,7 +232,7 @@ app
 
 
 
-var i = 0;
+var i = 1;
 var count = 1;
 var saveNode = undefined;
 const nodeList = Array.from(document.getElementsByTagName("link"));
@@ -246,12 +246,12 @@ nodeList.forEach((node) => {
 function nextIco() {
 	console.log('set interval');
 	console.log(i);
-	saveNode.href = `./images/dancing-groot/${i}.gif`;
-	if (i === 0)
-		count = 1;
-	else if (i === 10)
-		count = -1;
-	i += count;
+	saveNode.href = `./images/dancing-groot/groot-${i % 11}.gif`;
+	// if (i === 1)
+	// 	count = 1;
+	// else if (i === 10)
+	// 	count = -1;
+	i++;
 }
 
 
