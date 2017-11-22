@@ -41,6 +41,7 @@ export default class Game3D {
 		// Индикатор движения для движения, разрешает движение только после хода.
 		this.indicator = false;
 		this.raycasterIndicator = false;
+		this.stepIndicator = false;
         this.queue = [];
 
 		this.renderer = new THREE.WebGLRenderer( {antialias: true, alpha: true} );
@@ -61,7 +62,10 @@ export default class Game3D {
 
 		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('mousedown', this.raycasterFalse.bind(this), false);
-		container.getElement().addEventListener('mouseup', this.raycasterTrue.bind(this), false);
+		container.getElement().addEventListener('mouseup', this.raycasterFalse.bind(this), false);
+		container.getElement().addEventListener('mousemove', this.raycasterFalse.bind(this), false);
+		container.getElement().addEventListener('click', this.raycasterTrue.bind(this), false);
+		container.getElement().addEventListener('onscroll', this.raycasterFalse.bind(this), false);
 
 		this.mouse = new THREE.Vector2();
 		this.raycaster = new THREE.Raycaster();
@@ -71,7 +75,7 @@ export default class Game3D {
             this.gamers = data.game.gamers;
             this.countPlayers = this.gamers.length;
             this.addMeshes();
-	        this.bus.emit('showPlayers', this.playerString());
+	        // this.bus.emit('showPlayers', this.playerString());
 	        let info = {
 	        	code: 112
 	        };
@@ -83,7 +87,9 @@ export default class Game3D {
             this.animate();
         });
         this.bus.on('socketCode201', (data) => {
-	        this.fullStep(data.step.src, data.step.dst);
+        	this.queue.push(data.step.src);
+        	this.queue.push(data.step.dst);
+	        //this.fullStep(data.step.src, data.step.dst);
         });
 		this.bus.on('socketCode203', (data) => {
 			// console.log(data);
@@ -104,12 +110,10 @@ export default class Game3D {
 
 	raycasterTrue() {
 		this.raycasterIndicator = true;
-		//console.log("true" + this.raycasterIndicator);
 	}
 
 	raycasterFalse() {
 		this.raycasterIndicator = false;
-		//console.log("false" + this.raycasterIndicator);
 	}
 
 	makeBinArray(size) {
@@ -182,20 +186,28 @@ export default class Game3D {
 			this.camera.position.y = 5;
 		}
 
+		this.queueStep();
         this.playerChoice();
 
 		//То самое движения, для которого нужен включенный индикатор.
 		this.moving();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		// Зацикливание
 		requestAnimationFrame(this.animate.bind(this));
 		this.render();
 	}
 
+	queueStep() {
+		if (typeof this.queue !== "undefined" && this.queue !== null && this.queue.length > 0 && !this.stepIndicator && !Object.isFrozen(this.point1)) {
+			this.stepIndicator = true;
+			this.point1 = this.queue.shift();
+			this.point2 = this.queue.shift();
+			this.fullStep(this.point1, this.point2);
+		}
+	}
+
 	playerChoice() {
         // Выбор объектов
-        // console.log("here " + this.raycasterIndicator);
 		if (this.raycasterIndicator) {
             this.raycaster.setFromCamera(this.mouse, this.camera);
             let intersects = this.raycaster.intersectObjects(this.playerContainer.children.concat(this.cellContainer.children));
@@ -222,10 +234,10 @@ export default class Game3D {
                         this.makeStepEnable(this.point1.x, this.point1.z);
                     }
 
+	                let idx = 0;
+	                let idz = 0;
                     // Если нажата клетка
                     if (intersects[0].object.geometry.type === 'PlaneGeometry') {
-                        let idx = 0;
-                        let idz = 0;
                         //Также, не очень изящно, определяем ее целые координаты.
                         for (let i = 0; i < tools.PLANE_SIZE; i++) {
                             if (intersects[0].object.position.x > i * tools.PLANE_X)
@@ -238,10 +250,6 @@ export default class Game3D {
                             //Если да, то вторая точка
                             this.point2.x = idx;
                             this.point2.z = idz;
-
-                            this.vector.x = this.point2.x - this.point1.x;
-                            this.vector.z = this.point2.z - this.point1.z;
-                            this.distance = this.calculateDistance(this.point1, this.point2);
 
                             let step = {
                                 code: 201,
@@ -260,6 +268,7 @@ export default class Game3D {
                 if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
                 this.INTERSECTED = null;
             }
+            this.raycasterIndicator = false;
         }
 	}
 
@@ -278,9 +287,13 @@ export default class Game3D {
 	moveOrClone(point1, point2) {
 		//Если клетка, куда будет совершен ход, находится вплотную к заданной, то добавляем фигурку рядом.
 		if (Math.abs(point2.x - point1.x) <= 1 && Math.abs(point2.z - point1.z) <= 1) {
+			Object.freeze(this.point1);
 			this.addOnePlayers(this.playerContainer, point2.x, point2.z, this.arrayOfPlane[point1.x][point1.z].figure);
 			//И вызываем функцию обработки хода, то-есть замены фигурок, если они есть рядом.
 			this.step(point2.x, point2.z);
+			delete this.point1;
+			this.point1 = new Point();
+			this.stepIndicator = false;
 		}
 		//если клетка находится через одну, то включаем индикатор для движения фигуры.
 		else {
@@ -329,6 +342,7 @@ export default class Game3D {
 				this.point1 = new Point();
 				//Ну и в конце движения делаем обработку хода.
 				this.step(this.point2.x, this.point2.z);
+				this.stepIndicator = false;
 			}
 		}
 	}
@@ -407,6 +421,9 @@ export default class Game3D {
 	}
 
 	fullStep(point1, point2) {
+		this.vector.x = this.point2.x - this.point1.x;
+		this.vector.z = this.point2.z - this.point1.z;
+		this.distance = this.calculateDistance(this.point1, this.point2);
         //Название говорит само за себя.
         this.moveOrClone(point1, point2);
         //удаляем все возможные для хода клетки.
