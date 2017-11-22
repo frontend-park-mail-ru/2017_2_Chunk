@@ -1,5 +1,6 @@
 .view {
     display: flex;
+    background-color: #030c15ab;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
