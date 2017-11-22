@@ -45,6 +45,10 @@ import Game3D from "./game3D/main";
 
 import ServiceWorker from '../../public/serviceWorker';
 
+import WebWorker from './modules/webWorker';
+
+const webWorker = new WebWorker();
+
 
 const gameNameView = new GameNameView();
 
@@ -228,32 +232,23 @@ app
     .append(gamePrepareView)
     .append(gameContainer);
 
-// debugger;
 
 
-
-var i = 1;
-var count = 1;
-var saveNode = undefined;
-const nodeList = Array.from(document.getElementsByTagName("link"));
-nodeList.forEach((node) => {
-	if (node.rel === 'shortcut icon') {
-		saveNode = node;
-		setInterval(nextIco, 200);
-	}
-});
-
-function nextIco() {
-	console.log('set interval');
-	console.log(i);
-	saveNode.href = `./images/dancing-groot/groot-${i % 11}.gif`;
-	// if (i === 1)
-	// 	count = 1;
-	// else if (i === 10)
-	// 	count = -1;
-	i++;
-}
-
+// var i = 1;
+// var saveNode = undefined;
+// const myStorage = localStorage;
+// const nodeList = Array.from(document.getElementsByTagName("link"));
+// nodeList.forEach((node) => {
+// 	if (node.rel === 'shortcut icon') {
+// 		saveNode = node;
+// 		setInterval(nextIco, 100);
+// 	}
+// });
+//
+// function nextIco() {
+// 	saveNode.href = `./images/dancing-groot/groot-${i % 11}.gif`;
+// 	i++;
+// }
 
 
 // if ('serviceWorker' in navigator) {
@@ -266,12 +261,11 @@ function nextIco() {
 // 			console.log('Registration error');
 // 		});
 // }
-//
-//
-// if (window.Worker) {
-// 	const gameWorker = new Worker('worker.js')
-//
-//
-// }
+
+const workerRequest = {
+	data: "bla bla bal"
+};
+
+eventBus.emit('workerPostMessage', workerRequest);
 
 router.start();
