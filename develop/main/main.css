@@ -10,7 +10,7 @@
 
 
 
-@media not handheld{
+@media screen and (min-width: 1230px) and (max-width: 1800px){
     body {
         background: url('./image/galaxy.jpg') no-repeat;
         background-size: 100vw 100vh;
@@ -27,13 +27,13 @@
     }
 }
 
-@media handheld {
+@media screen and (min-width: 300px) and (max-width: 1230px){
     @viewport {
         orientation: landscape;
     }
     body {
-        background: url('./image/galaxy2.jpg') no-repeat;
-        background-size: 50vw 50vh;
+        background: url('./image/galaxy.jpg') no-repeat;
+        background-size: 100vw 100vh;
         font-family: "Comic Sans MS";
         box-sizing: border-box;
         margin: 0 !important;
