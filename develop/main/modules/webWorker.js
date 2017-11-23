@@ -83,6 +83,18 @@ export default class webWorker {
 			reason: "Start the game"
 		};
 
+		this.code204 = {
+			code: 204,
+			gameID: null,
+			field: {
+				field: this.arrayOfField,
+				gameOver: true,
+                maxX: this.code101.maxX,
+                maxY: this.code101.maxY
+			},
+			reason: "Game had ended, check result"
+		};
+
 		this.playerData = {
             userID: 1,
             username: "player",
@@ -91,9 +103,19 @@ export default class webWorker {
             online: true
 		};
 
-		this.step = {
-			src: {x: 0, z: 0},
-			dst: {x: 0, z: 0}
+		this.code201 = {
+			code: 201,
+			step: {
+				src: {
+					x: 0,
+					z: 0
+				},
+				dst: {
+					x: 0,
+					z: 0
+				}
+			},
+			reason: "Game step"
 		};
 
 		this.bots = [];
@@ -161,6 +183,9 @@ export default class webWorker {
                 case '112':
                     this.workerCode112();
                     break;
+                case '201':
+                    this.workerCode201(workerResponse.data);
+                    break;
                 default:
                     console.log('Error');
             }
@@ -223,6 +248,115 @@ export default class webWorker {
         this.bus.emit('workerCode112', this.code112);
 	}
 
+	workerCode201(data) {
+		this.code201.step.src.x = data.step.src.x;
+        this.code201.step.src.z = data.step.src.z;
+        this.code201.step.dst.x = data.step.dst.x;
+        this.code201.step.dst.z = data.step.dst.z;
+
+		this.bus.emit('workerCode201', this.code201);
+
+		this.moveOrClone(this.code201.step);
+		this.step(this.code201.step);
+
+		if (this.gameOver()) {
+            this.code204.field.maxX = this.code101.maxX;
+            this.code204.field.maxY = this.code101.maxY;
+            this.code204.field.field = this.arrayOfField;
+
+            this.bus.emit('workerCode204', this.code204);
+		}
+
+		this.botStep();
+        this.moveOrClone(this.code201.step);
+        this.step(this.code201.step);
+
+        if (this.gameOver()) {
+            this.code204.field.maxX = this.code101.maxX;
+            this.code204.field.maxY = this.code101.maxY;
+            this.code204.field.field = this.arrayOfField;
+
+            this.bus.emit('workerCode204', this.code204);
+        }
+
+        this.bus.emit('workerCode201', this.code201);
+	}
+
+	moveOrClone(step) {
+        if (Math.abs(step.src.x - step.dst.x) <= 1 && Math.abs(step.src.z - step.dst.z) <= 1) {
+            this.arrayOfField[step.dst.x][step.dst.z] = this.arrayOfField[step.src.x][step.src.z];
+        }
+        else {
+            this.arrayOfField[step.dst.x][step.dst.z] = this.arrayOfField[step.src.x][step.src.z];
+            this.arrayOfField[step.src.x][step.src.z] = 0;
+        }
+	}
+
+    step(step) {
+        let idx = step.dst.x;
+        let idz = step.dst.z;
+        for (let i = 0; i < this.code101.maxX; i++) {
+            for (let j = 0; j < this.code101.maxY; j++) {
+                // Первые два условия проверяют, что перебираемая в цикле клетка находится вплотную к заданной.
+                if (Math.abs(i - idx) <= 1 &&
+                    Math.abs(j - idz) <= 1) {
+                    // Затем идет проверка, что на этой клетке есть фигура и что она отлична от той, которая совершила ход.
+                    if (this.arrayOfField[i][j] !== 0 &&
+                        this.arrayOfField[i][j] !== this.arrayOfField[idx][idz]) {
+                        // И затем в массив клеток вносятся соответствующие изменения по фигурам.
+                        this.arrayOfField[i][j] = this.arrayOfField[idx][idz];
+                    }
+                }
+            }
+        }
+    }
+
+    botStep() {
+        for (let i = 0; i < this.code101.maxX; i++) {
+            for (let j = 0; j < this.code101.maxY; j++) {
+            	if (this.arrayOfField[i][j] === 2) {
+                    for (let k = 0; k < this.code101.maxX; k++) {
+                        for (let m = 0; m < this.code101.maxY; m++) {
+                            if (Math.abs(k - i) >= 3 ||
+                                Math.abs(m - j) >= 3 ||
+                                this.arrayOfField[k][m] !== 0
+                            ) {}
+                            else {
+                                this.code201.step.src.x = i;
+                                this.code201.step.src.z = j;
+                                this.code201.step.dst.x = k;
+                                this.code201.step.dst.z = m;
+                                return;
+                            }
+                        }
+                    }
+				}
+            }
+		}
+	}
+
+	gameOver() {
+		let notFreePlane = 0;
+		let countFigure = [];
+		for (let i = 0; i < this.code101.numberOfPlayers; i++) {
+			countFigure[i] = 0;
+		}
+        for (let i = 0; i < this.code101.maxX; i++) {
+            for (let j = 0; j < this.code101.maxY; j++) {
+            	if (this.arrayOfField[i][j] !== 0) {
+            		notFreePlane++;
+            		countFigure[this.arrayOfField[i][j]-1]++;
+				}
+            }
+        }
+        if (notFreePlane === this.code101.maxX*this.code101.maxY)
+        	return true;
+        for (let i = 0; i < this.code101.numberOfPlayers; i++) {
+        	if (countFigure[i] === 0)
+        		return true;
+        }
+        return false;
+	}
 
 	getFullGameList() {
 		const data = JSON.stringify({
