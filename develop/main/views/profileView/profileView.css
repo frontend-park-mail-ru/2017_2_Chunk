@@ -1,7 +1,13 @@
+/*.profileView {*/
+    /*font-family: cursive;*/
+    /*font-size:calc(20px + 2vh);*/
+    /*color: #ff8700;*/
+    /*max-width: 300px;*/
+    /*margin: auto;*/
+/*}*/
 .profileView {
     font-family: cursive;
-    font-size:calc(20px + 2vh);
+    font-size: 14px;
     color: #ff8700;
-    max-width: 300px;
     margin: auto;
 }

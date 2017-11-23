@@ -1,10 +1,25 @@
+/*.view {*/
+    /*display: flex;*/
+    /*background-color: #030c15ab !important;*/
+    /*flex-direction: column;*/
+    /*align-items: center;*/
+    /*justify-content: space-around;*/
+    /*min-width: 300px;*/
+    /*font-family: "Comic Sans MS";*/
+    /*font-size: calc(14px + 1.5vh);*/
+    /*margin: auto;*/
+    /*!*padding-top: 1%;*!*/
+    /*!*padding-bottom: 1%;*!*/
+    /*border-radius: 0.8em;*/
+    /*border: solid #ff8700;*/
+    /*transition: all .5s;*/
+/*}*/
 .view {
     display: flex;
     background-color: #030c15ab !important;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    min-width: 300px;
+    justify-content: flex-end;
     font-family: "Comic Sans MS";
     font-size: calc(14px + 1.5vh);
     margin: auto;

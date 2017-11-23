@@ -1,5 +1,4 @@
 self.onmessage = (workerRequest) => {
-	debugger;
 	console.log('worker request: ', workerRequest);
 	const workerResponse = {
 		code: '0',

@@ -1,14 +1,32 @@
+/*.view__view-button {*/
+    /*box-sizing: border-box;*/
+    /*font-size:calc(14px + 1.5vh);*/
+    /*text-align: center;*/
+    /*opacity: 1;*/
+    /*width: 10em;*/
+    /*padding: 0.1em;*/
+
+    /*margin: 0.7em;*/
+    /*min-width: 260px;*/
+
+    /*border-radius: 0.4em;*/
+    /*box-shadow: none;*/
+
+    /*border-width: 0.04em;*/
+    /*border-style: solid;*/
+    /*background-color: transparent;*/
+    /*cursor: pointer;*/
+    /*transition: all .1s;*/
+/*}*/
+
 .view__view-button {
     box-sizing: border-box;
-    font-size:calc(14px + 1.5vh);
+    font-size:calc(14px + 1.1vh);
     text-align: center;
     opacity: 1;
-    width: 10em;
-    padding: 0.1em;
+    width: 8em;
 
-    margin: 0.7em;
-    min-width: 260px;
-
+    margin: 0.4em;
     border-radius: 0.4em;
     box-shadow: none;
 

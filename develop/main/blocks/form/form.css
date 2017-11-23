@@ -1,9 +1,16 @@
+/*.form {*/
+    /*font-family: "Comic Sans MS";*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*align-content: center;*/
+    /*justify-content: center;*/
+    /*min-width: 280px;*/
+    /*min-height: 250px;*/
+/*}*/
 .form {
     font-family: "Comic Sans MS";
     display: flex;
     flex-direction: column;
     align-content: center;
     justify-content: center;
-    min-width: 280px;
-    min-height: 250px;
 }

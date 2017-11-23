@@ -40,7 +40,7 @@ export default class webWorker {
 	workerCallbacks() {
 		this.worker.onmessage = (workerResponse) => {//возвращает не массив ха - ха!
 			const data = workerResponse.data;
-			this.bus.emit(`workerCode${data.code}`, (data));
+			// this.bus.emit(`workerCode${data.code}`, (data));
 			console.log('Worker response!' , workerResponse);
 		};
 	}
