@@ -37,8 +37,8 @@
         font-family: "Comic Sans MS";
         box-sizing: border-box;
         margin: 0 !important;
-        width: 100vw;
-        height: 100vh;
+        width: 50vw !important;
+        height: 50vh !important;
         position: fixed;
         display: grid;
         grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";
