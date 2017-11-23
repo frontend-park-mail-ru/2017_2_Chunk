@@ -33,7 +33,7 @@
     }
     body {
         /*background: url('./image/galaxy.jpg') no-repeat;*/
-        background-size: 100vw 100vh;
+        background-size: 50vw 50vh;
         font-family: "Comic Sans MS";
         box-sizing: border-box;
         margin: 0 !important;
