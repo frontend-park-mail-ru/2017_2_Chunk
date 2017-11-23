@@ -45,6 +45,10 @@ import Game3D from "./game3D/main";
 
 import ServiceWorker from '../../public/serviceWorker';
 
+import WebWorker from './modules/webWorker';
+
+const webWorker = new WebWorker();
+
 
 const gameNameView = new GameNameView();
 
@@ -228,6 +232,24 @@ app
     .append(gameContainer);
 
 
+
+// var i = 1;
+// var saveNode = undefined;
+// const myStorage = localStorage;
+// const nodeList = Array.from(document.getElementsByTagName("link"));
+// nodeList.forEach((node) => {
+// 	if (node.rel === 'shortcut icon') {
+// 		saveNode = node;
+// 		setInterval(nextIco, 100);
+// 	}
+// });
+//
+// function nextIco() {
+// 	saveNode.href = `./images/dancing-groot/groot-${i % 11}.gif`;
+// 	i++;
+// }
+
+
 // if ('serviceWorker' in navigator) {
 // 	const serviceWorker = navigator.serviceWorker;
 // 	navigator.serviceWorker.register('/serviceWorker.js', {scope: '/'})
@@ -238,12 +260,10 @@ app
 // 			console.log('Registration error');
 // 		});
 // }
-//
-//
-// if (window.Worker) {
-// 	const gameWorker = new Worker('worker.js')
-//
-//
-// }
+
+const workerRequest = {
+	data: "bla bla bal"
+};
+eventBus.emit('workerMessage', workerRequest);
 
 router.start();
