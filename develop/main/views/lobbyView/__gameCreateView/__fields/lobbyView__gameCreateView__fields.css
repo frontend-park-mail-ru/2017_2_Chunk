@@ -12,6 +12,7 @@
     display: block;
     color: #00d8ff;
     opacity: 1 !important;
+    width: auto !important;
 }
 
 .lobbyView__gameCreateView__fields__playButton:hover {

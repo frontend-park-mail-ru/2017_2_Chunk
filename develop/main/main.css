@@ -8,71 +8,73 @@
     orientation: landscape;
 }
 
-
 /*@media screen {*/
-    /*body {*/
-        /*background: url('./image/galaxy.jpg') no-repeat;*/
-        /*background-size: 100vw 100vh;*/
-        /*font-family: "Comic Sans MS";*/
-        /*box-sizing: border-box;*/
-        /*margin: 0 !important;*/
-        /*width: 100vw;*/
-        /*height: 100vh;*/
-        /*position: fixed;*/
-        /*display: grid;*/
-        /*grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";*/
-        /*grid-template-columns: 1fr 3fr 1fr;*/
-        /*grid-template-rows: 6vh 5vh auto;*/
-    /*}*/
+/*body {*/
+/*background: url('./image/galaxy.jpg') no-repeat;*/
+/*background-size: 100vw 100vh;*/
+/*font-family: "Comic Sans MS";*/
+/*box-sizing: border-box;*/
+/*margin: 0 !important;*/
+/*width: 100vw;*/
+/*height: 100vh;*/
+/*position: fixed;*/
+/*display: grid;*/
+/*grid-template-areas: */
+/*"place1 place2 place3" */
+/*"place4 place5 place6" */
+/*"place7 place8 place9";*/
+/*grid-template-columns: 1fr 3fr 1fr;*/
+/*grid-template-rows: 6vh 5vh auto;*/
+/*}*/
 /*}*/
 
-
+@media screen {
     body {
-        /*background: url('./image/galaxy.jpg') no-repeat;*/
-        /*background-size: 100vw 100vh;*/
+        background: url('./image/galaxy.jpg') no-repeat;
+        background-size: 100vw 100vh;
         font-family: "Comic Sans MS";
         box-sizing: border-box;
         margin: 0 !important;
-        width: 640px;
-        height: 360px;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
         display: grid;
-        grid-template-areas:
-                "place0 place1 place3"
-                "place4 place5 place6"
-                "place8 place8 place8";
-        grid-template-columns: 20vw 60vw 20vw;
-        grid-template-rows: 80px 80px auto;
+        grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-rows: 6vh 10vh auto;
     }
-
+}
 
 .hidden {
     opacity: 0;
 }
 
-body > .gameName{
-    grid-area: place1;
+body > .gameName {
+    grid-area: place2;
 }
 
-body > .profileView{
+body > .profileView {
     grid-area: place3;
 }
 
-body > .themeButtonView{
+body > .themeButtonView {
     grid-area: place6;
 }
 
 body > .backMenuButtonView {
     grid-area: place4;
 }
+
 body > .backButtonView {
     grid-area: place4;
 }
 
-body > .view{
+body > .view {
     grid-area: place8;
 }
 
-body > .treeView{
-    grid-column: 1 / 3; grid-row: 1 / 3;
+body > .treeView {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
 }
 

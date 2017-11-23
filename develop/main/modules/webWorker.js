@@ -53,7 +53,6 @@ export default class webWorker {
 		this.worker.send(data);
 	};
 
-
 	subscribeNewGameNode() {
 		const data = JSON.stringify({
 			code: '106',

@@ -1,5 +1,12 @@
+/*.gamePrepareView__fields__playersList__string__fields {*/
+    /*font-size: calc(14px + 0.3vh) !important;*/
+    /*display: inline-block;*/
+    /*margin: 0.1em 0.8em;*/
+/*}*/
+
 .gamePrepareView__fields__playersList__string__fields {
-    font-size: calc(14px + 0.3vh) !important;
+    font-size: 12px !important;
     display: inline-block;
     margin: 0.1em 0.8em;
+    overflow: hidden;
 }

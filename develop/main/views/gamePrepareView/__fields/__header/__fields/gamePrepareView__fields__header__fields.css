@@ -1,6 +1,14 @@
+/*.gamePrepareView__fields__header__fields {*/
+    /*display: inline-block;*/
+    /*font-size: calc(14px + 0.3vh) !important;*/
+    /*color: white;*/
+    /*margin: 0.1em;*/
+/*}*/
+
 .gamePrepareView__fields__header__fields {
     display: inline-block;
-    font-size: calc(14px + 0.3vh) !important;
+    font-size: calc(12px) !important;
     color: white;
+    padding: 0.1em !important;
     margin: 0.1em;
 }
