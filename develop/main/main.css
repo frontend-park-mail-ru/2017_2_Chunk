@@ -8,7 +8,9 @@
     orientation: landscape;
 }
 
-@media screen and (not handheld) {
+
+
+@media not handheld{
     body {
         background: url('./image/galaxy.jpg') no-repeat;
         background-size: 100vw 100vh;
@@ -44,6 +46,8 @@
         grid-template-rows: 6vh 10vh auto;
     }
 }
+
+
 
 .hidden {
     opacity: 0;
