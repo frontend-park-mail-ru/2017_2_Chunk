@@ -1,3 +1,14 @@
+@viewport {
+    width: device-width;
+    height: device-height;
+    zoom: 1;
+    max-zoom: 1;
+    min-zoom: 1;
+    user-zoom: fixed;
+    orientation: landscape;
+}
+
+
 body {
     background: url('./image/galaxy.jpg') no-repeat;
     background-size: 100vw 100vh;
