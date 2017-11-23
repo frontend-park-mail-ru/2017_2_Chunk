@@ -10,7 +10,7 @@
 
 
 
-@media screen and (min-width: 1230px) and (max-width: 1800px){
+@media screen and (min-width: 1200px) and (max-width: 1800px){
     body {
         background: url('./image/galaxy.jpg') no-repeat;
         background-size: 100vw 100vh;
@@ -27,12 +27,12 @@
     }
 }
 
-@media screen and (min-width: 300px) and (max-width: 1230px){
+@media screen and (min-width: 300px) and (max-width: 1200px) {
     @viewport {
         orientation: landscape;
     }
     body {
-        background: url('./image/galaxy.jpg') no-repeat;
+        background: url('./image/galaxy2.jpg') no-repeat;
         background-size: 100vw 100vh;
         font-family: "Comic Sans MS";
         box-sizing: border-box;
@@ -43,7 +43,7 @@
         display: grid;
         grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";
         grid-template-columns: 1fr 3fr 1fr;
-        grid-template-rows: 200px 10vh auto;
+        grid-template-rows: 6vh 10vh auto;
     }
 }
 
