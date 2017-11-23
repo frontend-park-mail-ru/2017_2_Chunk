@@ -91,6 +91,11 @@ export default class webWorker {
             online: true
 		};
 
+		this.step = {
+			src: {x: 0, z: 0},
+			dst: {x: 0, z: 0}
+		};
+
 		this.bots = [];
 		this.gamers = [];
 		this.userID = this.code101.player.userID;
@@ -157,7 +162,7 @@ export default class webWorker {
                     this.workerCode112();
                     break;
                 default:
-                    alert('Error');
+                    console.log('Error');
             }
 			console.log('Worker response!' , workerResponse);
 		}
@@ -169,7 +174,6 @@ export default class webWorker {
 		this.arrayOfField = this.makeGameField(data.maxX);
 		this.gamers.push(this.playerData);
 		this.code101.numberOfPlayers = +data.numberOfPlayers;
-		this.code101.player.push(this.playerData);
 
 		this.bus.emit('workerCode101', this.code101);
 	}
