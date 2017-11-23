@@ -86,8 +86,7 @@ const gamePrepareView = new GamePrepareView();
 
 // const game = new Game(canvas, eventBus);
 
-const gameContainer = new ThreeView(eventBus);
-
+const gameContainer = new ThreeView(eventBus, () => router.goTo('/menu'));
 
 const game3D = new Game3D(gameContainer);
 

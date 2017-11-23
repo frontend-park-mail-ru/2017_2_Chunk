@@ -4,12 +4,12 @@ import CommonView from "../view/view";
 import Block from "../../blocks/block/block.js";
 
 export default class ThreeView extends CommonView {
-    constructor(eventBus) {
+    constructor(eventBus, exit) {
         const gameContainer = Block.Create('div');
 
 	    const winDiv = Block.Create('div', {}, ['canvasView__winDiv'], '');
 	    // const playersDiv = Block.Create('div', {}, [], '');
-	    super([gameContainer]);
+	    super([gameContainer, winDiv]);
 	    this.el.style.setProperty("border", "none");
 	    this.el.classList.add('treeView');
 
@@ -27,6 +27,10 @@ export default class ThreeView extends CommonView {
 			    this.winDiv.setText('You lose! =(');
 		    }
 		    this.winDiv.show();
+            setTimeout(() => {
+                this.winDiv.hide();
+                exit();
+            }, 3000);
 	    });
 	    // this.eventBus.on('showPlayers', (players) => {
 	    // 	this.playersDiv.setText(players);
