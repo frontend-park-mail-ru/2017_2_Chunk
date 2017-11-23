@@ -1,4 +1,4 @@
-onmessage = (workerRequest) => {
+self.onmessage = (workerRequest) => {
 	debugger;
 	console.log('worker request: ', workerRequest);
 	const workerResponse = {
@@ -6,7 +6,6 @@ onmessage = (workerRequest) => {
 		message: 'Hello world',
 		data: 15,
 	};
-	postMessage(workerResponse);
+	self.postMessage(workerResponse);
 };
 
-console.log('worker');
