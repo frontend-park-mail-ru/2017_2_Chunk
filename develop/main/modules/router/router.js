@@ -30,11 +30,15 @@ export default class Router {
 		});
 
 		window.onpopstate = () => {
+			if (location.pathname === '/waiting-hall' || location.pathname === '/game' ) {
+				this.goTo('/lobby');
+				return;
+			}
 			const resp = this.userService.isLoggedIn();
 			const locationPath = location.pathname;
 			if (resp) {
 				const slice_Routes = this._routes.slice(0, 8);
-				const isValid = slice_Routes.some((_route) => {
+				const isValid = slice_Routes.some((_route, index) => {
 						return locationPath.match(_route.url_pattern);
 					});
 				if (isValid)
@@ -147,6 +151,9 @@ export default class Router {
 	 * @param {string[]} slice_Routes - массив "разрешенных" урлов
 	 */
 	findNewState(slice_Routes) {
+		if (location.pathname === '/waiting-hall' || location.pathname === '/game') {
+			this.goTo('/lobby');
+		}
 		const idx = slice_Routes.findIndex(function (_route) {
 			return location.pathname.match(_route.url_pattern);
 		});

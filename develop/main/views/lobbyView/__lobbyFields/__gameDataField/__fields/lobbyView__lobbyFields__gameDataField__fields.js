@@ -32,7 +32,7 @@ export default class GameDataFields {
                 'lobbyView__lobbyFields__gameDataField__fields'], `Field size: ${socketResponse.field.maxX} x ${socketResponse.field.maxY}`),
             // voyeurButton: ViewButton.Create({href: '/game'}, ['auth'], 'Play');
             playButton: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__playButton',
-                'lobbyView__lobbyFields__gameDataField__fields', 'view__view-button'], 'Play'),
+                'lobbyView__lobbyFields__gameDataField__fields', 'view__view-button', 'auth'], 'Play'),
         }
     }
 

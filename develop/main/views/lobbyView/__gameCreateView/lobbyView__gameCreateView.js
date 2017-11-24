@@ -65,5 +65,7 @@ export default class GameCreateView extends Block {
 			this.bus.emit('createGame', data);
 			this.hide();
 		});
+
+		
 	}
 }

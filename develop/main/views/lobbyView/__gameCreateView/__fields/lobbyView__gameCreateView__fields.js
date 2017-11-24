@@ -31,7 +31,7 @@ export default class GameCreateFields {
 					'lobbyView__gameCreateView__fields', 'view__view-button']),
 			playButtonWithFriends:
 				Block.Create('input', {type: 'submit', value: 'Play with friends'}, ['lobbyView__gameCreateView__fields__playButton',
-					'lobbyView__gameCreateView__fields', 'view__view-button'])
+					'lobbyView__gameCreateView__fields', 'view__view-button', 'auth'])
 		};
 		this.addRadioPLayers();
 		this.addRadioFieldSize();

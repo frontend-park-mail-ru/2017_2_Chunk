@@ -19,6 +19,7 @@ export default class LobbyGameData extends Block {
         super(block.el);
         this.bus = eventBus;
         this.gameID = data.gameID;
+        this.validationField();
         this.gameDataFields = new GameDataFields(data);
         for (let field in this.gameDataFields.fields) {
             this.append(this.gameDataFields.fields[field]);
@@ -41,9 +42,34 @@ export default class LobbyGameData extends Block {
                 gamersNumberHtml.innerHTML = gamersNumberHtml.innerHTML.replace(/\d+/g, gamersNumber);
             }
         });
+
+
+
     }
 
     updateGameData(socketResponse) {
         this.gameDataFields.update(socketResponse)
     }
+
+	validationField() {
+		this.bus.on('auth', () => {
+			debugger;
+			const elements = this.gameDataFields.fields.filter((field) => {
+				return field.el.classList.contains('auth');
+			});
+			elements.forEach((elem) => {
+				elem.show();
+			})
+		});
+
+		this.bus.on('unauth', () => {
+			const elements = this.gameDataFields.fields.filter((field) => {
+				return field.el.classList.contains('auth');
+			});
+
+			elements.forEach((elem) => {
+				elem.hide();
+			})
+		})
+	}
 }
