@@ -4,6 +4,8 @@ self.addEventListener('install', (event) => {
             .then((cache) => {
                 console.log('cache open');
                 return cache.addAll([
+                    './galaxy2-a81f392a9671ed0258e1899a3986505a.jpg',
+                    './galaxy2',
                     'menu',
                     'menu/application.css',
                     'menu/application.js',
