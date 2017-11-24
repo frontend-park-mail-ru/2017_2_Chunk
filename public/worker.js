@@ -45,7 +45,7 @@ const startArray = [
 ];
 
 var arrayOfField = 0;
-
+var bots = [];
 var gamers = [];
 
 var code101 = {
@@ -79,7 +79,7 @@ var code104 = {
 			maxY: code101.maxY
 		},
 		gamers: gamers,
-		masterID: 5,
+		masterID: 1,
 		numberOfPlayers: code101.numberOfPlayers,
 		watchers: code101.watchersCount
 	},
@@ -141,7 +141,6 @@ var code201 = {
 	reason: "Game step"
 };
 
-var bots = [];
 var userID = code101.player.userID;
 
 var code112 = {
