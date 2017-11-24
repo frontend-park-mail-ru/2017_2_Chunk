@@ -14,7 +14,7 @@ export default class GamePrepareViewHeader extends Block {
 	 * @constructor
 	 */
 	constructor() {
-		const block = Block.Create('div', {}, ['gamePrepareView__fields__header']);
+		const block = Block.create('div', {}, ['gamePrepareView__fields__header']);
 		super(block.el);
 		this.fields = {};
 		this.headerFields = new HeaderFields();

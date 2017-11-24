@@ -29,7 +29,7 @@ export default class LoginView extends CommonView {
 			event.preventDefault();
 			const formData = {};
 			const fields = this.form.fields;
-			for (let field in fields) {
+			for (const field in fields) {
 				formData[fields[field].el.name] = fields[field].el.value;
 			}
 			this.onSubmit(formData)
@@ -54,8 +54,7 @@ export default class LoginView extends CommonView {
 			this.message.hide();
 			this.bus.emit('auth', resp.json.username);
 			this.bus.emit('goToMenu');
-		}
-		else {
+		} else {
 			this.setErrorText(resp);
 		}
 	}
@@ -70,5 +69,4 @@ export default class LoginView extends CommonView {
 		this.message.show();
 	}
 }
-
 

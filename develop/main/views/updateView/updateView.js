@@ -1,6 +1,6 @@
 'use strict';
-//navigotor.online
-//узнать про промис
+// navigotor.online
+// узнать про промис
 import View from '../view/view';
 import Form from '../../blocks/form/form.js';
 import Message from '../../blocks/form/__message/form__message.js';
@@ -27,10 +27,10 @@ export default class UpdateView extends View {
 			event.preventDefault();
 			const formData = {};
 			const fields = this.el.childNodes.item(0).elements;
-			for (let field in fields) {
+			for (const field in fields) {
 				formData[fields[field].name] = fields[field].value;
 			}
-			this.onSubmit(formData)
+			this.onSubmit(formData);
 		}, true);
 		this.bus.on('openUpdate', async () => {
 			try {
@@ -40,12 +40,10 @@ export default class UpdateView extends View {
 					const email = this.form.fields[1].el;
 					username.value = resp.json.username;
 					email.value = resp.json.email;
-				}
-				else {
+				} else {
 					this.setErrorText(resp.json.message);
 				}
-			}
-			catch (err) {
+			} catch (err) {
 				console.log(err.message);
 			}
 		});
@@ -75,12 +73,10 @@ export default class UpdateView extends View {
 				this.message.hide();
 				this.bus.emit('auth', resp.json.username);
 				this.router.goTo('/menu');
+			} else {
+				this.setErrorText(resp);// возвращаемый промис. че с ним делать?
 			}
-			else {
-				this.setErrorText(resp)//возвращаемый промис. че с ним делать?
-			}
-		}
-		catch (err) {
+		} catch (err) {
 			console.log(err.message);
 		}
 	}

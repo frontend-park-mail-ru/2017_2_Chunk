@@ -16,22 +16,22 @@ export default class GameDataFields {
         })[0];
         const masterUsername = masterInfo.username;
         this.fields = {
-            creator: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__masterUsername',
+            creator: Block.create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__masterUsername',
                 'lobbyView__lobbyFields__gameDataField__fields'], `Creator: ${masterUsername}`),
-            gameID: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__gameId',
+            gameID: Block.create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__gameId',
                 'lobbyView__lobbyFields__gameDataField__fields'], `GameId: ${socketResponse.gameID}`),
-            gamersNumber: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__playersNumber',
+            gamersNumber: Block.create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__playersNumber',
                 'lobbyView__lobbyFields__gameDataField__fields'], `Players: ${socketResponse.gamers.length}`),
-            botsNumber: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__botsNumber',
+            botsNumber: Block.create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__botsNumber',
                 'lobbyView__lobbyFields__gameDataField__fields'], `Bots: ${socketResponse.bots.length}`),
-            numberOfPlayers: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__totalPLayersNumber',
+            numberOfPlayers: Block.create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__totalPLayersNumber',
                 'lobbyView__lobbyFields__gameDataField__fields'], `Total players: ${socketResponse.numberOfPlayers}`),
-            // watchers: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__voyeursNumber',
+            // watchers: Block.create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__voyeursNumber',
             //     'lobbyView__lobbyFields__gameDataField__fields'], `Watchers: ${socketResponse.watchers}`),
-            fieldSize: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__fieldSize',
+            fieldSize: Block.create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__fieldSize',
                 'lobbyView__lobbyFields__gameDataField__fields'], `Field size: ${socketResponse.field.maxX} x ${socketResponse.field.maxY}`),
-            // voyeurButton: ViewButton.Create({href: '/game'}, ['auth'], 'Play');
-            playButton: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__playButton',
+            // voyeurButton: ViewButton.create({href: '/game'}, ['auth'], 'Play');
+            playButton: Block.create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__playButton',
                 'lobbyView__lobbyFields__gameDataField__fields', 'view__view-button', 'auth'], 'Play'),
         }
     }

@@ -30,31 +30,30 @@ export default class Router {
 		});
 
 		window.onpopstate = () => {
-			if (location.pathname === '/waiting-hall' || location.pathname === '/game' ) {
+			if (location.pathname === '/waiting-hall' || location.pathname === '/game') {
 				this.goTo('/lobby');
 				return;
 			}
 			const resp = this.userService.isLoggedIn();
 			const locationPath = location.pathname;
 			if (resp) {
-				const slice_Routes = this._routes.slice(0, 8);
-				const isValid = slice_Routes.some((_route, index) => {
-						return locationPath.match(_route.url_pattern);
-					});
-				if (isValid)
+				const sliceRoutes_ = this._routes.slice(0, 8);
+				const isValid = sliceRoutes_.some((_route, index) =>
+					locationPath.match(_route.url_pattern));
+				if (isValid) {
 					this.changeState(locationPath);
-				else
-					this.goTo(this._routes[0].url_pattern)
-			}
-			else {
-				const slice_Routes = this._routes.slice(6);
-				const isValid = slice_Routes.some((_route) => {
-						return locationPath.match(_route.url_pattern);
-					});
-				if (isValid)
-					this.changeState(locationPath);
-				else
+				} else {
 					this.goTo(this._routes[0].url_pattern);
+				}
+			} else {
+				const sliceRoutes_ = this._routes.slice(6);
+				const isValid = sliceRoutes_.some((_route) =>
+					locationPath.match(_route.url_pattern));
+				if (isValid) {
+					this.changeState(locationPath);
+				} else {
+					this.goTo(this._routes[0].url_pattern);
+				}
 			}
 		};
 
@@ -75,9 +74,8 @@ export default class Router {
 		});
 
 		this.bus.on('socketClose', () => {
-			if (!location.pathname.match('/menu'))
-				this.goTo('/menu');
-		})
+			if (!location.pathname.match('/menu')) { this.goTo('/menu'); }
+		});
 	}
 
 
@@ -91,16 +89,14 @@ export default class Router {
 			const resp = await this.userService.getDataFetch();
 			if (resp.ok) {
 				this.bus.emit('auth', resp.json.username);
-				const slice_Routes = this._routes.slice(0, 8);
-				this.findNewState(slice_Routes);
-			}
-			else {
+				const sliceRoutes_ = this._routes.slice(0, 8);
+				this.findNewState(sliceRoutes_);
+			} else {
 				this.bus.emit('unauth');
-				const slice_Routes = this._routes.slice(6);
-				this.findNewState(slice_Routes);
+				const sliceRoutes_ = this._routes.slice(6);
+				this.findNewState(sliceRoutes_);
 			}
-		}
-		catch (err) {
+		} catch (err) {
 			this.bus.emit('unauth');
 			const slice_Routes = this._routes.slice(6);
 			this.findNewState(slice_Routes);
@@ -129,7 +125,8 @@ export default class Router {
 	 */
 	goTo(path) {
 		const idx = this._routes.findIndex((_route) => path.match(_route.url_pattern));
-		window.history.pushState({page: this.routes[idx].url}, this.routes[idx].url, this.routes[idx].url);
+		window.history.pushState({page: this.routes[idx].url},
+			this.routes[idx].url, this.routes[idx].url);
 		this._routes[idx].emit(this.routes[idx].event);
 	}
 
@@ -148,17 +145,17 @@ export default class Router {
 
 	/**
 	 * Выбирает нужный урл среди "разрешенных для пользователя". Иначе переправляет в меню.
-	 * @param {string[]} slice_Routes - массив "разрешенных" урлов
+	 * @param {string[]} sliceRoutes_ - массив "разрешенных" урлов
 	 */
-	findNewState(slice_Routes) {
+	findNewState(sliceRoutes_) {
 		if (location.pathname === '/waiting-hall' || location.pathname === '/game') {
 			this.goTo('/lobby');
 		}
-		const idx = slice_Routes.findIndex(function (_route) {
+		const idx = sliceRoutes_.findIndex(function (_route) {
 			return location.pathname.match(_route.url_pattern);
 		});
 		if (idx > -1) {
-			const _route = slice_Routes[idx];
+			const _route = sliceRoutes_[idx];
 			window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
 			this.changeState(_route.url_pattern);
 		} else {

@@ -26,7 +26,7 @@ export default class gamePrepareView extends View {
 		this.whoIsItEvent();
 		// this.source = 'socket';
 		this.hide();
-	};
+	}
 
 
 	show() {
@@ -46,7 +46,7 @@ export default class gamePrepareView extends View {
 	}
 
 
-	//добавление пользователя
+	// добавление пользователя
 	addPlayer() {
 		this.bus.on(`${this.source}Code101`, (sourceResponse) => {
 			this.fields.playersList.addPlayer(sourceResponse.player);
@@ -69,11 +69,11 @@ export default class gamePrepareView extends View {
 				gameID: socketResponse.gameID,
 			};
 			this.bus.emit('getGameInfo', socketRequest);
-		})
+		});
 	}
 
 
-	//удаление пользователя
+	// удаление пользователя
 	removePLayer() {
 		this.bus.on(`${this.source}Code103`, (socketReceiveData) => {
 			if (this.active) {
@@ -97,7 +97,7 @@ export default class gamePrepareView extends View {
 		});
 		this.bus.on(`${this.source}Code200`, () => {
 			this.bus.emit('goToGame');
-		})
+		});
 	}
 
 
@@ -107,7 +107,7 @@ export default class gamePrepareView extends View {
 			this.clear = false;
 			this.gameInfo = socketReceiveData;
 		});
-	};
+	}
 
 
 	updateGameDataSlave() {
@@ -116,8 +116,7 @@ export default class gamePrepareView extends View {
 			this.clear = false;
 			this.gameInfo = socketReceiveData;
 			socketReceiveData.game.gamers.forEach((gamer) => {
-				if (gamer.userID !== this.userID)
-					this.fields.playersList.addPlayer(gamer);
+				if (gamer.userID !== this.userID) { this.fields.playersList.addPlayer(gamer); }
 			});
 		});
 	}
@@ -127,8 +126,7 @@ export default class gamePrepareView extends View {
 		this.bus.on(`${this.source}Code110`, (socketReceiveData) => {
 			this.bus.emit('openLobby');
 		});
-	};
-
+	}
 
 
 	buttonsEvents() {

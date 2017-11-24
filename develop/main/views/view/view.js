@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-//key frames
-import Block from "../../blocks/block/block.js";
+// key frames
+import Block from '../../blocks/block/block.js';
 
 
 /**
@@ -14,7 +14,7 @@ export default class View extends Block {
 	 * @constructor
 	 */
 	constructor(blocks) {
-		const block = Block.Create('section', {}, ['view', 'view_theme-black-orange',
+		const block = Block.create('section', {}, ['view', 'view_theme-black-orange',
 			'main_font-theme-black-orange']);
 
 		super(block.el);
@@ -31,8 +31,8 @@ export default class View extends Block {
 	 * Показывает вьюху
 	 */
 	show() {
-		setTimeout(() => {this.el.style.setProperty("display", "flex");}, 170);
-		setTimeout(() => {this.el.classList.remove("main_hidden");}, 130)
+		setTimeout(() => { this.el.style.setProperty('display', 'flex'); }, 170);
+		setTimeout(() => { this.el.classList.remove('main_hidden'); }, 130);
 	}
 
 
@@ -40,9 +40,8 @@ export default class View extends Block {
 	 * Скрывает вьюху
 	 */
 	hide() {
-		this.el.classList.add("main_hidden",);
-		setTimeout(() => {this.el.style.setProperty("display", "none");}, 170);
+		this.el.classList.add('main_hidden',);
+		setTimeout(() => { this.el.style.setProperty('display', 'none'); }, 170);
 	}
 }
-
 

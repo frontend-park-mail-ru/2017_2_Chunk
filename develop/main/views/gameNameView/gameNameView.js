@@ -11,7 +11,7 @@ export default class GameNameView extends Block {
 	 * @constructor - конструктор класса кнопки возврата в меню
 	 */
 	constructor() {
-		const gameName = Block.Create('div', {}, ['gameNameView', 'gameName'], 'NOT DEFENSE');
+		const gameName = Block.create('div', {}, ['gameNameView', 'gameName'], 'NOT DEFENSE');
 		super(gameName.el);
 		this.gameName = gameName;
 		this.hide();

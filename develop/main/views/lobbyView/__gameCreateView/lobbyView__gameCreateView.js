@@ -14,7 +14,7 @@ export default class GameCreateView extends Block {
 	 * @constructor
 	 */
 	constructor() {
-		const block = Block.Create('form', {}, ['lobbyView__gameCreateView']);
+		const block = Block.create('form', {}, ['lobbyView__gameCreateView']);
 		super(block.el);
 		this.fields = {};
 		this.bus = eventBus;

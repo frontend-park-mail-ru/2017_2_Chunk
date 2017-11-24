@@ -15,7 +15,7 @@ export default class LobbyGameData extends Block {
      * @constructor
      */
     constructor(data) {
-        const block = Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField']);
+        const block = Block.create('div', {}, ['lobbyView__lobbyFields__gameDataField']);
         super(block.el);
         this.bus = eventBus;
         this.gameID = data.gameID;
