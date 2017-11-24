@@ -133,12 +133,6 @@ export default class Game3D {
 			win = true;
 		this.bus.emit('endOfGame', win);
 		this.scene.remove(this.light);
-	    // let allChildren = this.scene.children;
-	    // let length = allChildren.length;
-	    //
-	    // for(let i = 0; i < length; i++) {
-		 //    this.scene.remove(allChildren[i]);
-	    // }
     }
 
 	raycasterTrue() {
@@ -211,6 +205,12 @@ export default class Game3D {
 
 		this.scene.add(this.cellContainer);
 		this.scene.add(this.playerContainer);
+
+		this.bus.on('deleteTree', () => {
+			console.log("HEREEEEEEEEEEEEEEEEEE");
+			this.scene.remove(this.cellContainer);
+			this.scene.remove(this.playerContainer);
+		})
 	}
 
 	animate() {

@@ -164,13 +164,13 @@ function createGame(data) {
 	code101.maxY = data.maxY;
 	arrayOfField = makeGameField(data.maxX);
 	arrayOfField = startArray;
-	gamers.push(playerData);
 	code101.numberOfPlayers = +data.numberOfPlayers;
 
 	return code101;
 }
 
 function getGameInfo() {
+	gamers.push(playerData);
 	code104.game.bots = bots;
 	code104.game.gameID = code101.gameID;
 	code104.game.field.field = arrayOfField;
@@ -185,7 +185,6 @@ function getGameInfo() {
 }
 
 function startGame() {
-	gamers.push(playerData);
 	arrayOfField = startArray;
 	code200.game.field.field = arrayOfField;
 	code200.game.field.maxX = code101.maxX;
@@ -204,7 +203,6 @@ function addBot() {
 	playerData.userID++;
 	playerData.email = `bot@com`;
 	bots.push(playerData);
-	gamers.push(playerData);
 	code101.player = playerData;
 
 	return code101;
