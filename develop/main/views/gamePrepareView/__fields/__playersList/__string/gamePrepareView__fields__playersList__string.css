@@ -8,6 +8,16 @@
 
 }
 
+
+@media screen and (min-width: 360px) and (max-width: 1100px) and (orientation: portrait) {
+    .gamePrepareView__fields__playersList__string {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: 30vw 30vw 30vw;
+        grid-template-areas: "place1 place2 place3";
+    }
+}
+
 .gamePrepareView__fields__playersList__string > .gamePrepareView__fields__playersList__string__userId {
     grid-area: place1;
 }

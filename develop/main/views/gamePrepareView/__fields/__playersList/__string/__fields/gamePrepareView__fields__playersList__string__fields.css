@@ -1,12 +1,12 @@
-/*.gamePrepareView__fields__playersList__string__fields {*/
-    /*font-size: calc(14px + 0.3vh) !important;*/
-    /*display: inline-block;*/
-    /*margin: 0.1em 0.8em;*/
-/*}*/
-
 .gamePrepareView__fields__playersList__string__fields {
-    font-size: 12px !important;
+    font-size: calc(14px + 0.3vh) !important;
     display: inline-block;
     margin: 0.1em 0.8em;
-    overflow: hidden;
+}
+
+@media screen and (min-width: 640px) and (max-width: 1100px) {
+    .gamePrepareView__fields__playersList__string__fields {
+        font-size: 10px !important;
+        overflow: hidden;
+    }
 }
