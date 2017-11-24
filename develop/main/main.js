@@ -230,38 +230,15 @@ app
     .append(gameContainer);
 
 
-
-// var i = 1;
-// var saveNode = undefined;
-// const myStorage = localStorage;
-// const nodeList = Array.from(document.getElementsByTagName("link"));
-// nodeList.forEach((node) => {
-// 	if (node.rel === 'shortcut icon') {
-// 		saveNode = node;
-// 		setInterval(nextIco, 100);
-// 	}
-// });
-//
-// function nextIco() {
-// 	saveNode.href = `./images/dancing-groot/groot-${i % 11}.gif`;
-// 	i++;
-// }
-
-
-// if ('serviceWorker' in navigator) {
-// 	const serviceWorker = navigator.serviceWorker;
-// 	navigator.serviceWorker.register('/serviceWorker.js', {scope: '/'})
-// 		.then((reg) => {
-// 			console.log('Succeeded registration ' + reg.scope);
-// 		})
-// 		.catch((err) => {
-// 			console.log('Registration error');
-// 		});
-// }
-
-// const workerRequest = {
-//     data: "bla bla bal"
-// };
-// eventBus.emit('workerMessage', workerRequest);
+if ('serviceWorker' in navigator) {
+	const serviceWorker = navigator.serviceWorker;
+	navigator.serviceWorker.register('/serviceWorker.js', {scope: '/'})
+		.then((reg) => {
+			console.log('Succeeded registration ' + reg.scope);
+		})
+		.catch((err) => {
+			console.log('Registration error');
+		});
+}
 
 router.start();
