@@ -36,8 +36,10 @@ export default class Game3D {
 		this.distance = 0;
 		this.end = false;
 		this.diff = 0;
+		this.grow = 0;
 		// Индикатор движения для движения, разрешает движение только после хода.
-		this.indicator = false;
+		this.moveIndicator = false;
+		this.scaleIndicator = false;
 		this.raycasterIndicator = false;
 		this.stepIndicator = false;
         this.queue = [];
@@ -215,6 +217,7 @@ export default class Game3D {
 
 		//То самое движения, для которого нужен включенный индикатор.
 		this.moving();
+		this.scaling();
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		// Зацикливание
 		requestAnimationFrame(this.animate.bind(this));
@@ -285,6 +288,8 @@ export default class Game3D {
                             };
                             this.bus.emit(`${this.source}Message`, step);
                         }
+                        else this.deleteAllStepEnable();
+
                     }
                     this.INTERSECTED.material.emissive.setHex(tools.HOVER_COLOR);
                 }
@@ -314,24 +319,38 @@ export default class Game3D {
 		if (Math.abs(point2.x - point1.x) <= 1 && Math.abs(point2.z - point1.z) <= 1) {
 			Object.freeze(this.point1);
 			this.addOnePlayers(this.playerContainer, point2.x, point2.z, this.arrayOfPlane[point1.x][point1.z].figure);
+			this.scaleIndicator = true;
 			//И вызываем функцию обработки хода, то-есть замены фигурок, если они есть рядом.
 			this.step(point2.x, point2.z);
-			delete this.point1;
-			this.point1 = new Point();
 			this.stepIndicator = false;
 		}
 		//если клетка находится через одну, то включаем индикатор для движения фигуры.
 		else {
 			this.point1 = point1;
 			this.point2 = point2;
-			this.indicator = true;
+			this.moveIndicator = true;
+		}
+	}
+
+	scaling() {
+		if (this.scaleIndicator) {
+			if (this.grow < 1) {
+				this.arrayOfFigure[this.point2.x][this.point2.z].mesh.scale.set(1, this.grow, 1);
+				this.grow += 0.04;
+			}
+			else {
+				this.grow = 0;
+				this.scaleIndicator = false;
+				delete this.point1;
+				this.point1 = new Point();
+			}
 		}
 	}
 
 	// Функция движения.
 	moving() {
 		//Если индикатор вкдючен
-		if (this.indicator) {
+		if (this.moveIndicator) {
 			//Замораживаю point1, чтобы она на протяжении всего движения не менялась.
 			Object.freeze(this.point1);
 
@@ -353,7 +372,7 @@ export default class Game3D {
 			}
 			else {
 				//Выключаем индикатор, тоесть останавливаем движение.
-				this.indicator = false;
+				this.moveIndicator = false;
 				this.end = false;
 				//В следующих двух строчках приравниваем длинные кривые координаты фигуры к ровным координатам клеток,
 				//чтобы со временем не получилось большой погрешности.

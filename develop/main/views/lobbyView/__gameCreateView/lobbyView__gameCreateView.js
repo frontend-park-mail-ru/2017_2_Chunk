@@ -57,7 +57,7 @@ export default class GameCreateView extends Block {
 			event.preventDefault();
 			const data = {
 				code: '100',
-				numberOfPlayers: '2',
+				numberOfPlayers: '4',
 				maxX: 8,
 				maxY: 8,
 			};
