@@ -14,7 +14,7 @@ export default class Http {
 	 * @param {string} address - адрес запроса
 	 * @return {Promise}
 	 */
-	static FetchGet(address) {
+	static fetchGet(address) {
 		const url = backendUrl + address;
 		const myHeaders = new Headers();
 		myHeaders.append('Content-Type', 'application/json; charset=utf-8');
@@ -33,7 +33,7 @@ export default class Http {
 	 * @param {string} address - адрес запроса
 	 * @return {Promise}
 	 */
-	static FetchPost(address, body) {
+	static fetchPost(address, body) {
 		const url = backendUrl + address;
 		const myHeaders = new Headers();
 		myHeaders.set('Content-Type', 'application/json; charset=utf-8');
