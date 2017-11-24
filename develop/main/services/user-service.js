@@ -199,12 +199,13 @@ export default class UserService {
 	 * Разлогинивает
 	 */
 	logout() {
-		if (navigator.onLine)
+		if (navigator.onLine) {
 			if (this.isLoggedIn()) {
 				this.user = null;
 				this.users = [];
 				Http.FetchGet('/user/exit');
 			}
+		}
 	}
 
 

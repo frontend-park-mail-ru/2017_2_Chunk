@@ -24,7 +24,7 @@ export default class webSocket {
 		this.bus.on('socketMessage', (socketRequest) => {
 			this.socket.send(JSON.stringify(socketRequest));
 		});
-		//how to use it?
+		// how to use it?
 		// const data = {
 		// 	code: 123,
 		// 	message: 'bla bla bla'
@@ -54,13 +54,13 @@ export default class webSocket {
 				console.log('web socket close is not clean');
 			}
 			clearInterval(this.interval);
-			//alert('Код: ' + event.code + ' причина: ' + event.reason);
+			// alert('Код: ' + event.code + ' причина: ' + event.reason);
 			this.bus.emit('socketClose');
 		};
 		this.socket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
 			console.log(data);
-			this.bus.emit(`socketCode${data.code}`, (data))
+			this.bus.emit(`socketCode${data.code}`, (data));
 		};
 		this.socket.onerror = (error) => {
 			clearInterval(this.interval);
@@ -80,13 +80,13 @@ export default class webSocket {
 			code: '111',
 		});
 		this.socket.send(data);
-	};
+	}
 
 
 	subscribeNewGameNode() {
 		const data = JSON.stringify({
 			code: '106',
 		});
-		this.socket.send(data)
+		this.socket.send(data);
 	}
 }

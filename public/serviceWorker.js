@@ -1,4 +1,4 @@
-let version = '17';
+let version = '18';
 self.addEventListener('install', (event) => {
 	event.waitUntil(
 		caches.open(version)
@@ -52,7 +52,6 @@ self.addEventListener('install', (event) => {
 	)
 });
 self.addEventListener('fetch', (event) => {
-	debugger;
 	event.respondWith(
 		caches.match(event.request)
 			.then((cachedResponse) => {
