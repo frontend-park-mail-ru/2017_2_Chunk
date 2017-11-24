@@ -1,7 +1,7 @@
 .themeButtonView {
     box-sizing: border-box;
     border: 0.1em solid white;
-    font-size: calc(12px + 1.1vh);
+    font-size: calc(10px + 1.3vh);
     text-align: center;
     opacity: 1;
     padding: 0.1em 0.1em;
@@ -17,14 +17,6 @@
     outline: none;
 
 }
-
-
-/*.menuView__theme-button:focus {*/
-    /*outline: none;*/
-    /*opacity: 0.8 !important;*/
-    /*color: #FF4900 !important;*/
-    /*border: 0.04em solid #FF4900 !important;*/
-/*}*/
 
 
 .themeButtonView:hover {

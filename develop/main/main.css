@@ -35,7 +35,7 @@
     }
     body {
         background: url('./image/galaxy.jpg') no-repeat;
-        background-size: 640px 362px;
+        background-size: 100vw 100vh;
         font-family: "Comic Sans MS";
         box-sizing: border-box;
         margin: 0 !important;
@@ -61,6 +61,8 @@
 
         grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place8 place8 place8";
         grid-template-rows: 6vw 10vw auto;
+        grid-template-columns: 2fr 3fr 2fr;
+
     }
 
 }
