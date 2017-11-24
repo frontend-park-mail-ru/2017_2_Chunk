@@ -174,7 +174,7 @@ function createGame(data) {
 }
 
 function getGameInfo() {
-	gamers.push(playerData);
+	gamers.push(code101.player);
 	code104.game.bots = bots;
 	code104.game.gameID = code101.gameID;
 	code104.game.field.field = arrayOfField;
