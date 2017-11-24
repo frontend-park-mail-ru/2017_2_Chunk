@@ -51,7 +51,6 @@ export default class gamePrepareView extends View {
 	//добавление пользователя
 	addPlayer() {
 		this.bus.on(`${this.source}Code101`, (sourceResponse) => {
-			debugger;
 			this.fields.playersList.addPlayer(sourceResponse.player);
 			this.clear = false;
 			const socketRequest = {
@@ -98,7 +97,7 @@ export default class gamePrepareView extends View {
 		this.bus.on('createGame', () => {
 			this.updateGameDataMaster();
 		});
-		this.bus.on('socketCode200', () => {
+		this.bus.on(`${this.source}Code200`, () => {
 			this.bus.emit('goToGame');
 		})
 	}
@@ -132,18 +131,6 @@ export default class gamePrepareView extends View {
 		});
 	};
 
-
-	gameStatusEvents() {
-		this.bus.on('connectGame', () => {
-			this.updateGameDataSlave();
-		});
-		this.bus.on('createGame', () => {
-			this.updateGameDataMaster();
-		});
-		this.bus.on('socketCode200', () => {
-			this.bus.emit('goToGame');
-		})
-	}
 
 
 	buttonsEvents() {

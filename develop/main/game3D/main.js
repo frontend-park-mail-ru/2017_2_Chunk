@@ -12,7 +12,7 @@ import eventBus from "../modules/eventBus";
 export default class Game3D {
 
 	constructor(container) {
-        this.source = 'socket';
+        this.source = 'worker';
 
 		this.bus = eventBus;
 
@@ -109,8 +109,9 @@ export default class Game3D {
         this.countPlayers = this.gamers.length;
         this.addMeshes();
         // this.bus.emit('showPlayers', this.playerString());
+	    debugger;
         let info = {
-            code: 112
+            code: '112'
         };
         this.bus.emit(`${this.source}Message`, info);
         this.bus.on(`${this.source}Code112`, (data) => {

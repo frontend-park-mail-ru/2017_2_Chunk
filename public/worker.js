@@ -113,7 +113,7 @@ var code204 = {
 	reason: "Game had ended, check result"
 };
 
-let playerData = {
+var playerData = {
 	userID: 1,
 	username: "player",
 	email: "player@com",
@@ -139,7 +139,7 @@ var code201 = {
 var userID = code101.player.userID;
 
 var code112 = {
-	code: 112,
+	code: '112',
 	gameID: code101.gameID,
 	reason: "Returns your userID",
 	userID: userID
@@ -208,7 +208,6 @@ function addBot() {
 
 function getUserID() {
 	code112.gameID = code101.gameID;
-
 	return code112;
 }
 
