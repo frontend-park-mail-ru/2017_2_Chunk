@@ -11,6 +11,7 @@ import eventBus from '../../modules/eventBus';
 export default class gamePrepareView extends View {
 	constructor() {
 		super(gamePrepareFields);
+		this.source = 'worker';
 		this.fields = gamePrepareFields;
 		this.bus = eventBus;
 		this.el.classList.add('gamePrepareView');
@@ -23,7 +24,8 @@ export default class gamePrepareView extends View {
 		this.gameStatusEvents();
 		this.buttonsEvents();
 		this.whoIsItEvent();
-		this.source = 'socket';
+		// this.source = 'socket';
+
 		this.hide();
 	};
 
@@ -48,12 +50,13 @@ export default class gamePrepareView extends View {
 
 	//добавление пользователя
 	addPlayer() {
-		this.bus.on('socketCode101', (socketResponse) => {
-			this.fields.playersList.addPlayer(socketResponse.player);
+		this.bus.on(`${this.source}Code101`, (sourceResponse) => {
+			debugger;
+			this.fields.playersList.addPlayer(sourceResponse.player);
 			this.clear = false;
 			const socketRequest = {
 				code: '104',
-				gameID: socketResponse.gameID,
+				gameID: sourceResponse.gameID,
 			};
 			this.bus.emit('getGameInfo', socketRequest);
 		});
@@ -61,7 +64,7 @@ export default class gamePrepareView extends View {
 
 
 	addBot() {
-		this.bus.on('socketCode108', (socketResponse) => {
+		this.bus.on(`${this.source}Code108`, (socketResponse) => {
 			this.fields.playersList.addPlayer(socketResponse.player);
 			this.clear = false;
 			const socketRequest = {
@@ -75,7 +78,7 @@ export default class gamePrepareView extends View {
 
 	//удаление пользователя
 	removePLayer() {
-		this.bus.on('socketCode103', (socketReceiveData) => {
+		this.bus.on(`${this.source}Code103`, (socketReceiveData) => {
 			if (this.active) {
 				this.fields.playersList.removePlayer(socketReceiveData.player.userID);
 				const socketSendData = {
@@ -102,7 +105,7 @@ export default class gamePrepareView extends View {
 
 
 	updateGameDataMaster() {
-		this.bus.on('socketCode104', (socketReceiveData) => {
+		this.bus.on(`${this.source}Code104`, (socketReceiveData) => {
 			this.fields.header.updateGameData(socketReceiveData.game);
 			this.clear = false;
 			this.gameInfo = socketReceiveData;
@@ -111,7 +114,7 @@ export default class gamePrepareView extends View {
 
 
 	updateGameDataSlave() {
-		this.bus.on('socketCode104', (socketReceiveData) => {
+		this.bus.on(`${this.source}Code104`, (socketReceiveData) => {
 			this.fields.header.updateGameData(socketReceiveData.game);
 			this.clear = false;
 			this.gameInfo = socketReceiveData;
@@ -124,7 +127,7 @@ export default class gamePrepareView extends View {
 
 
 	gameClose() {
-		this.bus.on('socketCode110', (socketReceiveData) => {
+		this.bus.on(`${this.source}Code110`, (socketReceiveData) => {
 			this.bus.emit('openLobby');
 		});
 	};

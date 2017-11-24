@@ -2,7 +2,6 @@
 
 import Field from './field.js';
 import GameService from '../services/game-service.js';
-import WebSocket from '../modules/webSocket';
 
 
 const x = 425;

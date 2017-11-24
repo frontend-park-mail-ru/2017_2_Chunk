@@ -132,6 +132,7 @@ export default class Game3D {
 		if (this.result === this.figureType)
 			win = true;
 		this.bus.emit('endOfGame', win);
+		this.scene.remove(this.light);
 	    // let allChildren = this.scene.children;
 	    // let length = allChildren.length;
 	    //

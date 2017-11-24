@@ -2,7 +2,8 @@
 import View from '../view/view';
 import lobbyFields from './__lobbyFields/lobbyView__lobbyFields';
 import LobbyGameData from './__lobbyFields/__gameDataField/lobbyView__lobbyFields__gameDataField';
-import WebSocket from '../../modules/webSocket';
+// import WebSocket from '../../modules/webSocket';
+import WebWorker from '../../modules/webWorker';
 import eventBus from '../../modules/eventBus';
 
 
@@ -26,8 +27,11 @@ export default class LobbyView extends View {
     show() {
         super.show();
         this.el.classList.remove('lobbyView_filter-smooth');
-        if (!this.webSocket)
-            this.webSocket = new WebSocket();
+        // if (!this.webSocket)
+        //     this.webSocket = new WebSocket();
+        this.source = 'worker';
+        if (!this.webWorker)
+            this.webWorker = new WebWorker();
     }
 
 
@@ -67,7 +71,7 @@ export default class LobbyView extends View {
 
     socketEvent() {
         //обновление информации о всех играх
-        this.bus.on('socketCode106', (data) => {
+        this.bus.on(`${this.source}Code106`, (data) => {
             //debugger;
             if (this.gameList[data.game.gameID]) {
                 this.updateGameNode(data.game);
@@ -77,19 +81,21 @@ export default class LobbyView extends View {
             }
         });
         //удаление игры
-        this.bus.on('socketCode110', (socketReceiveData) => {
-            //debugger;
+        this.bus.on(`${this.source}Code110`, (socketReceiveData) => {
             this.removeGameNode(socketReceiveData.gameID);
         });
         //запрос всей информации об играх
-        this.bus.on('socketCode111', (data) => {
+        this.bus.on(`${this.source}Code111`, (data) => {
             data.games.forEach((gameData) => {
                 this.addGameNode(gameData);
             });
         });
         //закрытии всех игр
-        this.bus.on('socketClose', () => {
-            delete this.webSocket;
+        this.bus.on(`${this.source}Close`, () => {
+        	if (this.webWorker)
+                delete this.webWorker;
+        	else
+        		delete this.webSocket;
             for (const gameID in this.gameList) {
                 this.removeGameNode(gameID);
             }

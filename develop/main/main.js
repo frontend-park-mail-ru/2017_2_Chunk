@@ -45,10 +45,6 @@ import Game3D from "./game3D/main";
 
 import ServiceWorker from '../../public/serviceWorker';
 
-import WebWorker from './modules/webWorker';
-
-const webWorker = new WebWorker();
-
 
 const gameNameView = new GameNameView();
 
@@ -229,16 +225,16 @@ app
     .append(gamePrepareView)
     .append(gameContainer);
 
-
-if ('serviceWorker' in navigator) {
-	const serviceWorker = navigator.serviceWorker;
-	navigator.serviceWorker.register('/serviceWorker.js', {scope: '/'})
-		.then((reg) => {
-			console.log('Succeeded registration ' + reg.scope);
-		})
-		.catch((err) => {
-			console.log('Registration error');
-		});
-}
+//
+// if ('serviceWorker' in navigator) {
+// 	const serviceWorker = navigator.serviceWorker;
+// 	navigator.serviceWorker.register('/serviceWorker.js', {scope: '/'})
+// 		.then((reg) => {
+// 			console.log('Succeeded registration ' + reg.scope);
+// 		})
+// 		.catch((err) => {
+// 			console.log('Registration error');
+// 		});
+// }
 
 router.start();

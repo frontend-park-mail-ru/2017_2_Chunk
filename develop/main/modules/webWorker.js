@@ -7,6 +7,7 @@ export default class webWorker {
         if (window.Worker) {
             this.bus = eventBus;
             this.worker = new Worker('./worker.js');
+            console.log('web worker constructor');
             this.gameHandler();
             this.workerCallbacks();
         }
@@ -40,8 +41,13 @@ export default class webWorker {
     workerCallbacks() {
         this.worker.onmessage = (workerResponse) => {//возвращает не массив ха - ха!
             const data = workerResponse.data;
+            console.log(data);
             this.bus.emit(`workerCode${data.code}`, (data))
-        }
+        };
+
+        this.bus.on('workerClose', () => {
+            this.worker.close();
+        })
     }
 
 
