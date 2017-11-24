@@ -13,10 +13,10 @@ import eventBus from '../../modules/eventBus';
  */
 export default class LobbyView extends View {
 	constructor() {
-	    super(lobbyFields);
+		super(lobbyFields);
 		this.fields = lobbyFields;
-	    this.source = navigator.onLine ? 'socket' : 'worker';
-	    this.bus = eventBus;
+		this.source = navigator.onLine ? 'socket' : 'worker';
+		this.bus = eventBus;
 		this.el.classList.add('lobbyView');
 		this.gameList = {};
 		this.gameCreateBannerEvent();
@@ -94,7 +94,11 @@ export default class LobbyView extends View {
 		});
 		// закрытии всех игр
 		this.bus.on(`${this.source}Close`, () => {
-        	if (this.webWorker) { delete this.webWorker; } else { delete this.webSocket; }
+			if (this.webWorker) {
+				delete this.webWorker;
+			} else {
+				delete this.webSocket;
+			}
 			for (const gameID in this.gameList) {
 				this.removeGameNode(gameID);
 			}

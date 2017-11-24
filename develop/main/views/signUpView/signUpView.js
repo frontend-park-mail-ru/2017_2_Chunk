@@ -55,7 +55,8 @@ export default class SignUpView extends View {
 	 * @returns {Promise.<void>}
 	 */
 	async onSubmit(formData) {
-		const resp = await this.userService.signup(formData.name, formData.email, formData.password, formData.confirm);
+		const resp = await this.userService.signup(formData.name, formData.email,
+			formData.password, formData.confirm);
 		if (resp.ok) {
 			this.form.reset();
 			this.message.clear();

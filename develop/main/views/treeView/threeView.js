@@ -1,5 +1,4 @@
 'use strict';
-
 import CommonView from '../view/view';
 import Block from '../../blocks/block/block.js';
 import eventBus from '../../modules/eventBus';
@@ -9,16 +8,13 @@ export default class ThreeView extends CommonView {
 		const gameContainer = Block.create('div');
 
 	    const winDiv = Block.create('div', {}, ['canvasView__winDiv'], '');
-	    // const playersDiv = Block.create('div', {}, [], '');
 	    super([gameContainer, winDiv]);
 	    this.el.style.setProperty('border', 'none');
 	    this.el.classList.add('treeView');
 
 	    this.winDiv = winDiv;
-	    // this.playersDiv = playersDiv;
 
 	    this.winDiv.hide();
-	    // this.playersDiv.hide();
 
 	    this.bus = eventBus;
 	    this.bus.on('endOfGame', (win) => {
@@ -33,12 +29,7 @@ export default class ThreeView extends CommonView {
 				router.goTo('/menu');
 			}, 3000);
 	    });
-	    // this.eventBus.on('showPlayers', (players) => {
-	    // 	this.playersDiv.setText(players);
-	    // 	this.playersDiv.show();
-	    // });
-
-		this.hide();
+		super.hide();
 	}
 
 

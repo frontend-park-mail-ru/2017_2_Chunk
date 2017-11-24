@@ -18,7 +18,7 @@ export default class Player {
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.position.set(
 			(x + 0.5) * tools.PLANE_X,
-			(tools.PLAYER_HEIGHT / 2) * 1.05,
+			tools.PLAYER_HEIGHT / 2 * 1.05,
 			(z + 0.5) * tools.PLANE_Z
 		);
 

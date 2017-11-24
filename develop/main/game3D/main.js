@@ -92,6 +92,13 @@ export default class Game3D {
 		this.bus.on(`${this.source}Code307`, (data) => {	// It is not your turn
 			// console.log(data);
 		});
+
+		this.bus.on('deleteTree', () => {
+			this.scene.remove(this.spotLight);
+			this.scene.remove(this.cellContainer);
+			this.scene.remove(this.playerContainer);
+			cancelAnimationFrame(this.animation);
+		});
 	}
 
 	handling112(data) {
@@ -134,12 +141,6 @@ export default class Game3D {
 		if (this.result === this.figureType) { win = true; }
 		this.bus.emit('endOfGame', win);
 		this.scene.remove(this.light);
-		this.bus.on('deleteTree', () => {
-			this.scene.remove(this.spotLight);
-			this.scene.remove(this.cellContainer);
-			this.scene.remove(this.playerContainer);
-			cancelAnimationFrame(this.animation);
-		});
 	}
 
 	raycasterTrue() {
