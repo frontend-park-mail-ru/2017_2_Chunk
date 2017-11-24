@@ -2,7 +2,7 @@
 import View from '../view/view';
 import lobbyFields from './__lobbyFields/lobbyView__lobbyFields';
 import LobbyGameData from './__lobbyFields/__gameDataField/lobbyView__lobbyFields__gameDataField';
-// import WebSocket from '../../modules/webSocket';
+import WebSocket from '../../modules/webSocket';
 import WebWorker from '../../modules/webWorker';
 import eventBus from '../../modules/eventBus';
 
@@ -13,9 +13,10 @@ import eventBus from '../../modules/eventBus';
  */
 export default class LobbyView extends View {
     constructor() {
-        super(lobbyFields);
+	    super(lobbyFields);
         this.fields = lobbyFields;
-        this.bus = eventBus;
+	    this.source = navigator.onLine ? 'socket' : 'worker';
+	    this.bus = eventBus;
         this.el.classList.add('lobbyView');
         this.gameList = {};
         this.gameCreateBannerEvent();
@@ -27,11 +28,16 @@ export default class LobbyView extends View {
     show() {
         super.show();
         this.el.classList.remove('lobbyView_filter-smooth');
-        // if (!this.webSocket)
-        //     this.webSocket = new WebSocket();
-        this.source = 'worker';
-        if (!this.webWorker)
-            this.webWorker = new WebWorker();
+        if (navigator.onLine) {
+	        if (!this.webSocket) {
+		        this.webSocket = new WebSocket();
+	        }
+        }
+        else {
+	        if (!this.webWorker) {
+		        this.webWorker = new WebWorker();
+	        }
+        }
     }
 
 

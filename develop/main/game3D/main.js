@@ -12,7 +12,7 @@ import eventBus from "../modules/eventBus";
 export default class Game3D {
 
 	constructor(container) {
-        this.source = 'worker';
+		this.source = navigator.onLine ? 'socket' : 'worker';
 
 		this.bus = eventBus;
 

@@ -10,7 +10,7 @@ import ViewButton from '../../view/__view-button/view__view-button';
  */
 const menuFields = {
 	profile: Block.Create('div', {'data-section': 'profile'}, ['profile', 'auth'], ''),
-	lobby: ViewButton.Create({href: '/lobby'}, ['auth'], 'Lobby'),
+	lobby: ViewButton.Create({href: '/lobby'}, ['every-available'], 'Lobby'),
 	signup: ViewButton.Create({href: '/signup'}, ['unauth'], 'Sign up'),
 	login: ViewButton.Create({href: '/login'}, ['unauth'], 'Login'),
 	update: ViewButton.Create({href: '/profile'}, ['auth'], 'Profile'),

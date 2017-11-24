@@ -15,8 +15,6 @@ export default class MenuView extends View {
 
 		this.bus = eventBus;
 
-
-
 		this.bus.on('unauth', () => {
 			for (const elem in this.elements) {
 				if (!this.elements[elem].el.classList.contains('unauth') &&

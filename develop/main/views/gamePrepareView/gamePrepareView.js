@@ -11,7 +11,7 @@ import eventBus from '../../modules/eventBus';
 export default class gamePrepareView extends View {
 	constructor() {
 		super(gamePrepareFields);
-		this.source = 'worker';
+		this.source = navigator.onLine ? 'socket' : 'worker';
 		this.fields = gamePrepareFields;
 		this.bus = eventBus;
 		this.el.classList.add('gamePrepareView');
@@ -25,7 +25,6 @@ export default class gamePrepareView extends View {
 		this.buttonsEvents();
 		this.whoIsItEvent();
 		// this.source = 'socket';
-
 		this.hide();
 	};
 
@@ -44,7 +43,6 @@ export default class gamePrepareView extends View {
 		}
 		this.clear = true;
 		this.active = false;
-		this.bus.off('socketCode104');
 	}
 
 
