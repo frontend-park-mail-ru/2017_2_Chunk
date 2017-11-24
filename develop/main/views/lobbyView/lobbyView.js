@@ -29,12 +29,12 @@ export default class LobbyView extends View {
 		super.show();
 		this.el.classList.remove('lobbyView_filter-smooth');
 		if (navigator.onLine) {
-	        if (!this.webSocket) {
-		        this.webSocket = new WebSocket();
-	        }
+			if (!this.webSocket) {
+				this.webSocket = new WebSocket();
+			}
 		} else if (!this.webWorker) {
-		        this.webWorker = new WebWorker();
-	        }
+			this.webWorker = new WebWorker();
+		}
 	}
 
 

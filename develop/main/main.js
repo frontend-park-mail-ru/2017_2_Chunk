@@ -39,9 +39,9 @@ import EventBus from './modules/eventBus';
 
 import Router from './modules/router/router';
 
-import ThreeView from "./views/treeView/threeView.js"
+import ThreeView from './views/treeView/threeView.js';
 
-import Game3D from "./game3D/main";
+import Game3D from './game3D/main';
 
 import ServiceWorker from '../../public/serviceWorker';
 
@@ -109,126 +109,124 @@ Views.push(gameContainer);
 
 
 eventBus.on('openSignUp', function () {
-    Views.forEach((view) => {
-        view.hide();
-    });
-    gameNameView.show();
-    signUpView.show();
-    backMenuButtonView.show();
+	Views.forEach((view) => {
+		view.hide();
+	});
+	gameNameView.show();
+	signUpView.show();
+	backMenuButtonView.show();
 });
 
 
 eventBus.on('openLogin', function () {
-    Views.forEach((view) => {
-        view.hide();
-    });
-    gameNameView.show();
-    loginView.show();
-    backMenuButtonView.show();
+	Views.forEach((view) => {
+		view.hide();
+	});
+	gameNameView.show();
+	loginView.show();
+	backMenuButtonView.show();
 });
 
 
 eventBus.on('openUpdate', function () {
-    Views.forEach((view) => {
-        view.hide();
-    });
-    gameNameView.show();
-    updateView.show();
-    backMenuButtonView.show();
+	Views.forEach((view) => {
+		view.hide();
+	});
+	gameNameView.show();
+	updateView.show();
+	backMenuButtonView.show();
 });
 
 
 eventBus.on('openRules', function () {
-    Views.forEach((view) => {
-        view.hide();
-    });
-    gameNameView.show();
-    rulesView.show();
-    backMenuButtonView.show();
+	Views.forEach((view) => {
+		view.hide();
+	});
+	gameNameView.show();
+	rulesView.show();
+	backMenuButtonView.show();
 });
 
 
 eventBus.on('openMenu', function () {
-    Views.forEach((view) => {
-        view.hide();
-    });
-    themeButtonView.show();
-    const browserStorage = window.localStorage;
-    gameNameView.show();
-    if (browserStorage.gameID) {
-        browserStorage.removeItem('gameID');
-    }
+	Views.forEach((view) => {
+		view.hide();
+	});
+	themeButtonView.show();
+	const browserStorage = window.localStorage;
+	gameNameView.show();
+	if (browserStorage.gameID) {
+		browserStorage.removeItem('gameID');
+	}
 
-    menuView.show();
+	menuView.show();
 });
 
 
 eventBus.on('exit', function () {
-    userService.logout();
-    eventBus.emit('unauth');
-    router.goTo('/menu');
+	userService.logout();
+	eventBus.emit('unauth');
+	router.goTo('/menu');
 });
 
 
 eventBus.on('openScoreboard', function () {
-    Views.forEach((view) => {
-        view.hide();
-    });
-    gameNameView.show();
-    scoreboardView.show();
-    backMenuButtonView.show();
+	Views.forEach((view) => {
+		view.hide();
+	});
+	gameNameView.show();
+	scoreboardView.show();
+	backMenuButtonView.show();
 });
 
 
-eventBus.on("openGame", () => {
-    Views.forEach((view) => {
-        view.hide();
-    });
-    backMenuButtonView.show();
-    gameContainer.show();
+eventBus.on('openGame', () => {
+	Views.forEach((view) => {
+		view.hide();
+	});
+	backMenuButtonView.show();
+	gameContainer.show();
 });
 
 
 eventBus.on('openLobby', function () {
-    Views.forEach((view) => {
-        view.hide();
-    });
-    gameNameView.show();
-    backMenuButtonView.show();
-    lobbyView.show();
+	Views.forEach((view) => {
+		view.hide();
+	});
+	gameNameView.show();
+	backMenuButtonView.show();
+	lobbyView.show();
 });
 
 eventBus.on('openWaitingHall', function () {
-    Views.forEach((view) => {
-        view.hide();
-    });
-    gameNameView.show();
-    backButtonView.show();
-    gamePrepareView.show();
+	Views.forEach((view) => {
+		view.hide();
+	});
+	gameNameView.show();
+	backButtonView.show();
+	gamePrepareView.show();
 });
 
 
-
 app
-    .append(gameNameView)
-    .append(menuView)
-    .append(signUpView)
-    .append(loginView)
-    .append(backMenuButtonView)
-    .append(backButtonView)
-    .append(themeButtonView)
-    .append(profileView)
-    .append(rulesView)
-    .append(scoreboardView)
-    .append(lobbyView)
-    .append(updateView)
-    .append(gameCreateView)
-    .append(gamePrepareView)
-    .append(gameContainer);
+	.append(gameNameView)
+	.append(menuView)
+	.append(signUpView)
+	.append(loginView)
+	.append(backMenuButtonView)
+	.append(backButtonView)
+	.append(themeButtonView)
+	.append(profileView)
+	.append(rulesView)
+	.append(scoreboardView)
+	.append(lobbyView)
+	.append(updateView)
+	.append(gameCreateView)
+	.append(gamePrepareView)
+	.append(gameContainer);
 
 
 if ('serviceWorker' in navigator) {
-	const serviceWorker = navigator.serviceWorker;
 	navigator.serviceWorker.register('/serviceWorker.js', {scope: '/'})
 		.then((reg) => {
 			console.log('Succeeded registration ' + reg.scope);

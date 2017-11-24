@@ -98,8 +98,8 @@ export default class Router {
 			}
 		} catch (err) {
 			this.bus.emit('unauth');
-			const slice_Routes = this._routes.slice(6);
-			this.findNewState(slice_Routes);
+			const sliceRoutes_ = this._routes.slice(6);
+			this.findNewState(sliceRoutes_);
 		}
 	}
 
