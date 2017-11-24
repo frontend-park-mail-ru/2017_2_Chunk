@@ -29,8 +29,8 @@ export default class ThreeView extends CommonView {
 		    this.winDiv.show();
             setTimeout(() => {
                 this.winDiv.hide();
+	            this.eventBus.emit('deleteTree');
                 router.goTo('/menu');
-                this.eventBus.emit('deleteTree');
             }, 3000);
 	    });
 	    // this.eventBus.on('showPlayers', (players) => {
