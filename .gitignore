@@ -95,3 +95,12 @@ node-js-getting-git started
 /public/application.css.map
 /public/application.js.map
 
+/develop/main/image/galaxy.jpg
+/develop/main/image/galaxy2.jpg
+/develop/main/image/galaxy4.jpg
+/develop/main/image/galaxy3.jpg
+Будет удалено develop/main/views/gamePrepareView/__fields/__startButton/
+!/public/menu/
+Будет удалено public/menu/
+/public/menu/application.js
+/public/menu/application.css

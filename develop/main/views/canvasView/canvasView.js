@@ -9,13 +9,19 @@ import Block from '../../blocks/block/block.js';
  */
 export default class CanvasView extends CommonView {
 	constructor(eventBus) {
-		const canvas1 = Block.Create('canvas', {width: '850', height: '850'}, [
+		const canvas1 = Block.create('canvas', {width: '850', height: '850'}, [
 			'canvasView__canvas', 'canvasView__canvas_position_backCanvas'
 		], '');
-		const canvas2 = Block.Create('canvas', {width: '850', height: '850'}, [
+		const canvas2 = Block.create('canvas', {width: '850', height: '850'}, [
 			'canvasView__canvas', 'canvasView__canvas_position_frontCanvas'
 		], '');
-		const winDiv = Block.Create('div', {}, ['canvasView__winDiv'], '');
+		const winDiv = Block.create('div', {}, ['canvasView__winDiv'], '');
+
+		const connect = Block.create('button', {}, ['canvasView__webSocketButton'], 'Connect');
+
+		const disconnect = Block.create('button', {}, ['canvasView__webSocketButton'], 'Disconnect');
+
+		const sendMessage = Block.create('button', {}, ['canvasView__webSocketButton'], 'Send message');
 
 		super([canvas1, canvas2, winDiv]);
 
@@ -24,6 +30,11 @@ export default class CanvasView extends CommonView {
 		this.canvas1 = canvas1;
 		this.canvas2 = canvas2;
 		this.winDiv = winDiv;
+		this.socket = {
+			connect,
+			disconnect,
+			sendMessage
+		};
 		this.winDiv.hide();
 
 		this.canvasForClicks = this.canvas2.el;

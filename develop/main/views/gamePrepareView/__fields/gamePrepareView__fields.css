@@ -1,0 +1,28 @@
+.gamePrepareView__fields {
+}
+
+.gamePrepareView__fields__starGameButton {
+    box-sizing: border-box;
+    font-size: calc(14px + 0.9vh) !important;
+    background-color: #014f77 !important;
+}
+
+.gamePrepareView__fields__addBotButton {
+    box-sizing: border-box;
+    font-size: calc(14px + 0.9vh) !important;
+    background-color: #014f77 !important;
+}
+
+@media screen and (min-width: 640px) and (max-width: 1100px) and (orientation: landscape) {
+    .gamePrepareView__fields__starGameButton {
+        box-sizing: border-box;
+        font-size: 14px !important;
+        background-color: #014f77 !important;
+    }
+
+    .gamePrepareView__fields__addBotButton {
+        box-sizing: border-box;
+        font-size: 14px !important;
+        background-color: #014f77 !important;
+    }
+}

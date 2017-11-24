@@ -1,15 +1,16 @@
 'use strict';
 
-import CommonView from '../view/view';
-import menuFields from '../../templates/menuFields';
+import View from '../view/view';
+import menuFields from './__fields/menuView__fields';
 
 
 /**
  * Класс секции меню
  * @module LoginView
  */
-export default class MenuView extends CommonView {
+export default class MenuView extends View {
 	constructor(eventBus, router) {
+
 		super(menuFields);
 
 		this.bus = eventBus;
@@ -32,7 +33,10 @@ export default class MenuView extends CommonView {
 			}
 		});
 
+
 		this.bus.emit('unauth');
 		this.hide();
 	}
+
+
 }

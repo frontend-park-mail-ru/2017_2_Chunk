@@ -4,7 +4,7 @@
  * Модуль, предоставляющий интерфейс для работы с событиями
  * @module EventBus
  */
-export default class EventBus {
+export default new class EventBus {
 	constructor() {
 		this.listeners = {};
 	}
@@ -19,6 +19,15 @@ export default class EventBus {
 		this.listeners[event].push(listener);
 	}
 
+	/**
+	 * Отписывается от события
+	 * @param {string} event - название события
+	 */
+	off(event) {
+		this.listeners[event] = this.listeners[event] || [];
+		delete this.listeners[event];
+	}
+
 
 	/**
 	 * Вызывает событие
@@ -30,5 +39,5 @@ export default class EventBus {
 			listener(data);
 		});
 	}
-}
+}();
 
