@@ -98,7 +98,7 @@ var code200 = {
 		numberOfPlayers: code101.numberOfPlayers,
 		watchers: code101.watchersCount
 	},
-	reason: "Start the game"
+	reason: "start the game"
 };
 
 var code204 = {

@@ -50,7 +50,7 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
-		const resp = await Http.FetchPost('/user/sign_up', {username, email, password});
+		const resp = await Http.fetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
@@ -86,7 +86,7 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
-		const resp = await Http.FetchPost('/user/sign_in', {login, password});
+		const resp = await Http.fetchPost('/user/sign_in', {login, password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
@@ -103,10 +103,10 @@ export default class UserService {
 	 * @param {string} username
 	 * @param {string} email
 	 * @param {string} password
-	 * @param {string} old_password
+	 * @param {string} oldPassword
 	 * @return {*} response - объект ответа
 	 */
-	async update(username, email, password, old_password) { // не парсит JSON
+	async update(username, email, password, oldPassword) { // не парсит JSON
 		const response = {
 			ok: false,
 			json: {},
@@ -124,7 +124,7 @@ export default class UserService {
 			response.message = 'Длина пароля должна быть не меньше 6 символов!';
 			return response;
 		}
-		if (old_password.length < 6) {
+		if (oldPassword.length < 6) {
 			response.message = 'Длина пароля должна быть не меньше 6 символов!';
 			return response;
 		}
@@ -132,7 +132,7 @@ export default class UserService {
 			response.message = 'Логин и пароль не должны совпадать!';
 			return response;
 		}
-		if (old_password === username) {
+		if (oldPassword === username) {
 			response.message = 'Логин и пароль не должны совпадать!';
 			return response;
 		}
@@ -140,7 +140,7 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
-		const resp = await Http.FetchPost('/user/update', {username, email, password, old_password});
+		const resp = await Http.fetchPost('/user/update', {username, email, password, oldPassword});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
@@ -181,7 +181,7 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
-		const resp = await Http.FetchGet('/user/whoisit');
+		const resp = await Http.fetchGet('/user/whoisit');
 		response.json = await resp.json();
 		if (resp.status >= 400) {
 			this.user = null;
@@ -203,7 +203,7 @@ export default class UserService {
 			if (this.isLoggedIn()) {
 				this.user = null;
 				this.users = [];
-				Http.FetchGet('/user/exit');
+				Http.fetchGet('/user/exit');
 			}
 		}
 	}
@@ -213,6 +213,6 @@ export default class UserService {
 	 * Запрашивает список пользователей
 	 */
 	loadUsersList() {
-		return Http.FetchGet('');
+		return Http.fetchGet('');
 	}
 }

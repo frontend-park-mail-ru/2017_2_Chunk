@@ -1,10 +1,10 @@
 'use strict';
 
+import OrbitControl from 'three-orbitcontrols';
 import * as THREE from 'three';
 import PlaneCell from './models/plane.js';
 import Player from './models/player.js';
 import * as tools from './tools/tools.js';
-import OrbitControl from 'three-orbitcontrols';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 
@@ -115,8 +115,8 @@ export default class Game3D {
 			code: '112'
 		};
 		this.bus.emit(`${this.source}Message`, info);
-		this.bus.on(`${this.source}Code112`, (data) => {
-			this.handling112(data);
+		this.bus.on(`${this.source}Code112`, (_data) => {
+			this.handling112(_data);
 		});
 		this.animate();
 	}
@@ -134,12 +134,12 @@ export default class Game3D {
 		if (this.result === this.figureType) { win = true; }
 		this.bus.emit('endOfGame', win);
 		this.scene.remove(this.light);
-	    this.bus.on('deleteTree', () => {
-		    this.scene.remove(this.spotLight);
-		    this.scene.remove(this.cellContainer);
-		    this.scene.remove(this.playerContainer);
-		    cancelAnimationFrame(this.animation);
-	    });
+		this.bus.on('deleteTree', () => {
+			this.scene.remove(this.spotLight);
+			this.scene.remove(this.cellContainer);
+			this.scene.remove(this.playerContainer);
+			cancelAnimationFrame(this.animation);
+		});
 	}
 
 	raycasterTrue() {
@@ -188,7 +188,9 @@ export default class Game3D {
 	addAllPlayers() {
 		for (let i = 0; i < this.PLANE_SIZE; i++) {
 			for (let j = 0; j < this.PLANE_SIZE; j++) {
-				if (this.arrayOfPlane[i][j].figure !== 0) { this.addOnePlayers(this.playerContainer, i, j, this.arrayOfPlane[i][j].figure); }
+				if (this.arrayOfPlane[i][j].figure !== 0) {
+					this.addOnePlayers(this.playerContainer, i, j, this.arrayOfPlane[i][j].figure);
+				}
 			}
 		}
 	}
@@ -244,31 +246,39 @@ export default class Game3D {
 		// Выбор объектов
 		if (this.raycasterIndicator) {
 			this.raycaster.setFromCamera(this.mouse, this.camera);
-			const intersects = this.raycaster.intersectObjects(this.playerContainer.children.concat(this.cellContainer.children));
+			const intersects = this.raycaster.intersectObjects(
+				this.playerContainer.children.concat(this.cellContainer.children));
 			if (intersects.length > 0) {
 				if (this.INTERSECTED !== intersects[0].object) {
-					if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+					if (this.INTERSECTED) {
+						this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+					}
 					this.INTERSECTED = intersects[0].object;
 					this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
 
 					// Если нажали на фигурку, у которой наш цвет, то-есть первого игрока
 					if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-                        intersects[0].object.material.color.getHex() === tools.PLAYER_COLORS[this.figureType] &&
-                        // Проверяем, можно ли изменять первую точку.
-                        // Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
-                        !Object.isFrozen(this.point1)) {
+						intersects[0].object.material.color.getHex()
+						=== tools.PLAYER_COLORS[this.figureType] &&
+						// Проверяем, можно ли изменять первую точку.
+						// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
+						!Object.isFrozen(this.point1)) {
 						// Тут определяются номера по х и z фигуры, на которую нажали.
-	                    this.deleteAllStepEnable();
+						this.deleteAllStepEnable();
 						for (let i = 0; i < this.PLANE_SIZE; i++) {
-							if (intersects[0].object.position.x > i * tools.PLANE_X) { this.point1.x = i; }
-							if (intersects[0].object.position.z > i * tools.PLANE_Z) { this.point1.z = i; }
+							if (intersects[0].object.position.x > i * tools.PLANE_X) {
+								this.point1.x = i;
+							}
+							if (intersects[0].object.position.z > i * tools.PLANE_Z) {
+								this.point1.z = i;
+							}
 						}
 						// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
 						this.makeStepEnable(this.point1.x, this.point1.z);
 					}
 
-	                let idx = 0;
-	                let idz = 0;
+					let idx = 0;
+					let idz = 0;
 					// Если нажата клетка
 					if (intersects[0].object.geometry.type === 'PlaneGeometry') {
 						// Также, не очень изящно, определяем ее целые координаты.
@@ -296,7 +306,9 @@ export default class Game3D {
 					this.INTERSECTED.material.emissive.setHex(tools.HOVER_COLOR);
 				}
 			} else {
-				if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+				if (this.INTERSECTED) {
+					this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+				}
 				this.INTERSECTED = null;
 			}
 			this.raycasterIndicator = false;
@@ -307,10 +319,10 @@ export default class Game3D {
 		return Math.sqrt(
 			Math.pow(
 				this.arrayOfFigure[point1.x][point1.z].mesh.position.x -
-                this.arrayOfPlane[point2.x][point2.z].mesh.position.x, 2) +
-            Math.pow(
-            	this.arrayOfFigure[point1.x][point1.z].mesh.position.z -
-                this.arrayOfPlane[point2.x][point2.z].mesh.position.z, 2));
+				this.arrayOfPlane[point2.x][point2.z].mesh.position.x, 2) +
+			Math.pow(
+				this.arrayOfFigure[point1.x][point1.z].mesh.position.z -
+				this.arrayOfPlane[point2.x][point2.z].mesh.position.z, 2));
 	}
 
 	// Функция решает, создать фигурку рядом или сделать движение.
@@ -319,14 +331,16 @@ export default class Game3D {
 		// Если клетка, куда будет совершен ход, находится вплотную к заданной, то добавляем фигурку рядом.
 		if (Math.abs(point2.x - point1.x) <= 1 && Math.abs(point2.z - point1.z) <= 1) {
 			Object.freeze(this.point1);
-			this.addOnePlayers(this.playerContainer, point2.x, point2.z, this.arrayOfPlane[point1.x][point1.z].figure);
+			this.addOnePlayers(
+				this.playerContainer, point2.x, point2.z,
+				this.arrayOfPlane[point1.x][point1.z].figure
+			);
 			this.scaleIndicator = true;
 			// И вызываем функцию обработки хода, то-есть замены фигурок, если они есть рядом.
 			this.step(point2.x, point2.z);
 			this.stepIndicator = false;
-		}
-		// если клетка находится через одну, то включаем индикатор для движения фигуры.
-		else {
+		} else {
+			// если клетка находится через одну, то включаем индикатор для движения фигуры.
 			this.point1 = point1;
 			this.point2 = point2;
 			this.moveIndicator = true;
@@ -355,12 +369,18 @@ export default class Game3D {
 			Object.freeze(this.point1);
 
 			if (!this.end) {
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x += tools.SPEED * (this.vector.x + 0.5 * this.vector.x / 2);
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z += tools.SPEED * (this.vector.z + 0.5 * this.vector.z / 2);
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x +=
+					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z +=
+					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
 				this.diff += this.distance * tools.SPEED;
 				if (this.diff <= this.distance * 2) {
 					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y += 0.8;
-				} else if (this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y > this.arrayOfFigure[this.point1.x][this.point1.z].y) { this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y -= 0.8; }
+				} else if (
+					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y >
+					this.arrayOfFigure[this.point1.x][this.point1.z].y) {
+					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y -= 0.8;
+				}
 				if (this.diff >= this.distance * 4) {
 					this.end = true;
 					this.diff = 0;
@@ -371,9 +391,12 @@ export default class Game3D {
 				this.end = false;
 				// В следующих двух строчках приравниваем длинные кривые координаты фигуры к ровным координатам клеток,
 				// чтобы со временем не получилось большой погрешности.
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x = this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.x;
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y = this.arrayOfFigure[this.point1.x][this.point1.z].y;
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z = this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.z;
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x =
+					this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.x;
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y =
+					this.arrayOfFigure[this.point1.x][this.point1.z].y;
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z =
+					this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.z;
 				// Заменяем фигуры в массиве фигур и в массиве клеток.
 				this.replaceFigure(this.point1, this.point2);
 				// Удаляем замороженную точку и создаем ее снова
@@ -397,22 +420,22 @@ export default class Game3D {
 	// Считает разницу в координатах каждой клетки и клетки, на которой стоит фигура.
 	// В аргументах функции как раз координаты клетки, где стоит фигура.
 	// И если эта разница меньше 3, и на этой клетке не стоит фигура, то на нее можно сходить.
-	makeStepEnable(i, j) {
+	makeStepEnable(ii, jj) {
 		for (let i = 0; i < this.PLANE_SIZE; i++) {
 			for (let j = 0; j < this.PLANE_SIZE; j++) {
 				const idx2 = this.arrayOfPlane[i][j].x;
 				const idz2 = this.arrayOfPlane[i][j].z;
-				if (Math.abs(idx2 - this.point1.x) >= 3 ||
+				if (!(Math.abs(idx2 - this.point1.x) >= 3 ||
 					Math.abs(idz2 - this.point1.z) >= 3 ||
 					this.arrayOfPlane[i][j].figure !== 0
-				) {} else {
+				)) {
 					this.arrayOfPlane[i][j].stepEnable = true;
 					this.arrayOfPlane[i][j].material.color.setHex(tools.COLORS.BACKGROUND);
 				}
 			}
 		}
 		// Убирает возможность походить на клетку, где сама фигура и стоит.
-		this.arrayOfPlane[i][j].stepEnable = false;
+		this.arrayOfPlane[ii][jj].stepEnable = false;
 	}
 
 	// Функция обработки хода, тоесть замены одних фигурок другими.
@@ -456,8 +479,8 @@ export default class Game3D {
 	onDocumentMouseMove(event) {
 		event.preventDefault();
 
-		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-		this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+		this.mouse.x = ((event.clientX / window.innerWidth) * 2) - 1;
+		this.mouse.y = (-(event.clientY / window.innerHeight) * 2) + 1;
 	}
 
 	fullStep(point1, point2) {
