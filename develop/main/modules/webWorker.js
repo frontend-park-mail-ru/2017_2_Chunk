@@ -26,6 +26,7 @@ export default class webWorker {
             this.worker.postMessage(data);
         });
         this.bus.on('workerMessage', (workerRequest) => {
+            console.log("workerMessage " + workerRequest);
             this.worker.postMessage(workerRequest);//принимает массив аргументов
         });
         //how to use it?
@@ -40,7 +41,7 @@ export default class webWorker {
     workerCallbacks() {
         this.worker.onmessage = (workerResponse) => {//возвращает не массив ха - ха!
             const data = workerResponse.data;
-            console.log('Worker response!' , workerResponse);
+            console.log('Worker response!2' , workerResponse);
             this.bus.emit(`workerCode${data.code}`, (data))
         }
     }

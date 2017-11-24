@@ -88,10 +88,7 @@ const gameCreateView = new GameCreateView();
 
 const gamePrepareView = new GamePrepareView();
 
-// const game = new Game(canvas, eventBus);
-
-const gameContainer = new ThreeView(eventBus);
-
+const gameContainer = new ThreeView(eventBus, router);
 
 const game3D = new Game3D(gameContainer);
 
@@ -262,9 +259,9 @@ app
 // 		});
 // }
 
-const workerRequest = {
-    data: "bla bla bal"
-};
-eventBus.emit('workerMessage', workerRequest);
+// const workerRequest = {
+//     data: "bla bla bal"
+// };
+// eventBus.emit('workerMessage', workerRequest);
 
 router.start();

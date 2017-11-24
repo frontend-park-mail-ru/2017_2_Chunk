@@ -45,11 +45,12 @@ const startArray = [
 ];
 
 var arrayOfField = 0;
+
 var gamers = [];
 
 var code101 = {
 	botsCount: 0,
-	code: 101,
+	code: '101',
 	gameID: 1,
 	gamersCount: 1,
 	maxX: 8,
@@ -67,7 +68,7 @@ var code101 = {
 };
 
 var code104 = {
-	code: 104,
+	code: '104',
 	game: {
 		bots: bots,
 		gameID: code101.gameID,
@@ -88,7 +89,7 @@ var code104 = {
 };
 
 var code200 = {
-	code: 200,
+	code: '200',
 	game: {
 		currentPlayerID: 1,
 		field: {
@@ -106,7 +107,7 @@ var code200 = {
 };
 
 var code204 = {
-	code: 204,
+	code: '204',
 	gameID: null,
 	field: {
 		field: arrayOfField,
@@ -126,7 +127,7 @@ var playerData = {
 };
 
 var code201 = {
-	code: 201,
+	code: '201',
 	step: {
 		src: {
 			x: 0,
@@ -167,6 +168,7 @@ function createGame(data) {
 	code101.maxX = data.maxX;
 	code101.maxY = data.maxY;
 	arrayOfField = makeGameField(data.maxX);
+	arrayOfField = startArray;
 	gamers.push(playerData);
 	code101.numberOfPlayers = +data.numberOfPlayers;
 

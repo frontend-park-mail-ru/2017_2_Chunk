@@ -248,6 +248,7 @@ export default class Game3D {
                         //Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
                         !Object.isFrozen(this.point1)) {
                         // Тут определяются номера по х и z фигуры, на которую нажали.
+	                    this.deleteAllStepEnable();
                         for (let i = 0; i < this.PLANE_SIZE; i++) {
                             if (intersects[0].object.position.x > i * tools.PLANE_X)
                                 this.point1.x = i;
@@ -276,7 +277,7 @@ export default class Game3D {
                             this.point2.z = idz;
 
                             let step = {
-                                code: 201,
+                                code: '201',
                                 step: {
                                     src: this.point1,
                                     dst: this.point2
@@ -393,6 +394,7 @@ export default class Game3D {
 				) {}
 				else {
 					this.arrayOfPlane[i][j].stepEnable = true;
+					this.arrayOfPlane[i][j].material.color.setHex(tools.COLORS.BACKGROUND);
 				}
 			}
 		}
@@ -428,6 +430,7 @@ export default class Game3D {
 		for (let i = 0; i < this.PLANE_SIZE; i++) {
 			for (let j = 0; j < this.PLANE_SIZE; j++) {
 				this.arrayOfPlane[i][j].stepEnable = false;
+				this.arrayOfPlane[i][j].material.color.setHex(tools.COLORS.PLANE_COLOR);
 			}
 		}
 	}

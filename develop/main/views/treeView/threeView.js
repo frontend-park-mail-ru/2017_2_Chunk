@@ -4,7 +4,7 @@ import CommonView from "../view/view";
 import Block from "../../blocks/block/block.js";
 
 export default class ThreeView extends CommonView {
-    constructor(eventBus, exit) {
+    constructor(eventBus, router) {
         const gameContainer = Block.Create('div');
 
 	    const winDiv = Block.Create('div', {}, ['canvasView__winDiv'], '');
@@ -29,7 +29,7 @@ export default class ThreeView extends CommonView {
 		    this.winDiv.show();
             setTimeout(() => {
                 this.winDiv.hide();
-                exit();
+                router.goTo('/menu');
             }, 3000);
 	    });
 	    // this.eventBus.on('showPlayers', (players) => {
