@@ -204,6 +204,7 @@ function addBot() {
 	playerData.userID++;
 	playerData.email = `bot@com`;
 	bots.push(playerData);
+	gamers.push(playerData);
 	code101.player = playerData;
 
 	return code101;

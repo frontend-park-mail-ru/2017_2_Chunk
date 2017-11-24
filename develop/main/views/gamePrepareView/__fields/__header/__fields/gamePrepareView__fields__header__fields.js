@@ -40,7 +40,7 @@ export default class headerFields {
 		this.fields.gamersNumber.el.innerHTML = this.fields.gamersNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.gamers.length);
 		this.fields.botsNumber.el.innerHTML = this.fields.botsNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.bots.length);
 		this.fields.numberOfPlayers.el.innerHTML = this.fields.numberOfPlayers.el.innerHTML.replace(/\d+/g, socketReceiveData.numberOfPlayers);
-		this.fields.watchers.el.innerHTML = this.fields.watchers.el.innerHTML.replace(/\d+/g, socketReceiveData.watchers);
+		// this.fields.watchers.el.innerHTML = this.fields.watchers.el.innerHTML.replace(/\d+/g, socketReceiveData.watchers);
 		this.fields.fieldSize.el.innerHTML = this.fields.fieldSize.el.innerHTML.replace(/\d+/g, socketReceiveData.field.maxX);
 	}
 
