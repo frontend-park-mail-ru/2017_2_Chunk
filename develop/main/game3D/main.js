@@ -43,6 +43,7 @@ export default class Game3D {
 		this.raycasterIndicator = false;
 		this.stepIndicator = false;
         this.queue = [];
+        this.animation = 0;
 
 		this.renderer = new THREE.WebGLRenderer( {antialias: true, alpha: true} );
 		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
@@ -133,6 +134,12 @@ export default class Game3D {
 			win = true;
 		this.bus.emit('endOfGame', win);
 		this.scene.remove(this.light);
+	    this.bus.on('deleteTree', () => {
+		    this.scene.remove(this.spotLight);
+		    this.scene.remove(this.cellContainer);
+		    this.scene.remove(this.playerContainer);
+		    cancelAnimationFrame(this.animation);
+	    })
     }
 
 	raycasterTrue() {
@@ -205,12 +212,6 @@ export default class Game3D {
 
 		this.scene.add(this.cellContainer);
 		this.scene.add(this.playerContainer);
-
-		this.bus.on('deleteTree', () => {
-			console.log("HEREEEEEEEEEEEEEEEEEE");
-			this.scene.remove(this.cellContainer);
-			this.scene.remove(this.playerContainer);
-		})
 	}
 
 	animate() {
@@ -227,7 +228,7 @@ export default class Game3D {
 		this.scaling();
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		// Зацикливание
-		requestAnimationFrame(this.animate.bind(this));
+		this.animation = requestAnimationFrame(this.animate.bind(this));
 		this.render();
 	}
 
