@@ -30,7 +30,7 @@ export default class ViewButton extends Block {
 		_classes.push('view__view-button');
 		_classes.push('view__view-button_theme-black-orange');
 
-		const button = Block.Create('a', attrs, _classes, text);
+		const button = Block.create('a', attrs, _classes, text);
 		return new ViewButton(button);
 	}
 }

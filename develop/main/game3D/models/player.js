@@ -11,15 +11,15 @@ export default class Player {
 		);
 
 		this.material = new THREE.MeshLambertMaterial({
-			color: tools.PLAYER_COLORS[colorpl-1]
+			color: tools.PLAYER_COLORS[colorpl - 1]
 		});
 		this.color = colorpl;
 
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.position.set(
-			(x + 0.5)*tools.PLANE_X,
+			(x + 0.5) * tools.PLANE_X,
 			tools.PLAYER_HEIGHT / 2 * 1.05,
-			(z + 0.5)*tools.PLANE_Z
+			(z + 0.5) * tools.PLANE_Z
 		);
 
 		this.x = x;

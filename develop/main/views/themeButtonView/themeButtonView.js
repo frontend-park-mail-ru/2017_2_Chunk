@@ -11,7 +11,7 @@ export default class themeButtonView extends Block {
 	 * @constructor - конструктор класса кнопки возврата в меню
 	 */
 	constructor() {
-		const themeButton = Block.Create('div', {}, ['themeButtonView',
+		const themeButton = Block.create('div', {}, ['themeButtonView',
 			'view__view-button_theme-black-orange'], 'Theme');
 		super(themeButton.el);
 		this.themeButton = themeButton;
@@ -21,8 +21,8 @@ export default class themeButtonView extends Block {
 		this.hide();
 	}
 
-	changeTheme () {
-		if(document.querySelector('.view__view-button_theme-black-orange')) {
+	changeTheme() {
+		if (document.querySelector('.view__view-button_theme-black-orange')) {
 			const elems = Array.from(document.getElementsByClassName('view__view-button_theme-black-orange'));
 			elems.forEach((elem) => {
 				elem.classList.remove('view__view-button_theme-black-orange');
@@ -37,10 +37,7 @@ export default class themeButtonView extends Block {
 			body.classList.remove('main_theme-black-orange');
 			body.classList.add('main_theme-white-black');
 			console.log('black-orange');
-		}
-
-
-		else if(document.querySelector('.view__view-button_theme-white-black')) {
+		} else if (document.querySelector('.view__view-button_theme-white-black')) {
 			const elems = Array.from(document.getElementsByClassName('view__view-button_theme-white-black'));
 			elems.forEach((elem) => {
 				elem.classList.remove('view__view-button_theme-white-black');

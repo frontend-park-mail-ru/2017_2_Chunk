@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-import View from "../view/view";
-import Form from "../../blocks/form/form.js";
-import Message from "../../blocks/form/__message/form__message.js";
-import signUpFields from "../../templates/signUpFileds"
+import View from '../view/view';
+import Form from '../../blocks/form/form.js';
+import Message from '../../blocks/form/__message/form__message.js';
+import signUpFields from '../../templates/signUpFileds';
 
 
 /**
@@ -31,18 +31,18 @@ export default class SignUpView extends View {
 		this.message.hide();
 		this.append(this.message);
 
-		this.el.addEventListener("submit", (event) => {
+		this.el.addEventListener('submit', (event) => {
 			event.preventDefault();
 			const formData = {};
 			const fields = this.el.childNodes.item(0).elements;
 
-			for (let field in fields) {
+			for (const field in fields) {
 				formData[fields[field].name] = fields[field].value;
 			}
 			this.onSubmit(formData)
 				.catch((err) => {
 					console.log(err.message);
-				})
+				});
 		}, true);
 
 		this.hide();
@@ -55,16 +55,16 @@ export default class SignUpView extends View {
 	 * @returns {Promise.<void>}
 	 */
 	async onSubmit(formData) {
-		const resp = await this.userService.signup(formData.name, formData.email, formData.password, formData.confirm);
+		const resp = await this.userService.signup(formData.name, formData.email,
+			formData.password, formData.confirm);
 		if (resp.ok) {
 			this.form.reset();
 			this.message.clear();
 			this.message.hide();
-			this.bus.emit("auth", resp.json.username);
-			this.router.goTo("/menu");
-		}
-		else {
-			this.setErrorText(resp)
+			this.bus.emit('auth', resp.json.username);
+			this.router.goTo('/menu');
+		} else {
+			this.setErrorText(resp);
 		}
 	}
 

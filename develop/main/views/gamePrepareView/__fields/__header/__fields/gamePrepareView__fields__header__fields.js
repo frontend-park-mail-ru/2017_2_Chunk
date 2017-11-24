@@ -9,19 +9,19 @@ import Block from '../../../../../blocks/block/block.js';
 export default class headerFields {
 	constructor() {
 		this.fields = {
-			creator: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__masterUsername',
+			creator: Block.create('div', {}, ['gamePrepareView__fields__header__fields__masterUsername',
 				'gamePrepareView__fields__header__fields'], `Creator: `),
-			gameID: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__gameId',
+			gameID: Block.create('div', {}, ['gamePrepareView__fields__header__fields__gameId',
 				'gamePrepareView__fields__header__fields'], `GameId: 0`),
-			gamersNumber: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__playersNumber',
+			gamersNumber: Block.create('div', {}, ['gamePrepareView__fields__header__fields__playersNumber',
 				'gamePrepareView__fields__header__fields'], `Players: 0`),
-			botsNumber: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__botsNumber',
+			botsNumber: Block.create('div', {}, ['gamePrepareView__fields__header__fields__botsNumber',
 				'gamePrepareView__fields__header__fields'], `Bots: 0`),
-			numberOfPlayers: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__totalPLayersNumber',
+			numberOfPlayers: Block.create('div', {}, ['gamePrepareView__fields__header__fields__totalPLayersNumber',
 				'gamePrepareView__fields__header__fields'], `Total players: 0`),
-			// watchers: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__voyeursNumber',
+			// watchers: Block.create('div', {}, ['gamePrepareView__fields__header__fields__voyeursNumber',
 			// 	'gamePrepareView__fields__header__fields'], `Watchers: 0`),
-			fieldSize: Block.Create('div', {}, ['gamePrepareView__fields__header__fields__fieldSize',
+			fieldSize: Block.create('div', {}, ['gamePrepareView__fields__header__fields__fieldSize',
 					'gamePrepareView__fields__header__fields'],
 				`Field size: 0 x 0`),
 		}

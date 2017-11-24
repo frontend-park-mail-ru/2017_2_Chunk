@@ -30,7 +30,7 @@ export default class Router {
 		});
 
 		window.onpopstate = () => {
-			if (location.pathname === '/waiting-hall' || location.pathname === '/game' ) {
+			if (location.pathname === '/waiting-hall' || location.pathname === '/game') {
 				this.goTo('/lobby');
 				return;
 			}
@@ -38,23 +38,12 @@ export default class Router {
 			const locationPath = location.pathname;
 			if (resp) {
 				const slice_Routes = this._routes.slice(0, 8);
-				const isValid = slice_Routes.some((_route, index) => {
-						return locationPath.match(_route.url_pattern);
-					});
-				if (isValid)
-					this.changeState(locationPath);
-				else
-					this.goTo(this._routes[0].url_pattern)
-			}
-			else {
+				const isValid = slice_Routes.some((_route, index) => locationPath.match(_route.url_pattern));
+				if (isValid) { this.changeState(locationPath); } else { this.goTo(this._routes[0].url_pattern); }
+			} else {
 				const slice_Routes = this._routes.slice(6);
-				const isValid = slice_Routes.some((_route) => {
-						return locationPath.match(_route.url_pattern);
-					});
-				if (isValid)
-					this.changeState(locationPath);
-				else
-					this.goTo(this._routes[0].url_pattern);
+				const isValid = slice_Routes.some((_route) => locationPath.match(_route.url_pattern));
+				if (isValid) { this.changeState(locationPath); } else { this.goTo(this._routes[0].url_pattern); }
 			}
 		};
 
@@ -75,9 +64,8 @@ export default class Router {
 		});
 
 		this.bus.on('socketClose', () => {
-			if (!location.pathname.match('/menu'))
-				this.goTo('/menu');
-		})
+			if (!location.pathname.match('/menu')) { this.goTo('/menu'); }
+		});
 	}
 
 
@@ -93,14 +81,12 @@ export default class Router {
 				this.bus.emit('auth', resp.json.username);
 				const slice_Routes = this._routes.slice(0, 8);
 				this.findNewState(slice_Routes);
-			}
-			else {
+			} else {
 				this.bus.emit('unauth');
 				const slice_Routes = this._routes.slice(6);
 				this.findNewState(slice_Routes);
 			}
-		}
-		catch (err) {
+		} catch (err) {
 			this.bus.emit('unauth');
 			const slice_Routes = this._routes.slice(6);
 			this.findNewState(slice_Routes);

@@ -14,7 +14,7 @@ export default class ProfileView extends Block {
 	 * @param eventBus -
 	 */
 	constructor(eventBus) {
-		const profile = Block.Create('div', {}, ['userData', 'auth', 'profileView', 'profile']);
+		const profile = Block.create('div', {}, ['userData', 'auth', 'profileView', 'profile']);
 		super(profile.el);
 
 		this.bus = eventBus;

@@ -34,11 +34,9 @@ export default class MenuView extends View {
 		});
 
 
-
 		this.bus.emit('unauth');
 		this.hide();
 	}
-
 
 
 }

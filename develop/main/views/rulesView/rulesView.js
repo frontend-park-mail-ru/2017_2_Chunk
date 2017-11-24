@@ -14,7 +14,7 @@ export default class RulesView extends View {
 	 * @constructor
 	 */
 	constructor(emitBus) {
-		const rules = Block.Create('div', {}, ['rulesText', 'main_font-theme-black-orange'], 'text Text text');
+		const rules = Block.create('div', {}, ['rulesText', 'main_font-theme-black-orange'], 'text Text text');
 
 		super({rules});
 

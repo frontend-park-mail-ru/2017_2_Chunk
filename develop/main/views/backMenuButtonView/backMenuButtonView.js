@@ -12,7 +12,7 @@ export default class backButtonView extends Block {
 	 * @constructor - конструктор класса кнопки возврата в меню
 	 */
 	constructor() {
-		const backButton = Block.Create('a', {href: '/menu'}, ['backMenuButtonView', 'view__view-button_theme-black-orange'], 'Menu');
+		const backButton = Block.create('a', {href: '/menu'}, ['backMenuButtonView', 'view__view-button_theme-black-orange'], 'Menu');
 		super(backButton.el);
 
 		this.button = backButton;

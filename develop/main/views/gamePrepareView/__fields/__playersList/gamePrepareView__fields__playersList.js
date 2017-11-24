@@ -9,7 +9,7 @@ import PLayerListString from './__string/gamePrepareView__fields__playersList__s
  */
 export default class PlayersList extends Block {
 	constructor() {
-		const block = Block.Create('div', {}, ['gamePrepareView__fields__playersList']);
+		const block = Block.create('div', {}, ['gamePrepareView__fields__playersList']);
 		super(block.el);
 		const header = {
 			userID: 'User ID',

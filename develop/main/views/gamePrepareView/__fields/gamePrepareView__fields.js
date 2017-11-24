@@ -15,9 +15,9 @@ import Block from '../../../blocks/block/block';
 const gamePrepareFields = {
 	header: new Header(),
 	playersList: new PlayList(),
-	startGame: Block.Create('div', {},
+	startGame: Block.create('div', {},
 		['gamePrepareView__fields__starGameButton', 'view__view-button'], 'Start game'),
-	addBot: Block.Create('div', {},
+	addBot: Block.create('div', {},
 		['gamePrepareView__fields__addBotButton', 'view__view-button'], 'Add bot'),
 };
 
