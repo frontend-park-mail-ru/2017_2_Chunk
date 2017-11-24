@@ -36,7 +36,7 @@ export default class Game3D {
 		this.distance = 0;
 		this.end = false;
 		this.diff = 0;
-		this.grow = 0;
+		this.grow = 0.01;
 		// Индикатор движения для движения, разрешает движение только после хода.
 		this.moveIndicator = false;
 		this.scaleIndicator = false;
@@ -132,6 +132,12 @@ export default class Game3D {
 		if (this.result === this.figureType)
 			win = true;
 		this.bus.emit('endOfGame', win);
+	    // let allChildren = this.scene.children;
+	    // let length = allChildren.length;
+	    //
+	    // for(let i = 0; i < length; i++) {
+		 //    this.scene.remove(allChildren[i]);
+	    // }
     }
 
 	raycasterTrue() {
@@ -339,7 +345,7 @@ export default class Game3D {
 				this.grow += 0.04;
 			}
 			else {
-				this.grow = 0;
+				this.grow = 0.01;
 				this.scaleIndicator = false;
 				delete this.point1;
 				this.point1 = new Point();

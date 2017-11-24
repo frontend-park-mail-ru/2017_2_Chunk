@@ -1,6 +1,6 @@
 self.onmessage = (workerRequest) => {
 	//debugger;
-	console.log('worker request: ', workerRequest);
+	// console.log('worker request: ', workerRequest);
 
 	var data = workerRequest.data;
 	var workerResponse;
@@ -28,7 +28,7 @@ self.onmessage = (workerRequest) => {
 		default:
 			console.log('Error');
 	}
-	console.log('Worker response!' , workerResponse);
+	// console.log('Worker response!' , workerResponse);
 
 	self.postMessage(workerResponse);
 };
