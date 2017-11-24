@@ -25,7 +25,6 @@ self.onmessage = (workerRequest) => {
 		default:
 			console.log('Error');
 	}
-	// console.log('Worker response!' , workerResponse);
 	self.postMessage(workerResponse);
 };
 
@@ -114,7 +113,7 @@ var code204 = {
 	reason: "Game had ended, check result"
 };
 
-var playerData = {
+let playerData = {
 	userID: 1,
 	username: "player",
 	email: "player@com",
@@ -165,7 +164,6 @@ function createGame(data) {
 	arrayOfField = makeGameField(data.maxX);
 	arrayOfField = startArray;
 	code101.numberOfPlayers = +data.numberOfPlayers;
-
 	return code101;
 }
 
