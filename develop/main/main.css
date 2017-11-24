@@ -28,25 +28,20 @@
     }
 }
 
-@media screen and (min-width: 300px) and (max-width: 1100px) {
-    @viewport {
-        orientation: landscape;
-    }
+@media screen and (min-width: 640px) and (max-width: 1100px) {
     @viewport {
         min-width: 640px;
+        max-zoom: 2;
+        orientation: portrait;
     }
-    @viewport {
-        user-zoom: fixed;
-    }
-
     body {
         background: url('../../public/images/background2.png') no-repeat;
         background-size: 100vw 100vh;
         font-family: "Comic Sans MS";
         box-sizing: border-box;
         margin: 0 !important;
-        width: 101vw;
-        height: 101vh;
+        width: 640px !important;
+        height: 381px !important;
         position: fixed;
         display: grid;
         grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";

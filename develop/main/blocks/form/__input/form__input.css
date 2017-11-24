@@ -1,25 +1,6 @@
-/*.form__input {*/
-    /*font-family: "Comic Sans MS";*/
-    /*font-size:calc(14px + 1.5vh);*/
-    /*color: #ff8700;*/
-
-    /*background-color: transparent;*/
-    /*border: 0.06em solid white;*/
-    /*border-radius: 0.4em;*/
-    /*box-shadow: none;*/
-
-    /*opacity: 0.9;*/
-    /*width: 10em;*/
-    /*height: 1em;*/
-    /*padding: 0.3em;*/
-    /*margin: 0.7em;*/
-
-    /*min-height: 30px;*/
-    /*min-width: 250px;*/
-/*}*/
 .form__input {
     font-family: "Comic Sans MS";
-    font-size:calc(14px + 1vh);
+    font-size:calc(14px + 1.5vh);
     color: #ff8700;
 
     background-color: transparent;
@@ -34,8 +15,23 @@
     margin: 0.7em;
 
     min-height: 30px;
+    min-width: 250px;
 }
+@media screen and (min-width: 640px) and (max-width: 1100px) {
+    .form__input {
+        font-family: "Comic Sans MS";
+        font-size: calc(14px + 1vh);
+        color: #ff8700;
+        opacity: 0.9;
+        width: 10em;
+        height: 1em;
+        padding: 0.1em;
+        margin: 0.4em;
+        min-width: 100px;
 
+        min-height: 30px;
+    }
+}
 .form__input:focus {
     outline: none;
     border: 0.06em solid #ff8700; /* Параметры рамки */
