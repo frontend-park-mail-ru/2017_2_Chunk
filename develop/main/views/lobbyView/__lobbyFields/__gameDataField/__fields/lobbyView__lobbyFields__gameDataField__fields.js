@@ -26,8 +26,8 @@ export default class GameDataFields {
                 'lobbyView__lobbyFields__gameDataField__fields'], `Bots: ${socketResponse.bots.length}`),
             numberOfPlayers: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__totalPLayersNumber',
                 'lobbyView__lobbyFields__gameDataField__fields'], `Total players: ${socketResponse.numberOfPlayers}`),
-            watchers: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__voyeursNumber',
-                'lobbyView__lobbyFields__gameDataField__fields'], `Watchers: ${socketResponse.watchers}`),
+            // watchers: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__voyeursNumber',
+            //     'lobbyView__lobbyFields__gameDataField__fields'], `Watchers: ${socketResponse.watchers}`),
             fieldSize: Block.Create('div', {}, ['lobbyView__lobbyFields__gameDataField__fields__fieldSize',
                 'lobbyView__lobbyFields__gameDataField__fields'], `Field size: ${socketResponse.field.maxX} x ${socketResponse.field.maxY}`),
             // voyeurButton: ViewButton.Create({href: '/game'}, ['auth'], 'Play');

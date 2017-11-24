@@ -1,13 +1,13 @@
-/*.profileView {*/
-    /*font-family: cursive;*/
-    /*font-size:calc(20px + 2vh);*/
-    /*color: #ff8700;*/
-    /*max-width: 300px;*/
-    /*margin: auto;*/
-/*}*/
 .profileView {
     font-family: cursive;
-    font-size: 14px;
+    font-size:calc(20px + 2vh);
     color: #ff8700;
+    max-width: 300px;
     margin: auto;
+}
+
+@media screen and (min-width: 360px) and (max-width: 1200px) {
+    .profileView {
+        font-size: 20px;
+    }
 }
