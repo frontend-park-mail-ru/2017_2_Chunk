@@ -45,7 +45,8 @@ export default class GameCreateFields {
 					'name': 'playerNumber',
 					'id': 'playersNumber2',
 					'type': 'radio',
-					'value': '2'
+					'value': '2',
+					'checked': true
 				},
 				['lobbyView__gameCreateView__fields__choiceRadio',], ''),
 			label2: Block.Create('label', {'for': 'playersNumber2'},
@@ -73,7 +74,8 @@ export default class GameCreateFields {
 					'name': 'fieldSize',
 					'id': 'fieldSize10',
 					'type': 'radio',
-					'value': '8'
+					'value': '8',
+					'checked': true
 				},
 				['lobbyView__gameCreateView__fields__choiceRadio',], ''),
 			label2: Block.Create('label', {'for': 'fieldSize10'},

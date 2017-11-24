@@ -54,7 +54,7 @@ export default class webSocket {
 				console.log('web socket close is not clean');
 			}
 			clearInterval(this.interval);
-			alert('Код: ' + event.code + ' причина: ' + event.reason);
+			//alert('Код: ' + event.code + ' причина: ' + event.reason);
 			this.bus.emit('socketClose');
 		};
 		this.socket.onmessage = (event) => {

@@ -88,10 +88,7 @@ const gameCreateView = new GameCreateView();
 
 const gamePrepareView = new GamePrepareView();
 
-// const game = new Game(canvas, eventBus);
-
-const gameContainer = new ThreeView(eventBus);
-
+const gameContainer = new ThreeView(eventBus, router);
 
 const game3D = new Game3D(gameContainer);
 
@@ -129,8 +126,8 @@ eventBus.on('openLogin', function () {
     Views.forEach((view) => {
         view.hide();
     });
-	gameNameView.show();
-	loginView.show();
+    gameNameView.show();
+    loginView.show();
     backMenuButtonView.show();
 });
 
@@ -139,8 +136,8 @@ eventBus.on('openUpdate', function () {
     Views.forEach((view) => {
         view.hide();
     });
-	gameNameView.show();
-	updateView.show();
+    gameNameView.show();
+    updateView.show();
     backMenuButtonView.show();
 });
 
@@ -150,7 +147,7 @@ eventBus.on('openRules', function () {
         view.hide();
     });
     gameNameView.show();
-	rulesView.show();
+    rulesView.show();
     backMenuButtonView.show();
 });
 
@@ -161,7 +158,7 @@ eventBus.on('openMenu', function () {
     });
     themeButtonView.show();
     const browserStorage = window.localStorage;
-	gameNameView.show();
+    gameNameView.show();
     if (browserStorage.gameID) {
         browserStorage.removeItem('gameID');
     }
@@ -172,7 +169,7 @@ eventBus.on('openMenu', function () {
 
 eventBus.on('exit', function () {
     userService.logout();
-	eventBus.emit('unauth');
+    eventBus.emit('unauth');
     router.goTo('/menu');
 });
 
@@ -181,8 +178,8 @@ eventBus.on('openScoreboard', function () {
     Views.forEach((view) => {
         view.hide();
     });
-	gameNameView.show();
-	scoreboardView.show();
+    gameNameView.show();
+    scoreboardView.show();
     backMenuButtonView.show();
 });
 
@@ -191,7 +188,7 @@ eventBus.on("openGame", () => {
     Views.forEach((view) => {
         view.hide();
     });
-	gameContainer.show();
+    gameContainer.show();
 });
 
 
@@ -199,8 +196,8 @@ eventBus.on('openLobby', function () {
     Views.forEach((view) => {
         view.hide();
     });
-	gameNameView.show();
-	backMenuButtonView.show();
+    gameNameView.show();
+    backMenuButtonView.show();
     lobbyView.show();
 });
 
@@ -208,8 +205,8 @@ eventBus.on('openWaitingHall', function () {
     Views.forEach((view) => {
         view.hide();
     });
-	gameNameView.show();
-	backButtonView.show();
+    gameNameView.show();
+    backButtonView.show();
     gamePrepareView.show();
 });
 
@@ -262,9 +259,9 @@ app
 // 		});
 // }
 
-const workerRequest = {
-	data: "bla bla bal"
-};
-eventBus.emit('workerMessage', workerRequest);
+// const workerRequest = {
+//     data: "bla bla bal"
+// };
+// eventBus.emit('workerMessage', workerRequest);
 
 router.start();
