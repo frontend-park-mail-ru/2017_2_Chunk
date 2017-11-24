@@ -39,8 +39,7 @@
         font-family: "Comic Sans MS";
         box-sizing: border-box;
         margin: 0 !important;
-        width: 640px !important;
-        height: 362px !important;
+
         display: grid;
         grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";
         grid-template-columns: 1fr 3fr 1fr;
@@ -59,8 +58,7 @@
         background-size: auto 100vh;
         font-family: "Comic Sans MS";
         margin: 0 !important;
-        width: 360px !important;
-        height: 642px !important;
+
         grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place8 place8 place8";
         grid-template-rows: 6vw 10vw auto;
     }
