@@ -5,7 +5,7 @@ import eventBus from '../../modules/eventBus';
 
 
 export default class ThreeView extends CommonView {
-	constructor(router) {
+	constructor() {
 		const gameContainer = Block.create('div');
 		const winDiv = Block.create('div', {}, ['canvasView__winDiv'], '');
 		super([gameContainer, winDiv]);
@@ -23,7 +23,7 @@ export default class ThreeView extends CommonView {
 			this.winDiv.show();
 			setTimeout(() => {
 				this.winDiv.hide();
-				router.goTo('/menu');
+				this.bus.emit('goToMenu');
 			}, 3000);
 		});
 		super.hide();

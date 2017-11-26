@@ -84,7 +84,7 @@ const gameCreateView = new GameCreateView();
 
 const gamePrepareView = new GamePrepareView();
 
-const gameContainer = new ThreeView(eventBus, router);
+const gameContainer = new ThreeView();
 
 const game3D = new Game3D(gameContainer);
 
@@ -235,5 +235,58 @@ if ('serviceWorker' in navigator) {
 			console.log('Registration error');
 		});
 }
+
+//убрать адресную строку на мобилке
+// document.documentElement.scrollTop;
+// document.body.scrollTop;
+// window.scrollTo(0, 0);
+// window.scrollTo(1, 0)
+
+
+
+
+
+eventBus.on('socketCode106', blink);
+
+function blink() {
+	var i = 1;
+	var saveNode = undefined;
+	var grootTimer = undefined;
+	const myStorage = localStorage;
+	const nodeList = Array.from(document.getElementsByTagName("link"));
+	nodeList.forEach((node) => {
+		if (node.rel === 'shortcut icon') {
+			saveNode = node;
+			grootTimer = setInterval(nextIco, 100);
+		}
+	});
+
+	function nextIco() {
+		saveNode.href = `./images/dancing-groot/groot-${i % 11}.gif`;
+		i++;
+	}
+
+
+	var j = 0;
+	var show = ['Игра создана', document.title];
+
+
+	function stop() {
+		clearInterval(focusTimer);
+		clearInterval(grootTimer);
+		document.title = show[1];
+		saveNode.href = `./images/favicon.ico`;
+	}
+
+
+	document.onmousemove = function () {
+		stop();
+		document.onmousemove = null;
+	};
+	var focusTimer = setInterval(function () {
+		document.title = show[j++ % 2];
+	}, 1000);
+}
+
 
 router.start();

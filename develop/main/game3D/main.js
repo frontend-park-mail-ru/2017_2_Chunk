@@ -16,7 +16,7 @@ export default class Game3D {
 
 		this.bus = eventBus;
 
-		this.scene = new THREE.Scene();
+		this.scene = new THREE.Scene();//что за нотация?
 		// let axes = new THREE.AxisHelper(20);
 		// this.scene.add(axes);
 
@@ -26,6 +26,9 @@ export default class Game3D {
 			0.1,
 			1000
 		);
+		// this.camera = new THREE.OrthographicCamera(
+		// 	-100, 100, 100, 100
+		// );
 		this.camera.position.set(-28, 55, -28);
 		this.camera.lookAt(this.scene.position);
 
@@ -47,7 +50,7 @@ export default class Game3D {
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
-		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		container.getElement().appendChild(this.renderer.domElement);
 
 		this.renderer.render(this.scene, this.camera);
@@ -58,6 +61,9 @@ export default class Game3D {
 		this.controls.enablePan = true;
 		this.controls.minDistance = 40.0;
 		this.controls.maxDistance = 200.0;
+		this.controls.enableDamping = true;
+		this.dampingFactor = 0.01;
+
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
 
@@ -115,7 +121,7 @@ export default class Game3D {
 		this.arrayOfFigure = this.makeBinArray(this.PLANE_SIZE);
 		this.gamers = data.game.gamers;
 		this.countPlayers = this.gamers.length;
-		this.addMeshes();
+		this.addMeshes();//не уверен, что это так должно работать
 		// this.bus.emit('showPlayers', this.playerString());
 
 		const info = {
@@ -128,22 +134,22 @@ export default class Game3D {
 		this.animate();
 	}
 
-	handling201(data) {
+	handling201(data) {//разумные названия функций
 		this.queue.push(data.step.src);
 		this.queue.push(data.step.dst);
 	}
 
-	handling204(data) {
+	handling204(data) {//что делает функция?
 		let win = false;
-		this.startArray = data.field.field;
-		this.addPlaneByArray();
-		this.result = this.findMaxFiguresCount(this.countFigure());
+		this.startArray = data.field.field;//зачем?
+		this.addPlaneByArray();//че делает? почему старт эрей?
+		this.result = this.findMaxFiguresCount(this.countFigure());//зачем туда передавать counterFIgure?
 		if (this.result === this.figureType) { win = true; }
 		this.bus.emit('endOfGame', win);
 		this.scene.remove(this.light);
 	}
 
-	raycasterTrue() {
+	raycasterTrue() {//зачем вызывать функцию которая ничего не делает?
 		this.raycasterIndicator = true;
 	}
 
@@ -151,7 +157,7 @@ export default class Game3D {
 		this.raycasterIndicator = false;
 	}
 
-	makeBinArray(size) {
+	makeBinArray(size) {//зачем массив пустых массивов?
 		const array = [];
 		for (let i = 0; i < size; i++) {
 			array[i] = [];
@@ -169,10 +175,10 @@ export default class Game3D {
 
 	// Создает двумерный массив клеточек поля и расстявляет по нему фигуры в соответствии с массивом.
 	addPlaneByArray() {
-		for (let i = 0; i < this.PLANE_SIZE; i++) {
+		for (let i = 0; i < this.PLANE_SIZE; i++) {//что за интересная нотация?
 			for (let j = 0; j < this.PLANE_SIZE; j++) {
-				this.arrayOfPlane[i][j] = new PlaneCell(i, j);
-				this.arrayOfPlane[i][j].figure = this.startArray[i][j];
+				this.arrayOfPlane[i][j] = new PlaneCell(i, j);//зачем?
+				this.arrayOfPlane[i][j].figure = this.startArray[i][j];//почему стартэрей?
 				this.cellContainer.add(this.arrayOfPlane[i][j].mesh);
 			}
 		}
@@ -509,7 +515,7 @@ export default class Game3D {
 		return countFigure;
 	}
 
-	findMaxFiguresCount(array) {
+	findMaxFiguresCount(array) {//что за array?
 		let max = 0;
 		let maxI = 0;
 		for (let i = 0; i < array.length; i++) {
