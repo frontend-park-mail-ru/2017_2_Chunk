@@ -50,7 +50,7 @@ export default class Game3D {
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
 		container.getElement().appendChild(this.renderer.domElement);
 
 		this.renderer.render(this.scene, this.camera);
@@ -234,7 +234,7 @@ export default class Game3D {
 		// То самое движения, для которого нужен включенный индикатор.
 		this.moving();
 		this.scaling();
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
 		// Зацикливание
 		this.animation = requestAnimationFrame(this.animate.bind(this));
 		this.render();
@@ -486,8 +486,8 @@ export default class Game3D {
 	onDocumentMouseMove(event) {
 		event.preventDefault();
 
-		this.mouse.x = ((event.clientX / window.innerWidth) * 2) - 1;
-		this.mouse.y = (-(event.clientY / window.innerHeight) * 2) + 1;
+		this.mouse.x = ((event.clientX / window.screen.availWidth) * 2) - 1;
+		this.mouse.y = (-(event.clientY / window.screen.availHeight) * 2) + 1;
 	}
 
 	fullStep(point1, point2) {
