@@ -133,7 +133,7 @@ export default class gamePrepareView extends View {
 		this.fields.addBot.on('click', () => {
 			const request = {
 				code: '108',
-				lvlbot: '1',
+				lvlbot: '3',
 			};
 			this.bus.emit(`${this.source}Message`, (request));
 		});
