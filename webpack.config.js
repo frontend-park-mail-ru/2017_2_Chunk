@@ -30,6 +30,9 @@ module.exports = {
 		}, {
 			test: /\.json$/,
 			loader: 'json-loader'
+		}, {
+			test: /\.pug$/,
+			loader: 'pug-loader'
 		}],
 	},
 	plugins: [

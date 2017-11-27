@@ -2,7 +2,7 @@
 
 import View from '../view/view';
 import menuFields from './__fields/menuView__fields';
-
+import tmpl from './menu.pug';
 
 /**
  * Класс секции меню
@@ -10,6 +10,9 @@ import menuFields from './__fields/menuView__fields';
  */
 export default class MenuView extends View {
 	constructor(eventBus, router) {
+
+		debugger;
+		let template = tmpl;
 
 		super(menuFields);
 

@@ -104,3 +104,6 @@ node-js-getting-git started
 Будет удалено public/menu/
 /public/menu/application.js
 /public/menu/application.css
+/test/
+Будет удалено develop/main/views/menuView/menu.pug
+Будет удалено test/
