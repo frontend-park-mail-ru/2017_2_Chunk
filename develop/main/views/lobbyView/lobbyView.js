@@ -5,6 +5,7 @@ import LobbyGameData from './__lobbyFields/__gameDataField/lobbyView__lobbyField
 import WebSocket from '../../modules/webSocket';
 import WebWorker from '../../modules/webWorker';
 import eventBus from '../../modules/eventBus';
+import messageCodes from '../../messageCodes/messageCodes';
 
 
 /**
@@ -73,27 +74,46 @@ export default class LobbyView extends View {
 
 
 	socketEvent() {
+		this.lobbyUpdates();
+		this.gameDelete();
+		this.getGameFullList();
+		this.socketClose();
+	}
+
+
+	lobbyUpdates() {
 		// обновление информации о всех играх
-		this.bus.on(`${this.source}Code106`, (data) => {
-			// debugger;
-			if (this.gameList[data.game.gameID]) {
-				this.updateGameNode(data.game);
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.lobbyUpdates.code}`, (response) => {
+			if (this.gameList[response.game.gameID]) {
+				this.updateGameNode(response.game);
 			} else {
-				this.addGameNode(data.game);
+				this.addGameNode(response.game);
 			}
 		});
+	}
+
+
+	gameDelete() {
 		// удаление игры
-		this.bus.on(`${this.source}Code110`, (socketReceiveData) => {
-			this.removeGameNode(socketReceiveData.gameID);
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.gameDelete.code}`, (response) => {
+			this.removeGameNode(response.gameID);
 		});
-		// запрос всей информации об играх
-		this.bus.on(`${this.source}Code111`, (data) => {
-			data.games.forEach((gameData) => {
+	}
+
+
+	getGameFullList() {
+		// подписываемся на получение всей информации об играх
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.getGamesFullList.code}`, (response) => {
+			response.games.forEach((gameData) => {
 				this.addGameNode(gameData);
 			});
 		});
-		// закрытии всех игр
-		this.bus.on(`${this.source}Close`, () => {
+	}
+
+
+	socketClose() {
+		// закрытие сокета, удаление всех игр
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.close}`, () => {
 			if (this.webWorker) {
 				delete this.webWorker;
 			} else {

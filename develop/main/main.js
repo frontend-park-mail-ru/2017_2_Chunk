@@ -45,6 +45,10 @@ import Game3D from './game3D/main';
 
 import ServiceWorker from '../../public/serviceWorker';
 
+import messageCodes from './messageCodes/messageCodes';
+
+import TabBlink from './views/tabBlink/tabBlink';
+
 
 const gameNameView = new GameNameView();
 
@@ -90,6 +94,7 @@ const game3D = new Game3D(gameContainer);
 
 const serviceWorker = ServiceWorker;
 
+const tabBlink = new TabBlink();
 
 const Views = [];
 Views.push(gameNameView);
@@ -243,50 +248,7 @@ if ('serviceWorker' in navigator) {
 // window.scrollTo(1, 0)
 
 
-
-
-
-eventBus.on('socketCode106', blink);
-
-function blink() {
-	var i = 1;
-	var saveNode = undefined;
-	var grootTimer = undefined;
-	const myStorage = localStorage;
-	const nodeList = Array.from(document.getElementsByTagName("link"));
-	nodeList.forEach((node) => {
-		if (node.rel === 'shortcut icon') {
-			saveNode = node;
-			grootTimer = setInterval(nextIco, 100);
-		}
-	});
-
-	function nextIco() {
-		saveNode.href = `./images/dancing-groot/groot-${i % 11}.gif`;
-		i++;
-	}
-
-
-	var j = 0;
-	var show = ['Игра создана', document.title];
-
-
-	function stop() {
-		clearInterval(focusTimer);
-		clearInterval(grootTimer);
-		document.title = show[1];
-		saveNode.href = `./images/favicon.ico`;
-	}
-
-
-	document.onmousemove = function () {
-		stop();
-		document.onmousemove = null;
-	};
-	var focusTimer = setInterval(function () {
-		document.title = show[j++ % 2];
-	}, 1000);
-}
+eventBus.on(`${messageCodes.lobbyUpdates.code}`, tabBlink.blink(messageCodes.lobbyUpdates));
 
 
 router.start();

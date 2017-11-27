@@ -2,6 +2,7 @@
 import Block from '../../../blocks/block/block';
 import GameCreateViewFields from './__fields/lobbyView__gameCreateView__fields';
 import eventBus from '../../../modules/eventBus';
+import messageCodes from '../../../messageCodes/messageCodes';
 
 
 /**
@@ -61,8 +62,8 @@ export default class GameCreateView extends Block {
 				maxX: 8,
 				maxY: 8,
 			};
-
-			this.bus.emit('createGame', data);
+			this.bus.emit(`${messageCodes.connectGame.internal}`);
+			this.bus.emit(`${messageCodes.createGame.request}`, data);
 			this.hide();
 		});
 

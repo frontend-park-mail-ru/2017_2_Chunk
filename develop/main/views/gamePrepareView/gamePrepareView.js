@@ -2,7 +2,7 @@
 import View from '../view/view';
 import gamePrepareFields from './__fields/gamePrepareView__fields';
 import eventBus from '../../modules/eventBus';
-
+import messageCodes from '../../messageCodes/messageCodes';
 
 /**
  * Класс секции ожидания набора игроков
@@ -48,74 +48,63 @@ export default class gamePrepareView extends View {
 
 	// добавление пользователя
 	addPlayer() {
-		this.bus.on(`${this.source}Code101`, (sourceResponse) => {
-			this.fields.playersList.addPlayer(sourceResponse.player);
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.connectGamePLayer.code}`, (response) => {
+			this.fields.playersList.addPlayer(response.player);
 			this.clear = false;
-			const socketRequest = {
+			const request = {
 				code: '104',
-				gameID: sourceResponse.gameID,
+				gameID: response.gameID,
 			};
-			this.bus.emit('getGameInfo', socketRequest);
+			this.bus.emit(`${messageCodes.getGameInfo.request}`, request);
 		});
 	}
 
 
 	addBot() {
-		this.bus.on(`${this.source}Code108`, (socketResponse) => {
-			this.fields.playersList.addPlayer(socketResponse.player);
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.addBot.code}`, (response) => {
+			this.fields.playersList.addPlayer(response.player);
 			this.clear = false;
-			const socketRequest = {
+			const request = {
 				code: '104',
-				gameID: socketResponse.gameID,
+				gameID: response.gameID,
 			};
-			this.bus.emit('getGameInfo', socketRequest);
+			this.bus.emit(`${messageCodes.getGameInfo.request}`, request);
 		});
 	}
 
 
 	// удаление пользователя
 	removePLayer() {
-		this.bus.on(`${this.source}Code103`, (socketReceiveData) => {
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.exitFromPreparingGame.code}`, (response) => {
 			if (this.active) {
-				this.fields.playersList.removePlayer(socketReceiveData.player.userID);
-				const socketSendData = {
+				this.fields.playersList.removePlayer(response.player.userID);
+				const request = {
 					code: '104',
-					gameID: socketReceiveData.gameID
+					gameID: response.gameID
 				};
-				this.bus.emit('getGameInfo', socketSendData);
+				this.bus.emit(`${messageCodes.getGameInfo.request}`, request);
 			}
 		});
 	}
 
 
 	gameStatusEvents() {
-		this.bus.on('connectGame', () => {
-			this.updateGameDataSlave();
+		this.bus.on(`${messageCodes.connectGame.internal}`, () => {
+			this.updateGameData();
 		});
-		this.bus.on('createGame', () => {
-			this.updateGameDataMaster();
-		});
-		this.bus.on(`${this.source}Code200`, () => {
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.startGame.code}`, () => {
+
 			this.bus.emit('goToGame');
 		});
 	}
 
 
-	updateGameDataMaster() {
-		this.bus.on(`${this.source}Code104`, (socketReceiveData) => {
-			this.fields.header.updateGameData(socketReceiveData.game);
+	updateGameData() {
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.getGameInfo.code}`, (response) => {
+			this.fields.header.updateGameData(response.game);
 			this.clear = false;
-			this.gameInfo = socketReceiveData;
-		});
-	}
-
-
-	updateGameDataSlave() {
-		this.bus.on(`${this.source}Code104`, (socketReceiveData) => {
-			this.fields.header.updateGameData(socketReceiveData.game);
-			this.clear = false;
-			this.gameInfo = socketReceiveData;
-			socketReceiveData.game.gamers.forEach((gamer) => {
+			this.gameInfo = response;
+			response.game.gamers.forEach((gamer) => {
 				if (gamer.userID !== this.userID) { this.fields.playersList.addPlayer(gamer); }
 			});
 		});
@@ -123,7 +112,7 @@ export default class gamePrepareView extends View {
 
 
 	gameClose() {
-		this.bus.on(`${this.source}Code110`, (socketReceiveData) => {
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.gameDelete.code}`, (response) => {
 			this.bus.emit('openLobby');
 		});
 	}
@@ -135,20 +124,20 @@ export default class gamePrepareView extends View {
 				code: '108',
 				lvlbot: '3',
 			};
-			this.bus.emit(`${this.source}Message`, (request));
+			this.bus.emit(`${messageCodes.addBot.request}`, (request));
 		});
 		this.fields.startGame.on('click', () => {
 			const request = {
 				code: '105',
 			};
-			this.bus.emit(`${this.source}Message`, (request));
+			this.bus.emit(`${messageCodes.startGame.request}`, (request));
 		});
 	}
 
 
 	whoIsItEvent() {
-		this.bus.on('socketCode112', (socketResponse) => {
-			this.userID = socketResponse.userID;
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.whoIsIt.code}`, (request) => {
+			this.userID = request.userID;
 		});
 	}
 }
