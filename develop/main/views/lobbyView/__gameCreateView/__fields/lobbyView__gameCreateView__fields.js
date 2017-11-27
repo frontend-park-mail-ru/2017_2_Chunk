@@ -42,23 +42,23 @@ export default class GameCreateFields {
 		const choice = {
 			players2: Block.create('input', {
 					'required': 'required',
-					'name': 'playerNumber',
+					'name': 'playersNumberChoice',
 					'id': 'playersNumber2',
 					'type': 'radio',
 					'value': '2',
 					'checked': true
 				},
 				['lobbyView__gameCreateView__fields__choiceRadio',], ''),
-			label2: Block.create('label', {'for': 'playersNumber2'},
+			label1: Block.create('label', {'for': 'playersNumber2'},
 				['lobbyView__gameCreateView__fields__choiceRadio_label',], '2'),
 			players4: Block.create('input', {
-					'name': 'playerNumber',
+					'name': 'playersNumberChoice',
 					'id': 'playersNumber4',
 					'type': 'radio',
 					'value': '4'
 				},
 				['lobbyView__gameCreateView__fields__choiceRadio',], ''),
-			label4: Block.create('label', {'for': 'playersNumber4'},
+			label2: Block.create('label', {'for': 'playersNumber4'},
 				['lobbyView__gameCreateView__fields__choiceRadio_label',], '4'),
 		};
 		for (const field in choice) {
@@ -69,26 +69,26 @@ export default class GameCreateFields {
 
 	addRadioFieldSize() {
 		const choice = {
-			fieldSize10: Block.create('input', {
+			fieldSize6: Block.create('input', {
 					'required': 'required',
-					'name': 'fieldSize',
-					'id': 'fieldSize10',
+					'name': 'fieldSizeChoice',
+					'id': 'fieldSize6',
 					'type': 'radio',
-					'value': '8',
+					'value': '6',
 					'checked': true
 				},
 				['lobbyView__gameCreateView__fields__choiceRadio',], ''),
-			label2: Block.create('label', {'for': 'fieldSize10'},
-				['lobbyView__gameCreateView__fields__choiceRadio_label',], '8'),
-			fieldSize15: Block.create('input', {
-					'name': 'fieldSize',
-					'id': 'fieldSize15',
+			label1: Block.create('label', {'for': 'fieldSize6'},
+				['lobbyView__gameCreateView__fields__choiceRadio_label',], '6'),
+			fieldSize8: Block.create('input', {
+					'name': 'fieldSizeChoice',
+					'id': 'fieldSize8',
 					'type': 'radio',
-					'value': '12'
+					'value': '8'
 				},
 				['lobbyView__gameCreateView__fields__choiceRadio',], ''),
-			label4: Block.create('label', {'for': 'fieldSize15'},
-				['lobbyView__gameCreateView__fields__choiceRadio_label',], '12'),
+			label2: Block.create('label', {'for': 'fieldSize8'},
+				['lobbyView__gameCreateView__fields__choiceRadio_label',], '8'),
 		};
 		for (const field in choice) {
 			this.fields.fieldSize.append(choice[field]);
