@@ -8,8 +8,6 @@ import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
-import LogicSource from './logicSource';
-
 
 export default class Game3D {
 
@@ -77,20 +75,21 @@ export default class Game3D {
 
 		this.gameEvents();
 
-		this.bus.on(`${this.source}Code203`, (data) => {	// Player is blocked
-			// console.log(data);
-		});
-		this.bus.on(`${this.source}Code209`, (data) => {	// Player is offline
-			// console.log(data);
-		});
-		this.bus.on(`${this.source}Code306`, (data) => {	// Invalid game step
-			// console.log(data);
-		});
-		this.bus.on(`${this.source}Code307`, (data) => {	// It is not your turn
-			// console.log(data);
-		});
+		// this.bus.on(`${this.source}Code203`, (data) => {	// Player is blocked
+		// 	// console.log(data);
+		// });
+		// this.bus.on(`${this.source}Code209`, (data) => {	// Player is offline
+		// 	// console.log(data);
+		// });
+		// this.bus.on(`${this.source}Code306`, (data) => {	// Invalid game step
+		// 	// console.log(data);
+		// });
+		// this.bus.on(`${this.source}Code307`, (data) => {	// It is not your turn
+		// 	// console.log(data);
+		// });
 
 		this.bus.on('deleteTree', () => {
+			console.log("HERE");
 			this.scene.remove(this.spotLight);
 			this.scene.remove(this.cellContainer);
 			this.scene.remove(this.playerContainer);
@@ -118,7 +117,6 @@ export default class Game3D {
 			// Двумерный массив клеток поля.
 			this.arrayOfPlane = this.makeBinArray(this.planeSize);
 			this.gamers = response.game.gamers;
-			this.arrayLogic = new LogicSource(this.arrayOfPlane, this.gamers);
 			// Двумерный массив фигур на поле.
 			this.arrayOfFigure = this.makeBinArray(this.planeSize);
 			this.countPlayers = this.gamers.length;
@@ -144,9 +142,9 @@ export default class Game3D {
 	gameEnd() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameEnd.code}`, (response) => {
 			let win = false;
-			this.startArray = response.field.field;
-			this.addPlaneByStart();
-			this.result = this.arrayLogic.findMaxFiguresCount(this.arrayLogic.countFigure());
+			// this.startArray = response.field.field;
+			// this.addPlaneByStart();
+			this.result = this.findMaxFiguresCount(this.countFigure());
 			if (this.result === this.figureType) { win = true; }
 			this.bus.emit('endOfGame', win);
 			this.scene.remove(this.light);
@@ -509,32 +507,32 @@ export default class Game3D {
 		this.deleteAllStepEnable();
 	}
 
-	// countFigure() {
-	// 	const countFigure = [];
-	// 	for (let i = 0; i < this.countPlayers; i++) {
-	// 		countFigure[i] = 0;
-	// 	}
-	// 	for (let i = 0; i < this.planeSize; i++) {
-	// 		for (let j = 0; j < this.planeSize; j++) {
-	// 			if (this.arrayOfPlane[i][j].figure > 0) {
-	// 				countFigure[this.arrayOfPlane[i][j].figure - 1]++;
-	// 			}
-	// 		}
-	// 	}
-	// 	return countFigure;
-	// }
+	countFigure() {
+		const countFigure = [];
+		for (let i = 0; i < this.countPlayers; i++) {
+			countFigure[i] = 0;
+		}
+		for (let i = 0; i < this.planeSize; i++) {
+			for (let j = 0; j < this.planeSize; j++) {
+				if (this.arrayOfPlane[i][j].figure > 0) {
+					countFigure[this.arrayOfPlane[i][j].figure - 1]++;
+				}
+			}
+		}
+		return countFigure;
+	}
 
-	// findMaxFiguresCount(array) {
-	// 	let max = 0;
-	// 	let maxI = 0;
-	// 	for (let i = 0; i < array.length; i++) {
-	// 		if (array[i] > max) {
-	// 			max = array[i];
-	// 			maxI = i;
-	// 		}
-	// 	}
-	// 	return maxI;
-	// }
+	findMaxFiguresCount(array) {
+		let max = 0;
+		let maxI = 0;
+		for (let i = 0; i < array.length; i++) {
+			if (array[i] > max) {
+				max = array[i];
+				maxI = i;
+			}
+		}
+		return maxI;
+	}
 
 	playerString() {
 		let playerString = '';
