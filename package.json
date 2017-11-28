@@ -17,7 +17,6 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
     "body-parser": "^1.18.1",
-    "bootstrap": "^4.0.0-beta.2",
     "cookie-parser": "^1.4.3",
     "cool-ascii-faces": "1.3.4",
     "css-loader": "^0.28.7",
@@ -61,7 +60,7 @@
   "scripts": {
     "compile-pug": "pug --client --no-debug ./public/templates/recordIndex.pug",
     "build": "babel public -d public_ES",
-    "start": "./node_modules/.bin/webpack && node ./server/index.js",
+    "start": "webpack && node ./server/index.js",
     "lint": "./node_modules/.bin/eslint ./develop/**/**/*.js",
     "lint-fix": "./node_modules/.bin/eslint --fix ./develop/**/**/*.js"
   }
