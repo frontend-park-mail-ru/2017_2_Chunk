@@ -31,11 +31,11 @@ export default class LobbyGameData extends Block {
 
 	playButtonOnClick() {
 		this.gameDataFields.fields.playButton.on('click', () => {
-			const data = {
+			const response = {
 				code: '101',
 				gameID: `${this.gameID}`,
 			};
-			this.bus.emit(`${messageCodes.connectGame}`, data);
+			this.bus.emit(`${messageCodes.connectGame}`, response);
 		});
 	}
 
