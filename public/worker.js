@@ -290,7 +290,7 @@ function botStep() {
 							code201.step.src.x = i;
 							code201.step.src.z = j;
 							code201.step.dst.x = k;
-							code201.step.dst.z = m;
+							code201.step.dst.z = m; //массив координат фигурок бота, а не четверная вложенность.
 							return;
 						}
 					}

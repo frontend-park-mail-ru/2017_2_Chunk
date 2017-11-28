@@ -9,10 +9,10 @@ import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 
 
-export default class Game3D {
+export default class Game3D { //поменять название.
 
 	constructor(container) {
-		this.source = navigator.onLine ? 'socket' : 'worker';
+		//this.source = navigator.onLine ? 'socket' : 'worker';
 
 		this.bus = eventBus;
 
@@ -67,7 +67,7 @@ export default class Game3D {
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
 
-		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
+		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false); //заменить на эд ремове.
 		container.getElement().addEventListener('mousedown', this.raycasterFalse.bind(this), false);
 		container.getElement().addEventListener('mouseup', this.raycasterFalse.bind(this), false);
 		container.getElement().addEventListener('mousemove', this.raycasterFalse.bind(this), false);
@@ -77,7 +77,7 @@ export default class Game3D {
 		this.mouse = new THREE.Vector2();
 		this.raycaster = new THREE.Raycaster();
 
-		this.bus.on(`${this.source}Code200`, (data) => {
+		this.bus.on(`${this.source}Code200`, (data) => { // чрез свитч кейс.
 			this.handling200(data);
 		});
 		this.bus.on(`${this.source}Code201`, (data) => {	// Game step
@@ -157,7 +157,7 @@ export default class Game3D {
 		this.raycasterIndicator = false;
 	}
 
-	makeBinArray(size) {//зачем массив пустых массивов?
+	makeBinArray(size) { //зачем массив пустых массивов?
 		const array = [];
 		for (let i = 0; i < size; i++) {
 			array[i] = [];
@@ -234,13 +234,13 @@ export default class Game3D {
 		// То самое движения, для которого нужен включенный индикатор.
 		this.moving();
 		this.scaling();
-		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
+		//this.renderer.setSize(window.screen.availWidth, window.screen.availHeight); убираем заменяем сет сайз на что то другое.
 		// Зацикливание
 		this.animation = requestAnimationFrame(this.animate.bind(this));
 		this.render();
 	}
 
-	queueStep() {
+	queueStep() { // this.queue
 		if (typeof this.queue !== 'undefined' && this.queue !== null && this.queue.length > 0 && !this.stepIndicator && !Object.isFrozen(this.point1)) {
 			this.stepIndicator = true;
 			this.point1 = this.queue.shift();
