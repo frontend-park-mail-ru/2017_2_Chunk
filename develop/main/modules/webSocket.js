@@ -1,19 +1,20 @@
 'use strict';
 import eventBus from './eventBus';
-import messageCodes from '../messageCodes/messageCodes';
+import messageCodes from '../messageCodes/lobbyCodes';
 
 
 export default class webSocket {
 	constructor() {
 		this.bus = eventBus;
 		this.socket = new WebSocket('wss://backend-java-spring.herokuapp.com/play');
-		this.gameHandler();
+		this.socketListeners = {};
 		this.socketCallbacks();
 	}
 
 
 	gameHandler() {
-		this.bus.on(messageCodes.requestEventName, (data) => {
+		this.socketListeners[messageCodes.requestEventName]
+			= this.bus.on(messageCodes.requestEventName, (data) => {
 			this.socket.send(JSON.stringify(data));
 		});
 	}
@@ -28,6 +29,7 @@ export default class webSocket {
 
 
 	gettingStart() {
+		this.gameHandler();
 		this.bus.emit(messageCodes.requestEventName, messageCodes.getGamesFullList);
 		this.bus.emit(messageCodes.requestEventName, messageCodes.subscribeLobbyUpdates);
 		this.keepAliveEvent();
@@ -45,10 +47,11 @@ export default class webSocket {
 
 
 	openMenuEvent() {
-		this.bus.on('openMenu', () => {
-			this.bus.emit(`${messageCodes.responseEventName}Close`);
+		this.socketListeners['openMenu'] = this.bus.on('openMenu', () => {
+			this.bus.emit(`${messageCodes.responseEventName}${messageCodes.close}`);
 		});
-		this.bus.on(`${messageCodes.responseEventName}Close`, () => {
+		this.socketListeners[`${messageCodes.responseEventName}${messageCodes.close}`]
+			= this.bus.on(`${messageCodes.responseEventName}${messageCodes.close}`, () => {
 			if (this.socket) {
 				this.socket.close();
 				delete this.socket;
@@ -72,7 +75,15 @@ export default class webSocket {
 		clearInterval(this.interval);
 		console.log('Код: ' + event.code + ' причина: ' + event.reason);
 		delete this.socket;
+		this.removeSocketListeners();
 		this.bus.emit('goToMenu');
+	}
+
+
+	removeSocketListeners() {
+		for (let listener in this.socketListeners) {
+			this.bus.remove(`${listener}`, this.socketListeners[listener]);
+		}
 	}
 
 

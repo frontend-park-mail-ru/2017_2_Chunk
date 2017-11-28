@@ -2,7 +2,7 @@
 import Block from '../../../../blocks/block/block';
 import GameDataFields from './__fields/lobbyView__lobbyFields__gameDataField__fields';
 import eventBus from '../../../../modules/eventBus';
-import messageCodes from '../../../../messageCodes/messageCodes';
+import lobbyCodes from '../../../../messageCodes/lobbyCodes';
 
 
 /**
@@ -31,17 +31,17 @@ export default class LobbyGameData extends Block {
 
 	playButtonOnClick() {
 		this.gameDataFields.fields.playButton.on('click', () => {
-			const response = {
+			const request = {
 				code: '101',
 				gameID: `${this.gameID}`,
 			};
-			this.bus.emit(`${messageCodes.connectGame}`, response);
+			this.bus.emit(`${lobbyCodes.connectGame.request}`, request);
 		});
 	}
 
 
 	playerExitFromPreparingGameEvent() {
-		this.bus.on(`${messageCodes.exitFromPreparingGame.code}`, (response) => {
+		this.bus.on(`${lobbyCodes.exitFromPreparingGame.code}`, (response) => {
 			if (response.gameID === this.gameID) {
 				let gamersNumberHtml = this.gameDataFields.fields.gamersNumber.el;
 				//debugger;

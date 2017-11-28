@@ -1,4 +1,4 @@
-import messageCode from '../../messageCodes/messageCodes';
+import messageCode from '../../messageCodes/lobbyCodes';
 
 export default class TabBlink {
 	constructor(){};

@@ -45,7 +45,7 @@ import Game3D from './game3D/main';
 
 import ServiceWorker from '../../public/serviceWorker';
 
-import messageCodes from './messageCodes/messageCodes';
+import messageCodes from './messageCodes/lobbyCodes';
 
 import TabBlink from './views/tabBlink/tabBlink';
 

@@ -69,7 +69,7 @@ export default class Game3D { //поменять название.
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
 
-		const event = container.getElement().addEventListener('click', this.onDocumentMouseMove, false); //заменить на эд ремове.
+		const event = container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false); //заменить на эд ремове.
 		container.getElement().addEventListener('mousedown', this.raycasterFalse.bind(this), false);
 		container.getElement().addEventListener('mouseup', this.raycasterFalse.bind(this), false);
 		container.getElement().addEventListener('mousemove', this.raycasterFalse.bind(this), false);

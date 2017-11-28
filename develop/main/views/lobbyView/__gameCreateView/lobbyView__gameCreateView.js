@@ -2,7 +2,7 @@
 import Block from '../../../blocks/block/block';
 import GameCreateViewFields from './__fields/lobbyView__gameCreateView__fields';
 import eventBus from '../../../modules/eventBus';
-import messageCodes from '../../../messageCodes/messageCodes';
+import messageCodes from '../../../messageCodes/lobbyCodes';
 
 
 /**

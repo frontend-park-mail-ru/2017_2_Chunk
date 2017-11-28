@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * Модуль, предоставляющий интерфейс для работы с событиями
  * @module EventBus
@@ -9,6 +8,7 @@ export default new class EventBus {
 		this.listeners = {};
 	}
 
+
 	/**
 	 * Подписывает на собтые
 	 * @param {string} event - название события
@@ -17,15 +17,24 @@ export default new class EventBus {
 	on(event, listener) {
 		this.listeners[event] = this.listeners[event] || [];
 		this.listeners[event].push(listener);
+		return listener
 	}
+
 
 	/**
 	 * Отписывается от события
 	 * @param {string} event - название события
+	 * @param {Object} listener - название события
 	 */
-	off(event) {
+	remove(event, listener) {
 		this.listeners[event] = this.listeners[event] || [];
-		delete this.listeners[event];
+		const idx = this.listeners[event].indexOf(listener);
+		if (idx !== -1) {
+			delete this.listeners[event][idx];
+		}
+		if (!this.listeners[event].length) {
+			delete this.listeners[event];
+		}
 	}
 
 

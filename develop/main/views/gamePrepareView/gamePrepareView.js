@@ -2,7 +2,7 @@
 import View from '../view/view';
 import gamePrepareFields from './__fields/gamePrepareView__fields';
 import eventBus from '../../modules/eventBus';
-import messageCodes from '../../messageCodes/messageCodes';
+import messageCodes from '../../messageCodes/lobbyCodes';
 
 /**
  * Класс секции ожидания набора игроков
@@ -112,7 +112,7 @@ export default class gamePrepareView extends View {
 
 
 	gameClose() {
-		this.bus.on(`${messageCodes.responseEventName}${messageCodes.gameDelete.code}`, (response) => {
+		this.bus.on(`${messageCodes.responseEventName}${messageCodes.deleteGame.code}`, (response) => {
 			this.bus.emit('openLobby');
 		});
 	}
