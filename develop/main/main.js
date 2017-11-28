@@ -189,7 +189,7 @@ eventBus.on('openGame', () => {
 	Views.forEach((view) => {
 		view.hide();
 	});
-	backMenuButtonView.show();
+	backButtonView.show();
 	gameContainer.show();
 });
 
