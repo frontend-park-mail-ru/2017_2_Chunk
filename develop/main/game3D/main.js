@@ -7,6 +7,7 @@ import Player from './models/player.js';
 import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
+import gameCodes from '../messageCodes/gameCodes';
 
 
 export default class Game3D { //поменять название.
@@ -29,6 +30,7 @@ export default class Game3D { //поменять название.
 		// this.camera = new THREE.OrthographicCamera(
 		// 	-100, 100, 100, 100
 		// );
+
 		this.camera.position.set(-28, 55, -28);
 		this.camera.lookAt(this.scene.position);
 
@@ -77,8 +79,8 @@ export default class Game3D { //поменять название.
 		this.mouse = new THREE.Vector2();
 		this.raycaster = new THREE.Raycaster();
 
-		this.bus.on(`${this.source}Code200`, (data) => { // чрез свитч кейс.
-			this.handling200(data);
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.startGame.code}`, (response) => {
+			this.handling200(response);
 		});
 		this.bus.on(`${this.source}Code201`, (data) => {	// Game step
 			this.handling201(data);
@@ -124,12 +126,12 @@ export default class Game3D { //поменять название.
 		this.addMeshes();//не уверен, что это так должно работать
 		// this.bus.emit('showPlayers', this.playerString());
 
-		const info = {
-			code: '112'
+		const request = {//все запросы поменяй на request все ответы на response
+			code: gameCodes.getGameInfo.code
 		};
-		this.bus.emit(`${this.source}Message`, info);
-		this.bus.on(`${this.source}Code112`, (_data) => {
-			this.handling112(_data);
+		this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.getGameInfo.code}`, (response) => {
+			this.handling112(response);
 		});
 		this.animate();
 	}
@@ -164,6 +166,11 @@ export default class Game3D { //поменять название.
 		}
 		return array;
 	}
+
+	// makeBinArray(size) {//зачем массив пустых массивов?
+	// 	const array = [];//сорян, не знаю как вернуть назад
+	// 	return array;
+	// }
 
 	detectFigureByUserID(userID) {
 		for (let i = 0; i < this.gamers.length; i++) {

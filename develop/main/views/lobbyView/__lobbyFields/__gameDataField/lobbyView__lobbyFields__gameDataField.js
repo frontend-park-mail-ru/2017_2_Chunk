@@ -60,7 +60,7 @@ export default class LobbyGameData extends Block {
 
 	validationField() {
 		this.bus.on('auth', () => {
-			debugger;
+			//debugger;
 			const elements = this.gameDataFields.fields.filter((field) => {
 				return field.el.classList.contains('auth');
 			});
