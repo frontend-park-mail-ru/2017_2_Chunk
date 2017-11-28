@@ -1,7 +1,7 @@
 'use strict';
 
 import OrbitControl from 'three-orbitcontrols';
-import * as THREE from 'three';
+import * as Three from 'three';
 import PlaneCell from './models/plane.js';
 import Player from './models/player.js';
 import * as tools from './tools/tools.js';
@@ -9,25 +9,20 @@ import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
 
-
-export default class Game3D { //поменять название.
+export default class Game3D {
 
 	constructor(container) {
-		//this.source = navigator.onLine ? 'socket' : 'worker';
-
 		this.bus = eventBus;
 
-		this.scene = new THREE.Scene();//что за нотация?
-		// let axes = new THREE.AxisHelper(20);
-		// this.scene.add(axes);
+		this.scene = new Three.Scene();
 
-		this.camera = new THREE.PerspectiveCamera(
+		this.camera = new Three.PerspectiveCamera(
 			45,
 			window.screen.availWidth / window.screen.availHeight,
 			0.1,
 			1000
 		);
-		// this.camera = new THREE.OrthographicCamera(
+		// this.camera = new Three.OrthographicCamera(
 		// 	-100, 100, 100, 100
 		// );
 
@@ -50,8 +45,7 @@ export default class Game3D { //поменять название.
 		this.queue = [];
 		this.animation = 0;
 
-		this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-		// this.renderer.setClearColor( tools.COLORS.BACKGROUND, 1.0 );
+		this.renderer = new Three.WebGLRenderer({antialias: true, alpha: true});
 		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
 		container.getElement().appendChild(this.renderer.domElement);
 
@@ -75,32 +69,26 @@ export default class Game3D { //поменять название.
 		container.getElement().addEventListener('click', this.raycasterTrue.bind(this), false);
 		container.getElement().addEventListener('onscroll', this.raycasterFalse.bind(this), false);
 
-		this.mouse = new THREE.Vector2();
-		this.raycaster = new THREE.Raycaster();
+		this.mouse = new Three.Vector2();
+		this.raycaster = new Three.Raycaster();
 
-		this.bus.on(`${gameCodes.responseEventName}${gameCodes.startGame.code}`, (response) => {
-			this.handling200(response);
-		});
-		this.bus.on(`${this.source}Code201`, (data) => {	// Game step
-			this.handling201(data);
-		});
-		this.bus.on(`${this.source}Code203`, (data) => {	// Player is blocked
-			// console.log(data);
-		});
-		this.bus.on(`${this.source}Code204`, (data) => {	// Game had ended, check result
-			this.handling204(data);
-		});
-		this.bus.on(`${this.source}Code209`, (data) => {	// Player is offline
-			// console.log(data);
-		});
-		this.bus.on(`${this.source}Code306`, (data) => {	// Invalid game step
-			// console.log(data);
-		});
-		this.bus.on(`${this.source}Code307`, (data) => {	// It is not your turn
-			// console.log(data);
-		});
+		this.gameEvents();
+
+		// this.bus.on(`${this.source}Code203`, (data) => {	// Player is blocked
+		// 	// console.log(data);
+		// });
+		// this.bus.on(`${this.source}Code209`, (data) => {	// Player is offline
+		// 	// console.log(data);
+		// });
+		// this.bus.on(`${this.source}Code306`, (data) => {	// Invalid game step
+		// 	// console.log(data);
+		// });
+		// this.bus.on(`${this.source}Code307`, (data) => {	// It is not your turn
+		// 	// console.log(data);
+		// });
 
 		this.bus.on('deleteTree', () => {
+			console.log("HERE");
 			this.scene.remove(this.spotLight);
 			this.scene.remove(this.cellContainer);
 			this.scene.remove(this.playerContainer);
@@ -108,46 +96,58 @@ export default class Game3D { //поменять название.
 		});
 	}
 
-	handling112(data) {
-		this.userID = data.userID;
-		this.figureType = this.detectFigureByUserID(this.userID);
+	gameEvents() {
+		this.startGame();
+		this.gameStep();
+		this.gameEnd();
 	}
 
-	handling200(data) {
-		this.startArray = data.game.field.field;
-		this.PLANE_SIZE = data.game.field.maxX;
-		// Двумерный массив клеток поля.
-		this.arrayOfPlane = this.makeBinArray(this.PLANE_SIZE);
-		// Двумерный массив фигур на поле.
-		this.arrayOfFigure = this.makeBinArray(this.PLANE_SIZE);
-		this.gamers = data.game.gamers;
-		this.countPlayers = this.gamers.length;
-		this.addMeshes();//не уверен, что это так должно работать
-		// this.bus.emit('showPlayers', this.playerString());
-
-		const request = {//все запросы поменяй на request все ответы на response
-			code: gameCodes.getGameInfo.code
-		};
-		this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
+	getGameInfo() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.getGameInfo.code}`, (response) => {
-			this.handling112(response);
+			this.userID = response.userID;
+			this.figureType = this.detectFigureByUserID(this.userID);
 		});
-		this.animate();
 	}
 
-	handling201(data) {//разумные названия функций
-		this.queue.push(data.step.src);
-		this.queue.push(data.step.dst);
+	startGame() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.startGame.code}`, (response) => {
+			this.startArray = response.game.field.field;
+			this.planeSize = response.game.field.maxX;
+			// Двумерный массив клеток поля.
+			this.arrayOfPlane = this.makeBinArray(this.planeSize);
+			this.gamers = response.game.gamers;
+			// Двумерный массив фигур на поле.
+			this.arrayOfFigure = this.makeBinArray(this.planeSize);
+			this.countPlayers = this.gamers.length;
+			this.addMeshes();
+
+			const request = {//все запросы поменяй на request все ответы на response
+				code: gameCodes.getGameInfo.code
+			};
+			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
+			this.getGameInfo();
+
+			this.animate();
+		});
 	}
 
-	handling204(data) {//что делает функция?
-		let win = false;
-		this.startArray = data.field.field;//зачем?
-		this.addPlaneByArray();//че делает? почему старт эрей?
-		this.result = this.findMaxFiguresCount(this.countFigure());//зачем туда передавать counterFIgure?
-		if (this.result === this.figureType) { win = true; }
-		this.bus.emit('endOfGame', win);
-		this.scene.remove(this.light);
+	gameStep() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameStep.code}`, (response) => {
+			this.queue.push(response.step.src);
+			this.queue.push(response.step.dst);
+		});
+	}
+
+	gameEnd() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameEnd.code}`, (response) => {
+			let win = false;
+			// this.startArray = response.field.field;
+			// this.addPlaneByStart();
+			this.result = this.findMaxFiguresCount(this.countFigure());
+			if (this.result === this.figureType) { win = true; }
+			this.bus.emit('endOfGame', win);
+			this.scene.remove(this.light);
+		});
 	}
 
 	raycasterTrue() {//зачем вызывать функцию которая ничего не делает?
@@ -158,7 +158,7 @@ export default class Game3D { //поменять название.
 		this.raycasterIndicator = false;
 	}
 
-	makeBinArray(size) { //зачем массив пустых массивов?
+	makeBinArray(size) {
 		const array = [];
 		for (let i = 0; i < size; i++) {
 			array[i] = [];
@@ -180,10 +180,10 @@ export default class Game3D { //поменять название.
 	}
 
 	// Создает двумерный массив клеточек поля и расстявляет по нему фигуры в соответствии с массивом.
-	addPlaneByArray() {
-		for (let i = 0; i < this.PLANE_SIZE; i++) {//что за интересная нотация?
-			for (let j = 0; j < this.PLANE_SIZE; j++) {
-				this.arrayOfPlane[i][j] = new PlaneCell(i, j);//зачем?
+	addPlaneByStart() {
+		for (let i = 0; i < this.planeSize; i++) {//что за интересная нотация?
+			for (let j = 0; j < this.planeSize; j++) {
+				this.arrayOfPlane[i][j] = new PlaneCell(i, j);
 				this.arrayOfPlane[i][j].figure = this.startArray[i][j];//почему стартэрей?
 				this.cellContainer.add(this.arrayOfPlane[i][j].mesh);
 			}
@@ -199,8 +199,8 @@ export default class Game3D { //поменять название.
 
 	// Добавляет на поле все фигуры, заданные в массиве клеток поля.
 	addAllPlayers() {
-		for (let i = 0; i < this.PLANE_SIZE; i++) {
-			for (let j = 0; j < this.PLANE_SIZE; j++) {
+		for (let i = 0; i < this.planeSize; i++) {
+			for (let j = 0; j < this.planeSize; j++) {
 				if (this.arrayOfPlane[i][j].figure !== 0) {
 					this.addOnePlayers(this.playerContainer, i, j, this.arrayOfPlane[i][j].figure);
 				}
@@ -209,19 +209,19 @@ export default class Game3D { //поменять название.
 	}
 
 	addMeshes() {
-		this.light = new THREE.AmbientLight(tools.COLORS.WHITE, 0.75, 100, Math.PI);
+		this.light = new Three.AmbientLight(tools.COLORS.WHITE, 0.75, 100, Math.PI);
 		this.light.position.set(0, 0, 0);
 		this.scene.add(this.light);
 
-		this.spotLight = new THREE.SpotLight(tools.COLORS.WHITE, 1, 100, Math.PI);
+		this.spotLight = new Three.SpotLight(tools.COLORS.WHITE, 1, 100, Math.PI);
 		this.spotLight.position.set(0, 10, 0);
 		this.scene.add(this.spotLight);
 
-		this.playerContainer = new THREE.Object3D();
-		this.cellContainer = new THREE.Object3D();
+		this.playerContainer = new Three.Object3D();
+		this.cellContainer = new Three.Object3D();
 
 		// Рисование поля и всех фигурок.
-		this.addPlaneByArray();
+		this.addPlaneByStart();
 		this.addAllPlayers();
 
 		this.scene.add(this.cellContainer);
@@ -278,7 +278,7 @@ export default class Game3D { //поменять название.
 						!Object.isFrozen(this.point1)) {
 						// Тут определяются номера по х и z фигуры, на которую нажали.
 						this.deleteAllStepEnable();
-						for (let i = 0; i < this.PLANE_SIZE; i++) {
+						for (let i = 0; i < this.planeSize; i++) {
 							if (intersects[0].object.position.x > i * tools.PLANE_X) {
 								this.point1.x = i;
 							}
@@ -295,7 +295,7 @@ export default class Game3D { //поменять название.
 					// Если нажата клетка
 					if (intersects[0].object.geometry.type === 'PlaneGeometry') {
 						// Также, не очень изящно, определяем ее целые координаты.
-						for (let i = 0; i < this.PLANE_SIZE; i++) {
+						for (let i = 0; i < this.planeSize; i++) {
 							if (intersects[0].object.position.x > i * tools.PLANE_X) { idx = i; }
 							if (intersects[0].object.position.z > i * tools.PLANE_Z) { idz = i; }
 						}
@@ -305,14 +305,14 @@ export default class Game3D { //поменять название.
 							this.point2.x = idx;
 							this.point2.z = idz;
 
-							const step = {
+							const request = {
 								code: '201',
 								step: {
 									src: this.point1,
 									dst: this.point2
 								}
 							};
-							this.bus.emit(`${this.source}Message`, step);
+							this.bus.emit(`${gameCodes.gameStep.request}`, request);
 						} else this.deleteAllStepEnable();
 
 					}
@@ -434,8 +434,8 @@ export default class Game3D { //поменять название.
 	// В аргументах функции как раз координаты клетки, где стоит фигура.
 	// И если эта разница меньше 3, и на этой клетке не стоит фигура, то на нее можно сходить.
 	makeStepEnable(ii, jj) {
-		for (let i = 0; i < this.PLANE_SIZE; i++) {
-			for (let j = 0; j < this.PLANE_SIZE; j++) {
+		for (let i = 0; i < this.planeSize; i++) {
+			for (let j = 0; j < this.planeSize; j++) {
 				const idx2 = this.arrayOfPlane[i][j].x;
 				const idz2 = this.arrayOfPlane[i][j].z;
 				if (!(Math.abs(idx2 - this.point1.x) >= 3 ||
@@ -454,8 +454,8 @@ export default class Game3D { //поменять название.
 	// Функция обработки хода, тоесть замены одних фигурок другими.
 	// На вход подаются координаты клетки, на которую был совершен ход.
 	step(idx, idz) {
-		for (let i = 0; i < this.PLANE_SIZE; i++) {
-			for (let j = 0; j < this.PLANE_SIZE; j++) {
+		for (let i = 0; i < this.planeSize; i++) {
+			for (let j = 0; j < this.planeSize; j++) {
 				// Первые два условия проверяют, что перебираемая в цикле клетка находится вплотную к заданной.
 				if (Math.abs(this.arrayOfPlane[i][j].x - this.arrayOfPlane[idx][idz].x) <= 1 &&
 					Math.abs(this.arrayOfPlane[i][j].z - this.arrayOfPlane[idx][idz].z) <= 1) {
@@ -476,8 +476,8 @@ export default class Game3D { //поменять название.
 
 	// Удаляет у всех клеток возможность на них походить.
 	deleteAllStepEnable() {
-		for (let i = 0; i < this.PLANE_SIZE; i++) {
-			for (let j = 0; j < this.PLANE_SIZE; j++) {
+		for (let i = 0; i < this.planeSize; i++) {
+			for (let j = 0; j < this.planeSize; j++) {
 				this.arrayOfPlane[i][j].stepEnable = false;
 				this.arrayOfPlane[i][j].material.color.setHex(tools.COLORS.PLANE_COLOR);
 			}
@@ -511,8 +511,8 @@ export default class Game3D { //поменять название.
 		for (let i = 0; i < this.countPlayers; i++) {
 			countFigure[i] = 0;
 		}
-		for (let i = 0; i < this.PLANE_SIZE; i++) {
-			for (let j = 0; j < this.PLANE_SIZE; j++) {
+		for (let i = 0; i < this.planeSize; i++) {
+			for (let j = 0; j < this.planeSize; j++) {
 				if (this.arrayOfPlane[i][j].figure > 0) {
 					countFigure[this.arrayOfPlane[i][j].figure - 1]++;
 				}
@@ -521,7 +521,7 @@ export default class Game3D { //поменять название.
 		return countFigure;
 	}
 
-	findMaxFiguresCount(array) {//что за array?
+	findMaxFiguresCount(array) {
 		let max = 0;
 		let maxI = 0;
 		for (let i = 0; i < array.length; i++) {

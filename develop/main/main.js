@@ -41,7 +41,7 @@ import Router from './modules/router/router';
 
 import ThreeView from './views/treeView/threeView.js';
 
-import Game3D from './game3D/main';
+import Game3D from './game3D/gameMain';
 
 import ServiceWorker from '../../public/serviceWorker';
 

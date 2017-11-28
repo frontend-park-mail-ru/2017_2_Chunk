@@ -7,6 +7,14 @@ const gameCodes = {
 		code: 200,
 		request: 'request'
 	},
+	gameStep: {
+		code: 201,
+		request: 'request'
+	},
+	gameEnd: {
+		code: 204,
+		request: 'request'
+	},
 	responseEventName: 'response',
 
 };
