@@ -33,7 +33,6 @@ export default new class visibilityViewer {
 
 
 	visibleCallback() {
-		debugger;
 		this.stop();
 		eventBus.remove(`${tabMessage.newGame.name}`, this.hiddenEvent);
 	}

@@ -1,6 +1,6 @@
 'use strict';
 import eventBus from './eventBus';
-import messageCodes from '../messageCodes/lobbyCodes';
+import lobbyCodes from '../messageCodes/lobbyCodes';
 
 
 export default class webSocket {
@@ -13,8 +13,8 @@ export default class webSocket {
 
 
 	gameHandler() {
-		this.socketListeners[messageCodes.requestEventName]
-			= this.bus.on(messageCodes.requestEventName, (data) => {
+		this.socketListeners[lobbyCodes.requestEventName]
+			= this.bus.on(lobbyCodes.requestEventName, (data) => {
 			this.socket.send(JSON.stringify(data));
 		});
 	}
@@ -30,8 +30,8 @@ export default class webSocket {
 
 	gettingStart() {
 		this.gameHandler();
-		this.bus.emit(messageCodes.requestEventName, messageCodes.getGamesFullList);
-		this.bus.emit(messageCodes.requestEventName, messageCodes.subscribeLobbyUpdates);
+		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.getGamesFullList);
+		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.subscribeLobbyUpdates);
 		this.keepAliveEvent();
 		this.openMenuEvent();
 	}
@@ -39,7 +39,7 @@ export default class webSocket {
 
 	keepAliveEvent() {
 		const emitKeepAlive = () => {
-			this.bus.emit(messageCodes.requestEventName, messageCodes.keepAlive);
+			this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.keepAlive);
 			console.log('keepAlive');
 		};
 		this.interval = setInterval(emitKeepAlive, 30000);
@@ -48,10 +48,10 @@ export default class webSocket {
 
 	openMenuEvent() {
 		this.socketListeners['openMenu'] = this.bus.on('openMenu', () => {
-			this.bus.emit(`${messageCodes.responseEventName}${messageCodes.close}`);
+			this.bus.emit(`${lobbyCodes.responseEventName}${lobbyCodes.close}`);
 		});
-		this.socketListeners[`${messageCodes.responseEventName}${messageCodes.close}`]
-			= this.bus.on(`${messageCodes.responseEventName}${messageCodes.close}`, () => {
+		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.close}`]
+			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`, () => {
 			if (this.socket) {
 				this.socket.close();
 				delete this.socket;
@@ -76,6 +76,7 @@ export default class webSocket {
 		console.log('Код: ' + event.code + ' причина: ' + event.reason);
 		delete this.socket;
 		this.removeSocketListeners();
+		this.bus.emit(`${lobbyCodes.responseEventName}${lobbyCodes.close}`);
 		this.bus.emit('goToMenu');
 	}
 
@@ -90,7 +91,7 @@ export default class webSocket {
 	onMessageCallback(event) {
 		const response = JSON.parse(event.data);
 		console.log(response);
-		this.bus.emit(`${messageCodes.responseEventName}${response.code}`, (response));
+		this.bus.emit(`${lobbyCodes.responseEventName}${response.code}`, (response));
 	}
 
 

@@ -101,8 +101,6 @@ export default class LobbyView extends View {
 		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.lobbyUpdates.code}`]
 			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.lobbyUpdates.code}`, (response) => {
 			if (Visibility.hidden()) {
-				console.log('hidden, try to emit!');
-				console.log(`event name: ${tabMessage.newGame.name}`);
 				this.bus.emit(`${tabMessage.newGame.name}`, tabMessage.newGame.message);
 			}
 			if (this.gameList[response.game.gameID]) {

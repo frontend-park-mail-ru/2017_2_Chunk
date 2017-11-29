@@ -37,7 +37,7 @@ export default class GameCreateView extends Block {
 		this.bus.on('openCreateGameBanner', () => {
 			this.show();
 			const body = document.body;
-			body.addEventListener('click', (event) => {
+			this.listener = body.addEventListener('click', (event) => {
 				const path = event.path;
 				const ifFormInPath = path.some((elem) => {
 					return elem.tagName === 'FORM';
@@ -49,6 +49,8 @@ export default class GameCreateView extends Block {
 			}, true);
 		});
 		this.bus.on('closeCreateGameBanner', () => {
+			const body = document.body;
+			body.removeEventListener('click', this.listener);
 			this.hide();
 		});
 	}

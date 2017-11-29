@@ -124,8 +124,8 @@ export default class Game3D {
 			const request = {//все запросы поменяй на request все ответы на response
 				code: gameCodes.getGameInfo.code
 			};
-			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
 			this.getGameInfo();
+			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
 
 			this.animate();
 		});
