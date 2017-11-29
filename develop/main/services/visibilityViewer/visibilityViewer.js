@@ -44,6 +44,7 @@ export default new class visibilityViewer {
 
 	blink(messageText) {
 		let j = 0;
+		this.blinkWork = true;
 		this.show = [messageText, document.title];
 		this.focusTimer = setInterval(() => {
 			document.title = this.show[j++ % 2];
@@ -73,10 +74,11 @@ export default new class visibilityViewer {
 
 
 	stop() {
-		debugger;
-		clearInterval(this.focusTimer);
-		document.title = this.show[1];
-		this.show = ['bla bla', document.title];
+		if (this.blinkWork) {
+			clearInterval(this.focusTimer);
+			document.title = this.show[1];
+			this.blinkWork = false;
+		}
 		// clearInterval(grootTimer);
 		// saveNode.href = `./images/favicon.ico`;
 	}
