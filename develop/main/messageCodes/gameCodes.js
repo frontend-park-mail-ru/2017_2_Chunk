@@ -1,4 +1,12 @@
 const gameCodes = {
+	exitFromPreparingGame: {
+		code: 103,
+		request: 'request'
+	},
+	gameDelete: {
+		code: 110,
+		tabMessage: 'Game finish',
+	},
 	getGameInfo: {
 		code: 112,
 		request: 'request'

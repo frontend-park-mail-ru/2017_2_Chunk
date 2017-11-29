@@ -100,6 +100,7 @@ export default class Game3D {
 		this.startGame();
 		this.gameStep();
 		this.gameEnd();
+		this.exitGame();
 	}
 
 	getGameInfo() {
@@ -113,6 +114,7 @@ export default class Game3D {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.startGame.code}`, (response) => {
 			this.startArray = response.game.field.field;
 			this.planeSize = response.game.field.maxX;
+			this.gameID = response.game.gameID;
 			// Двумерный массив клеток поля.
 			this.arrayOfPlane = this.makeBinArray(this.planeSize);
 			this.gamers = response.game.gamers;
@@ -147,6 +149,15 @@ export default class Game3D {
 			if (this.result === this.figureType) { win = true; }
 			this.bus.emit('endOfGame', win);
 			this.scene.remove(this.light);
+		});
+	}
+
+	exitGame() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.exitFromPreparingGame.code}`, (response) => {
+			const request = {
+				gameID: this.gameID
+			};
+			this.bus.emit(`${gameCodes.gameDelete.request}`, request);
 		});
 	}
 
