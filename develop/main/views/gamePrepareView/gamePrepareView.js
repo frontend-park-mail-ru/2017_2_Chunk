@@ -102,10 +102,7 @@ export default class gamePrepareView extends View {
 
 
 	gameStatusEvents() {
-		this.gamePrepareListeners[`${messageCodes.connectGame.internal}`]
-		= this.bus.on(`${messageCodes.connectGame.internal}`, () => {
-			this.updateGameData();
-		});
+		this.updateGameData();
 		this.bus.on(`${messageCodes.responseEventName}${messageCodes.startGame.code}`, () => {
 			this.bus.emit('goToGame');
 		});

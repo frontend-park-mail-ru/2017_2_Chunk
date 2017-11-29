@@ -35,6 +35,7 @@ export default class LobbyGameData extends Block {
 				code: '101',
 				gameID: `${this.gameID}`,
 			};
+			this.bus.emit(`${lobbyCodes.connectGame.internal}`);
 			this.bus.emit(`${lobbyCodes.connectGame.request}`, request);
 		});
 	}

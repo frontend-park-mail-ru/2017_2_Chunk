@@ -45,6 +45,7 @@ export default class LobbyView extends View {
 	hide() {
 		super.hide();
 		this.removeSocketEvent();
+		this.clearGameList();
 	}
 
 
@@ -133,6 +134,14 @@ export default class LobbyView extends View {
 	}
 
 
+	clearGameList() {
+		for (const gameID in this.gameList) {
+			this.removeGameNode(gameID);
+			delete this.gameList;
+		}
+	}
+
+
 	socketClose() {
 		// закрытие сокета, удаление всех игр
 		this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`, () => {
@@ -143,6 +152,7 @@ export default class LobbyView extends View {
 			}
 			for (const gameID in this.gameList) {
 				this.removeGameNode(gameID);
+				delete this.gameList;
 			}
 		});
 	}
