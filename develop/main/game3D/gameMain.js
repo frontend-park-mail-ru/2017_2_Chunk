@@ -20,6 +20,7 @@ export default class Game3D {
 		this.figureClick();
 		this.gameStep();
 		this.gameEnd();
+		this.coordinatesForStep();
 	}
 
 	getGameInfo() {
@@ -34,6 +35,7 @@ export default class Game3D {
 				code: gameCodes.getGameInfo.code
 			};
 			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
+			this.bus.emit('startArray', response.game.field.field);
 			this.getGameInfo();
 			this.draw.startGame(response);
 		});
@@ -49,8 +51,8 @@ export default class Game3D {
 
 	gameStep() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameStep.code}`, (response) => {
+			console.log("I AM IN GAME STEP IN MAIN");
 			const request = response;
-			this.coordinatesForStep();
 			this.bus.emit('step', request);
 		});
 	}
@@ -63,6 +65,7 @@ export default class Game3D {
 
 	coordinatesForStep() {
 		this.bus.on('coordinatesForStep', (response) => {
+			console.log("COORDINATES FOR STEP IN MAIN");
 			this.draw.gameStep(response);
 		})
 	}

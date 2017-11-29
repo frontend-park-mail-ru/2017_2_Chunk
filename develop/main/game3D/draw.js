@@ -58,12 +58,8 @@ export default class Draw {
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
 
-		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false); //заменить на эд ремове.
-		container.getElement().addEventListener('mousedown', this.raycasterFalse.bind(this), false);
-		container.getElement().addEventListener('mouseup', this.raycasterFalse.bind(this), false);
-		container.getElement().addEventListener('mousemove', this.raycasterFalse.bind(this), false);
+		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('click', this.raycasterTrue.bind(this), false);
-		container.getElement().addEventListener('onscroll', this.raycasterFalse.bind(this), false);
 
 		this.mouse = new Three.Vector2();
 		this.raycaster = new Three.Raycaster();
@@ -109,9 +105,10 @@ export default class Draw {
 	}
 
 	gameStep(response) {
-		this.stepObject = response;
-		this.queue.push(response.step.src);
-		this.queue.push(response.step.dst);
+		console.log("game STEP");
+		this.queue.push(response);
+		// this.queue.push(response.step.src);
+		// this.queue.push(response.step.dst);
 	}
 
 	gameEnd(response) {
@@ -123,12 +120,8 @@ export default class Draw {
 		this.scene.remove(this.light);
 	}
 
-	raycasterTrue() {//зачем вызывать функцию которая ничего не делает?
+	raycasterTrue() {
 		this.raycasterIndicator = true;
-	}
-
-	raycasterFalse() {
-		this.raycasterIndicator = false;
 	}
 
 	makeBinArray(size) {
@@ -139,7 +132,7 @@ export default class Draw {
 	}
 
 	// makeBinArray(size) {
-	// 	const array = [];//сорян, не знаю как вернуть назад
+	// 	const array = [];
 	// 	return array;
 	// }
 
@@ -220,9 +213,11 @@ export default class Draw {
 
 	queueStep() { // this.queue
 		if (typeof this.queue !== 'undefined' && this.queue !== null && this.queue.length > 0 && !this.stepIndicator && !Object.isFrozen(this.point1)) {
+			console.log("QUEUE STEP");
 			this.stepIndicator = true;
-			this.point1 = this.queue.shift();
-			this.point2 = this.queue.shift();
+			this.stepObject = this.queue.shift();
+			this.point1 = this.stepObject.step.src;
+			this.point2 = this.stepObject.step.dst;
 			// this.fullStep(this.point1, this.point2);
 			this.fullStep(this.stepObject);
 		}
@@ -308,6 +303,7 @@ export default class Draw {
 	}
 
 	calculateDistance(point1, point2) {
+		console.log("calculateDistance");
 		return Math.sqrt(
 			Math.pow(
 				this.arrayOfFigure[point1.x][point1.z].mesh.position.x -
@@ -340,10 +336,12 @@ export default class Draw {
 	// }
 
 	moveOrClone(stepObject) {
+		console.log("moveOrClone");
 		const point1 = stepObject.step.src;
 		const point2 = stepObject.step.dst;
 		// Если клетка, куда будет совершен ход, находится вплотную к заданной, то добавляем фигурку рядом.
 		if (stepObject.clone) {
+			console.log("clone");
 			Object.freeze(this.point1);
 			this.addOnePlayers(
 				this.playerContainer, point2.x, point2.z,
@@ -354,9 +352,12 @@ export default class Draw {
 			this.step(stepObject.figureForPaint);
 			this.stepIndicator = false;
 		} else {
+			console.log("move");
 			// если клетка находится через одну, то включаем индикатор для движения фигуры.
 			this.point1 = point1;
 			this.point2 = point2;
+			console.log(this.point1);
+			console.log(this.point2);
 			this.moveIndicator = true;
 		}
 	}
@@ -383,6 +384,7 @@ export default class Draw {
 			Object.freeze(this.point1);
 
 			if (!this.end) {
+				console.log("Moooooooooooooooooooooooooooooooooving");
 				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x +=
 					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
 				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z +=
@@ -400,6 +402,7 @@ export default class Draw {
 					this.diff = 0;
 				}
 			} else {
+				console.log("END");
 				// Выключаем индикатор, тоесть останавливаем движение.
 				this.moveIndicator = false;
 				this.end = false;
@@ -417,7 +420,7 @@ export default class Draw {
 				delete this.point1;
 				this.point1 = new Point();
 				// Ну и в конце движения делаем обработку хода.
-				this.step(this.point2.x, this.point2.z);
+				this.step(this.stepObject.figureForPaint);
 				this.stepIndicator = false;
 			}
 		}
@@ -484,6 +487,8 @@ export default class Draw {
 
 
 	step(figureForPaint) {
+		console.log("step");
+		console.log(figureForPaint);
 		figureForPaint.forEach((figure) => {
 			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(tools.PLAYER_COLORS[figure.color]);
 			this.arrayOfPlane[figure.x][figure.z].figure = figure.color;
@@ -532,6 +537,7 @@ export default class Draw {
 	// }
 
 	fullStep(stepObject) {
+		console.log('fullStep');
 		this.vector.x = stepObject.vector;
 		this.distance = this.calculateDistance(this.point1, this.point2);
 		this.moveOrClone(stepObject);
