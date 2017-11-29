@@ -63,12 +63,8 @@ export default class Game3D {
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
 
-		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false); //заменить на эд ремове.
-		container.getElement().addEventListener('mousedown', this.raycasterFalse.bind(this), false);
-		container.getElement().addEventListener('mouseup', this.raycasterFalse.bind(this), false);
-		container.getElement().addEventListener('mousemove', this.raycasterFalse.bind(this), false);
+		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('click', this.raycasterTrue.bind(this), false);
-		container.getElement().addEventListener('onscroll', this.raycasterFalse.bind(this), false);
 
 		this.mouse = new Three.Vector2();
 		this.raycaster = new Three.Raycaster();
@@ -162,24 +158,19 @@ export default class Game3D {
 		});
 	}
 
-	raycasterTrue() {//зачем вызывать функцию которая ничего не делает?
+	raycasterTrue() {
 		this.raycasterIndicator = true;
-	}
-
-	raycasterFalse() {
-		this.raycasterIndicator = false;
 	}
 
 	makeBinArray(size) {
 		const array = [];
-		for (let i = 0; i < size; i++) {
+		for (let i = 0; i < size; i++)
 			array[i] = [];
-		}
 		return array;
 	}
 
-	// makeBinArray(size) {//зачем массив пустых массивов?
-	// 	const array = [];//сорян, не знаю как вернуть назад
+	// makeBinArray(size) {
+	// 	const array = [];
 	// 	return array;
 	// }
 
@@ -193,10 +184,10 @@ export default class Game3D {
 
 	// Создает двумерный массив клеточек поля и расстявляет по нему фигуры в соответствии с массивом.
 	addPlaneByStart() {
-		for (let i = 0; i < this.planeSize; i++) {//что за интересная нотация?
+		for (let i = 0; i < this.planeSize; i++) {
 			for (let j = 0; j < this.planeSize; j++) {
 				this.arrayOfPlane[i][j] = new PlaneCell(i, j);
-				this.arrayOfPlane[i][j].figure = this.startArray[i][j];//почему стартэрей?
+				this.arrayOfPlane[i][j].figure = this.startArray[i][j];
 				this.cellContainer.add(this.arrayOfPlane[i][j].mesh);
 			}
 		}
