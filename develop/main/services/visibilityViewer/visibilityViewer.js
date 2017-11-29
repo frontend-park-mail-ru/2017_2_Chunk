@@ -4,18 +4,11 @@ import eventBus from '../../modules/eventBus';
 
 export default new class visibilityViewer {
 	constructor() {
-		if (Visibility.isSupported()) {
-			console.log('supported');
-		}
-		const vis = Visibility;
-		console.dir(vis);
+
 		Visibility.change((event, stateName) => this.stateAnalise(event, stateName));
 	};
 
 	stateAnalise(event, stateName) {
-		console.log(this);
-		console.log(event);
-		console.log(stateName);
 		if (Visibility.hidden()) {
 			this.hiddenCallback();
 		}
