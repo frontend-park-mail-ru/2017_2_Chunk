@@ -109,6 +109,7 @@ export default class Draw {
 	}
 
 	gameStep(response) {
+		this.stepObject = response;
 		this.queue.push(response.step.src);
 		this.queue.push(response.step.dst);
 	}
@@ -222,7 +223,8 @@ export default class Draw {
 			this.stepIndicator = true;
 			this.point1 = this.queue.shift();
 			this.point2 = this.queue.shift();
-			this.fullStep(this.point1, this.point2);
+			// this.fullStep(this.point1, this.point2);
+			this.fullStep(this.stepObject);
 		}
 	}
 
@@ -317,9 +319,31 @@ export default class Draw {
 
 	// Функция решает, создать фигурку рядом или сделать движение.
 	// На вход передаются две точки.
-	moveOrClone(point1, point2) {
+	// moveOrClone(point1, point2) {
+	// 	// Если клетка, куда будет совершен ход, находится вплотную к заданной, то добавляем фигурку рядом.
+	// 	if (Math.abs(point2.x - point1.x) <= 1 && Math.abs(point2.z - point1.z) <= 1) {
+	// 		Object.freeze(this.point1);
+	// 		this.addOnePlayers(
+	// 			this.playerContainer, point2.x, point2.z,
+	// 			this.arrayOfPlane[point1.x][point1.z].figure
+	// 		);
+	// 		this.scaleIndicator = true;
+	// 		// И вызываем функцию обработки хода, то-есть замены фигурок, если они есть рядом.
+	// 		this.step(point2.x, point2.z);
+	// 		this.stepIndicator = false;
+	// 	} else {
+	// 		// если клетка находится через одну, то включаем индикатор для движения фигуры.
+	// 		this.point1 = point1;
+	// 		this.point2 = point2;
+	// 		this.moveIndicator = true;
+	// 	}
+	// }
+
+	moveOrClone(stepObject) {
+		const point1 = stepObject.step.src;
+		const point2 = stepObject.step.dst;
 		// Если клетка, куда будет совершен ход, находится вплотную к заданной, то добавляем фигурку рядом.
-		if (Math.abs(point2.x - point1.x) <= 1 && Math.abs(point2.z - point1.z) <= 1) {
+		if (stepObject.clone) {
 			Object.freeze(this.point1);
 			this.addOnePlayers(
 				this.playerContainer, point2.x, point2.z,
@@ -327,7 +351,7 @@ export default class Draw {
 			);
 			this.scaleIndicator = true;
 			// И вызываем функцию обработки хода, то-есть замены фигурок, если они есть рядом.
-			this.step(point2.x, point2.z);
+			this.step(stepObject.figureForPaint);
 			this.stepIndicator = false;
 		} else {
 			// если клетка находится через одну, то включаем индикатор для движения фигуры.
@@ -435,28 +459,38 @@ export default class Draw {
 		})
 	}
 
-	// Функция обработки хода, тоесть замены одних фигурок другими.
-	// На вход подаются координаты клетки, на которую был совершен ход.
-	step(idx, idz) {
-		for (let i = 0; i < this.planeSize; i++) {
-			for (let j = 0; j < this.planeSize; j++) {
-				// Первые два условия проверяют, что перебираемая в цикле клетка находится вплотную к заданной.
-				if (Math.abs(this.arrayOfPlane[i][j].x - this.arrayOfPlane[idx][idz].x) <= 1 &&
-					Math.abs(this.arrayOfPlane[i][j].z - this.arrayOfPlane[idx][idz].z) <= 1) {
-					// Затем идет проверка, что на этой клетке есть фигура и что она отлична от той, которая совершила ход.
-					if (this.arrayOfPlane[i][j].figure !== 0 &&
-						this.arrayOfPlane[i][j].figure !== this.arrayOfPlane[idx][idz].figure) {
-						// Если там стоит вражеская фигура, то ее цвет меняется на цвет той, которая совершила ход.
-						this.arrayOfFigure[i][j].material.color.setHex(
-							this.arrayOfFigure[idx][idz].material.color.getHex()
-						);
-						// И затем в массив клеток вносятся соответствующие изменения по фигурам.
-						this.arrayOfPlane[i][j].figure = this.arrayOfPlane[idx][idz].figure;
-					}
-				}
-			}
-		}
+	// // Функция обработки хода, тоесть замены одних фигурок другими.
+	// // На вход подаются координаты клетки, на которую был совершен ход.
+	// step(idx, idz) {
+	// 	for (let i = 0; i < this.planeSize; i++) {
+	// 		for (let j = 0; j < this.planeSize; j++) {
+	// 			// Первые два условия проверяют, что перебираемая в цикле клетка находится вплотную к заданной.
+	// 			if (Math.abs(this.arrayOfPlane[i][j].x - this.arrayOfPlane[idx][idz].x) <= 1 &&
+	// 				Math.abs(this.arrayOfPlane[i][j].z - this.arrayOfPlane[idx][idz].z) <= 1) {
+	// 				// Затем идет проверка, что на этой клетке есть фигура и что она отлична от той, которая совершила ход.
+	// 				if (this.arrayOfPlane[i][j].figure !== 0 &&
+	// 					this.arrayOfPlane[i][j].figure !== this.arrayOfPlane[idx][idz].figure) {
+	// 					// Если там стоит вражеская фигура, то ее цвет меняется на цвет той, которая совершила ход.
+	// 					this.arrayOfFigure[i][j].material.color.setHex(
+	// 						this.arrayOfFigure[idx][idz].material.color.getHex()
+	// 					);
+	// 					// И затем в массив клеток вносятся соответствующие изменения по фигурам.
+	// 					this.arrayOfPlane[i][j].figure = this.arrayOfPlane[idx][idz].figure;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+
+	step(figureForPaint) {
+		figureForPaint.forEach((figure) => {
+			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(tools.PLAYER_COLORS[figure.color]);
+			this.arrayOfPlane[figure.x][figure.z].figure = figure.color;
+		})
 	}
+
+
 
 	// // Удаляет у всех клеток возможность на них походить.
 	// deleteAllStepEnable() {
@@ -499,8 +533,8 @@ export default class Draw {
 
 	fullStep(stepObject) {
 		this.vector.x = stepObject.vector;
-		this.distance = stepObject.distance;
-		this.moveOrClone(stepObject.clone);
+		this.distance = this.calculateDistance(this.point1, this.point2);
+		this.moveOrClone(stepObject);
 		this.deleteAllStepEnable();
 	}
 

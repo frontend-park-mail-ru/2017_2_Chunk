@@ -41,7 +41,8 @@ export default class GameWorker {
 	}
 
 	fullStep(response) {
-		let figureForAdd = [];
+		const src = response.step.src;
+		const dst = response.step.dst;
 		let figureForPaint = [];
 		let step = {
 			src: response.step.src,
@@ -53,7 +54,8 @@ export default class GameWorker {
 		};
 		let clone = false;
 
-
+		vector.x = dst.x - src.x;
+		vector.z = dst.z - src.z;
 
 		const request = {
 
