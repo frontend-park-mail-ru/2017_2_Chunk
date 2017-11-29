@@ -88,7 +88,6 @@ export default class Game3D {
 		// });
 
 		this.bus.on('deleteTree', () => {
-			console.log("HERE");
 			this.scene.remove(this.spotLight);
 			this.scene.remove(this.cellContainer);
 			this.scene.remove(this.playerContainer);
@@ -244,7 +243,6 @@ export default class Game3D {
 		if (this.camera.position.y < 5) {
 			this.camera.position.y = 5;
 		}
-		debugger;
 
 		this.queueStep();
 		this.playerChoice();
