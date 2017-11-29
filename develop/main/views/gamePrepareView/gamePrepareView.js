@@ -32,6 +32,7 @@ export default class gamePrepareView extends View {
 		this.addGamePrepareListeners();
 		super.show();
 		this.active = true;
+		this.clear = false;
 	}
 
 

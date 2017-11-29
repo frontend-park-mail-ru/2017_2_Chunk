@@ -112,7 +112,6 @@ export default class Game3D {
 
 	startGame() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.startGame.code}`, (response) => {
-			debugger;
 			this.startArray = response.game.field.field;
 			this.planeSize = response.game.field.maxX;
 			this.gameID = response.game.gameID;
@@ -245,6 +244,7 @@ export default class Game3D {
 		if (this.camera.position.y < 5) {
 			this.camera.position.y = 5;
 		}
+		debugger;
 
 		this.queueStep();
 		this.playerChoice();

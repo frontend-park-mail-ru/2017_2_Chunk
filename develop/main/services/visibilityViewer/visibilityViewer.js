@@ -4,7 +4,6 @@ import eventBus from '../../modules/eventBus';
 
 export default new class visibilityViewer {
 	constructor() {
-
 		Visibility.change((event, stateName) => this.stateAnalise(event, stateName));
 	};
 
