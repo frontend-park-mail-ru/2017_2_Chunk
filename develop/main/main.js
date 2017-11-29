@@ -45,9 +45,7 @@ import Game3D from './game3D/gameMain';
 
 import ServiceWorker from '../../public/serviceWorker';
 
-import messageCodes from './messageCodes/lobbyCodes';
-
-import TabBlink from './views/tabBlink/tabBlink';
+import visibilityViewer from './services/visibilityViewer/visibilityViewer';
 
 
 const gameNameView = new GameNameView();
@@ -94,7 +92,6 @@ const game3D = new Game3D(gameContainer);
 
 const serviceWorker = ServiceWorker;
 
-const tabBlink = new TabBlink();
 
 const Views = [];
 Views.push(gameNameView);
@@ -246,9 +243,6 @@ if ('serviceWorker' in navigator) {
 // document.body.scrollTop;
 // window.scrollTo(0, 0);
 // window.scrollTo(1, 0)
-
-
-eventBus.on(`${messageCodes.lobbyUpdates.code}`, tabBlink.blink(messageCodes.lobbyUpdates));
 
 
 router.start();

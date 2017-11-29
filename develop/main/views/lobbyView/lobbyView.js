@@ -5,7 +5,8 @@ import LobbyGameData from './__lobbyFields/__gameDataField/lobbyView__lobbyField
 import WebSocket from '../../modules/webSocket';
 import WebWorker from '../../modules/webWorker';
 import eventBus from '../../modules/eventBus';
-import messageCodes from '../../messageCodes/lobbyCodes';
+import lobbyCodes from '../../messageCodes/lobbyCodes';
+import tabMessage from '../../messageCodes/tabMessage';
 
 
 /**
@@ -46,6 +47,7 @@ export default class LobbyView extends View {
 		this.removeSocketEvent();
 	}
 
+
 	addGameNode(data) {
 		const lobbyGameData = new LobbyGameData(data);
 		this.gameList[data.gameID] = lobbyGameData;
@@ -54,7 +56,6 @@ export default class LobbyView extends View {
 
 
 	removeGameNode(gameID) {
-		debugger;
 		const lobbyGameData = this.gameList[gameID];
 		delete this.gameList[gameID];
 		this.elements.gameList.remove(lobbyGameData);
@@ -93,10 +94,16 @@ export default class LobbyView extends View {
 		}
 	}
 
+
 	lobbyUpdates() {
 		// обновление информации о всех играх
-		this.socketListeners[`${messageCodes.responseEventName}${messageCodes.lobbyUpdates.code}`]
-			= this.bus.on(`${messageCodes.responseEventName}${messageCodes.lobbyUpdates.code}`, (response) => {
+		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.lobbyUpdates.code}`]
+			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.lobbyUpdates.code}`, (response) => {
+			if (Visibility.hidden()) {
+				console.log('hidden, try to emit!');
+				console.log(`event name: ${tabMessage.newGame.name}`);
+				this.bus.emit(`${tabMessage.newGame.name}`, tabMessage.newGame.message);
+			}
 			if (this.gameList[response.game.gameID]) {
 				this.updateGameNode(response.game);
 			} else {
@@ -108,8 +115,8 @@ export default class LobbyView extends View {
 
 	gameDelete() {
 		// удаление игры
-		this.socketListeners[`${messageCodes.responseEventName}${messageCodes.deleteGame.code}`]
-			= this.bus.on(`${messageCodes.responseEventName}${messageCodes.deleteGame.code}`, (response) => {
+		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.deleteGame.code}`]
+			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.deleteGame.code}`, (response) => {
 			this.removeGameNode(response.gameID);
 		});
 	}
@@ -117,8 +124,8 @@ export default class LobbyView extends View {
 
 	getGameFullList() {
 		// подписываемся на получение всей информации об играх
-		this.socketListeners[`${messageCodes.responseEventName}${messageCodes.getGamesFullList.code}`]
-			= this.bus.on(`${messageCodes.responseEventName}${messageCodes.getGamesFullList.code}`, (response) => {
+		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.getGamesFullList.code}`]
+			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.getGamesFullList.code}`, (response) => {
 			response.games.forEach((gameData) => {
 				this.addGameNode(gameData);
 			});
@@ -128,7 +135,7 @@ export default class LobbyView extends View {
 
 	socketClose() {
 		// закрытие сокета, удаление всех игр
-		this.bus.on(`${messageCodes.responseEventName}${messageCodes.close}`, () => {
+		this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`, () => {
 			if (this.webWorker) {
 				delete this.webWorker;
 			} else {

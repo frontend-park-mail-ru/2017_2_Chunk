@@ -1,5 +1,6 @@
 'use strict';
 import Block from '../../blocks/block/block.js';
+import eventBus from '../../modules/eventBus';
 
 
 /**
@@ -16,7 +17,7 @@ export default class GameNameView extends Block {
 		this.gameName = gameName;
 		this.hide();
 		this.gameName.on('click', () => {
-			this.bus.emit('goToMenu');
+			eventBus.emit('goToMenu');
 		});
 	}
 }

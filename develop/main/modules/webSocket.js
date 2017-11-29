@@ -22,9 +22,9 @@ export default class webSocket {
 
 	socketCallbacks() {
 		this.socket.onopen = () => this.onOpenCallback();
-		this.socket.onclose = () => this.onCloseCallback(event);
-		this.socket.onmessage = () => this.onMessageCallback(event);
-		this.socket.onerror = () => this.onErrorCallback(event)
+		this.socket.onclose = (event) => this.onCloseCallback(event);
+		this.socket.onmessage = (event) => this.onMessageCallback(event);
+		this.socket.onerror = (event) => this.onErrorCallback(event)
 	}
 
 
@@ -88,9 +88,9 @@ export default class webSocket {
 
 
 	onMessageCallback(event) {
-		const data = JSON.parse(event.data);
-		console.log(data);
-		this.bus.emit(`${messageCodes.responseEventName}${data.code}`, (data));
+		const response = JSON.parse(event.data);
+		console.log(response);
+		this.bus.emit(`${messageCodes.responseEventName}${response.code}`, (response));
 	}
 
 
