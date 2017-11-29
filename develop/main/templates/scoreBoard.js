@@ -50,7 +50,7 @@ export default class scoreboardTemplate {
 			pug_interp;
 		const locals_for_with = (locals || {});
 		(function (users) {
-			pug_html += '\u003Cdiv class="scoreboard__fields"\u003E';
+			pug_html += '\u003Cdiv class="scoreboardView"\u003E';
 			// iterate users
 			(function () {
 				const $$obj = users;

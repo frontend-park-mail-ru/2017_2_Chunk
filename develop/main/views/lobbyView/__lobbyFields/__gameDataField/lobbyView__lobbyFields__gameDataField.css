@@ -1,0 +1,64 @@
+.lobbyView__lobbyFields__gameDataField {
+    box-sizing: border-box;
+    /*background-color: #4d4d4d;*/
+    background-color: #1d1f20;
+    width: 70vh;
+    /*height: 20vh;*/
+    margin-bottom: 0.5em;
+    padding: 0.4em;
+    border-radius: 0.5em;
+
+    display: grid;
+    grid-template-areas:
+    "place1 place2"
+    "place3 place4"
+    "place5 place6"
+    "place7 place8"
+    "place9 place9";
+}
+
+@media screen and (min-width: 640px) and (max-width: 1200px) and (orientation: landscape){
+    .lobbyView__lobbyFields__gameDataField {
+        width: 48vw;
+    }
+}
+
+@media screen and (min-width: 360px) and (max-width: 1200px) and (orientation: portrait){
+    .lobbyView__lobbyFields__gameDataField {
+        width: 85vw;
+    }
+}
+.lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__gameId {
+    grid-area: place1;
+}
+
+.lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__fieldSize {
+    grid-area: place5;
+}
+
+.lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__playersNumber{
+    grid-area: place2;
+}
+
+/*.lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__voyeursNumber{*/
+    /*grid-area: place4;*/
+/*}*/
+
+.lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__botsNumber{
+    grid-area: place4;
+}
+
+.lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__totalPLayersNumber{
+    grid-area: place6;
+}
+
+.lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__masterUsername{
+    grid-area: place3;
+}
+
+.lobbyView__lobbyFields__gameDataField > .lobbyView__lobbyFields__gameDataField__fields__playButton{
+    grid-area: place9;
+}
+
+
+

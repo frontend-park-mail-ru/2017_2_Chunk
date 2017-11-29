@@ -1,5 +1,5 @@
 .view__view-button {
-    border: 0.04em solid white;
+    box-sizing: border-box;
     font-size:calc(14px + 1.5vh);
     text-align: center;
     opacity: 1;
@@ -7,17 +7,26 @@
     padding: 0.1em;
 
     margin: 0.7em;
-    min-height: 30px;
     min-width: 260px;
-    color: white;
 
     border-radius: 0.4em;
     box-shadow: none;
 
+    border-width: 0.04em;
+    border-style: solid;
     background-color: transparent;
     cursor: pointer;
+    transition: all .1s;
 }
 
+@media screen and (min-width: 360px) and (max-width: 1200px) {
+    .view__view-button {
+        font-size: calc(14px + 2vh);
+        width: 8em;
+        margin: 0.4em;
+        min-width: 0;
+    }
+}
 
 .view__view-button:focus {
     outline: none;

@@ -20,12 +20,12 @@ export default class Block {
 	 * @param {string|null} [text=null] - опциональный текст блока
 	 * @return {Block}
 	 */
-	static Create(tagName = 'div', attrs = {}, classes = [], text = null) {
+	static create(tagName = 'div', attrs = {}, classes = [], text = null) {
 		const el = document.createElement(tagName);
 		classes.forEach(function (className) {
 			el.classList.add(className);
 		});
-		for (let name in attrs) {
+		for (const name in attrs) {
 			el.setAttribute(name, attrs[name]);
 		}
 		if (text) {

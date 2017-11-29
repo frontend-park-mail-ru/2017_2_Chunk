@@ -12,7 +12,7 @@ export default class Message extends Block {
 	 * @constructor
 	 */
 	constructor() {
-		const block = Block.Create('div', {}, ["form__message", "form__message_theme"]);
+		const block = Block.create('div', {}, ["form__message", "form__message_theme"]);
 		super(block.el);
 
 		this.clear();

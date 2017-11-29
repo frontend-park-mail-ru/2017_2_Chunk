@@ -17,7 +17,21 @@
     min-height: 30px;
     min-width: 250px;
 }
+@media screen and (min-width: 640px) and (max-width: 1100px) {
+    .form__input {
+        font-family: "Comic Sans MS";
+        font-size: calc(14px + 1vh);
+        color: #ff8700;
+        opacity: 0.9;
+        width: 10em;
+        height: 1em;
+        padding: 0.1em;
+        margin: 0.4em;
+        min-width: 100px;
 
+        min-height: 30px;
+    }
+}
 .form__input:focus {
     outline: none;
     border: 0.06em solid #ff8700; /* Параметры рамки */
@@ -31,7 +45,7 @@
 
 /*штуки стилей плейсхолдеров*/
 ::-webkit-input-placeholder {
-    color: #fff;
+    color: inherit;
     /*font-weight: bold;*/
     font-size:calc(8px + 1.5vh);
 }
@@ -110,6 +124,7 @@ input:-ms-input-placeholder {
 
 /*Замена автонастроек браузера*/
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px black inset;
+    -webkit-box-shadow: 0 0 0px 2000px black inset !important;
+    background-color: transparent !important;
     -webkit-text-fill-color: #ff8700;
 }

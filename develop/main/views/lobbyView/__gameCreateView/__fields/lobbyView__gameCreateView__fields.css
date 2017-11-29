@@ -1,0 +1,29 @@
+.lobbyView__gameCreateView__fields {
+    margin: 1em auto !important;
+    padding: 0.1em 0.4em;
+}
+
+.lobbyView__gameCreateView__fields__header {
+    color: #ff8700;
+    text-align: center;
+}
+
+.lobbyView__gameCreateView__fields__playButton {
+    display: block;
+    color: #00d8ff;
+    opacity: 1 !important;
+    width: auto !important;
+}
+
+.lobbyView__gameCreateView__fields__playButton:hover {
+    background-color: #1d1f20;
+    color: #00fbff !important;
+    border: 0.04em solid #00fbff !important;
+}
+
+.lobbyView__gameCreateView__fields__playButton:focus {
+    color: #00a9ff !important;
+    border: 0.04em solid #00a9ff !important;
+}
+
+

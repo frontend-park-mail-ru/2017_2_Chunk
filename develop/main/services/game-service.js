@@ -1,6 +1,6 @@
 'use strict';
 
-import Http from "../modules/http";
+import http from '../modules/http';
 
 /**
  * Сервис для работы игры
@@ -10,7 +10,7 @@ export default class GameService {
 	constructor() {
 		this.response = {
 			json: {},
-			message: "",
+			message: '',
 		};
 
 		this.gameData = {
@@ -20,7 +20,7 @@ export default class GameService {
 			currentPlayerID: 0,
 			gameOver: false,
 			arrayOfFigures: [],
-		}
+		};
 	}
 
 	/**
@@ -32,7 +32,7 @@ export default class GameService {
 	 */
 	async start(width, height, maxPlayers) {
 		const хранилище = window.localStorage;
-		const resp = await Http.FetchPost('/game/single/create', {width, height, maxPlayers});
+		const resp = await http.fetchPost('/game/single/create', {width, height, maxPlayers});
 		this.response.json = await resp.json();
 
 		if (resp.status >= 400) {
@@ -40,12 +40,10 @@ export default class GameService {
 			return this.response;
 		}
 
-		if (!хранилище["gameID"]) {
-			хранилище.setItem("gameID", `${this.response.json.gameID}`);
+		if (!хранилище.gameID) {
+			хранилище.setItem('gameID', `${this.response.json.gameID}`);
 			this.gameData.gameID = this.response.json.gameID;
-		}
-		else
-			this.gameData.gameID = хранилище["gameID"];
+		} else { this.gameData.gameID = хранилище.gameID; }
 
 		return this.gameData;
 	}
@@ -55,7 +53,7 @@ export default class GameService {
 	 * @return {*} gameData - объект ответа, содержит информацию о состоянии игры
 	 */
 	async complete() {
-		const resp = await Http.FetchGet('/game/complete?gameID=' + this.gameData.gameID);
+		const resp = await http.fetchGet('/game/complete?gameID=' + this.gameData.gameID);
 		this.response.json = await resp.json();
 
 		if (resp.status >= 400) {
@@ -81,7 +79,7 @@ export default class GameService {
 		const y2 = coord.y2;
 		const gameID = this.gameData.gameID;
 		const playerID = this.gameData.playerID;
-		const resp = await Http.FetchPost('/game/play', {x1, x2, y1, y2, gameID, playerID, currentPlayerID});
+		const resp = await http.fetchPost('/game/play', {x1, x2, y1, y2, gameID, playerID, currentPlayerID});
 		this.response.json = await resp.json();
 
 		if (resp.status >= 400) {
@@ -101,7 +99,7 @@ export default class GameService {
 		const gameID = this.gameData.gameID;
 		const playerID = this.gameData.playerID;
 		const currentPlayerID = this.gameData.currentPlayerID;
-		const resp = await Http.FetchPost('/game/status', {gameID, playerID, currentPlayerID});
+		const resp = await http.fetchPost('/game/status', {gameID, playerID, currentPlayerID});
 		this.response.json = await resp.json();
 
 		if (resp.status >= 400) {
