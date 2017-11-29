@@ -1,4 +1,4 @@
-const messageCodes = {
+const lobbyCodes = {
 	keepAlive: {
 		code: 0,
 	},
@@ -39,7 +39,7 @@ const messageCodes = {
 		internal: 'addBot',
 		tabMessage: '',
 	},
-	gameDelete: {
+	deleteGame: {
 		code: 110,
 		tabMessage: 'Game finish',
 	},
@@ -66,4 +66,4 @@ const messageCodes = {
 };
 
 
-export default messageCodes;
+export default lobbyCodes;
