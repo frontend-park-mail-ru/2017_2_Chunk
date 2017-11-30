@@ -85,13 +85,20 @@ export default class Draw {
 		});
 	}
 
+	// getGameInfo(response) {
+	// 	this.userID = response.userID;
+	// 	this.figureType = this.detectFigureByUserID(this.userID);
+	// }
+
 	getGameInfo(response) {
-		this.userID = response.userID;
-		this.figureType = this.detectFigureByUserID(this.userID);
+		this.figureType = response;
+		console.log(this.figureType);
 	}
 
 	startGame(response) {
 		this.startArray = response.game.field.field;
+		//console.log("START ARRAY IN DRAW");
+		//console.log(this.startArray);
 		this.planeSize = response.game.field.maxX;
 		// Двумерный массив клеток поля.
 		this.arrayOfPlane = this.makeBinArray(this.planeSize);
@@ -105,18 +112,24 @@ export default class Draw {
 	}
 
 	gameStep(response) {
-		console.log("game STEP");
+		// console.log("game STEP");
 		this.queue.push(response);
 		// this.queue.push(response.step.src);
 		// this.queue.push(response.step.dst);
 	}
 
+	// gameEnd(response) {
+	// 	let win = false;
+	// 	let finishArray = response.field.field;
+	// 	this.result = this.findMaxFiguresCount(this.countFigure(finishArray));
+	// 	if (this.result === this.figureType) { win = true; }
+	// 	this.bus.emit('endOfGame', win);
+	// 	this.scene.remove(this.light);
+	// }
+
 	gameEnd(response) {
-		let win = false;
-		let finishArray = response.field.field;
-		this.result = this.findMaxFiguresCount(this.countFigure(finishArray));
-		if (this.result === this.figureType) { win = true; }
-		this.bus.emit('endOfGame', win);
+		const request = response.win;
+		this.bus.emit('endOfGame', request);
 		this.scene.remove(this.light);
 	}
 
@@ -136,13 +149,13 @@ export default class Draw {
 	// 	return array;
 	// }
 
-	detectFigureByUserID(userID) {
-		for (let i = 0; i < this.gamers.length; i++) {
-			if (this.gamers[i].userID === userID) {
-				return i;
-			}
-		}
-	}
+	// detectFigureByUserID(userID) {
+	// 	for (let i = 0; i < this.gamers.length; i++) {
+	// 		if (this.gamers[i].userID === userID) {
+	// 			return i;
+	// 		}
+	// 	}
+	// }
 
 	// Создает двумерный массив клеточек поля и расстявляет по нему фигуры в соответствии с массивом.
 	addPlaneByStart() {
@@ -213,7 +226,7 @@ export default class Draw {
 
 	queueStep() { // this.queue
 		if (typeof this.queue !== 'undefined' && this.queue !== null && this.queue.length > 0 && !this.stepIndicator && !Object.isFrozen(this.point1)) {
-			console.log("QUEUE STEP");
+			// console.log("QUEUE STEP");
 			this.stepIndicator = true;
 			this.stepObject = this.queue.shift();
 			this.point1 = this.stepObject.step.src;
@@ -303,7 +316,7 @@ export default class Draw {
 	}
 
 	calculateDistance(point1, point2) {
-		console.log("calculateDistance");
+		// console.log("calculateDistance");
 		return Math.sqrt(
 			Math.pow(
 				this.arrayOfFigure[point1.x][point1.z].mesh.position.x -
@@ -336,12 +349,12 @@ export default class Draw {
 	// }
 
 	moveOrClone(stepObject) {
-		console.log("moveOrClone");
+		// console.log("moveOrClone");
 		const point1 = stepObject.step.src;
 		const point2 = stepObject.step.dst;
 		// Если клетка, куда будет совершен ход, находится вплотную к заданной, то добавляем фигурку рядом.
 		if (stepObject.clone) {
-			console.log("clone");
+			// console.log("clone");
 			Object.freeze(this.point1);
 			this.addOnePlayers(
 				this.playerContainer, point2.x, point2.z,
@@ -352,12 +365,12 @@ export default class Draw {
 			this.step(stepObject.figureForPaint);
 			this.stepIndicator = false;
 		} else {
-			console.log("move");
+			// console.log("move");
 			// если клетка находится через одну, то включаем индикатор для движения фигуры.
 			this.point1 = point1;
 			this.point2 = point2;
-			console.log(this.point1);
-			console.log(this.point2);
+			// console.log(this.point1);
+			// console.log(this.point2);
 			this.moveIndicator = true;
 		}
 	}
@@ -384,7 +397,8 @@ export default class Draw {
 			Object.freeze(this.point1);
 
 			if (!this.end) {
-				console.log("Moooooooooooooooooooooooooooooooooving");
+				// console.log("Moooooooooooooooooooooooooooooooooving");
+				// console.log(this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x);
 				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x +=
 					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
 				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z +=
@@ -487,10 +501,10 @@ export default class Draw {
 
 
 	step(figureForPaint) {
-		console.log("step");
-		console.log(figureForPaint);
+		//console.log("step FIGURE FOR PAINT");
+		//console.log(figureForPaint);
 		figureForPaint.forEach((figure) => {
-			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(tools.PLAYER_COLORS[figure.color]);
+			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(tools.PLAYER_COLORS[figure.color-1]);
 			this.arrayOfPlane[figure.x][figure.z].figure = figure.color;
 		})
 	}
@@ -537,39 +551,39 @@ export default class Draw {
 	// }
 
 	fullStep(stepObject) {
-		console.log('fullStep');
-		this.vector.x = stepObject.vector;
+		// console.log('fullStep');
+		this.vector = stepObject.vector;
 		this.distance = this.calculateDistance(this.point1, this.point2);
 		this.moveOrClone(stepObject);
 		this.deleteAllStepEnable();
 	}
 
-	countFigure(array) {
-		const countFigure = [];
-		for (let i = 0; i < this.countPlayers; i++) {
-			countFigure[i] = 0;
-		}
-		for (let i = 0; i < this.planeSize; i++) {
-			for (let j = 0; j < this.planeSize; j++) {
-				if (array[i][j] > 0) {
-					countFigure[array[i][j] - 1]++;
-				}
-			}
-		}
-		return countFigure;
-	}
-
-	findMaxFiguresCount(array) {
-		let max = 0;
-		let maxI = 0;
-		for (let i = 0; i < array.length; i++) {
-			if (array[i] > max) {
-				max = array[i];
-				maxI = i;
-			}
-		}
-		return maxI;
-	}
+	// countFigure(array) {
+	// 	const countFigure = [];
+	// 	for (let i = 0; i < this.countPlayers; i++) {
+	// 		countFigure[i] = 0;
+	// 	}
+	// 	for (let i = 0; i < this.planeSize; i++) {
+	// 		for (let j = 0; j < this.planeSize; j++) {
+	// 			if (array[i][j] > 0) {
+	// 				countFigure[array[i][j] - 1]++;
+	// 			}
+	// 		}
+	// 	}
+	// 	return countFigure;
+	// }
+	//
+	// findMaxFiguresCount(array) {
+	// 	let max = 0;
+	// 	let maxI = 0;
+	// 	for (let i = 0; i < array.length; i++) {
+	// 		if (array[i] > max) {
+	// 			max = array[i];
+	// 			maxI = i;
+	// 		}
+	// 	}
+	// 	return maxI;
+	// }
 
 	// playerString() {
 	// 	let playerString = '';

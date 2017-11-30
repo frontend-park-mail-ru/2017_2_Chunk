@@ -21,10 +21,19 @@ export default class Game3D {
 		this.gameStep();
 		this.gameEnd();
 		this.coordinatesForStep();
+		this.figureType();
+		this.winDetected();
 	}
 
 	getGameInfo() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.getGameInfo.code}`, (response) => {
+			const request = response;
+			this.bus.emit('getUserID', request);
+		});
+	}
+
+	figureType() {
+		this.bus.on('figureType', (response) => {
 			this.draw.getGameInfo(response);
 		});
 	}
@@ -35,9 +44,9 @@ export default class Game3D {
 				code: gameCodes.getGameInfo.code
 			};
 			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
-			this.bus.emit('startArray', response.game.field.field);
-			this.getGameInfo();
 			this.draw.startGame(response);
+			this.bus.emit('startArray', response);
+			this.getGameInfo();
 		});
 	}
 
@@ -51,7 +60,6 @@ export default class Game3D {
 
 	gameStep() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameStep.code}`, (response) => {
-			console.log("I AM IN GAME STEP IN MAIN");
 			const request = response;
 			this.bus.emit('step', request);
 		});
@@ -59,13 +67,19 @@ export default class Game3D {
 
 	gameEnd() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameEnd.code}`, (response) => {
+			const request = response;
+			this.bus.emit('winOrLose', request);
+		});
+	}
+
+	winDetected() {
+		this.bus.on('winnerOrLooser', (response) => {
 			this.draw.gameEnd(response);
 		});
 	}
 
 	coordinatesForStep() {
 		this.bus.on('coordinatesForStep', (response) => {
-			console.log("COORDINATES FOR STEP IN MAIN");
 			this.draw.gameStep(response);
 		})
 	}

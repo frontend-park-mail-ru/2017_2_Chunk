@@ -12,7 +12,7 @@
 
 @media screen{
     body {
-        background: url('./image/galaxy.jpg') no-repeat;
+        /*background: url('./image/galaxy.jpg') no-repeat;*/
         background-size: 100vw 100vh;
         font-family: "Comic Sans MS";
         box-sizing: border-box;
