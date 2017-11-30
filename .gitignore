@@ -113,3 +113,5 @@ node-js-getting-git started
 Будет удалено public/loading.js
 Будет удалено public/loading.js.map
 /public/loading.js
+/public/loading.js.map
+/public/botWorker.js.map
