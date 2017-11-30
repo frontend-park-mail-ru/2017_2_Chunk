@@ -8,6 +8,7 @@ module.exports = {
 		application: './include.js',
 		loading: './loading/loading.js',
 		botWorker: './workers/botWorker',
+		gameWorker: './workers/gameWorker',
 	},
 	output: {
 		path: __dirname + '/public',

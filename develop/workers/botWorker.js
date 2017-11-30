@@ -1,6 +1,7 @@
 self.onmessage = (workerRequest) => {
 	var data = workerRequest.data;
 	var workerResponse;
+	console.log(data);
 	switch (data.code) {
 		case '100':
 			workerResponse = createGame(data);
