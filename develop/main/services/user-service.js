@@ -50,6 +50,7 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
+
 		const resp = await Http.fetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {

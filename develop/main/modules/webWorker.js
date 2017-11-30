@@ -6,7 +6,7 @@ export default class webWorker {
 	constructor() {
 		if (window.Worker) {
 			this.bus = eventBus;
-			this.worker = new Worker('./worker.js');
+			this.worker = new Worker('./botWorker.js');
 			console.log('web worker constructor');
 			this.gameHandler();
 			this.workerCallbacks();

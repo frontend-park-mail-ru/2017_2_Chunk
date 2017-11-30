@@ -245,4 +245,9 @@ if ('serviceWorker' in navigator) {
 // window.scrollTo(1, 0)
 
 
+
+// window.onbeforeunload = function() {
+// 	return "Вы уверены, что хотите покинут страницу?";
+// };
+
 router.start();

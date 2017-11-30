@@ -3,10 +3,15 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const NODE_ENV = process.env.NODE_ENV || 'development';
 module.exports = {
-	entry: './develop/include.js',
+	context: __dirname + '/develop',
+	entry: {
+		application: './include.js',
+		loading: './loading/loading.js',
+		botWorker: './workers/botWorker',
+	},
 	output: {
-		filename: 'application.js',
 		path: __dirname + '/public',
+		filename: '[name].js',
 	},
 	watch: NODE_ENV === 'development',
 	watchOptions: {

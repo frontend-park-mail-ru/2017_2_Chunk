@@ -89,9 +89,12 @@ export default class Router {
 	 * и дает доступ только к разрешенному контенту
 	 */
 	async start() {
+		const loader = document.body.getElementsByClassName('loader')[0];
+		debugger;
 		this.addHrefListeners();
 		try {
 			const resp = await this.userService.getDataFetch();
+			document.body.removeChild(loader);
 			if (resp.ok) {
 				this.bus.emit('auth', resp.json.username);
 				const sliceRoutes_ = this._routes.slice(0, 8);
