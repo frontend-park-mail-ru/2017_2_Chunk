@@ -26,7 +26,7 @@ export default class ThreeView extends CommonView {
 			setTimeout(() => {
 				this.winDiv.hide();
 				//нужно переделать, надо подумать как
-				this.bus.emit('goToMenu');//точка выхода из игры в меню
+				this.bus.emit('goToLobby');//точка выхода из игры в меню
 			}, 3000);
 		});
 		super.hide();
@@ -34,10 +34,11 @@ export default class ThreeView extends CommonView {
 
 
 	hide() {
-		if (!this.clear)
+		if (!this.clear) {
 			this.bus.emit('deleteTree');
+			this.clear = true;
+		}
 		super.hide();
-		this.clear = true;
 	}
 
 
