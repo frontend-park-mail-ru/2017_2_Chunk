@@ -20,7 +20,7 @@
     bottom: 18px;
     width: 2px;
     height: 5px;
-    background: #00ffeb;
+    background: #00ff8c;
     transition: all 0.25s ease-in;
     animation: barMotion 0.3s ease-out infinite;
 }
