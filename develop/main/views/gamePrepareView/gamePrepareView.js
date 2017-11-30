@@ -23,6 +23,7 @@ export default class gamePrepareView extends View {
 		this.removePLayer();
 		this.whoIsItEvent();//работает дважды
 		this.buttonsEvents();
+		this.gameStatusEvents();
 		// this.source = 'socket';
 		this.hide();
 	}
@@ -50,7 +51,6 @@ export default class gamePrepareView extends View {
 
 	addGamePrepareListeners() {
 		this.gameClose();
-		this.gameStatusEvents();
 	}
 
 
