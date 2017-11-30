@@ -1,11 +1,10 @@
 'use strict';
 import eventBus from './eventBus';
-import gameCodes from '../messageCodes/gameCodes';
-import gamePrepareCodes from '../messageCodes/gamePrepareCodes';
+import gameWorkerMessage from '../messageCodes/gameWorkerMessage';
 
 
-export default class commonWorker {
-	constructor(workerUrl, ) {
+export default class internalWorker {
+	constructor(workerUrl) {
 		if (window.Worker) {
 			this.bus = eventBus;
 			this.worker = new Worker(workerUrl);
@@ -17,7 +16,7 @@ export default class commonWorker {
 
 
 	gameHandler() {
-		this.bus.on(`${gameCodes.requestEventName}`, (data) => {
+		this.bus.on(`${gameWorkerMessage.responseEventName}`, (data) => {
 			this.worker.postMessage(data);
 		});
 	}
@@ -27,7 +26,7 @@ export default class commonWorker {
 		this.worker.onmessage = (workerResponse) => { // возвращает не массив ха - ха!
 			const data = workerResponse.data;
 			console.log(data);
-			this.bus.emit(`${gamePrepareCodes.responseEventName}${data.code}`, (data));
+			this.bus.emit(`${gameWorkerMessage.requestEventName}`, (data));
 		};
 
 		this.bus.on('workerClose', () => {
