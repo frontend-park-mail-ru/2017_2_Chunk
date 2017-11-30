@@ -1,7 +1,7 @@
 'use strict';
 import eventBus from '../../modules/eventBus';
 import audioLoaderHtml from './audioLoaderHtml';
-import backendWaitingLoaderHtml from './backendWaitingLoaderHtml';
+// import backendWaitingLoaderHtml from './backendWaitingLoaderHtml';
 
 
 new class WaitingLoader {
@@ -13,7 +13,6 @@ new class WaitingLoader {
 
 	start() {
 		this.removeStartCssLoader();
-		this.backendWaitingLoader();
 	}
 
 
