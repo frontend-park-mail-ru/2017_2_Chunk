@@ -4,7 +4,7 @@ import audioLoaderHtml from './audioLoaderHtml';
 import backendWaitingLoaderHtml from './backendWaitingLoaderHtml';
 
 
-class WaitingLoader {
+new class WaitingLoader {
 	constructor() {
 		this.start();
 		this.musicStart();
