@@ -1,0 +1,92 @@
+#audio-control {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: black;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#audio-control:hover {
+    box-shadow: -1px 1px 4px 0 #bda5a5;
+}
+
+#audio-control span.bar {
+    display: inline-block;
+    position: absolute;
+    left: 22px;
+    bottom: 18px;
+    width: 2px;
+    height: 5px;
+    background: #00ffeb;
+    transition: all 0.25s ease-in;
+    animation: barMotion 0.3s ease-out infinite;
+}
+
+#audio-control span.bar:nth-child(2) {
+    left: 28px;
+    animation-direction: reverse;
+}
+
+#audio-control span.bar:nth-child(3) {
+    left: 34px;
+    animation-direction: alternate-reverse;
+}
+
+#audio-control.noVolume span.bar {
+    bottom: 0;
+    top: 0;
+    margin: auto;
+    animation: none;
+}
+
+#backgroundaudio {
+    display: block;
+    position: fixed;
+    bottom: -43px;
+    left: 5px;
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -ms-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+#backgroundaudio:hover {
+    bottom: 0;
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -ms-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+#backgroundaudio audio {
+    background: #ff00dd;
+    border-radius: 5px;
+    padding: 0px;
+    display: table-cell;
+    vertical-align: middle;
+    height: 43px;
+    z-index: 9998;
+}
+
+#backgroundaudio i {
+    height: 20px;
+    border-radius: 5px;
+    display: block;
+    background: #ff00dd;
+    padding: 5px;
+    width: 50px;
+    float: none;
+    margin-bottom: -6px;
+    z-index: 9999;
+}
+
+@keyframes barMotion {
+    100% {
+        height: 25px;
+    }
+}
