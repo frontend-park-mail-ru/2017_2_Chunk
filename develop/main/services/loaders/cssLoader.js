@@ -1,9 +1,7 @@
 'use strict';
 import eventBus from '../../modules/eventBus';
 import audioLoaderHtml from './audioLoaderHtml';
-import backendWaitingLoaderHtml from './backendWaitingLoaderHtml';
-
-
+// import backendWaitingLoaderHtml from './backendWaitingLoaderHtml';
 new class WaitingLoader {
 	constructor() {
 		this.start();
@@ -13,7 +11,6 @@ new class WaitingLoader {
 
 	start() {
 		this.removeStartCssLoader();
-		this.backendWaitingLoader();
 	}
 
 
@@ -34,7 +31,7 @@ new class WaitingLoader {
 		this.audioControl = document.getElementById('audio-control');
 		this.audioControl.addEventListener('click', (event) => {
 			this.audioControlHandler(event);
-			}, false)
+		}, false)
 	}
 
 
@@ -51,18 +48,18 @@ new class WaitingLoader {
 	}
 
 
-	backendWaitingLoader() {
-		this.backendWaitingLoaderNode = document.createElement('div');
-		this.backendWaitingLoaderNode.classList.add('backendWaitingLoader');
-		this.backendWaitingLoaderNode.innerHTML = backendWaitingLoaderHtml;
-		// eventBus.on('backendRequest', () => {
-		// 	document.body.appendChild(this.backendWaitingLoaderNode);
-		// 	debugger;
-		// });
-		// eventBus.on('backendResponse', () => {
-		// 	document.body.removeChild(this.backendWaitingLoaderNode);
-		// });
-	}
+	// backendWaitingLoader() {
+	// 	this.backendWaitingLoaderNode = document.createElement('div');
+	// 	this.backendWaitingLoaderNode.classList.add('backendWaitingLoader');
+	// 	this.backendWaitingLoaderNode.innerHTML = backendWaitingLoaderHtml;
+	// eventBus.on('backendRequest', () => {
+	// 	document.body.appendChild(this.backendWaitingLoaderNode);
+	// 	debugger;
+	// });
+	// eventBus.on('backendResponse', () => {
+	// 	document.body.removeChild(this.backendWaitingLoaderNode);
+	// });
+	// };
 };
 
 

@@ -1,5 +1,4 @@
 'use strict';
-
 const loaderHtml = '<div id="audio-control">\n' +
 	'    <span class="bar"></span>\n' +
 	'    <span class="bar"></span>\n' +
@@ -12,6 +11,4 @@ const loaderHtml = '<div id="audio-control">\n' +
 	'  Your browser does not support the audio element.\n' +
 	' </audio>\n' +
 	'</div>';
-
-
 export default loaderHtml;
