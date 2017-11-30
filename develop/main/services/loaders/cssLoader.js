@@ -51,10 +51,10 @@ new class WaitingLoader {
 	}
 
 
-	backendWaitingLoader() {
-		this.backendWaitingLoaderNode = document.createElement('div');
-		this.backendWaitingLoaderNode.classList.add('backendWaitingLoader');
-		this.backendWaitingLoaderNode.innerHTML = backendWaitingLoaderHtml;
+	// backendWaitingLoader() {
+	// 	this.backendWaitingLoaderNode = document.createElement('div');
+	// 	this.backendWaitingLoaderNode.classList.add('backendWaitingLoader');
+	// 	this.backendWaitingLoaderNode.innerHTML = backendWaitingLoaderHtml;
 		// eventBus.on('backendRequest', () => {
 		// 	document.body.appendChild(this.backendWaitingLoaderNode);
 		// 	debugger;
@@ -62,7 +62,7 @@ new class WaitingLoader {
 		// eventBus.on('backendResponse', () => {
 		// 	document.body.removeChild(this.backendWaitingLoaderNode);
 		// });
-	}
+	// };
 };
 
 
