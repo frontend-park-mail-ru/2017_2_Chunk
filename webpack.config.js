@@ -30,25 +30,36 @@ module.exports = {
 				use: 'css-loader'
 			})
 		}, {
+			test: /\.scss$/,
+			use: [{
+				loader: 'style-loader'
+			}, {
+				loader: 'css-loader'
+			}, {
+				loader: 'sass-loader',
+			}]
+		}, {
 			test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
 			loader: 'url-loader?limit=30000&name=./[name]-[hash].[ext]',
 		}, {
 			test: /\.json$/,
 			loader: 'json-loader'
 		},
-		// 	{
-		// 	test: /\.pug$/,
-		// 	loader: 'pug-loader'
-		// }
+			// 	{
+			// 	test: /\.pug$/,
+			// 	loader: 'pug-loader'
+			// }
 		],
 	},
-	plugins: [
-		new webpack.DefinePlugin({
-			'process.env': {
-				NODE_ENV: JSON.stringify(NODE_ENV),
-				BROWSER: JSON.stringify(true)
-			}
-		}),
-		new ExtractTextPlugin('./application.css'),
-	],
-};
+	plugins:
+		[
+			new webpack.DefinePlugin({
+				'process.env': {
+					NODE_ENV: JSON.stringify(NODE_ENV),
+					BROWSER: JSON.stringify(true)
+				}
+			}),
+			new ExtractTextPlugin('./application.css'),
+		],
+}
+;

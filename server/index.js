@@ -11,6 +11,7 @@ const fallback = require('express-history-api-fallback');
 // const cert = fs.readFileSync( './server/encryption/chunk-frontend.herokuapp.crt' );
 // const ca = fs.readFileSync( './server/encryption/chunk-frontend.herokuapp.csr' );
 const app = express();
+const compass = require('compass');
 //
 // const options = {
 // 	key: key,
@@ -24,6 +25,7 @@ let options = {
 };
 
 app.use(express.static('./public'));
+app.use(compass({ cwd: __dirname + 'public' }));
 // app.use('/signup', express.static('./public', options));
 // app.use('/login', express.static('public', options));
 // app.use('/update', express.static('./public', options));
@@ -42,7 +44,7 @@ app.use(bodyParser.json()); // С помощью какой-то древней 
 app.use(cookieParser()); // всё то же волшебство, но уже для кук
 
 
-// app.get('/menu', (request, response) => {
+// app.get('*', (request, response) => {
 // 	response.redirect('/menu');
 // });
 

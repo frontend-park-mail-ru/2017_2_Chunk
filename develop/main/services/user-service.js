@@ -1,5 +1,6 @@
 'use strict';
 import Http from '../modules/http';
+import eventBus from '../modules/eventBus';
 
 
 /**
@@ -87,7 +88,9 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
+		// eventBus.emit('backendRequest');
 		const resp = await Http.fetchPost('/user/sign_in', {login, password});
+		// eventBus.emit('backendResponse');
 		response.json = await resp.json();
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
