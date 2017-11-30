@@ -1,0 +1,233 @@
+svg {
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+#contours {
+    fill:none;
+    stroke:#ffffff;
+    stroke-width:2;
+    stroke-miterlimit:10;
+    stroke-dasharray: 3000;
+    stroke-dashoffset: 3000;
+    animation: draw 3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#details {
+    fill: none;
+    stroke:#ffffff;
+    stroke-width: 1;
+    stroke-miterlimit: 10;
+    stroke-dasharray: 5000;
+    stroke-dashoffset: 5000;
+    animation: draw 3s;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#trous {
+    fill: none;
+    stroke:#ffffff;
+    stroke-width: 1;
+    stroke-miterlimit: 10;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw 3s;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#remplissage {
+    fill-opacity: 0;
+    fill: white;
+    animation: show 1s;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#ouverture {
+    fill: none;
+    stroke:#e2401c;
+    stroke-width: 1;
+    stroke-miterlimit: 10;
+    stroke-dasharray: 5000;
+    stroke-dashoffset: 5000;
+    animation: draw 2s;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#bandes {
+    fill: none;
+    stroke:#e2401c;
+    stroke-miterlimit: 10;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: draw 3s;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#B1 {
+    stroke-width: 1;
+}
+#B2 {
+    stroke-width: 2;
+}
+#B3 {
+    stroke-width: 4;
+}
+#B4 {
+    stroke-width: 8;
+}
+#B5 {
+    stroke-width: 10;
+}
+#B6 {
+    stroke-width: 14;
+}
+#B7 {
+    stroke-width: 16;
+}
+#bandes-remplissage {
+    fill-opacity:0;
+    fill: #e2401c;
+    animation: show 1s;
+    animation-delay: 3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#titre_mix {
+    fill-opacity:0;
+    fill: #38545b;
+    animation: show 1s;
+    animation-delay: 4s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#etiquette {
+    fill-opacity:0;
+    fill: #f6d890;
+    animation: show 1s;
+    animation-delay: 3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#citation {
+    fill-opacity:0;
+    fill: #ffffff;
+    animation: show 2s;
+    animation-delay: 4s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#bobines {
+    fill: none;
+    stroke:#ffffff;
+    stroke-width: 1;
+    stroke-miterlimit: 10;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: draw 3s;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#engrenage_gauche {
+    animation: rotation 3s;
+    animation-delay: 4s;
+    animation-iteration-count: infinite;
+    transform-origin: 50% 50%;
+    display: inline-block;
+}
+#engrenage_droite {
+    animation: rotation 3s;
+    animation-delay: 4s;
+    animation-iteration-count: infinite;
+    transform-origin: 50% 50%;
+    display: inline-block;
+}
+#centre-bobine-1 {
+    fill: none;
+    stroke:#ffffff;
+    stroke-width: 2;
+}
+#centre-bobine-2 {
+    fill: none;
+    stroke:#ffffff;
+    stroke-width: 2;
+}
+#gauche-remplissage {
+    fill-opacity:0;
+    fill: white;
+    animation: show 2s;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#droite-remplissage {
+    fill-opacity:0;
+    fill: white;
+    animation: show 2s;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+#cercles {
+    fill:none;
+    stroke:#ffffff;
+    stroke-width:2;
+    stroke-miterlimit:10;
+    stroke-dasharray: 3000;
+    stroke-dashoffset: 3000;
+    animation: draw 4s;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+
+
+
+@keyframes draw {
+    to {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes show {
+    to {
+        fill-opacity: 1;
+        opacity: 1;
+
+    }
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}

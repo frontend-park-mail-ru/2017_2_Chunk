@@ -93,9 +93,11 @@ export default class Draw {
 		this.startArray = response.game.field.field;
 		this.planeSize = response.game.field.maxX;
 		// Двумерный массив клеток поля.
-		this.arrayOfPlane = this.startArray;
+		//this.arrayOfPlane = this.makeBinArray(this.planeSize);
+		this.arrayOfPlane = [];
 		// Двумерный массив фигур на поле.
-		this.arrayOfFigure = this.startArray;
+		// this.arrayOfFigure = this.makeBinArray(this.planeSize);
+		this.arrayOfFigure = [];
 		this.addMeshes();
 
 		this.animate();
@@ -111,12 +113,12 @@ export default class Draw {
 		this.scene.remove(this.light);
 	}
 
-	// makeBinArray(size) {
-	// 	const array = [];
-	// 	for (let i = 0; i < size; i++)
-	// 		array[i] = [];
-	// 	return array;
-	// }
+	makeBinArray(size) {
+		const array = [];
+		for (let i = 0; i < size; i++)
+			array[i] = [];
+		return array;
+	}
 
 	// makeBinArray(size) {
 	// 	const array = [];
@@ -126,6 +128,7 @@ export default class Draw {
 	// Создает двумерный массив клеточек поля и расстявляет по нему фигуры в соответствии с массивом.
 	addPlaneByStart() {
 		for (let i = 0; i < this.planeSize; i++) {
+			this.arrayOfPlane[i] = [];
 			for (let j = 0; j < this.planeSize; j++) {
 				this.arrayOfPlane[i][j] = new PlaneCell(i, j);
 				this.arrayOfPlane[i][j].figure = this.startArray[i][j];
@@ -144,6 +147,7 @@ export default class Draw {
 	// Добавляет на поле все фигуры, заданные в массиве клеток поля.
 	addAllPlayers() {
 		for (let i = 0; i < this.planeSize; i++) {
+			this.arrayOfFigure[i] = [];
 			for (let j = 0; j < this.planeSize; j++) {
 				if (this.arrayOfPlane[i][j].figure !== 0) {
 					this.addOnePlayers(this.playerContainer, i, j, this.arrayOfPlane[i][j].figure);

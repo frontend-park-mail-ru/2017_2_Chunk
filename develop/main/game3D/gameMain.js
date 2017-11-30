@@ -23,6 +23,7 @@ export default class Game3D {
 		this.coordinatesForStep();
 		this.figureType();
 		this.winDetected();
+		this.exitGame();
 	}
 
 	getGameInfo() {
@@ -43,10 +44,21 @@ export default class Game3D {
 			const request = {
 				code: gameCodes.getGameInfo.code
 			};
+			this.gameID = response.game.gameID;
 			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
 			this.draw.startGame(response);
 			this.bus.emit('startArray', response);
 			this.getGameInfo();
+		});
+	}
+
+	exitGame() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.exitFromPreparingGame.code}`, (response) => {
+			const request = {
+				gameID: this.gameID
+			};
+			console.log(this.gameID);
+			this.bus.emit(`${gameCodes.gameDelete.request}`, request);
 		});
 	}
 

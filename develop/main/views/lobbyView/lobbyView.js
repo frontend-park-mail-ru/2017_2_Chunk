@@ -3,7 +3,7 @@ import View from '../view/view';
 import lobbyFields from './__lobbyFields/lobbyView__lobbyFields';
 import LobbyGameData from './__lobbyFields/__gameDataField/lobbyView__lobbyFields__gameDataField';
 import WebSocket from '../../modules/webSocket';
-import WebWorker from '../../modules/webWorker';
+import commonWorker from '../../modules/commonWorker';
 import eventBus from '../../modules/eventBus';
 import lobbyCodes from '../../messageCodes/lobbyCodes';
 import tabMessage from '../../messageCodes/tabMessage';
@@ -36,8 +36,8 @@ export default class LobbyView extends View {
 			if (!this.webSocket) {
 				this.webSocket = new WebSocket();
 			}
-		} else if (!this.webWorker) {
-			this.webWorker = new WebWorker();
+		} else if (!this.botWorker) {
+			this.botWorker = new commonWorker('./botWorker.js');
 		}
 	}
 
@@ -143,8 +143,8 @@ export default class LobbyView extends View {
 	socketClose() {
 		// закрытие сокета, удаление всех игр
 		this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`, () => {
-			if (this.webWorker) {
-				delete this.webWorker;
+			if (this.botWorker) {
+				delete this.botWorker;
 			} else {
 				delete this.webSocket;
 			}

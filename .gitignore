@@ -107,3 +107,13 @@ node-js-getting-git started
 /test/
 Будет удалено develop/main/views/menuView/menu.pug
 Будет удалено test/
+/public/botWorker.js
+Будет удалено public/botWorker.js
+Будет удалено public/botWorker.js.map
+Будет удалено public/loading.js
+Будет удалено public/loading.js.map
+/public/loading.js
+/public/loading.js.map
+/public/botWorker.js.map
+/develop/main/services/loaders/backendWaitingLoader.scss
+/public/gameWorker.js

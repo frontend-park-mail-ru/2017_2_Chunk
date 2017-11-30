@@ -92,6 +92,7 @@ export default class Router {
 		this.addHrefListeners();
 		try {
 			const resp = await this.userService.getDataFetch();
+			this.bus.emit('removeStartLoader');
 			if (resp.ok) {
 				this.bus.emit('auth', resp.json.username);
 				const sliceRoutes_ = this._routes.slice(0, 8);

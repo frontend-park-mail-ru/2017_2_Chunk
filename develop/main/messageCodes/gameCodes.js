@@ -24,6 +24,7 @@ const gameCodes = {
 		request: 'request'
 	},
 	responseEventName: 'response',
+	requestEventName: 'request',
 };
 
 export default gameCodes;
