@@ -30,10 +30,12 @@ module.exports = {
 		}, {
 			test: /\.json$/,
 			loader: 'json-loader'
-		}, {
-			test: /\.pug$/,
-			loader: 'pug-loader'
-		}],
+		},
+		// 	{
+		// 	test: /\.pug$/,
+		// 	loader: 'pug-loader'
+		// }
+		],
 	},
 	plugins: [
 		new webpack.DefinePlugin({

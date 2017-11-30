@@ -5,7 +5,7 @@ const gameCodes = {
 	},
 	gameDelete: {
 		code: 110,
-		request: 'request'
+		tabMessage: 'Game finish',
 	},
 	getGameInfo: {
 		code: 112,

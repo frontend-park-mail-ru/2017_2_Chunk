@@ -1,19 +1,20 @@
 'use strict';
 import eventBus from './eventBus';
-import messageCodes from '../messageCodes/messageCodes';
+import lobbyCodes from '../messageCodes/lobbyCodes';
 
 
 export default class webSocket {
 	constructor() {
 		this.bus = eventBus;
 		this.socket = new WebSocket('wss://backend-java-spring.herokuapp.com/play');
-		this.gameHandler();
+		this.socketListeners = {};
 		this.socketCallbacks();
 	}
 
 
 	gameHandler() {
-		this.bus.on(messageCodes.requestEventName, (data) => {
+		this.socketListeners[lobbyCodes.requestEventName]
+			= this.bus.on(lobbyCodes.requestEventName, (data) => {
 			this.socket.send(JSON.stringify(data));
 		});
 	}
@@ -21,15 +22,16 @@ export default class webSocket {
 
 	socketCallbacks() {
 		this.socket.onopen = () => this.onOpenCallback();
-		this.socket.onclose = () => this.onCloseCallback(event);
-		this.socket.onmessage = () => this.onMessageCallback(event);
-		this.socket.onerror = () => this.onErrorCallback(event)
+		this.socket.onclose = (event) => this.onCloseCallback(event);
+		this.socket.onmessage = (event) => this.onMessageCallback(event);
+		this.socket.onerror = (event) => this.onErrorCallback(event)
 	}
 
 
 	gettingStart() {
-		this.bus.emit(messageCodes.requestEventName, messageCodes.getGamesFullList);
-		this.bus.emit(messageCodes.requestEventName, messageCodes.subscribeLobbyUpdates);
+		this.gameHandler();
+		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.getGamesFullList);
+		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.subscribeLobbyUpdates);
 		this.keepAliveEvent();
 		this.openMenuEvent();
 	}
@@ -37,7 +39,7 @@ export default class webSocket {
 
 	keepAliveEvent() {
 		const emitKeepAlive = () => {
-			this.bus.emit(messageCodes.requestEventName, messageCodes.keepAlive);
+			this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.keepAlive);
 			console.log('keepAlive');
 		};
 		this.interval = setInterval(emitKeepAlive, 30000);
@@ -45,10 +47,11 @@ export default class webSocket {
 
 
 	openMenuEvent() {
-		this.bus.on('openMenu', () => {
-			this.bus.emit(`${messageCodes.responseEventName}Close`);
+		this.socketListeners['openMenu'] = this.bus.on('openMenu', () => {
+			this.bus.emit(`${lobbyCodes.responseEventName}${lobbyCodes.close}`);
 		});
-		this.bus.on(`${messageCodes.responseEventName}Close`, () => {
+		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.close}`]
+			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`, () => {
 			if (this.socket) {
 				this.socket.close();
 				delete this.socket;
@@ -72,14 +75,23 @@ export default class webSocket {
 		clearInterval(this.interval);
 		console.log('Код: ' + event.code + ' причина: ' + event.reason);
 		delete this.socket;
+		this.removeSocketListeners();
+		this.bus.emit(`${lobbyCodes.responseEventName}${lobbyCodes.close}`);
 		this.bus.emit('goToMenu');
 	}
 
 
+	removeSocketListeners() {
+		for (let listener in this.socketListeners) {
+			this.bus.remove(`${listener}`, this.socketListeners[listener]);
+		}
+	}
+
+
 	onMessageCallback(event) {
-		const data = JSON.parse(event.data);
-		console.log(data);
-		this.bus.emit(`${messageCodes.responseEventName}${data.code}`, (data));
+		const response = JSON.parse(event.data);
+		console.log(response);
+		this.bus.emit(`${lobbyCodes.responseEventName}${response.code}`, (response));
 	}
 
 

@@ -45,10 +45,12 @@ import Game3D from './game3D/gameMain';
 
 import ServiceWorker from '../../public/serviceWorker';
 
-import messageCodes from './messageCodes/messageCodes';
+import visibilityViewer from './services/visibilityViewer/visibilityViewer';
 
 import TabBlink from './views/tabBlink/tabBlink';
 
+
+const gameNameView = new GameNameView();
 
 const gameNameView = new GameNameView();
 
@@ -189,7 +191,7 @@ eventBus.on('openGame', () => {
 	Views.forEach((view) => {
 		view.hide();
 	});
-	backMenuButtonView.show();
+	backButtonView.show();
 	gameContainer.show();
 });
 
@@ -246,9 +248,6 @@ if ('serviceWorker' in navigator) {
 // document.body.scrollTop;
 // window.scrollTo(0, 0);
 // window.scrollTo(1, 0)
-
-
-eventBus.on(`${messageCodes.lobbyUpdates.code}`, tabBlink.blink(messageCodes.lobbyUpdates));
 
 
 router.start();

@@ -27,7 +27,11 @@ export default class GameWorker {
 	winOrLose() {
 		this.bus.on('winOrLose', (response) => {
 			let win = false;
-
+			const finishArray = response.field.field;
+			console.log(finishArray);
+			this.result = this.findMaxFiguresCount(this.countFigure(finishArray));
+			console.log(this.result);
+			if (this.result === this.figureType) { win = true; }
 			let request = {
 				win: win
 			};
@@ -67,6 +71,7 @@ export default class GameWorker {
 			// this.arrayOfField = this.makeGameField(this.fieldSize);
 			this.arrayOfField = response.game.field.field;
 			this.gamers = response.game.gamers;
+			this.countPlayers = this.gamers.length;
 			//console.log(this.fieldSize);
 			//console.log("START ARRAY");
 			//console.log(this.arrayOfField);

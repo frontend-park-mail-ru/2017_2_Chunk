@@ -60,6 +60,7 @@ export default class Draw {
 
 		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('click', this.raycasterTrue.bind(this), false);
+		// container.getElement().addEventListener('click', this.playerChoice.bind(this), false);
 
 		this.mouse = new Three.Vector2();
 		this.raycaster = new Three.Raycaster();
@@ -102,10 +103,10 @@ export default class Draw {
 		this.planeSize = response.game.field.maxX;
 		// Двумерный массив клеток поля.
 		this.arrayOfPlane = this.makeBinArray(this.planeSize);
-		this.gamers = response.game.gamers;
+		// this.gamers = response.game.gamers;
 		// Двумерный массив фигур на поле.
 		this.arrayOfFigure = this.makeBinArray(this.planeSize);
-		this.countPlayers = this.gamers.length;
+		// this.countPlayers = this.gamers.length;
 		this.addMeshes();
 
 		this.animate();
@@ -535,7 +536,6 @@ export default class Draw {
 	// Handlers
 	onDocumentMouseMove(event) {
 		event.preventDefault();
-
 		this.mouse.x = ((event.clientX / window.screen.availWidth) * 2) - 1;
 		this.mouse.y = (-(event.clientY / window.screen.availHeight) * 2) + 1;
 	}
