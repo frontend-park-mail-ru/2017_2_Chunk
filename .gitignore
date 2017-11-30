@@ -117,3 +117,4 @@ node-js-getting-git started
 /public/botWorker.js.map
 /develop/main/services/loaders/backendWaitingLoader.scss
 /public/gameWorker.js
+/public/gameWorker.js.map
