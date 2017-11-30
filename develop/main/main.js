@@ -52,8 +52,6 @@ import TabBlink from './views/tabBlink/tabBlink';
 
 const gameNameView = new GameNameView();
 
-const gameNameView = new GameNameView();
-
 const userService = new UserService();
 
 const eventBus = EventBus;
