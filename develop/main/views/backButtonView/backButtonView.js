@@ -19,7 +19,7 @@ export default class backButtonView extends Block {
 		this.hide();
 		this.button.on('click', () => {
 			const request = {
-				code: gamePrepareCodes.exit.code,
+				code: `${gamePrepareCodes.exit.code}`,
 			};
 			const listener = bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`,
 				() => {

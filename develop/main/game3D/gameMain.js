@@ -42,7 +42,7 @@ export default class Game3D {
 	startGame() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.startGame.code}`, (response) => {
 			const request = {
-				code: gameCodes.getGameInfo.code
+				code: `${gameCodes.getGameInfo.code}`
 			};
 			this.gameID = response.game.gameID;
 			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
@@ -54,6 +54,7 @@ export default class Game3D {
 
 	exitGame() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.exitFromPreparingGame.code}`, (response) => {
+			console.log("EXIT GAME");
 			const request = {
 				gameID: this.gameID
 			};

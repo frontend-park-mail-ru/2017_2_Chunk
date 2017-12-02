@@ -115,7 +115,7 @@ export default class gamePrepareView extends View {
 			= this.bus.on(`${messageCodes.responseEventName}${messageCodes.getGameInfo.code}`, (response) => {
 			this.fields.header.updateGameData(response.game);
 			this.clear = false;
-			this.gameInfo = response;
+			this.gameInformationObject = response;
 			response.game.gamers.forEach((gamer) => {
 				if (gamer.userID !== this.userID) { this.fields.playersList.addPlayer(gamer); }
 			});

@@ -1,29 +1,35 @@
 'use strict';
 
 export const BACKGROUND_COLOR = 0xEEEEEE;
-export const HOVER_COLOR = 0xff0000;
+export const HOVER_COLOR = 0xFF0000;
 export const PLANE_X = 5;
 export const PLANE_Z = 5;
 export const PLAYER_HEIGHT = 7;
-export const COLORS = {
-	RED: 0x8B0000,
-	GREEN: 0x32CD32,
-	AQUA: 0x7FFFD4,
-	YELLOW: 0xFFFF00,
-	BLUE: 0x00008B,
-	BLACK: 0x000000,
-	WHITE: 0xFFFFFF,
-	SNOW: 0xFFFAFA,
-	MILK: 0xEEEEEE,
-	L_BLUE: 0xA8D8FF,
 
+export const COLORS = {
+	LIGHT: 0xFFFFFF,
 	HOVER: 0xF4DE9E,
 	PLANE_COLOR: 0x69869D
 };
+
 export const PLAYER_COLORS = [
-	0x7A6014,
-	0x492C70,
-	0x55A62A,
-	0x9A001E
+	0x7A6014,   //желтый
+	0x492C70,   //фиолетовый
+	0x55A62A,   //зеленый
+	0x9A001E    //красный
 ];
+
 export const SPEED = 0.1;
+
+export const GAME_VARIABLES = {
+	distance: 0,
+	end: false,
+	diff: 0,
+	grow: 0.01,
+	moveIndicator: false,
+	scaleIndicator: false,
+	stepIndicator: false,
+	queue: [],
+	arrayOfStepEnablePlane: [],
+	animation: 0,
+};

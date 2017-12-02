@@ -21,26 +21,25 @@ export default class Draw {
 			0.1,
 			1000
 		);
+		//
+		// this.camera.position.set(-25, 35, -16);
+		// this.camera = new Three.OrthographicCamera(
+		// 	window.screen.availWidth / - 30,
+		// 	window.screen.availWidth / 30,
+		// 	window.screen.availHeight / 30,
+		// 	window.screen.availHeight / - 30,
+		// 	-200,
+		// 	500
+		// );
+		this.camera.position.set(-25, 35, -16);
 
-		this.camera.position.set(-28, 55, -28);
 		this.camera.lookAt(this.scene.position);
 
-		// Две точки, начало и конец хода.
 		this.point1 = new Point();
 		this.point2 = new Point();
 		this.vector = new Point();
-		this.distance = 0;
-		this.end = false;
-		this.diff = 0;
-		this.grow = 0.01;
-		// Индикатор движения для движения, разрешает движение только после хода.
-		this.moveIndicator = false;
-		this.scaleIndicator = false;
-		this.raycasterIndicator = false;
-		this.stepIndicator = false;
-		this.queue = [];
-		this.arrayOfStepEnablePlane = [];
-		this.animation = 0;
+
+		this.gameVariebles = tools.GAME_VARIABLES;
 
 		this.renderer = new Three.WebGLRenderer({antialias: true, alpha: true});
 		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
@@ -49,7 +48,7 @@ export default class Draw {
 
 		this.controls = new OrbitControl(this.camera, this.renderer.domElement);
 		this.controls.maxPolarAngle = Math.PI * 0.495;
-		this.controls.target.set(20, 5, 20);
+		this.controls.target.set(20, -5, 20);
 		this.controls.enablePan = true;
 		this.controls.minDistance = 40.0;
 		this.controls.maxDistance = 200.0;
@@ -64,47 +63,36 @@ export default class Draw {
 		this.mouse = new Three.Vector2();
 		this.raycaster = new Three.Raycaster();
 
-		// this.bus.on(`${this.source}Code203`, (data) => {	// Player is blocked
-		// 	// console.log(data);
-		// });
-		// this.bus.on(`${this.source}Code209`, (data) => {	// Player is offline
-		// 	// console.log(data);
-		// });
-		// this.bus.on(`${this.source}Code306`, (data) => {	// Invalid game step
-		// 	// console.log(data);
-		// });
-		// this.bus.on(`${this.source}Code307`, (data) => {	// It is not your turn
-		// 	// console.log(data);
-		// });
+		//203, 209, 306, 307
 
 		this.bus.on('deleteTree', () => {
 			this.scene.remove(this.spotLight);
 			this.scene.remove(this.cellContainer);
 			this.scene.remove(this.playerContainer);
-			cancelAnimationFrame(this.animation);
+			cancelAnimationFrame(this.gameVariebles.animation);
 		});
-	}
-
-	getGameInfo(response) {
-		this.figureType = response;
 	}
 
 	startGame(response) {
 		this.startArray = response.game.field.field;
 		this.planeSize = response.game.field.maxX;
+		const size = this.planeSize / 2 * tools.PLANE_X;
+		this.controls.target.set(size, -5, size);
 		// Двумерный массив клеток поля.
-		//this.arrayOfPlane = this.makeBinArray(this.planeSize);
 		this.arrayOfPlane = [];
 		// Двумерный массив фигур на поле.
-		// this.arrayOfFigure = this.makeBinArray(this.planeSize);
 		this.arrayOfFigure = [];
 		this.addMeshes();
 
 		this.animate();
 	}
 
+	getGameInfo(response) {
+		this.figureType = response;
+	}
+
 	gameStep(response) {
-		this.queue.push(response);
+		this.gameVariebles.queue.push(response);
 	}
 
 	gameEnd(response) {
@@ -113,17 +101,25 @@ export default class Draw {
 		this.scene.remove(this.light);
 	}
 
-	makeBinArray(size) {
-		const array = [];
-		for (let i = 0; i < size; i++)
-			array[i] = [];
-		return array;
-	}
+	addMeshes() {
+		this.light = new Three.AmbientLight(tools.COLORS.LIGHT, 0.75, 100, Math.PI);
+		this.light.position.set(0, 0, 0);
+		this.scene.add(this.light);
 
-	// makeBinArray(size) {
-	// 	const array = [];
-	// 	return array;
-	// }
+		this.spotLight = new Three.SpotLight(tools.COLORS.LIGHT, 1, 100, Math.PI);
+		this.spotLight.position.set(0, 10, 0);
+		this.scene.add(this.spotLight);
+
+		this.playerContainer = new Three.Object3D();
+		this.cellContainer = new Three.Object3D();
+
+		// Рисование поля и всех фигурок.
+		this.addPlaneByStart();
+		this.addAllPlayers();
+
+		this.scene.add(this.cellContainer);
+		this.scene.add(this.playerContainer);
+	}
 
 	// Создает двумерный массив клеточек поля и расстявляет по нему фигуры в соответствии с массивом.
 	addPlaneByStart() {
@@ -156,26 +152,6 @@ export default class Draw {
 		}
 	}
 
-	addMeshes() {
-		this.light = new Three.AmbientLight(tools.COLORS.WHITE, 0.75, 100, Math.PI);
-		this.light.position.set(0, 0, 0);
-		this.scene.add(this.light);
-
-		this.spotLight = new Three.SpotLight(tools.COLORS.WHITE, 1, 100, Math.PI);
-		this.spotLight.position.set(0, 10, 0);
-		this.scene.add(this.spotLight);
-
-		this.playerContainer = new Three.Object3D();
-		this.cellContainer = new Three.Object3D();
-
-		// Рисование поля и всех фигурок.
-		this.addPlaneByStart();
-		this.addAllPlayers();
-
-		this.scene.add(this.cellContainer);
-		this.scene.add(this.playerContainer);
-	}
-
 	animate() {
 		this.controls.update();
 		if (this.camera.position.y < 5) {
@@ -187,16 +163,20 @@ export default class Draw {
 		// То самое движения, для которого нужен включенный индикатор.
 		this.moving();
 		this.scaling();
-		//this.renderer.setSize(window.screen.availWidth, window.screen.availHeight); убираем заменяем сет сайз на что то другое.
 		// Зацикливание
-		this.animation = requestAnimationFrame(this.animate.bind(this));
+		this.gameVariebles.animation = requestAnimationFrame(this.animate.bind(this));
 		this.render();
 	}
 
-	queueStep() { // this.queue
-		if (typeof this.queue !== 'undefined' && this.queue !== null && this.queue.length > 0 && !this.stepIndicator && !Object.isFrozen(this.point1)) {
-			this.stepIndicator = true;
-			this.stepObject = this.queue.shift();
+	queueStep() {
+		if (typeof this.gameVariebles.queue !== 'undefined' &&
+			this.gameVariebles.queue !== null &&
+			this.gameVariebles.queue.length > 0 &&
+			!this.gameVariebles.stepIndicator &&
+			!Object.isFrozen(this.point1)
+		) {
+			this.gameVariebles.stepIndicator = true;
+			this.stepObject = this.gameVariebles.queue.shift();
 			this.point1 = this.stepObject.step.src;
 			this.point2 = this.stepObject.step.dst;
 			this.fullStep(this.stepObject);
@@ -207,7 +187,8 @@ export default class Draw {
 		// Выбор объектов
 		this.raycaster.setFromCamera(this.mouse, this.camera);
 		const intersects = this.raycaster.intersectObjects(
-			this.playerContainer.children.concat(this.cellContainer.children));
+			this.playerContainer.children.concat(this.cellContainer.children)
+		);
 		if (intersects.length > 0) {
 			if (this.INTERSECTED !== intersects[0].object) {
 				if (this.INTERSECTED) {
@@ -278,6 +259,108 @@ export default class Draw {
 		}
 	}
 
+	scaling() {
+		if (this.gameVariebles.scaleIndicator) {
+			if (this.gameVariebles.grow < 1) {
+				this.arrayOfFigure[this.point2.x][this.point2.z].mesh.scale.set(1, this.gameVariebles.grow, 1);
+				this.gameVariebles.grow += 0.04;
+			} else {
+				this.gameVariebles.grow = 0.01;
+				this.gameVariebles.scaleIndicator = false;
+				delete this.point1;
+				this.point1 = new Point();
+			}
+		}
+	}
+
+	// Функция движения.
+	moving() {
+		// Если индикатор вкдючен
+		if (this.gameVariebles.moveIndicator) {
+			// Замораживаю point1, чтобы она на протяжении всего движения не менялась.
+			Object.freeze(this.point1);
+
+			if (!this.gameVariebles.end) {
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x +=
+					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z +=
+					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
+				this.gameVariebles.diff += this.gameVariebles.distance * tools.SPEED;
+				if (this.gameVariebles.diff <= this.gameVariebles.distance * 2) {
+					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y += 0.8;
+				} else if (
+					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y >
+					this.arrayOfFigure[this.point1.x][this.point1.z].y) {
+					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y -= 0.8;
+				}
+				if (this.gameVariebles.diff >= this.gameVariebles.distance * 4) {
+					this.gameVariebles.end = true;
+					this.gameVariebles.diff = 0;
+				}
+			} else {
+				// Выключаем индикатор, тоесть останавливаем движение.
+				this.gameVariebles.moveIndicator = false;
+				this.gameVariebles.end = false;
+				// В следующих двух строчках приравниваем длинные кривые координаты фигуры к ровным координатам клеток,
+				// чтобы со временем не получилось большой погрешности.
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x =
+					this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.x;
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y =
+					this.arrayOfFigure[this.point1.x][this.point1.z].y;
+				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z =
+					this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.z;
+				// Заменяем фигуры в массиве фигур и в массиве клеток.
+				this.replaceFigure(this.point1, this.point2);
+				// Удаляем замороженную точку и создаем ее снова
+				delete this.point1;
+				this.point1 = new Point();
+				// Ну и в конце движения делаем обработку хода.
+				this.step(this.stepObject.figureForPaint);
+				this.gameVariebles.stepIndicator = false;
+			}
+		}
+	}
+
+	replaceFigure(point1, point2) {
+		this.arrayOfFigure[point2.x][point2.z] = this.arrayOfFigure[point1.x][point1.z];
+		this.arrayOfFigure[point1.x][point1.z] = undefined;
+		this.arrayOfPlane[point2.x][point2.z].figure = this.arrayOfPlane[point1.x][point1.z].figure;
+		this.arrayOfPlane[point1.x][point1.z].figure = 0;
+	}
+
+	makeStepEnable(array) {
+		this.gameVariebles.arrayOfStepEnablePlane = array;
+		array.forEach((coord) => {
+			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.HOVER);
+			this.arrayOfPlane[coord.x][coord.z].stepEnable = true;
+		})
+	}
+
+	step(figureForPaint) {
+		figureForPaint.forEach((figure) => {
+			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(tools.PLAYER_COLORS[figure.color-1]);
+			this.arrayOfPlane[figure.x][figure.z].figure = figure.color;
+		})
+	}
+
+	render() {
+		this.renderer.render(this.scene, this.camera);
+	}
+
+	// Handlers
+	onDocumentMouseMove(event) {
+		event.preventDefault();
+		this.mouse.x = ((event.clientX / window.screen.availWidth) * 2) - 1;
+		this.mouse.y = (-(event.clientY / window.screen.availHeight) * 2) + 1;
+	}
+
+	fullStep(stepObject) {
+		this.vector = stepObject.vector;
+		this.gameVariebles.distance = this.calculateDistance(this.point1, this.point2);
+		this.moveOrClone(stepObject);
+		this.deleteAllStepEnable();
+	}
+
 	calculateDistance(point1, point2) {
 		return Math.sqrt(
 			Math.pow(
@@ -298,124 +381,22 @@ export default class Draw {
 				this.playerContainer, point2.x, point2.z,
 				this.arrayOfPlane[point1.x][point1.z].figure
 			);
-			this.scaleIndicator = true;
+			this.gameVariebles.scaleIndicator = true;
 			// И вызываем функцию обработки хода, то-есть замены фигурок, если они есть рядом.
 			this.step(stepObject.figureForPaint);
-			this.stepIndicator = false;
+			this.gameVariebles.stepIndicator = false;
 		} else {
 			// если клетка находится через одну, то включаем индикатор для движения фигуры.
 			this.point1 = point1;
 			this.point2 = point2;
-			this.moveIndicator = true;
+			this.gameVariebles.moveIndicator = true;
 		}
-	}
-
-	scaling() {
-		if (this.scaleIndicator) {
-			if (this.grow < 1) {
-				this.arrayOfFigure[this.point2.x][this.point2.z].mesh.scale.set(1, this.grow, 1);
-				this.grow += 0.04;
-			} else {
-				this.grow = 0.01;
-				this.scaleIndicator = false;
-				delete this.point1;
-				this.point1 = new Point();
-			}
-		}
-	}
-
-	// Функция движения.
-	moving() {
-		// Если индикатор вкдючен
-		if (this.moveIndicator) {
-			// Замораживаю point1, чтобы она на протяжении всего движения не менялась.
-			Object.freeze(this.point1);
-
-			if (!this.end) {
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x +=
-					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z +=
-					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
-				this.diff += this.distance * tools.SPEED;
-				if (this.diff <= this.distance * 2) {
-					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y += 0.8;
-				} else if (
-					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y >
-					this.arrayOfFigure[this.point1.x][this.point1.z].y) {
-					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y -= 0.8;
-				}
-				if (this.diff >= this.distance * 4) {
-					this.end = true;
-					this.diff = 0;
-				}
-			} else {
-				// Выключаем индикатор, тоесть останавливаем движение.
-				this.moveIndicator = false;
-				this.end = false;
-				// В следующих двух строчках приравниваем длинные кривые координаты фигуры к ровным координатам клеток,
-				// чтобы со временем не получилось большой погрешности.
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x =
-					this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.x;
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y =
-					this.arrayOfFigure[this.point1.x][this.point1.z].y;
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z =
-					this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.z;
-				// Заменяем фигуры в массиве фигур и в массиве клеток.
-				this.replaceFigure(this.point1, this.point2);
-				// Удаляем замороженную точку и создаем ее снова
-				delete this.point1;
-				this.point1 = new Point();
-				// Ну и в конце движения делаем обработку хода.
-				this.step(this.stepObject.figureForPaint);
-				this.stepIndicator = false;
-			}
-		}
-	}
-
-	replaceFigure(point1, point2) {
-		this.arrayOfFigure[point2.x][point2.z] = this.arrayOfFigure[point1.x][point1.z];
-		this.arrayOfFigure[point1.x][point1.z] = undefined;
-		this.arrayOfPlane[point2.x][point2.z].figure = this.arrayOfPlane[point1.x][point1.z].figure;
-		this.arrayOfPlane[point1.x][point1.z].figure = 0;
-	}
-
-	makeStepEnable(array) {
-		this.arrayOfStepEnablePlane = array;
-		array.forEach((coord) => {
-			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.HOVER);
-			this.arrayOfPlane[coord.x][coord.z].stepEnable = true;
-		})
-	}
-
-	step(figureForPaint) {
-		figureForPaint.forEach((figure) => {
-			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(tools.PLAYER_COLORS[figure.color-1]);
-			this.arrayOfPlane[figure.x][figure.z].figure = figure.color;
-		})
 	}
 
 	deleteAllStepEnable() {
-		this.arrayOfStepEnablePlane.forEach((coord) => {
+		this.gameVariebles.arrayOfStepEnablePlane.forEach((coord) => {
 			this.arrayOfPlane[coord.x][coord.z].stepEnable = false;
 			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.PLANE_COLOR);
 		});
-	}
-
-	render() {
-		this.renderer.render(this.scene, this.camera);
-	}
-
-	// Handlers
-	onDocumentMouseMove(event) {
-		event.preventDefault();
-		this.mouse.x = ((event.clientX / window.screen.availWidth) * 2) - 1;
-		this.mouse.y = (-(event.clientY / window.screen.availHeight) * 2) + 1;
-	}
-
-	fullStep(stepObject) {
-		this.vector = stepObject.vector;
-		this.distance = this.calculateDistance(this.point1, this.point2);
-		this.moveOrClone(stepObject);
-		this.deleteAllStepEnable();
 	}
 }

@@ -78,7 +78,11 @@ export default class GameWorker {
 	}
 
 	fullStep() {
-		if (typeof this.queue !== 'undefined' && this.queue !== null && this.queue.length > 0 && this.stepIndicator) {
+		if (typeof this.queue !== 'undefined' &&
+			this.queue !== null &&
+			this.queue.length > 0 &&
+			this.stepIndicator
+		) {
 			this.stepIndicator = false;
 			const response = this.queue.shift();
 			const src = response.step.src;
