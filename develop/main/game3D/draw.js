@@ -8,6 +8,7 @@ import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
+import gameWorkerMessage from '../messageCodes/gameWorkerMessage';
 
 export default class Draw {
 
@@ -49,11 +50,11 @@ export default class Draw {
 		this.controls = new OrbitControl(this.camera, this.renderer.domElement);
 		this.controls.maxPolarAngle = Math.PI * 0.495;
 		this.controls.target.set(20, -5, 20);
-		this.controls.enablePan = true;
+		this.controls.enablePan = false;
 		this.controls.minDistance = 40.0;
 		this.controls.maxDistance = 200.0;
 		this.controls.enableDamping = true;
-		this.dampingFactor = 0.01;
+		this.controls.dampingFactor = 0.2;
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
 
@@ -88,7 +89,7 @@ export default class Draw {
 	}
 
 	getGameInfo(response) {
-		this.figureType = response;
+		this.figureType = response.figureType;
 	}
 
 	gameStep(response) {
@@ -154,8 +155,8 @@ export default class Draw {
 
 	animate() {
 		this.controls.update();
-		if (this.camera.position.y < 5) {
-			this.camera.position.y = 5;
+		if (this.camera.position.y < 20) {
+			this.camera.position.y += 0.5;
 		}
 
 		this.queueStep();
@@ -197,30 +198,21 @@ export default class Draw {
 				this.INTERSECTED = intersects[0].object;
 				this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
 
-				// Если нажали на фигурку, у которой наш цвет, то-есть первого игрока
+				// Если нажали на фигурку, у которой наш цвет
 				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
 					intersects[0].object.material.color.getHex()
 					=== tools.PLAYER_COLORS[this.figureType] &&
 					// Проверяем, можно ли изменять первую точку.
 					// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
 					!Object.isFrozen(this.point1)) {
-					// Тут определяются номера по х и z фигуры, на которую нажали.
 					this.deleteAllStepEnable();
+					// Тут определяются номера по х и z фигуры, на которую нажали.
 					for (let i = 0; i < this.planeSize; i++) {
-						if (intersects[0].object.position.x > i * tools.PLANE_X) {
-							this.point1.x = i;
-						}
-						if (intersects[0].object.position.z > i * tools.PLANE_Z) {
-							this.point1.z = i;
-						}
+						if (intersects[0].object.position.x > i * tools.PLANE_X) { this.point1.x = i; }
+						if (intersects[0].object.position.z > i * tools.PLANE_Z) { this.point1.z = i; }
 					}
 					// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
-					let request = {
-						array: this.arrayOfPlane,
-						x: this.point1.x,
-						z: this.point1.z
-					};
-					this.bus.emit('makeStepEnable', request);
+					this.getStepEnable();
 				}
 
 				let idx = 0;
@@ -232,8 +224,18 @@ export default class Draw {
 						if (intersects[0].object.position.x > i * tools.PLANE_X) { idx = i; }
 						if (intersects[0].object.position.z > i * tools.PLANE_Z) { idz = i; }
 					}
+
+					if (this.arrayOfFigure[idx][idz] !== undefined &&
+						this.arrayOfFigure[idx][idz].color === this.figureType+1) {
+						this.INTERSECTED = this.arrayOfFigure[idx][idz].mesh;
+
+						this.point1.x = idx;
+						this.point1.z = idz;
+
+						this.getStepEnable();
+					}
 					// Проверяем, что она доступна для хода
-					if (this.arrayOfPlane[idx][idz].stepEnable) {
+					else if (this.arrayOfPlane[idx][idz].stepEnable) {
 						// Если да, то вторая точка
 						this.point2.x = idx;
 						this.point2.z = idz;
@@ -257,6 +259,16 @@ export default class Draw {
 			}
 			this.INTERSECTED = null;
 		}
+	}
+
+	getStepEnable() {
+		let request = {
+			array: this.arrayOfPlane,
+			x: this.point1.x,
+			z: this.point1.z
+		};
+
+		this.bus.emit('makeStepEnable', request);
 	}
 
 	scaling() {
@@ -328,8 +340,8 @@ export default class Draw {
 		this.arrayOfPlane[point1.x][point1.z].figure = 0;
 	}
 
-	makeStepEnable(array) {
-		this.gameVariebles.arrayOfStepEnablePlane = array;
+	makeStepEnable(response) {
+		this.gameVariebles.arrayOfStepEnablePlane = response.arrayAfterStep;
 		array.forEach((coord) => {
 			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.HOVER);
 			this.arrayOfPlane[coord.x][coord.z].stepEnable = true;

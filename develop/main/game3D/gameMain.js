@@ -2,6 +2,8 @@
 
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
+import gameWorkerMessage from '../messageCodes/gameWorkerMessage';
+import internalWorker from '../modules/internalWorker';
 import GameWorker from './gameWorker';
 
 import Draw from './draw';
@@ -24,18 +26,13 @@ export default class Game3D {
 		this.figureType();
 		this.winDetected();
 		this.exitGame();
+		this.stepEnable();
 	}
 
 	getGameInfo() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.getGameInfo.code}`, (response) => {
 			const request = response;
 			this.bus.emit('getUserID', request);
-		});
-	}
-
-	figureType() {
-		this.bus.on('figureType', (response) => {
-			this.draw.getGameInfo(response);
 		});
 	}
 
@@ -54,7 +51,6 @@ export default class Game3D {
 
 	exitGame() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.exitFromPreparingGame.code}`, (response) => {
-			console.log("EXIT GAME");
 			const request = {
 				gameID: this.gameID
 			};
@@ -66,7 +62,6 @@ export default class Game3D {
 	figureClick() {
 		this.bus.on('makeStepEnable', (response) => {
 			const request = response;
-			this.stepEnable();
 			this.bus.emit('stepEnableInWorker', request);
 		});
 	}
@@ -82,6 +77,12 @@ export default class Game3D {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameEnd.code}`, (response) => {
 			const request = response;
 			this.bus.emit('winOrLose', request);
+		});
+	}
+
+	figureType() {
+		this.bus.on('figureType', (response) => {
+			this.draw.getGameInfo(response);
 		});
 	}
 
