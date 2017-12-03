@@ -1,76 +1,76 @@
-let version = '18';
-self.addEventListener('install', (event) => {
-	event.waitUntil(
-		caches.open(version)
-			.then((cache) => {
-				console.log('cache open');
-				return cache.addAll([
-					'./galaxy2-a81f392a9671ed0258e1899a3986505a.jpg',
-					'./galaxy2',
-					'worker.js',
-					'menu',
-					'menu/application.css',
-					'menu/application.js',
-					'menu/index.html',
-					'login',
-					'login/application.css',
-					'login/application.js',
-					'login/index.html',
-					'signup',
-					'signup/application.css',
-					'signup/application.js',
-					'signup/index.html',
-					'update',
-					'update/application.css',
-					'update/application.js',
-					'update/index.html',
-					'game',
-					'game/application.css',
-					'game/application.js',
-					'game/index.html',
-					'lobby',
-					'lobby/application.css',
-					'lobby/application.js',
-					'lobby/index.html',
-					'rules',
-					'rules/application.css',
-					'rules/application.js',
-					'rules/index.html',
-					'scoreboard',
-					'scoreboard/application.css',
-					'scoreboard/application.js',
-					'scoreboard/index.html',
-					'waiting-hall',
-					'waiting-hall/application.css',
-					'waiting-hall/application.js',
-					'waiting-hall/index.html',
-					'application.css',
-					'application.js',
-					'index.html',
-				]);
-			})
-	)
-});
-self.addEventListener('fetch', (event) => {
-	event.respondWith(
-		caches.match(event.request)
-			.then((cachedResponse) => {
-				return fetch(event.request)
-					.then((response) => {
-						return caches.open(version)
-							.then((cache) => {
-								cache.put(event.request, response.clone());
-								return response;
-							})
-					})
-					.catch((error) => {
-					console.log(error);
-						return cachedResponse;
-				})
-			})
-			.catch((error) => {
-				console.log(error);
-			})
-	)
-})
-;
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 13:
+/***/ (function(module, exports) {
+
+//здесь должен быть гейм воркер для обработки полученных данных из игры
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=serviceWorker.js.map

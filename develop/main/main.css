@@ -7,7 +7,10 @@
     /*user-zoom: fixed;*/
     /*orientation: landscape;*/
 /*}*/
-
+@font-face {
+    font-family: Guardians; /* Гарнитура шрифта */
+    src: url(../../public/fonts/Guardians.ttf); /* Путь к файлу со шрифтом */
+}
 
 
 @media screen{
@@ -15,7 +18,7 @@
         background-color: black;
         background-repeat: no-repeat;
         background-size: 100vw 100vh;
-        font-family: "Comic Sans MS";
+        font-family: Guardians, "Comic Sans MS";
         box-sizing: border-box;
         margin: 0 !important;
         width: 100vw;
@@ -37,7 +40,7 @@
     body {
         background: url('./image/galaxy.jpg') no-repeat;
         background-size: 100vw 100vh;
-        font-family: "Comic Sans MS";
+        font-family: Guardians, "Comic Sans MS";
         box-sizing: border-box;
         margin: 0 !important;
 
@@ -57,7 +60,7 @@
     body {
         background: url('./image/galaxy.jpg') no-repeat;
         background-size: auto 100vh;
-        font-family: "Comic Sans MS";
+        font-family: Guardians, "Comic Sans MS";
         margin: 0 !important;
 
         grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place8 place8 place8";

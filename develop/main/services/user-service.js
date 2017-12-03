@@ -116,28 +116,8 @@ export default class UserService {
 			json: {},
 			message: '',
 		};
-		if (username.length < 4) {
-			response.message = 'Длина логина должна быть не меньше 4 символов!';
-			return response;
-		}
-		if (username.length > 12) {
-			response.message = 'Длина логина не должна превышать 12 символов!';
-			return response;
-		}
 		if (password.length < 6) {
 			response.message = 'Длина пароля должна быть не меньше 6 символов!';
-			return response;
-		}
-		if (oldPassword.length < 6) {
-			response.message = 'Длина пароля должна быть не меньше 6 символов!';
-			return response;
-		}
-		if (password === username) {
-			response.message = 'Логин и пароль не должны совпадать!';
-			return response;
-		}
-		if (oldPassword === username) {
-			response.message = 'Логин и пароль не должны совпадать!';
 			return response;
 		}
 		if (!navigator.onLine) {

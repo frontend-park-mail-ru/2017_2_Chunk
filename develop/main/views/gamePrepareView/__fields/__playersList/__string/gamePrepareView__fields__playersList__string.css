@@ -1,7 +1,7 @@
 .gamePrepareView__fields__playersList__string {
     box-sizing: border-box;
     display: grid;
-    grid-template-columns: 8vw 8vw 8vw;
+    grid-template-columns: 10vw 10vw 10vw;
     grid-template-areas: "place1 place2 place3";
 
 }

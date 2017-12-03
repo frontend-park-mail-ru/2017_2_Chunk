@@ -47,9 +47,19 @@ export default class webSocket {
 
 
 	openMenuEvent() {
+		this.socketCloseEvent();
+		this.socketCloseListener();
+	}
+
+
+	socketCloseEvent() {
 		this.socketListeners['openMenu'] = this.bus.on('openMenu', () => {
 			this.bus.emit(`${lobbyCodes.responseEventName}${lobbyCodes.close}`);
 		});
+	}
+
+
+	socketCloseListener() {
 		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.close}`]
 			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`, () => {
 			if (this.socket) {

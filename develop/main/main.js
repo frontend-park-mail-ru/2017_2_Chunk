@@ -43,7 +43,7 @@ import ThreeView from './views/treeView/threeView.js';
 
 import Game3D from './game3D/gameMain';
 
-import ServiceWorker from '../../public/serviceWorker';
+import ServiceWorker from '../workers/serviceWorker';
 
 import visibilityViewer from './services/visibilityViewer/visibilityViewer';
 

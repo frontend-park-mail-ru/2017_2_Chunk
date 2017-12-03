@@ -9,6 +9,7 @@ module.exports = {
 		loading: './loading/loading.js',
 		botWorker: './workers/botWorker',
 		gameWorker: './workers/gameWorker',
+		serviceWorker: './workers/gameWorker',
 	},
 	output: {
 		path: __dirname + '/public',
