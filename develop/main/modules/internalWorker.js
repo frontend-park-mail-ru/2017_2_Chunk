@@ -17,6 +17,8 @@ export default class internalWorker {
 
 	gameHandler() {
 		this.bus.on(`${gameWorkerMessage.responseEventName}`, (data) => {
+			console.log("УШЛО В ВОРКЕР");
+			console.log(data);
 			this.worker.postMessage(data);
 		});
 	}
@@ -24,6 +26,8 @@ export default class internalWorker {
 
 	workerCallbacks() {
 		this.worker.onmessage = (workerResponse) => { // возвращает не массив ха - ха!
+			console.log("ПРИШЛО ИЗ ВОРКЕРА");
+			console.log(workerResponse);
 			const data = workerResponse.data;
 			console.log(data);
 			this.bus.emit(`${gameWorkerMessage.requestEventName}`, (data));

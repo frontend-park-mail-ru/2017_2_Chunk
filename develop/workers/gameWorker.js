@@ -1,25 +1,18 @@
 'use strict';
 
 const gameWorker = new class GameWorker {
-
 	constructor(eventBus) {
 		this.bus = eventBus;
 		this.queue = [];
 		this.stepIndicator = true;
-
-		this.step();
-		this.stepEnable();
-		this.startArray();
-		this.fullStep();
-		this.getUserID();
-		this.winOrLose();
 	}
 
 	getUserID(data) {
+		console.log("GET USER ID IN WORKER");
 		this.userID = data.userID;
 		this.figureType = this.detectFigureByUserID(this.userID);
 		const request = {
-			func: 'getUserID',
+			func: 'figureType',
 			figureType: this.figureType
 		};
 
@@ -27,12 +20,13 @@ const gameWorker = new class GameWorker {
 	}
 
 	winOrLose(data) {
+		console.log("WIN OR LOSE IN WORKER");
 		let win = false;
 		const finishArray = data.field.field;
 		this.result = this.findMaxFiguresCount(this.countFigure(finishArray));
 		if (this.result === this.figureType) { win = true; }
 		let request = {
-			func: 'winOrLose',
+			func: 'winnerOrLooser',
 			win: win
 		};
 
@@ -40,49 +34,56 @@ const gameWorker = new class GameWorker {
 	}
 
 	stepEnable(data) {
+		console.log("STEP ENABLE IN WORKER");
 		let array = data.array;
 		const fieldSize = array.length;
 		let x = data.x;
 		let z = data.z;
-		let array = [];
+		let reqArray = [];
 		for (let i = 0; i < fieldSize; i++) {
 			for (let j = 0; j < fieldSize; j++) {
-				const idx2 = array[i][j].x;
-				const idz2 = array[i][j].z;
-				if (!(Math.abs(idx2 - x) >= 3 ||
-						Math.abs(idz2 - z) >= 3 ||
-						array[i][j].figure !== 0 )) {
+				if (!(Math.abs(i - x) >= 3 ||
+						Math.abs(j - z) >= 3 ||
+						array[i][j] !== 0 )) {
 					let coord = {
 						x: i,
 						z: j
 					};
-					array.push(coord);
+					reqArray.push(coord);
 				}
 			}
 		}
 		const request = {
 			func: 'stepEnable',
-			arrayAfterStep: array
+			arrayAfterStep: reqArray
 		};
 
 		return request;
 	}
 
 	startArray(data) {
+		console.log("START ARRAY IN WORKER");
 		this.fieldSize = data.game.field.maxX;
 		this.arrayOfField = data.game.field.field;
 		this.gamers = data.game.gamers;
 		this.countPlayers = this.gamers.length;
 	}
 
-	step() {
-		this.queue.push(response);
+	step(data) {
+		console.log("STEP IN WORKER");
+		this.queue.push(data);
 	}
 
 	fullStep() {
+		console.log("FULL STEP BEFORE");
+		console.log(typeof this.queue !== 'undefined');
+		console.log(this.queue !== null);
+		console.log(this.queue.length);
+		console.log(this.stepIndicator);
 		if (typeof this.queue !== 'undefined' && this.queue !== null &&
 			this.queue.length > 0 && this.stepIndicator
 		) {
+			console.log("FULL STEP IN WORKER");
 			this.stepIndicator = false;
 			const response = this.queue.shift();
 			const src = response.step.src;
@@ -132,7 +133,7 @@ const gameWorker = new class GameWorker {
 			}
 
 			const request = {
-				func: 'fullStep',
+				func: 'coordinatesForStep',
 				vector: vector,
 				clone: clone,
 				step: step,
@@ -141,10 +142,8 @@ const gameWorker = new class GameWorker {
 
 			this.stepIndicator = true;
 
-			return request;
+			self.postMessage(request);
 		}
-
-		requestAnimationFrame(this.fullStep.bind(this));
 	}
 
 	countFigure(array) {
@@ -183,36 +182,33 @@ const gameWorker = new class GameWorker {
 	}
 };
 
+setInterval(gameWorker.fullStep, 1000);
+
 self.onmessage = (workerRequest) => {
 	let data = workerRequest.data;
 	let workerResponse;
+	console.log("DATA IN WORKER");
 	console.log(data);
-	switch (data.code) {
-		case '100':
-			workerResponse = offBot.createGame(data);
+	console.log(`${data.code}`);
+	switch (`${data.code}`) {
+		case '204':
+			workerResponse = gameWorker.winOrLose(data);
 			break;
-		case '103':
-			workerResponse = offBot.exitGame();
+		case '215':
+			workerResponse = gameWorker.stepEnable(data);
 			break;
-		case '104':
-			workerResponse = offBot.getGameInfo();
-			break;
-		case '105':
-			workerResponse = offBot.startGame();
-			break;
-		case '108':
-			workerResponse = offBot.addBot();
+		case '200':
+			gameWorker.startArray(data);
 			break;
 		case '112':
-			workerResponse = offBot.getUserID();
+			workerResponse = gameWorker.getUserID(data);
 			break;
 		case '201':
-			workerResponse = offBot.returnPlayerStep(data);
-			self.postMessage(workerResponse);
-			workerResponse = offBot.returnBotStep();
+			gameWorker.step(data);
 			break;
 		default:
 			console.log('Error');
 	}
-	self.postMessage(workerResponse);
+	if (workerResponse !== undefined)
+		self.postMessage(workerResponse);
 };
