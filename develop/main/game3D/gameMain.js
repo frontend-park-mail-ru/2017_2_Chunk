@@ -16,6 +16,8 @@ export default class Game3D {
 
 		this.scene = new Three.Scene();
 
+		this.cssScale = window.devicePixelRatio;
+
 		this.camera = new Three.PerspectiveCamera(
 			45,
 			window.screen.availWidth / window.screen.availHeight,
@@ -46,7 +48,8 @@ export default class Game3D {
 		this.animation = 0;
 
 		this.renderer = new Three.WebGLRenderer({antialias: true, alpha: true});
-		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
+		this.renderer.setSize(window.screen.availWidth / this.cssScale,
+			window.screen.availHeight / this.cssScale);
 		container.getElement().appendChild(this.renderer.domElement);
 
 		this.renderer.render(this.scene, this.camera);
@@ -494,8 +497,8 @@ export default class Game3D {
 	onDocumentMouseMove(event) {
 		event.preventDefault();
 
-		this.mouse.x = ((event.clientX / window.screen.availWidth) * 2) - 1;
-		this.mouse.y = (-(event.clientY / window.screen.availHeight) * 2) + 1;
+		this.mouse.x = ((event.clientX * this.cssScale/ window.screen.availWidth) * 2) - 1;
+		this.mouse.y = (-(event.clientY * this.cssScale / window.screen.availHeight) * 2) + 1;
 	}
 
 	fullStep(point1, point2) {
