@@ -1,6 +1,6 @@
 'use strict';
 
-let version = '18';
+let version = '19';
 self.addEventListener('install', (event) => {
 	event.waitUntil(
 		caches.open(version)
@@ -10,45 +10,46 @@ self.addEventListener('install', (event) => {
 					// './galaxy2-a81f392a9671ed0258e1899a3986505a.jpg',
 					// './galaxy2',
 					// 'worker.js',
-					// 'menu',
+					'/music/Billy Preston - Nothing From Nothing.mp3',
+					'menu',
 					// 'menu/application.css',
 					// 'menu/application.js',
 					// 'menu/index.html',
-					// 'login',
+					'login',
 					// 'login/application.css',
 					// 'login/application.js',
 					// 'login/index.html',
-					// 'signup',
+					'signup',
 					// 'signup/application.css',
 					// 'signup/application.js',
 					// 'signup/index.html',
-					// 'update',
+					'update',
 					// 'update/application.css',
 					// 'update/application.js',
 					// 'update/index.html',
-					// 'game',
+					'game',
 					// 'game/application.css',
 					// 'game/application.js',
 					// 'game/index.html',
-					// 'lobby',
+					'lobby',
 					// 'lobby/application.css',
 					// 'lobby/application.js',
 					// 'lobby/index.html',
-					// 'rules',
+					'rules',
 					// 'rules/application.css',
 					// 'rules/application.js',
 					// 'rules/index.html',
-					// 'scoreboard',
+					'scoreboard',
 					// 'scoreboard/application.css',
 					// 'scoreboard/application.js',
 					// 'scoreboard/index.html',
-					// 'waiting-hall',
+					'waiting-hall',
 					// 'waiting-hall/application.css',
 					// 'waiting-hall/application.js',
 					// 'waiting-hall/index.html',
-					// 'application.css',
-					// 'application.js',
-					// 'index.html',
+					'application.css',
+					'application.js',
+					'index.html',
 				]);
 			})
 			.catch((err) => {
@@ -56,6 +57,8 @@ self.addEventListener('install', (event) => {
 			})
 	)
 });
+
+
 self.addEventListener('fetch', (event) => {
 	event.respondWith(
 		caches.match(event.request)

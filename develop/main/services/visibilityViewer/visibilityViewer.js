@@ -1,6 +1,6 @@
 import tabMessage from '../../messageCodes/tabMessage';
 import eventBus from '../../modules/eventBus';
-
+import Visibility from 'visibilityjs';
 
 export default new class visibilityViewer {
 	constructor() {

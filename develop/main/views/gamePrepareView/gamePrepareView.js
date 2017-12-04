@@ -107,7 +107,7 @@ export default class gamePrepareView extends View {
 		this.bus.on(`${messageCodes.responseEventName}${messageCodes.startGame.code}`, () => {
 			this.bus.emit('goToGame');
 		});
-	}
+	};
 
 
 	updateGameData() {

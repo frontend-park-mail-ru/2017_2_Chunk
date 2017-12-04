@@ -1,13 +1,16 @@
 .gameNameView {
     margin: auto;
     font-size: calc(14px + 3vh);
-    color: #ff8e00;
+    /*color: #ff8e00;*/
+    color: #ffff00;
 }
+
 
 @media screen and (min-width: 360px) and (max-width: 1200px) {
     .gameNameView {
         margin: auto;
         font-size: calc(18px);
-        color: #ff8e00;
+        /*color: #ff8e00;*/
+        color: #ffff00;
     }
 }

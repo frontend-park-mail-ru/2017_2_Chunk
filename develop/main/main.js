@@ -238,6 +238,28 @@ if ('serviceWorker' in navigator) {
 		});
 }
 
+const canvas = document.body.getElementsByClassName('treeView')[0];
+
+function fullScreenOn() {
+	document.body.addEventListener("keydown", function(e) {
+		if (e.keyCode == 13) {
+			debugger;
+			canvas.requestFullscreen();
+		}
+	}, true);
+}
+
+function fullScreenOff(){
+	document.addEventListener("keydown", function(e) {
+		if (e.keyCode == 27) {
+			canvas.cancelFullscreen();
+		}
+	});
+}
+
+fullScreenOff();
+fullScreenOn();
+
 //убрать адресную строку на мобилке
 // document.documentElement.scrollTop;
 // document.body.scrollTop;
