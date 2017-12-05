@@ -8,7 +8,6 @@ const gameWorker = new class GameWorker {
 	}
 
 	getUserID(data) {
-		console.log("GET USER ID IN WORKER");
 		this.userID = data.userID;
 		this.figureType = this.detectFigureByUserID(this.userID);
 		const request = {
@@ -20,7 +19,6 @@ const gameWorker = new class GameWorker {
 	}
 
 	winOrLose(data) {
-		console.log("WIN OR LOSE IN WORKER");
 		let win = false;
 		const finishArray = data.field.field;
 		this.result = this.findMaxFiguresCount(this.countFigure(finishArray));
@@ -34,7 +32,6 @@ const gameWorker = new class GameWorker {
 	}
 
 	stepEnable(data) {
-		console.log("STEP ENABLE IN WORKER");
 		let array = data.array;
 		const fieldSize = array.length;
 		let x = data.x;
@@ -62,28 +59,22 @@ const gameWorker = new class GameWorker {
 	}
 
 	startArray(data) {
-		console.log("START ARRAY IN WORKER");
 		this.fieldSize = data.game.field.maxX;
 		this.arrayOfField = data.game.field.field;
 		this.gamers = data.game.gamers;
 		this.countPlayers = this.gamers.length;
+
+		this.fullStep();
 	}
 
 	step(data) {
-		console.log("STEP IN WORKER");
 		this.queue.push(data);
 	}
 
 	fullStep() {
-		console.log("FULL STEP BEFORE");
-		console.log(typeof this.queue !== 'undefined');
-		console.log(this.queue !== null);
-		console.log(this.queue.length);
-		console.log(this.stepIndicator);
 		if (typeof this.queue !== 'undefined' && this.queue !== null &&
 			this.queue.length > 0 && this.stepIndicator
 		) {
-			console.log("FULL STEP IN WORKER");
 			this.stepIndicator = false;
 			const response = this.queue.shift();
 			const src = response.step.src;
@@ -144,6 +135,8 @@ const gameWorker = new class GameWorker {
 
 			self.postMessage(request);
 		}
+
+		setTimeout(this.fullStep.bind(this), 1000);
 	}
 
 	countFigure(array) {
@@ -182,14 +175,10 @@ const gameWorker = new class GameWorker {
 	}
 };
 
-setInterval(gameWorker.fullStep, 1000);
 
 self.onmessage = (workerRequest) => {
 	let data = workerRequest.data;
 	let workerResponse;
-	console.log("DATA IN WORKER");
-	console.log(data);
-	console.log(`${data.code}`);
 	switch (`${data.code}`) {
 		case '204':
 			workerResponse = gameWorker.winOrLose(data);

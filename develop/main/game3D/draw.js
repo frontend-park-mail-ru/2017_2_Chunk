@@ -8,7 +8,6 @@ import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
-import gameWorkerMessage from '../messageCodes/gameWorkerMessage';
 
 export default class Draw {
 
@@ -60,6 +59,7 @@ export default class Draw {
 		this.controls.rotateSpeed = 0.5;
 
 		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
+		container.getElement().addEventListener('mousemove', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('click', this.playerChoice.bind(this), false);
 
 		this.mouse = new Three.Vector2();
@@ -76,8 +76,6 @@ export default class Draw {
 	}
 
 	startGame(response) {
-		// console.log("RESPONSE IN START GAME IN DRAW");
-		// console.log(response);
 		this.startArray = response.game.field.field;
 		this.planeSize = response.game.field.maxX;
 		const size = this.planeSize / 2 * tools.PLANE_X;
@@ -92,8 +90,6 @@ export default class Draw {
 	}
 
 	getGameInfo(response) {
-		//console.log("GET GAME INFO IN DRAW");
-		//console.log(response);
 		this.figureType = response.figureType;
 	}
 
@@ -169,9 +165,28 @@ export default class Draw {
 		// То самое движения, для которого нужен включенный индикатор.
 		this.moving();
 		this.scaling();
+		this.lightFigure();
 		// Зацикливание
 		this.gameVariebles.animation = requestAnimationFrame(this.animate.bind(this));
 		this.render();
+	}
+
+	lightFigure() {
+		this.raycaster.setFromCamera(this.mouse, this.camera);
+		let intersects = this.raycaster.intersectObjects(
+			this.playerContainer.children.concat(this.cellContainer.children)
+		);
+		if (intersects.length > 0) {
+			if (this.INTERSECTED !== intersects[0].object) {
+				if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+				this.INTERSECTED = intersects[0].object;
+				this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+				this.INTERSECTED.material.emissive.setHex(0xFFFFFF);
+			}
+		}  else {
+			if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+			this.INTERSECTED = null;
+		}
 	}
 
 	queueStep() {
@@ -203,14 +218,6 @@ export default class Draw {
 				this.INTERSECTED = intersects[0].object;
 				this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
 
-				// console.log(intersects[0].object.geometry.type === 'CylinderGeometry');
-				// console.log(intersects[0].object.material.color.getHex()
-				// 	=== tools.PLAYER_COLORS[this.figureType]);
-				// console.log(intersects[0].object.material.color.getHex());
-				//console.log(this.figureType);
-				// console.log(tools.PLAYER_COLORS[this.figureType]);
-				// console.log(!Object.isFrozen(this.point1));
-
 				// Если нажали на фигурку, у которой наш цвет
 				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
 					intersects[0].object.material.color.getHex()
@@ -218,7 +225,6 @@ export default class Draw {
 					// Проверяем, можно ли изменять первую точку.
 					// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
 					!Object.isFrozen(this.point1)) {
-					//console.log("IN CYLINDER DRAW");
 					this.deleteAllStepEnable();
 					// Тут определяются номера по х и z фигуры, на которую нажали.
 					for (let i = 0; i < this.planeSize; i++) {
@@ -276,7 +282,6 @@ export default class Draw {
 	}
 
 	getStepEnable() {
-		//console.log("GET STEP ENABLE IN DRAW");
 		const arrayOfFigureForPost = [];
 		for (let i = 0; i < this.planeSize; i++) {
 			arrayOfFigureForPost[i] = [];
@@ -363,9 +368,7 @@ export default class Draw {
 	}
 
 	makeStepEnable(response) {
-		//console.log("MAKE STEP ENABLE IN DRAW");
 		this.gameVariebles.arrayOfStepEnablePlane = response.arrayAfterStep;
-		//console.log(response.arrayAfterStep);
 		response.arrayAfterStep.forEach((coord) => {
 			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.HOVER);
 			this.arrayOfPlane[coord.x][coord.z].stepEnable = true;
