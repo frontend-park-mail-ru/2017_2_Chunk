@@ -1,5 +1,4 @@
 'use strict';
-
 let version = '19';
 self.addEventListener('install', (event) => {
 	event.waitUntil(
@@ -11,6 +10,10 @@ self.addEventListener('install', (event) => {
 					// './galaxy2',
 					// 'worker.js',
 					'/music/Billy Preston - Nothing From Nothing.mp3',
+					'/music/serviceSounds/button.mp3',
+					'/music/serviceSounds/button1.mp3',
+					'/music/serviceSounds/ihaveaplan.mp3',
+					'/music/serviceSounds/red_button.mp3',
 					'menu',
 					// 'menu/application.css',
 					// 'menu/application.js',
@@ -57,8 +60,6 @@ self.addEventListener('install', (event) => {
 			})
 	)
 });
-
-
 self.addEventListener('fetch', (event) => {
 	event.respondWith(
 		caches.match(event.request)
@@ -72,9 +73,9 @@ self.addEventListener('fetch', (event) => {
 							})
 					})
 					.catch((error) => {
-					console.log(error);
+						console.log(error);
 						return cachedResponse;
-				})
+					})
 			})
 			.catch((error) => {
 				console.log(error);

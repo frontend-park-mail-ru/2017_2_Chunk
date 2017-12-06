@@ -28,6 +28,7 @@ new class WaitingLoader {
 		this.musicNode.innerHTML = audioLoaderHtml;
 		document.body.appendChild(this.musicNode);
 		this.audio = document.getElementById('audio');
+		this.audio.volume = 0;
 		this.audioControl = document.getElementById('audio-control');
 		this.audioControl.addEventListener('click', (event) => {
 			this.audioControlHandler(event);
@@ -42,7 +43,7 @@ new class WaitingLoader {
 			this.audio.volume = 0;
 		} else {
 			_self.classList.remove('noVolume');
-			this.audio.volume = 1;
+			this.audio.volume = 0.3;
 		}
 		this.audioPlaying = !this.audioPlaying;
 	}

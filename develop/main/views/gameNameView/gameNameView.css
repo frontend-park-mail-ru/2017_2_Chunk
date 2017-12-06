@@ -3,6 +3,8 @@
     font-size: calc(14px + 3vh);
     /*color: #ff8e00;*/
     color: #ffff00;
+    cursor: pointer;
+
 }
 
 

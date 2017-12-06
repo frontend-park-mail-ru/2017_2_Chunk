@@ -47,6 +47,8 @@ import ServiceWorker from '../workers/serviceWorker';
 
 import visibilityViewer from './services/visibilityViewer/visibilityViewer';
 
+import SoundsEvents from './services/soundEvents/soundEvents';
+
 
 const gameNameView = new GameNameView();
 
@@ -91,6 +93,8 @@ const gameContainer = new ThreeView();
 const game3D = new Game3D(gameContainer);
 
 const serviceWorker = ServiceWorker;
+
+const soundsEvents = new SoundsEvents();
 
 
 const Views = [];
@@ -271,5 +275,5 @@ fullScreenOn();
 // window.onbeforeunload = function() {
 // 	return "Вы уверены, что хотите покинут страницу?";
 // };
-
+eventBus.emit('jsReady');
 router.start();

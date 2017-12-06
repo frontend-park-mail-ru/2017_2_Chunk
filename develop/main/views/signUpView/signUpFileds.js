@@ -41,7 +41,7 @@ const signUpFields = [
 	{attrs: {
 		type: 'submit',
 		value: 'Submit',
-		class: 'form__button view__view-button_theme-black-orange',
+		class: 'form__button view__view-button_theme-black-orange button',
 	}}
 ];
 

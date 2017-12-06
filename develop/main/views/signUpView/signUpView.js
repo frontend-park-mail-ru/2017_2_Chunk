@@ -3,7 +3,7 @@
 import View from '../view/view';
 import Form from '../../blocks/form/form.js';
 import Message from '../../blocks/form/__message/form__message.js';
-import signUpFields from '../../templates/signUpFileds';
+import signUpFields from './signUpFileds';
 
 
 /**
