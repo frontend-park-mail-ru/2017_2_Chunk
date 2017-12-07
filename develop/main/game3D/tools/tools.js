@@ -7,16 +7,16 @@ export const PLANE_Z = 5;
 export const PLAYER_HEIGHT = 7;
 
 export const COLORS = {
-	LIGHT: 0xFFFFFF,
 	HOVER: 0xF4DE9E,
-	PLANE_COLOR: 0x69869D
+	PLANE_COLOR: 0x69869D,
+	MOVE: 0xdfcc14
 };
 
 export const PLAYER_COLORS = [
 	0x7A6014,   //желтый
-	0x492C70,   //фиолетовый
-	0x55A62A,   //зеленый
-	0x9A001E    //красный
+	0x50147B,   //фиолетовый
+	0x1B7B14,   //зеленый
+	0x7B1425    //красный
 ];
 
 export const SPEED = 0.1;
@@ -29,6 +29,7 @@ export const GAME_VARIABLES = {
 	moveIndicator: false,
 	scaleIndicator: false,
 	stepIndicator: false,
+	lightIndicator: false,
 	queue: [],
 	arrayOfStepEnablePlane: [],
 	animation: 0,

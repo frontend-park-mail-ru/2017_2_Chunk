@@ -63,7 +63,8 @@ export default class Draw {
 		container.getElement().addEventListener('click', this.playerChoice.bind(this), false);
 
 		this.mouse = new Three.Vector2();
-		this.raycaster = new Three.Raycaster();
+		this.raycasterClick = new Three.Raycaster();
+		this.raycasterMove = new Three.Raycaster();
 
 		//203, 209, 306, 307
 
@@ -85,6 +86,8 @@ export default class Draw {
 		// Двумерный массив фигур на поле.
 		this.arrayOfFigure = [];
 		this.addMeshes();
+		this.gameVariebles.moveIndicator = false;
+		this.gameVariebles.lightIndicator = true;
 
 		this.animate();
 	}
@@ -101,6 +104,7 @@ export default class Draw {
 		const request = response.win;
 		this.bus.emit('endOfGame', request);
 		this.scene.remove(this.light);
+		this.gameVariebles.lightIndicator = false;
 	}
 
 	addMeshes() {
@@ -172,20 +176,26 @@ export default class Draw {
 	}
 
 	lightFigure() {
-		this.raycaster.setFromCamera(this.mouse, this.camera);
-		let intersects = this.raycaster.intersectObjects(
-			this.playerContainer.children.concat(this.cellContainer.children)
-		);
-		if (intersects.length > 0) {
-			if (this.INTERSECTED !== intersects[0].object) {
-				if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
-				this.INTERSECTED = intersects[0].object;
-				this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
-				this.INTERSECTED.material.emissive.setHex(0xFFFFFF);
+		if (this.gameVariebles.lightIndicator) {
+			this.raycasterMove.setFromCamera(this.mouse, this.camera);
+			let intersects = this.raycasterMove.intersectObjects(
+				this.playerContainer.children.concat(this.cellContainer.children)
+			);
+			if (intersects.length > 0) {
+				if (this.IntersectedMove !== intersects[0].object) {
+					if (this.IntersectedMove) this.IntersectedMove.material.color.setHSL(this.IntersectedMove.currentHsl.h, this.IntersectedMove.currentHsl.s, this.IntersectedMove.currentHsl.l);
+					this.IntersectedMove = intersects[0].object;
+					this.IntersectedMove.currentHsl = this.IntersectedMove.material.color.getHSL();
+					console.log(this.IntersectedMove.currentHsl);
+					let h = this.IntersectedMove.currentHsl.h;
+					let s = this.IntersectedMove.currentHsl.s;
+					let l = this.IntersectedMove.currentHsl.l;
+					this.IntersectedMove.material.color.setHSL(h, s, l+0.3);
+				}
+			} else {
+				if (this.IntersectedMove) this.IntersectedMove.material.color.setHSL(this.IntersectedMove.currentHsl.h, this.IntersectedMove.currentHsl.s, this.IntersectedMove.currentHsl.l);
+				this.IntersectedMove = null;
 			}
-		}  else {
-			if (this.INTERSECTED) this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
-			this.INTERSECTED = null;
 		}
 	}
 
@@ -206,17 +216,18 @@ export default class Draw {
 
 	playerChoice() {
 		// Выбор объектов
-		this.raycaster.setFromCamera(this.mouse, this.camera);
-		const intersects = this.raycaster.intersectObjects(
+		this.raycasterClick.setFromCamera(this.mouse, this.camera);
+		const intersects = this.raycasterClick.intersectObjects(
 			this.playerContainer.children.concat(this.cellContainer.children)
 		);
 		if (intersects.length > 0) {
-			if (this.INTERSECTED !== intersects[0].object) {
-				if (this.INTERSECTED) {
-					this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+			if (this.IntersectedClick !== intersects[0].object) {
+				if (this.IntersectedClick) {
+					this.IntersectedClick.material.emissive.setHex(this.IntersectedClick.currentHex);
 				}
-				this.INTERSECTED = intersects[0].object;
-				this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+				this.IntersectedClick = intersects[0].object;
+				if (this.IntersectedClick.material.emissive.getHex() !== tools.COLORS.MOVE)
+					this.IntersectedClick.currentHex = this.IntersectedClick.material.emissive.getHex();
 
 				// Если нажали на фигурку, у которой наш цвет
 				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
@@ -247,7 +258,7 @@ export default class Draw {
 
 					if (this.arrayOfFigure[idx][idz] !== undefined &&
 						this.arrayOfFigure[idx][idz].color === this.figureType+1) {
-						this.INTERSECTED = this.arrayOfFigure[idx][idz].mesh;
+						this.IntersectedClick = this.arrayOfFigure[idx][idz].mesh;
 
 						this.point1.x = idx;
 						this.point1.z = idz;
@@ -271,13 +282,13 @@ export default class Draw {
 					} else this.deleteAllStepEnable();
 
 				}
-				this.INTERSECTED.material.emissive.setHex(tools.HOVER_COLOR);
+				this.IntersectedClick.material.emissive.setHex(tools.HOVER_COLOR);
 			}
 		} else {
-			if (this.INTERSECTED) {
-				this.INTERSECTED.material.emissive.setHex(this.INTERSECTED.currentHex);
+			if (this.IntersectedClick) {
+				this.IntersectedClick.material.emissive.setHex(this.IntersectedClick.currentHex);
 			}
-			this.INTERSECTED = null;
+			this.IntersectedClick = null;
 		}
 	}
 
@@ -438,4 +449,5 @@ export default class Draw {
 			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.PLANE_COLOR);
 		});
 	}
+
 }
