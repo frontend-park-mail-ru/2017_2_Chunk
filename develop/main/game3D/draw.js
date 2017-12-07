@@ -183,17 +183,13 @@ export default class Draw {
 			);
 			if (intersects.length > 0) {
 				if (this.IntersectedMove !== intersects[0].object) {
-					if (this.IntersectedMove) this.IntersectedMove.material.color.setHSL(this.IntersectedMove.currentHsl.h, this.IntersectedMove.currentHsl.s, this.IntersectedMove.currentHsl.l);
+					if (this.IntersectedMove) this.IntersectedMove.material.emissive.setHex(this.IntersectedMove.currentHex);
 					this.IntersectedMove = intersects[0].object;
-					this.IntersectedMove.currentHsl = this.IntersectedMove.material.color.getHSL();
-					console.log(this.IntersectedMove.currentHsl);
-					let h = this.IntersectedMove.currentHsl.h;
-					let s = this.IntersectedMove.currentHsl.s;
-					let l = this.IntersectedMove.currentHsl.l;
-					this.IntersectedMove.material.color.setHSL(h, s, l+0.3);
+					this.IntersectedMove.currentHex = this.IntersectedMove.material.emissive.getHex();
+					this.IntersectedMove.material.emissive.setHex(tools.COLORS.MOVE);
 				}
-			} else {
-				if (this.IntersectedMove) this.IntersectedMove.material.color.setHSL(this.IntersectedMove.currentHsl.h, this.IntersectedMove.currentHsl.s, this.IntersectedMove.currentHsl.l);
+			}  else {
+				if (this.IntersectedMove) this.IntersectedMove.material.emissive.setHex(this.IntersectedMove.currentHex);
 				this.IntersectedMove = null;
 			}
 		}
