@@ -47,7 +47,9 @@ import ServiceWorker from '../workers/serviceWorker';
 
 import visibilityViewer from './services/visibilityViewer/visibilityViewer';
 
-import SoundsEvents from './services/soundEvents/soundEvents';
+import SoundsEvents from './services/sound/soundEvents/soundEvents';
+
+import VideoEvents from './services/video/videoEvents/videoEvents';
 
 
 const gameNameView = new GameNameView();
@@ -56,9 +58,9 @@ const userService = new UserService();
 
 const eventBus = EventBus;
 
-const app = new Block(document.body);
+const app = Block.create('main', {}, ['main_theme-black-orange', 'main']);
 
-app.el.classList.add('main_theme-black-orange');
+document.body.appendChild(app.el);
 
 const router = new Router(eventBus, userService);
 
@@ -95,6 +97,8 @@ const game3D = new Game3D(gameContainer);
 const serviceWorker = ServiceWorker;
 
 const soundsEvents = new SoundsEvents();
+
+const videoEvents = new VideoEvents();
 
 
 const Views = [];
@@ -242,12 +246,14 @@ if ('serviceWorker' in navigator) {
 		});
 }
 
+
+
+
 const canvas = document.body.getElementsByClassName('treeView')[0];
 
 function fullScreenOn() {
 	document.body.addEventListener("keydown", function(e) {
 		if (e.keyCode == 13) {
-			debugger;
 			canvas.requestFullscreen();
 		}
 	}, true);
@@ -263,13 +269,6 @@ function fullScreenOff(){
 
 fullScreenOff();
 fullScreenOn();
-
-//убрать адресную строку на мобилке
-// document.documentElement.scrollTop;
-// document.body.scrollTop;
-// window.scrollTo(0, 0);
-// window.scrollTo(1, 0)
-
 
 
 // window.onbeforeunload = function() {

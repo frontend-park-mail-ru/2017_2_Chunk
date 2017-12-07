@@ -16,14 +16,14 @@
     z-index: 2;
 }
 
-.backMenuButtonView:focus {
-    outline: none;
-    opacity: 1;
-    border: 0.1em solid #ff8700 !important; /* Параметры рамки */
-    color: #ff8700;
-}
 
 .backMenuButtonView:hover {
-    color: #ff8700;
-    border: 0.1em solid #ff8700 !important; /* Параметры рамки */
+    color: #00c2ff;
+    border-color: #00c2ff !important; /* Параметры рамки */
+}
+
+.backMenuButtonView:active {
+    outline: none;
+    color: #009fff;
+    border-color: #009fff !important; /* Параметры рамки */
 }

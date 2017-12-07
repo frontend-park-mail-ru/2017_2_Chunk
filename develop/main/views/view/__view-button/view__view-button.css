@@ -28,18 +28,19 @@
     }
 }
 
-.view__view-button:focus {
+.view__view-button:active {
     outline: none;
     opacity: 0.8 !important;
-    color: #FF4900 !important;
-    border: 0.04em solid #FF4900 !important;
+    color: #009fff!important;
+    border: 0.04em solid #009fff !important;
 }
 
 
 .view__view-button:hover {
     opacity: 1;
-    color: #ff8700 ; /* Цвет ссылки */
-    border: 0.04em solid #ff8700;
+    color: #00c2ff ; /* Цвет ссылки */
+    border: 0.04em solid #00c2ff;
+    background-color: #071228eb;
 }
 
 A:link {

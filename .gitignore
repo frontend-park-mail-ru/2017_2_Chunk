@@ -88,12 +88,12 @@ node_modules
 
 node-js-getting-git started
 /documentation/
-/public/application.css
+/public/css/application.css
 /public/background_wood-5d562cfa0e7f75caa0b9778c7d9e6961.jpg
 /public/background_wood_2-e50a9f4a38473ac3d5028bb93d381bd2.jpg
-/public/application.js
-/public/application.css.map
-/public/application.js.map
+/public/js/application.js
+/public/css/application.css.map
+/public/js/application.js.map
 
 /develop/main/image/galaxy.jpg
 /develop/main/image/galaxy2.jpg
@@ -107,16 +107,36 @@ node-js-getting-git started
 /test/
 Будет удалено develop/main/views/menuView/menu.pug
 Будет удалено test/
-/public/botWorker.js
+/public/js/botWorker.js
 Будет удалено public/botWorker.js
 Будет удалено public/botWorker.js.map
 Будет удалено public/loading.js
 Будет удалено public/loading.js.map
-/public/loading.js
-/public/loading.js.map
-/public/botWorker.js.map
+/public/js/loading.js
+/public/js/loading.js.map
+/public/js/botWorker.js.map
 /develop/main/services/loaders/backendWaitingLoader.scss
-/public/gameWorker.js
-/public/gameWorker.js.map
+/public/js/gameWorker.js
+/public/js/gameWorker.js.map
 /public/serviceWorker.js
 /public/serviceWorker.js.map
+/public/js/css/application.css
+Будет удалено develop/main/image/
+Будет удалено public/css/
+Будет удалено public/galaxy.jpg
+Будет удалено public/js/
+Будет удалено public/video/
+!/public/js/css/application.css.map
+/public/application.js
+Будет удалено public/application.js
+Будет удалено public/application.js.map
+Будет удалено public/gameWorker.js
+Будет удалено public/gameWorker.js.map
+/public/images/
+/public/loading.js.map
+/public/loading.js
+/public/application.js.map
+/public/botWorker.js.map
+/public/botWorker.js
+/public/gameWorker.js
+/public/gameWorker.js.map

@@ -1,0 +1,8 @@
+.videoEvents__themeButtonVideo {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    z-index: 999;
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
