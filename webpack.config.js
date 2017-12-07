@@ -2,19 +2,17 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const extractSass = new ExtractTextPlugin({
-	// path: __dirname + '/public/css',
+
+
+const extractPlugin = new ExtractTextPlugin({
 	filename: '[name].css',
-	disable: process.env.NODE_ENV === 'development'
 });
-const minPlugin = new webpack.optimize.UglifyJsPlugin({
-	compress: { warnings: false },
-	// minimize: true,
-});
+
 module.exports = {
 	context: __dirname + '/develop',
 	entry: {
 		application: './include.js',
+		'application.min': './include.js',
 		loading: './loading/loading.js',
 		botWorker: './workers/botWorker',
 		gameWorker: './workers/gameWorker',
@@ -34,26 +32,25 @@ module.exports = {
 			test: /\.js$/,
 			exclude: /(node_modules|bower_components)/,
 			loader: 'babel-loader',
-			// options: {
-			// 	minimize: true,
-			// },
 		}, {
 			test: /\.scss$/,
-			use: extractSass.extract({
-				fallback: 'style-loader',
-				use: {
-					loader: 'css-loader!sass-loader',
-				},
-			})
+			use: [{
+				loader: "style-loader"
+			}, {
+				loader: "css-loader", options: {
+					sourceMap: true
+				}
+			}, {
+				loader: "sass-loader", options: {
+					sourceMap: true
+				}
+			}]
 		}, {
 			test: /\.css$/,
 			use: ExtractTextPlugin.extract({
 				fallback: 'style-loader',
 				use: {
 					loader: 'css-loader',
-					// options: {
-					// 	minimize: true,
-					// },
 				},
 			})
 		}, {
@@ -77,7 +74,11 @@ module.exports = {
 				BROWSER: JSON.stringify(true)
 			}
 		}),
-		// minPlugin,
-		extractSass,
+		new webpack.optimize.UglifyJsPlugin({
+			compress: { warnings: false },
+			include: '/public' + /\.min\.js$/,
+			minimize: true
+		}),
+		extractPlugin,
 	],
 };

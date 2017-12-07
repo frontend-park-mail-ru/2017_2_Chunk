@@ -17,6 +17,8 @@ self.addEventListener('install', (event) => {
 					'/music/serviceSounds/red_button.mp3',
 					'/video/dont_push_this_button.mp4',
 					'/images/galaxy.jpg',
+					'/images/buttons/buttonTape0.jpg',
+					'/images/buttons/buttonTape1.jpg',
 					'menu',
 					// 'menu/application.css',
 					// 'menu/application.js',

@@ -31,7 +31,7 @@ new class MusicPlayer {
 		document.body.appendChild(this.musicNode);
 		this.backgroundaudio = document.getElementById('backgroundaudio');
 		this.audio = new Audio();
-		this.audio.volume = 0.0;
+		this.audio.volume = 0.3;
 		this.audio.type = 'audio/mpeg';
 		this.audio.autoplay = 'autoplay';
 		this.audioControl = document.getElementById('audio-control');
@@ -40,6 +40,7 @@ new class MusicPlayer {
 		}, false);
 		this.backgroundaudio.appendChild(this.audio);
 		this.nextSong();
+		this.videoEvents();
 	}
 
 
@@ -57,12 +58,13 @@ new class MusicPlayer {
 
 
 	nextSong() {
-		this.songNumber = Math.round(Math.random());
+		this.songNumber = Math.round(Math.random() * 0.4);
 		const songUrl = playlist[this.songNumber].url;
 		this.audio.pause();
 		this.audio.src = songUrl;
 		this.audio.load();
 	}
+
 
 	// backendWaitingLoader() {
 	// 	this.backendWaitingLoaderNode = document.createElement('div');
@@ -76,7 +78,19 @@ new class MusicPlayer {
 	// 	document.body.removeChild(this.backendWaitingLoaderNode);
 	// });
 	// };
+	videoEvents() {
+		eventBus.on('videoPlay', () => {
+			if (this.audio.volume > 0)
+				this.audio.volume = 0.1;
+		});
+		eventBus.on('videoPause', () => {
+			if (this.audio.volume > 0)
+				this.audio.volume = 0.3;
+		})
+	}
 };
+
+
 
 
 

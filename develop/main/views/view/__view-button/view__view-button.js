@@ -14,6 +14,8 @@ export default class ViewButton extends Block {
 	 */
 	constructor(button) {
 		super(button.el);
+		const buttonNumber = Math.floor(Math.random() * 3.9);
+		this.el.style.backgroundImage = `url(/images/buttons/buttonTape${buttonNumber}.jpg)`;
 	}
 
 
@@ -30,7 +32,6 @@ export default class ViewButton extends Block {
 		_classes.push('view__view-button');
 		_classes.push('button');
 		_classes.push('view__view-button_theme-black-orange');
-
 		const button = Block.create('a', attrs, _classes, text);
 		return new ViewButton(button);
 	}

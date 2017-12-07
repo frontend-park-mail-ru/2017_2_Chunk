@@ -71,6 +71,7 @@ export default class ThemeButtonVideo extends Block{
 		if (numberOfInterval < 4) {
 			if (numberOfInterval === 0 || numberOfInterval === 3)
 				this.setStartTime(this.intervals[numberOfInterval].start);
+			eventBus.emit('videoPlay');
 			this.setPauseTime(this.intervals[numberOfInterval].end);
 		}
 		if (numberOfInterval === 3 || numberOfInterval === 4)
@@ -95,7 +96,9 @@ export default class ThemeButtonVideo extends Block{
 
 	checkTime() {
 		const current_time = this.themeButtonVideo.el.currentTime.toFixed(2);
-		if (current_time >= this.pauseTime)
+		if (current_time >= this.pauseTime) {
 			this.pause();
+			eventBus.emit('videoPause');
+		}
 	}
 }

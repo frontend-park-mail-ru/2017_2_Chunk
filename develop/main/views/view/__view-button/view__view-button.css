@@ -1,15 +1,17 @@
 .view__view-button {
     box-sizing: border-box;
+    /*background: url(../../../../../public/images/buttons/buttonTape0.jpg);*/
+    background-size: cover;
+    background-position: center;
     font-size:calc(14px + 1.5vh);
     text-align: center;
-    opacity: 1;
     width: 10em;
     padding: 0.1em;
 
     margin: 0.7em;
     min-width: 260px;
 
-    border-radius: 0.4em;
+    border-radius: 0.1em;
     box-shadow: none;
 
     border-width: 0.04em;
@@ -17,6 +19,7 @@
     background-color: transparent;
     cursor: pointer;
     transition: all .1s;
+
 }
 
 @media screen and (min-width: 360px) and (max-width: 1200px) {
@@ -30,14 +33,14 @@
 
 .view__view-button:active {
     outline: none;
-    opacity: 0.8 !important;
+    opacity: 1 !important;
     color: #009fff!important;
     border: 0.04em solid #009fff !important;
 }
 
 
 .view__view-button:hover {
-    opacity: 1;
+    opacity: 0.8;
     color: #00c2ff ; /* Цвет ссылки */
     border: 0.04em solid #00c2ff;
     background-color: #071228eb;
