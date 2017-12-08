@@ -31,7 +31,7 @@ new class MusicPlayer {
 		document.body.appendChild(this.musicNode);
 		this.backgroundaudio = document.getElementById('backgroundaudio');
 		this.audio = new Audio();
-		this.audio.volume = 0.3;
+		this.audio.volume = 0.0;
 		this.audio.type = 'audio/mpeg';
 		this.audio.autoplay = 'autoplay';
 		this.audioControl = document.getElementById('audio-control');

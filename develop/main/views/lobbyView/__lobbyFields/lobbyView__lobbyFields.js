@@ -13,9 +13,8 @@ const lobbyFields = {
 		'lobbyView__lobbyFields'], 'Prepare games'),
 	gameList: Block.create('main', {}, ['every-available', 'lobbyView__lobbyFields__gameList',
 		'lobbyView__lobbyFields']),
-	createGame: Block.create('button', {}, ['every-available', 'view__view-button',
-		'view__view-button_theme-black-orange', 'lobbyView__lobbyFields__createGame',
-		'lobbyView__lobbyFields'], 'create game'),
+	createGame: Block.create('button', {}, ['every-available', 'form__button', 'lobbyView__lobbyFields__createGame',
+		'lobbyView__lobbyFields'], 'New game'),
 };
 
 export default lobbyFields;

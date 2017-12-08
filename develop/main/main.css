@@ -12,11 +12,16 @@
     src: url(../../public/fonts/Guardians.ttf); /* Путь к файлу со шрифтом */
 }
 
+@font-face {
+    font-family: Road_Rage; /* Гарнитура шрифта */
+    src: url(../../public/fonts/Road_Rage.otf); /* Путь к файлу со шрифтом */
+}
+
 
 body {
     background: black url(../../public/images/galaxy.jpg) no-repeat;
     background-size: cover;
-    font-family: Guardians, "Comic Sans MS";
+    font-family: Road_Rage, "Comic Sans MS";
     box-sizing: border-box;
     margin: 0 !important;
     width: 100vw;
@@ -94,6 +99,11 @@ main > .view {
 main > .treeView {
     grid-column: 1 / 3;
     grid-row: 1 / 3;
+}
+
+main > .lobbyView {
+    grid-column: 2;
+    grid-row: 2 / 3;
 }
 
 .hidden {

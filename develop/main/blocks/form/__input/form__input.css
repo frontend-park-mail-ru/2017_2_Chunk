@@ -1,14 +1,17 @@
 .form__input {
-    font-family: "Comic Sans MS";
     font-size:calc(14px + 1.5vh);
-    color: #ff8700;
+    color: #00c2ff;
 
-    background-color: transparent;
+    font-family: Road_Rage;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    background-color: #0000009e;
     border: 0.06em solid white;
     border-radius: 0.4em;
     box-shadow: none;
 
-    opacity: 0.9;
+    opacity: 1;
     width: 10em;
     height: 1em;
     padding: 0.3em;
@@ -16,12 +19,12 @@
 
     min-height: 30px;
     min-width: 250px;
+
 }
 @media screen and (min-width: 640px) and (max-width: 1100px) {
     .form__input {
-        font-family: "Comic Sans MS";
         font-size: calc(14px + 1vh);
-        color: #ff8700;
+        color: #00c2ff;
         opacity: 0.9;
         width: 10em;
         height: 1em;
@@ -34,35 +37,35 @@
 }
 .form__input:focus {
     outline: none;
-    border: 0.06em solid #ff8700; /* Параметры рамки */
+    filter: brightness(140%);
+    border: 0.06em solid #00c2ff; /* Параметры рамки */
 }
 
 .form__input:hover {
-    background: transparent; /* Цвет фона */
-    opacity: 1;
-    border: 0.06em solid #ff8700 !important; /* Параметры рамки */
+    filter: brightness(140%);
+    /*border: 0.06em solid #00c2ff !important; !* Параметры рамки *!*/
 }
 
 /*штуки стилей плейсхолдеров*/
 ::-webkit-input-placeholder {
-    color: inherit;
+    color: #00c2ff;
     /*font-weight: bold;*/
     font-size:calc(8px + 1.5vh);
 }
 ::-moz-placeholder {
-    color: #c0392b;
+    color: #00c2ff;
     font-weight: bold;
 }
 /* Firefox 19+ */
 
 :-moz-placeholder {
-    color: #c0392b;
+    color: #00c2ff;
     font-weight: bold;
 }
 /* Firefox 18- */
 
 :-ms-input-placeholder {
-    color: #c0392b;
+    color: #00c2ffb;
     font-weight: bold;
 }
 
@@ -126,5 +129,5 @@ input:-ms-input-placeholder {
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 2000px black inset !important;
     background-color: transparent !important;
-    -webkit-text-fill-color: #ff8700;
+    -webkit-text-fill-color: #00c2ff;
 }

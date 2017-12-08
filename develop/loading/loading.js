@@ -10,7 +10,7 @@ new class StartLoader {
 
 	start() {
 		this.createStartCssLoader();
-		this.loadBackgroundImage();
+		// this.loadBackgroundImage();
 		this.loadMainScript();
 	}
 
@@ -25,13 +25,6 @@ new class StartLoader {
 
 
 	loadBackgroundImage() {
-		// const downloadingImage = new Image();
-		// downloadingImage.onload = () => {
-		// 	document.body.setAttribute('style', 'background-image: url('
-		// 		+ downloadingImage.src + ')' +
-		// 		';background-repeat: no-repeat;');
-		// };
-		// downloadingImage.src = './images/galaxy.jpg';
 	}
 
 
@@ -39,7 +32,7 @@ new class StartLoader {
 		const script = document.createElement('script');
 		setTimeout(() => {
 			script.src = '/application.js';
-		}, 8000);
+		}, 500);
 		document.body.appendChild(script);
 	}
 };

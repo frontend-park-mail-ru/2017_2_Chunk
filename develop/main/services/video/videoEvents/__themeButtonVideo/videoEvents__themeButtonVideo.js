@@ -28,10 +28,11 @@ export default class ThemeButtonVideo extends Block{
 	}
 
 	play() {
-		const numberOfInterval = this.numberOfClick % 5;
+		const numberOfInterval = this.numberOfClick % 4;
 		// const numberOfInterval = 4;
-		if (numberOfInterval < 4) {
+		if (numberOfInterval < 3) {
 			this.themeButtonVideo.el.play();
+			console.log('video volume: ', this.themeButtonVideo.el.volume);
 			this.show();
 
 		}
@@ -47,34 +48,30 @@ export default class ThemeButtonVideo extends Block{
 		this.intervals = {
 			0: {
 				start: 0.0,
-				end: 2.6,
-			},
-			1: {
-				start: 0.0,
 				end: 11,
 			},
-			2: {
+			1: {
 				start: 11.0,
 				end: 16.5,
 			},
-			3: {
+			2: {
 				start: 21,
-				end: 35,
+				end: 22.5,
 			}
 		}
 	}
 
 
 	setInterval() {
-		const numberOfInterval = this.numberOfClick % 5;
+		const numberOfInterval = this.numberOfClick % 4;
 		// const numberOfInterval = 4;
-		if (numberOfInterval < 4) {
-			if (numberOfInterval === 0 || numberOfInterval === 3)
+		if (numberOfInterval < 3) {
+			if (numberOfInterval === 0 || numberOfInterval === 2)
 				this.setStartTime(this.intervals[numberOfInterval].start);
 			eventBus.emit('videoPlay');
 			this.setPauseTime(this.intervals[numberOfInterval].end);
 		}
-		if (numberOfInterval === 3 || numberOfInterval === 4)
+		if (numberOfInterval === 2 || numberOfInterval === 3)
 			eventBus.emit('changeTheme');
 		this.numberOfClick++;
 	}

@@ -25,10 +25,19 @@ export default class LoginView extends CommonView {
 		this.userService = userService;
 		this.message = new Message();
 		this.append(this.message);
+		this.onSubmitEvent();
+		this.addBackGround();
+		this.hide();
+	}
+
+
+
+	onSubmitEvent() {
 		this.el.addEventListener('submit', (event) => {
 			event.preventDefault();
 			const formData = {};
 			const fields = this.form.fields;
+
 			for (const field in fields) {
 				formData[fields[field].el.name] = fields[field].el.value;
 			}
@@ -37,9 +46,17 @@ export default class LoginView extends CommonView {
 					console.log(err.message);
 				});
 		}, true);
-		this.hide();
 	}
 
+
+	addBackGround() {
+		const fields = this.form.fields;
+		for (const field in fields) {
+			if (fields[field].el.type !== 'submit') {
+				// fields[field].el.style.backgroundImage = 'url(/images/buttons/buttonTape0.jpg)';
+			}
+		}
+	}
 
 	/**
 	 * Функция вызываемаемая при отправке данных

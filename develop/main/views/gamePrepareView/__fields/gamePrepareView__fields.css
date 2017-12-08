@@ -3,13 +3,13 @@
 
 .gamePrepareView__fields__starGameButton {
     box-sizing: border-box;
-    font-size: calc(14px + 0.9vh) !important;
+    font-size: 24px !important;
     background-color: #014f77 !important;
 }
 
 .gamePrepareView__fields__addBotButton {
     box-sizing: border-box;
-    font-size: calc(14px + 0.9vh) !important;
+    font-size: 24px !important;
     background-color: #014f77 !important;
 }
 

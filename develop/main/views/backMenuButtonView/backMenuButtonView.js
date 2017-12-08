@@ -13,7 +13,7 @@ export default class backButtonView extends Block {
 	 */
 	constructor() {
 		const backButton = Block.create('a', {href: '/menu'},
-			['backMenuButtonView', 'view__view-button_theme-black-orange', 'button'], 'Menu');
+			['backMenuButtonView', 'button'], 'Menu');
 		super(backButton.el);
 
 		this.button = backButton;

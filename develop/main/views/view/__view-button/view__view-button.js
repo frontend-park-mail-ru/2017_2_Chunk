@@ -14,7 +14,7 @@ export default class ViewButton extends Block {
 	 */
 	constructor(button) {
 		super(button.el);
-		const buttonNumber = Math.floor(Math.random() * 3.9);
+		const buttonNumber = Math.round(Math.random() * 3);
 		this.el.style.backgroundImage = `url(/images/buttons/buttonTape${buttonNumber}.jpg)`;
 	}
 

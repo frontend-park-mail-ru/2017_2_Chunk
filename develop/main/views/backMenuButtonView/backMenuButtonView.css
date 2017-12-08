@@ -1,23 +1,24 @@
 .backMenuButtonView {
     background-color: transparent;
-    transition: all .2s;
 
     text-align: center;
     font-size: calc(16px + 1.1vh);
-    color: white;
     opacity: 1;
     border: 0.1em solid white !important;
     margin: auto;
 
     padding: 0.1em 0.5em;
-
+    color: #ff9f00;
     border-radius: 0.4em;
     box-shadow: none;
     z-index: 2;
+    transition: all .2s;
+    transition: transform 0.3s ease !important;
 }
 
 
 .backMenuButtonView:hover {
+    transform: scale(1.1);
     color: #00c2ff;
     border-color: #00c2ff !important; /* Параметры рамки */
 }

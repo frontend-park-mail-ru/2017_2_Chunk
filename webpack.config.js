@@ -12,7 +12,6 @@ module.exports = {
 	context: __dirname + '/develop',
 	entry: {
 		application: './include.js',
-		'application.min': './include.js',
 		loading: './loading/loading.js',
 		botWorker: './workers/botWorker',
 		gameWorker: './workers/gameWorker',
@@ -54,7 +53,7 @@ module.exports = {
 				},
 			})
 		}, {
-			test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
+			test: /\.(eot|woff|woff2|ttf|otf|svg|png|jpg)$/,
 			// loader: 'url-loader?limit=30000&name=./[name]-[hash].[ext]',
 			loader: 'url-loader?limit=30000&name=./[name].[ext]',
 		}, {

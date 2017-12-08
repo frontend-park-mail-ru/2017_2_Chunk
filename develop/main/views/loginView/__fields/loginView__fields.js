@@ -10,9 +10,9 @@ const loginFields = [
 			type: 'text',
 			size: '128',
 			name: 'username',
-			placeholder: 'Enter your name',
+			placeholder: 'Name',
 			required: 'required',
-			class: 'form__input view__view-button_theme-black-orange',
+			class: 'form__input',
 		}
 	},
 	{
@@ -20,16 +20,16 @@ const loginFields = [
 			type: 'password',
 			size: '128',
 			name: 'password',
-			placeholder: 'Enter password',
+			placeholder: 'Password',
 			required: 'required',
-			class: 'form__input view__view-button_theme-black-orange',
+			class: 'form__input',
 		}
 	},
 	{
 		attrs: {
 			type: 'submit',
 			value: 'Submit',
-			class: 'form__button view__view-button_theme-black-orange button',
+			class: 'form__button',
 		}
 	}
 ];

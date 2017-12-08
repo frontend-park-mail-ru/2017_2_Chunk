@@ -5,12 +5,12 @@
     align-items: center;
     justify-content: flex-start;
     min-width: 300px;
-    font-size: calc(14px + 1.5vh);
+    font-size: 24px;
     margin: 0 auto auto auto;
     /*padding-top: 1%;*/
     /*padding-bottom: 1%;*/
     border-radius: 0.8em;
-    border: solid #00ff54;
+    border: solid #ff9f00;
     transition: all .2s;
 }
 
