@@ -20,16 +20,16 @@
 }
 
 .lobbyView__gameCreateView__fields__playButton:hover {
-    transform: scale(1.05) !important;
+    /*transform: scale(1.05) !important;*/
     background-color: #1d1f20;
     color: #00fbff !important;
-    border: 0.04em solid #00fbff !important;
+    border-color: #00fbff !important;
 }
 
 .lobbyView__gameCreateView__fields__playButton:focus {
     outline: none;
     color: #00a9ff !important;
-    border: 0.04em solid #00a9ff !important;
+    border-color: #00a9ff !important;
 }
 
 

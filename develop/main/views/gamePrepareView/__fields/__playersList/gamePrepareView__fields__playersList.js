@@ -16,12 +16,15 @@ export default class PlayersList extends Block {
 			username: 'Username',
 			email: 'Email',
 		};
-		this.addPlayer(header);
+		const header_attrs = {
+			'font-size': '18px !important',
+		};
+		this.addPlayer(header, header_attrs);
 	}
 
 
-	addPlayer(data) {
-		const string = new PLayerListString(data);
+	addPlayer(data, attrs = {}) {
+		const string = new PLayerListString(data, attrs);
 		this.strings = this.strings || {};
 		this.botStrings = this.botStrings || [];
 		if (data.userID) {

@@ -38,7 +38,7 @@
 
 .form__button:hover {
     /*background: #8b2b03; !* Цвет фона *!*/
-    transform: scale(1.01);
+    /*transform: scale(1.01);*/
     background-color: #00072791;
     opacity: 1;
     color: #00fbff;

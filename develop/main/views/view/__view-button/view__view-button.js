@@ -12,10 +12,10 @@ export default class ViewButton extends Block {
 	 * @param button
 	 * @constructor
 	 */
-	constructor(button) {
+	constructor(button, buttonTapeUrl) {
 		super(button.el);
-		const buttonNumber = Math.round(Math.random() * 3);
-		this.el.style.backgroundImage = `url(/images/buttons/buttonTape${buttonNumber}.jpg)`;
+		// const buttonNumber = Math.round(Math.random() * 3);
+		this.el.style.backgroundImage = `url(/images/buttons/${buttonTapeUrl}.jpg)`;
 	}
 
 
@@ -24,16 +24,17 @@ export default class ViewButton extends Block {
 	 * @param {*} attrs
 	 * @param {string[]} classes
 	 * @param {string} text
+	 * @param {string} buttonTapeUrl
 	 * @returns {ViewButton}
 	 * @constructor
 	 */
-	static Create (attrs = {}, classes = [], text) {
+	static Create (attrs = {}, classes = [], buttonTapeUrl, text) {
 		const _classes = classes;
 		_classes.push('view__view-button');
 		_classes.push('button');
 		_classes.push('view__view-button_theme-black-orange');
 		const button = Block.create('a', attrs, _classes, text);
-		return new ViewButton(button);
+		return new ViewButton(button, buttonTapeUrl);
 	}
 
 }

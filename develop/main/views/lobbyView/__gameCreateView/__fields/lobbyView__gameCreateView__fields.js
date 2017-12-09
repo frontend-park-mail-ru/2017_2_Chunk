@@ -28,7 +28,7 @@ export default class GameCreateFields {
 			// voyeurButton: ViewButton.create({href: '/game'}, ['auth'], 'Play');
 			playButton:
 				Block.create('input', {type: 'submit', value: 'Create'}, ['lobbyView__gameCreateView__fields__playButton',
-					'lobbyView__gameCreateView__fields', 'view__view-button', 'button']),
+					'lobbyView__gameCreateView__fields', 'button', 'form__button']),
 		};
 		this.addRadioPLayers();
 		this.addRadioFieldSize();
