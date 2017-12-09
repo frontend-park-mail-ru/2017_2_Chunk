@@ -12,17 +12,15 @@ export default class videoEvents {
 
 	themeButtonVideoEvent() {
 		this.themeButtonVideo = new ThemeButtonVideo('/video/dont_push_this_button.mp4');
-		const buttons = Array.from(document.getElementsByClassName('themeButtonView'));
+		const button = document.getElementsByClassName('themeButtonView')[0];
 		document.getElementsByTagName('body')[0].appendChild(this.themeButtonVideo.el);
-		this.buttonOnClick(buttons);
+		this.buttonOnClick(button);
 	}
 
 
-	buttonOnClick(buttons) {
-		buttons.forEach((button) => {
-			button.addEventListener('click', (event) => {
-				this.themeButtonVideo.play();
-			});
-		});
+	buttonOnClick(button) {
+		// button.addEventListener('click', (event) => {
+		// 	this.themeButtonVideo.play();
+		// });
 	};
 }

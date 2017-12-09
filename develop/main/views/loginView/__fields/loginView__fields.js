@@ -29,7 +29,7 @@ const loginFields = [
 		attrs: {
 			type: 'submit',
 			value: 'Submit',
-			class: 'form__button',
+			class: 'form__button button',
 		}
 	}
 ];

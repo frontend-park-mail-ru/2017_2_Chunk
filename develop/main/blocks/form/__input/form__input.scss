@@ -1,12 +1,12 @@
 .form__input {
-    font-size:calc(14px + 1.5vh);
+    font-size: 24px;
     color: #00c2ff;
 
     font-family: Road_Rage;
     text-align: center;
     background-size: cover;
     background-position: center;
-    background-color: #0000009e;
+    background-color: rgba(0, 0, 0, 0.67);
     border: 0.06em solid white;
     border-radius: 0.4em;
     box-shadow: none;
@@ -23,7 +23,6 @@
 }
 @media screen and (min-width: 640px) and (max-width: 1100px) {
     .form__input {
-        font-size: calc(14px + 1vh);
         color: #00c2ff;
         opacity: 0.9;
         width: 10em;
@@ -48,9 +47,10 @@
 
 /*штуки стилей плейсхолдеров*/
 ::-webkit-input-placeholder {
+
     color: #00c2ff;
     /*font-weight: bold;*/
-    font-size:calc(8px + 1.5vh);
+    font-size: 16px;
 }
 ::-moz-placeholder {
     color: #00c2ff;
@@ -65,47 +65,52 @@
 /* Firefox 18- */
 
 :-ms-input-placeholder {
-    color: #00c2ffb;
+    color: #00c2ff;
     font-weight: bold;
 }
 
+
+$transTime: 0.8s;
+$placeholderStartOpacity: 0.7;
+$placeholderEndOpacity: 0;
 ::-webkit-input-placeholder {
-    opacity: 1;
-    transition: opacity 0.6s ease;
+    opacity: $placeholderStartOpacity;
+    transition: all $transTime ease;
 }
 
 ::-moz-placeholder {
-    opacity: 1;
-    transition: opacity 0.6s ease;
+    opacity: $placeholderStartOpacity;
+    transition: opacity $transTime ease;
 }
 
 :-moz-placeholder {
-    opacity: 1;
-    transition: opacity 0.6s ease;
+    opacity: $placeholderStartOpacity;
+    transition: opacity $transTime ease;
 }
 
 :-ms-input-placeholder {
-    opacity: 1;
-    transition: opacity 0.6s ease;
+    opacity: $placeholderStartOpacity;
+    transition: opacity $transTime ease;
 }
 
 :focus::-webkit-input-placeholder {
-    opacity: 0;
-    transition: opacity 0.6s ease;
+    //position:absolute !important;
+    opacity: $placeholderEndOpacity;
+    transform: translate(0, -35px);
 }
 :focus::-moz-placeholder {
-    opacity: 0;
-    transition: opacity 0.6s ease;
+    opacity: $placeholderEndOpacity;
+    transition: opacity $transTime ease;
 }
 
 :focus:-moz-placeholder {
-    opacity: 0;
-    transition: opacity 0.6s ease;
+    opacity: $placeholderEndOpacity;
+    transition: opacity $transTime ease;
 }
 
 :focus:-ms-input-placeholder {
-    opacity: 0;
-    transition: opacity 0.6s ease;}
+    opacity: $placeholderEndOpacity;
+    transition: opacity $transTime ease;}
 
 
 

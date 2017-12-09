@@ -14,9 +14,12 @@
 
 .lobbyView__lobbyFields__gameDataField__fields__playButton {
     background-color: #00537d !important;
+    text-align: center;
     margin: auto !important;
+    border-color: #00d8ff;
 }
 
 .lobbyView__lobbyFields__gameDataField__fields__playButton:hover {
     border-color: #ff8700 !important;
+    transform: none !important;
 }

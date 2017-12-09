@@ -20,7 +20,7 @@ const signUpFields = [
 		name: 'email',
 		placeholder: 'Enter your email',
 		required: 'required',
-		class: 'form__input view__view-button_theme-black-orange',
+		class: 'form__input',
 	}},
 	{attrs: {
 		type: 'password',
@@ -36,12 +36,12 @@ const signUpFields = [
 		name: 'confirm',
 		placeholder: 'Confirm password',
 		required: 'required',
-		class: 'form__input view__view-button_theme-black-orange',
+		class: 'form__input',
 	}},
 	{attrs: {
 		type: 'submit',
 		value: 'Submit',
-		class: 'form__button view__view-button_theme-black-orange button',
+		class: 'form__button button',
 	}}
 ];
 
