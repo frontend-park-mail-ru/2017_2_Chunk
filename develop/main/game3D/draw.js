@@ -273,7 +273,7 @@ export default class Draw {
 							code: '201',
 							step: {
 								src: this.point1,
-								dst: this.point2 //лалала
+								dst: this.point2
 							}
 						};
 						this.bus.emit(`${gameCodes.gameStep.request}`, request);
