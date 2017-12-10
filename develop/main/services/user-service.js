@@ -52,6 +52,7 @@ export default class UserService {
 			return response;
 		}
 
+
 		const resp = await Http.fetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
 		if (resp.status >= 400) {
@@ -88,6 +89,8 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
+		eventBus.emit('waitingBackend');
+		debugger;
 		// eventBus.emit('backendRequest');
 		const resp = await Http.fetchPost('/user/sign_in', {login, password});
 		// eventBus.emit('backendResponse');

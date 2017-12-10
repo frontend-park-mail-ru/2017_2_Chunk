@@ -1,0 +1,275 @@
+.stripe {
+  position: fixed;
+  bottom: 200px;
+  right: 302px;
+  width: 60px;
+  height: 60px;
+}
+
+.container {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  z-index: 10;
+}
+
+// ---------
+//! Starlord
+// ---------
+#starlord {
+
+  .container {
+    background: #fff;
+    border: 2px solid darken(#ccc, 10%);
+  }
+
+  .body {
+    position: absolute;
+    width: 100px;
+    height: 150px;
+    background: #6A2422;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 40px;
+    z-index: 3;
+    overflow: hidden;
+  }
+
+  .jacket {
+    position: absolute;
+    background: #6C6B72;
+    width: 24px;
+    left: 50%;
+    height: 160px;
+    top: -4px;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
+  .jacket:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 160px 0;
+    border-color: transparent darken(#6A2422, 10%) transparent transparent;
+  }
+
+  .jacket:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 160px 10px 0 0;
+    border-color: darken(#6A2422, 10%) transparent transparent transparent;
+  }
+
+  .collar {
+    position: absolute;
+    background: darken(#6A2422, 10%);
+    top: 126px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 50px;
+    border-radius: 6px 6px 50% 50%;
+    z-index: 2;
+  }
+
+  .face {
+    position: absolute;
+    width: 60px;
+    height: 80px;
+    background: #F0BEAF;
+    border-radius: 100px;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+  }
+
+  .mask {
+    position: absolute;
+    background: #808281;
+    width: 60px;
+    height: 60px;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 0 0 25px 25px;
+    z-index: 10;
+  }
+  .mask:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 30px 6px 30px;
+    border-color: transparent transparent #808281 transparent;
+
+  }
+  .faceplate {
+    position: absolute;
+    width: 80%;
+    height: 50px;
+    top: 5px;
+    left: 10%;
+    background: #c4a68f;
+    border-radius: 5px 5px 50% 50%;
+    overflow: hidden;
+  }
+
+  .faceplate:before {
+    content: "";
+    position: absolute;
+    background: #808281;
+    top: 30px;
+    height: 20px;
+    width: 20px;
+    left: -4px;
+    transform: rotate(15deg);
+  }
+
+  .faceplate:after {
+    content: "";
+    position: absolute;
+    background: #808281;
+    top: 30px;
+    height: 20px;
+    width: 20px;
+    right: -4px;
+    transform: rotate(-15deg);
+  }
+
+  .eye {
+    position: absolute;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background: #E42F34;
+    border: 3px solid #808281;
+    top: 5px;
+  }
+
+  .eye.one {
+    left: 1px;
+  }
+
+  .eye.two {
+    right: 1px;
+  }
+
+  .mouthpiece {
+    position: absolute;
+    left: 50%;
+    bottom: 0px;
+    width: 20px;
+    background: darken(#808281, 10%);
+    height: 24px;
+    transform: translateX(-50%);
+    border-radius: 30% 30% 0 0;
+  }
+
+  .mouthpiece:before {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 22px;
+    height: 10px;
+    background: #a8a8a8;
+    transform: translateX(-50%);
+    border-radius: 5px;
+  }
+
+  .mouthpiece:after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    width: 8px;
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  .tube {
+    position: absolute;
+    border-radius: 50%;
+    bottom: -2px;
+    height: 12px;
+    width: 10px;
+    background: #333;
+    border: 2px solid #a8a8a8;
+  }
+
+  .tube.one {
+    left: 16px;
+  }
+
+  .tube.two {
+    right: 16px;
+  }
+
+  .neck {
+    position: absolute;
+    z-index: 5;
+    width: 30px;
+    height: 50px;
+    border-radius: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 90px;
+    background: #F0BEAF;
+  }
+
+  .hair {
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background: #72514A;
+    border-radius: 50%;
+    top: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .pouf {
+    position: absolute;
+    width: 30px;
+    height: 20px;
+    border-radius: 50%;
+    left: 60px;
+    top: 46px;
+    background: #72514A;
+    transform: rotate(-53deg);
+    z-index: 10;
+  }
+
+  .pomp {
+    position: absolute;
+    width: 51px;
+    height: 23px;
+    border-radius: 100% 0% 100% 100%;
+    left: 71px;
+    top: 40px;
+    background: #72514A;
+    z-index: 10;
+    transform: rotate(-5deg);
+  }
+
+}
