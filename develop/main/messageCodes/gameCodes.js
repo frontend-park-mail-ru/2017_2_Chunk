@@ -3,7 +3,7 @@ const gameCodes = {
 		code: 103,
 		request: 'request'
 	},
-	gameDelete: {
+	deleteGame: {
 		code: 110,
 		tabMessage: 'Game finish',
 	},
@@ -27,4 +27,4 @@ const gameCodes = {
 	requestEventName: 'request',
 };
 
-export default gameCodes;
+// export default gameCodes;

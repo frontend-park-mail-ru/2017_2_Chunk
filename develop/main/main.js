@@ -92,9 +92,9 @@ const gameCreateView = new GameCreateView();
 
 const gamePrepareView = new GamePrepareView();
 
-const gameContainer = new ThreeView();
+// const gameContainer = new ThreeView();
 
-const game3D = new Game3D(gameContainer);
+// const game3D = new Game3D(gameContainer);
 
 const serviceWorker = ServiceWorker;
 
@@ -118,7 +118,7 @@ Views.push(scoreboardView);
 Views.push(lobbyView);
 Views.push(gameCreateView);
 Views.push(gamePrepareView);
-Views.push(gameContainer);
+// Views.push(gameContainer);
 
 
 eventBus.on('openSignUp', function () {
@@ -198,7 +198,7 @@ eventBus.on('openGame', () => {
 		view.hide();
 	});
 	backButtonView.show();
-	gameContainer.show();
+	// gameContainer.show();
 });
 
 
@@ -235,8 +235,8 @@ app
 	.append(lobbyView)
 	.append(updateView)
 	.append(gameCreateView)
-	.append(gamePrepareView)
-	.append(gameContainer);
+	.append(gamePrepareView);
+	// .append(gameContainer);
 
 
 if ('serviceWorker' in navigator) {

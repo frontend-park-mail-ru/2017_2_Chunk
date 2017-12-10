@@ -13,14 +13,6 @@ export default class webSocket {
 	}
 
 
-	requestHandler() {
-		this.socketListeners[lobbyCodes.requestEventName]
-			= this.bus.on(lobbyCodes.requestEventName, (data) => {
-			this.socket.send(JSON.stringify(data));
-		});
-	}
-
-
 	socketCallbacks() {
 		this.socket.onopen = () => this.onOpenCallback();
 		this.socket.onclose = (event) => this.onCloseCallback(event);
@@ -31,10 +23,17 @@ export default class webSocket {
 
 	gettingStart() {
 		this.requestHandler();
-		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.getGamesFullList);
-		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.subscribeLobbyUpdates);
 		this.keepAliveEvent();
 		this.openMenuEvent();
+		this.openEmit();
+	}
+
+
+	requestHandler() {
+		this.socketListeners[lobbyCodes.requestEventName]
+			= this.bus.on(lobbyCodes.requestEventName, (data) => {
+			this.socket.send(JSON.stringify(data));
+		});
 	}
 
 
@@ -68,6 +67,11 @@ export default class webSocket {
 				delete this.socket;
 			}
 		});
+	}
+
+
+	openEmit() {
+		this.bus.emit('socketOpen');
 	}
 
 
