@@ -240,6 +240,8 @@ export default class Draw {
 					}
 					// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
 					this.getStepEnable();
+
+					this.IntersectedClick.material.emissive.setHex(tools.HOVER_COLOR);
 				}
 
 				let idx = 0;
@@ -276,9 +278,8 @@ export default class Draw {
 						};
 						this.bus.emit(`${gameCodes.gameStep.request}`, request);
 					} else this.deleteAllStepEnable();
-
+					this.IntersectedClick.material.emissive.setHex(tools.HOVER_COLOR);
 				}
-				this.IntersectedClick.material.emissive.setHex(tools.HOVER_COLOR);
 			}
 		} else {
 			if (this.IntersectedClick) {
