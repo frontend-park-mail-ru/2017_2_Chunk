@@ -51,6 +51,8 @@ import SoundsEvents from './services/sound/soundEvents/soundEvents';
 
 import VideoEvents from './services/video/videoEvents/videoEvents';
 
+import TabBlink from './views/tabBlink/tabBlink';
+
 
 const gameNameView = new GameNameView();
 
@@ -100,6 +102,7 @@ const soundsEvents = new SoundsEvents();
 
 const videoEvents = new VideoEvents();
 
+const tabBlink = new TabBlink();
 
 const Views = [];
 Views.push(gameNameView);

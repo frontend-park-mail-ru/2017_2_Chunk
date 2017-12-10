@@ -109,3 +109,7 @@ node-js-getting-git started
 /public/application.css
 /public/application.css.map
 
+/.vscode/
+Будет удалено .vscode/
+Будет удалено develop/main/image/
+Будет удалено develop/main/views/gamePrepareView/__fields/__startButton/

@@ -23,7 +23,7 @@ export default class internalWorker {
 
 
 	workerCallbacks() {
-		this.worker.onmessage = (workerResponse) => { // возвращает не массив ха - ха!
+		this.worker.onmessage = (workerResponse) => {
 			const data = workerResponse.data;
 			console.log(data);
 			this.bus.emit(`${gameWorkerMessage.requestEventName}`, (data));

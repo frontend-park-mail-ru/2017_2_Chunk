@@ -37,6 +37,15 @@ export default new class EventBus {
 		}
 	}
 
+	/**
+	 * Отписывается от события
+	 * @param {string} event - название события
+	 */
+	off(event) {
+		this.listeners[event] = this.listeners[event] || [];
+		delete this.listeners[event];
+	}
+
 
 	/**
 	 * Вызывает событие

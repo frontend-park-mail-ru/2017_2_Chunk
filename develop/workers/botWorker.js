@@ -1,326 +1,375 @@
+'use strict';
+
+const startArray = [
+	[1,0,0,0,0,2],
+	[0,0,0,0,0,0],
+	[0,0,0,0,0,0],
+	[0,0,0,0,0,0],
+	[0,0,0,0,0,0],
+	[2,0,0,0,0,1],
+];
+
+const offBot = new class BotWorker {
+	constructor() {
+		this.arrayOfField = 0;
+		this.bots = [];
+		this.gamers = [];
+
+		this.connectGameObject = {
+			botsCount: 0,
+			code: '101',
+			gameID: 1,
+			gamersCount: 1,
+			maxX: 8,
+			maxY: 8,
+			numberOfPlayers: 2,
+			player: {
+				userID: 1,
+				username: "player",
+				email: "player@com",
+				playerID: null,
+				online: true
+			},
+			reason: "Connect to preparing game as a player",
+			watchersCount: 0
+		};
+
+		this.gameInformationObject = {
+			code: '104',
+			game: {
+				bots: this.bots,
+				gameID: this.connectGameObject.gameID,
+				field: {
+					field: this.arrayOfField,
+					gameOver: false,
+					maxX: this.connectGameObject.maxX,
+					maxY: this.connectGameObject.maxY
+				},
+				gamers: this.gamers,
+				masterID: 1,
+				numberOfPlayers: this.connectGameObject.numberOfPlayers,
+				watchers: this.connectGameObject.watchersCount
+			},
+			gameID: this.connectGameObject.gameID,
+			player: null,
+			reason: "Get full information about explicit game"
+		};
+
+		this.startGameObject = {
+			code: '200',
+			game: {
+				currentPlayerID: 1,
+				field: {
+					field: this.arrayOfField,
+					gameOver: false,
+					maxX: this.connectGameObject.maxX,
+					maxY: this.connectGameObject.maxY
+				},
+				gameID: this.connectGameObject.gameID,
+				gamers: this.gamers,
+				numberOfPlayers: this.connectGameObject.numberOfPlayers,
+				watchers: this.connectGameObject.watchersCount
+			},
+			reason: "start the game"
+		};
+
+		this.gameEndObject = {
+			code: '204',
+			gameID: null,
+			field: {
+				field: this.arrayOfField,
+				gameOver: true,
+				maxX: this.connectGameObject.maxX,
+				maxY: this.connectGameObject.maxY
+			},
+			reason: "Game had ended, check result"
+		};
+
+		this.playerData = {
+			userID: 1,
+			username: "player",
+			email: "player@com",
+			playerID: null,
+			online: true
+		};
+
+		this.stepObject = {
+			code: '201',
+			step: {
+				src: { x: 0, z: 0 },
+				dst: {x: 0, z: 0 }
+			},
+			reason: "Game step"
+		};
+
+		this.userID = this.connectGameObject.player.userID;
+
+		this.userIdObject = {
+			code: '112',
+			gameID: this.connectGameObject.gameID,
+			reason: "Returns your userID",
+			userID: this.userID
+		};
+
+		this.exitGameObject = {
+			code: '110',
+			gameID: this.connectGameObject.gameID
+		}
+	}
+
+	makeGameField(size) {
+		let array = [];
+		for (let i = 0; i < size; i++) {
+			array[i] = [];
+		}
+		for (let i = 0; i < size; i ++) {
+			for (let j = 0; j < size; j ++) {
+				array[i][j] = 0;
+			}
+		}
+		return array;
+	}
+
+	createGame(data) {
+		this.connectGameObject.maxX = data.maxX;
+		this.connectGameObject.maxY = data.maxY;
+		this.arrayOfField = this.makeGameField(data.maxX);
+		this.arrayOfField = startArray;
+		this.connectGameObject.numberOfPlayers = +data.numberOfPlayers;
+
+		return this.connectGameObject;
+	}
+
+	getGameInfo() {
+		this.gamers.push(this.connectGameObject.player);
+		this.gameInformationObject.game.bots = this.bots;
+		this.gameInformationObject.game.gameID = this.connectGameObject.gameID;
+		this.gameInformationObject.game.field.field = this.arrayOfField;
+		this.gameInformationObject.game.field.maxX = this.connectGameObject.maxX;
+		this.gameInformationObject.game.field.maxY = this.connectGameObject.maxY;
+		this.gameInformationObject.game.gamers = this.gamers;
+		this.gameInformationObject.game.numberOfPlayers = this.connectGameObject.numberOfPlayers;
+		this.gameInformationObject.game.watchers = this.connectGameObject.watchersCount;
+		this.gameInformationObject.game.gameID = this.connectGameObject.gameID;
+
+		return this.gameInformationObject;
+	}
+
+	startGame() {
+		this.arrayOfField = startArray;
+		this.startGameObject.game.field.field = this.arrayOfField;
+		this.startGameObject.game.field.maxX = this.connectGameObject.maxX;
+		this.startGameObject.game.field.maxY = this.connectGameObject.maxY;
+		this.startGameObject.game.gamers = this.gamers;
+		this.startGameObject.game.gameID = this.connectGameObject.gameID;
+		this.startGameObject.game.numberOfPlayers = this.connectGameObject.numberOfPlayers;
+		this.startGameObject.game.watchers = this.connectGameObject.watchersCount;
+
+		return this.startGameObject;
+	}
+
+	addBot() {
+		this.connectGameObject.botsCount++;
+		this.playerData.username = `bot`;
+		this.playerData.userID++;
+		this.playerData.email = `bot@com`;
+		this.bots.push(this.playerData);
+		this.connectGameObject.player = this.playerData;
+
+		return this.connectGameObject;
+	}
+
+	getUserID() {
+		this.userIdObject.gameID = this.connectGameObject.gameID;
+		return this.userIdObject;
+	}
+
+	returnPlayerStep(data) {
+		this.stepObject.step.src.x = data.step.src.x;
+		this.stepObject.step.src.z = data.step.src.z;
+		this.stepObject.step.dst.x = data.step.dst.x;
+		this.stepObject.step.dst.z = data.step.dst.z;
+
+		return this.stepObject;
+	}
+
+	returnBotStep() {
+		this.moveOrClone(this.stepObject.step);
+		this.step(this.stepObject.step);
+
+		if (this.gameOver()) {
+			this.gameEndObject.field.field = this.arrayOfField;
+			this.clearGame();
+			return this.gameEndObject;
+		}
+
+		this.botStep();
+		this.moveOrClone(this.stepObject.step);
+		this.step(this.stepObject.step);
+
+		if (this.gameOver()) {
+			this.gameEndObject.field.field = this.arrayOfField;
+			this.clearGame();
+			return this.gameEndObject;
+		}
+
+		return this.stepObject;
+	}
+
+	clearGame() {
+		this.arrayOfField = 0;
+		this.bots = [];
+		this.gamers = [];
+
+		this.playerData = {
+			userID: 1,
+			username: "player",
+			email: "player@com",
+			playerID: null,
+			online: true
+		};
+
+		this.connectGameObject = {
+			botsCount: 0,
+			code: '101',
+			gameID: 1,
+			gamersCount: 1,
+			maxX: 8,
+			maxY: 8,
+			numberOfPlayers: 2,
+			player: {
+				userID: 1,
+				username: "player",
+				email: "player@com",
+				playerID: null,
+				online: true
+			},
+			reason: "Connect to preparing game as a player",
+			watchersCount: 0
+		};
+	}
+
+	moveOrClone(step) {
+		if (Math.abs(step.src.x - step.dst.x) <= 1 && Math.abs(step.src.z - step.dst.z) <= 1) {
+			this.arrayOfField[step.dst.x][step.dst.z] = this.arrayOfField[step.src.x][step.src.z];
+		}
+		else {
+			this.arrayOfField[step.dst.x][step.dst.z] = this.arrayOfField[step.src.x][step.src.z];
+			this.arrayOfField[step.src.x][step.src.z] = 0;
+		}
+	}
+
+	step(step) {
+		let idx = step.dst.x;
+		let idz = step.dst.z;
+		for (let i = 0; i < this.connectGameObject.maxX; i++) {
+			for (let j = 0; j < this.connectGameObject.maxY; j++) {
+				// Первые два условия проверяют, что перебираемая в цикле клетка находится вплотную к заданной.
+				if (Math.abs(i - idx) <= 1 &&
+					Math.abs(j - idz) <= 1) {
+					// Затем идет проверка, что на этой клетке есть фигура и что она отлична от той, которая совершила ход.
+					if (this.arrayOfField[i][j] !== 0 &&
+						this.arrayOfField[i][j] !== this.arrayOfField[idx][idz]) {
+						// И затем в массив клеток вносятся соответствующие изменения по фигурам.
+						this.arrayOfField[i][j] = this.arrayOfField[idx][idz];
+					}
+				}
+			}
+		}
+	}
+
+	botStep() {
+		for (let i = 0; i < this.connectGameObject.maxX; i++) {
+			for (let j = 0; j < this.connectGameObject.maxY; j++) {
+				if (this.arrayOfField[i][j] === 2) {
+					const step = this.makeStepEnable(i ,j);
+					if (step) {
+						this.stepObject.step.src.x = i;
+						this.stepObject.step.src.z = j;
+						this.stepObject.step.dst.x = step.x;
+						this.stepObject.step.dst.z = step.z;
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	makeStepEnable(x, z) {
+		for (let k = 0; k < this.connectGameObject.maxX; k++) {
+			for (let m = 0; m < this.connectGameObject.maxY; m++) {
+				if (!(Math.abs(k - x) >= 3 || Math.abs(m - z) >= 3 || this.arrayOfField[k][m] !== 0)) {
+					const step = {
+						x: k,
+						z: m
+					};
+					return step;
+				}
+			}
+		}
+		return false;
+	}
+
+	gameOver() {
+		let notFreePlane = 0;
+		let countFigure = [];
+		for (let k = 0; k < this.connectGameObject.numberOfPlayers; k++) {
+			countFigure[k] = 0;
+		}
+		for (let i = 0; i < this.connectGameObject.maxX; i++) {
+			for (let j = 0; j < this.connectGameObject.maxY; j++) {
+				if (this.arrayOfField[i][j] !== 0) {
+					notFreePlane++;
+					countFigure[this.arrayOfField[i][j]-1]++;
+				}
+			}
+		}
+		if (notFreePlane === this.connectGameObject.maxX * this.connectGameObject.maxY)
+			return true;
+		for (let m = 0; m < this.connectGameObject.numberOfPlayers; m++) {
+			if (countFigure[m] === 0)
+				return true;
+		}
+		return false;
+	}
+
+	exitGame() {
+		this.clearGame();
+		return this.exitGameObject;
+	}
+};
+
 self.onmessage = (workerRequest) => {
-	var data = workerRequest.data;
-	var workerResponse;
+	let data = workerRequest.data;
+	let workerResponse;
 	console.log(data);
 	switch (data.code) {
 		case '100':
-			workerResponse = createGame(data);
+			workerResponse = offBot.createGame(data);
+			break;
+		case '103':
+			workerResponse = offBot.exitGame();
 			break;
 		case '104':
-			workerResponse = getGameInfo();
+			workerResponse = offBot.getGameInfo();
 			break;
 		case '105':
-			workerResponse = startGame();
+			workerResponse = offBot.startGame();
 			break;
 		case '108':
-			workerResponse = addBot();
+			workerResponse = offBot.addBot();
 			break;
 		case '112':
-			workerResponse = getUserID();
+			workerResponse = offBot.getUserID();
 			break;
 		case '201':
-			workerResponse = returnPlayerStep(data);
+			workerResponse = offBot.returnPlayerStep(data);
 			self.postMessage(workerResponse);
-			workerResponse = returnBotStep();
+			workerResponse = offBot.returnBotStep();
 			break;
 		default:
 			console.log('Error');
 	}
 	self.postMessage(workerResponse);
 };
-
-const startArray = [
-	[1,0,0,0,0,0,0,2],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[2,0,0,0,0,0,0,1],
-];
-
-var arrayOfField = 0;
-var bots = [];
-var gamers = [];
-
-var code101 = {
-	botsCount: 0,
-	code: '101',
-	gameID: 1,
-	gamersCount: 1,
-	maxX: 8,
-	maxY: 8,
-	numberOfPlayers: 2,
-	player: {
-		userID: 1,
-		username: "player",
-		email: "player@com",
-		playerID: null,
-		online: true
-	},
-	reason: "Connect to preparing game as a player",
-	watchersCount: 0
-};
-
-var code104 = {
-	code: '104',
-	game: {
-		bots: bots,
-		gameID: code101.gameID,
-		field: {
-			field: arrayOfField,
-			gameOver: false,
-			maxX: code101.maxX,
-			maxY: code101.maxY
-		},
-		gamers: gamers,
-		masterID: 1,
-		numberOfPlayers: code101.numberOfPlayers,
-		watchers: code101.watchersCount
-	},
-	gameID: code101.gameID,
-	player: null,
-	reason: "Get full information about explicit game"
-};
-
-var code200 = {
-	code: '200',
-	game: {
-		currentPlayerID: 1,
-		field: {
-			field: arrayOfField,
-			gameOver: false,
-			maxX: code101.maxX,
-			maxY: code101.maxY
-		},
-		gameID: code101.gameID,
-		gamers: gamers,
-		numberOfPlayers: code101.numberOfPlayers,
-		watchers: code101.watchersCount
-	},
-	reason: "start the game"
-};
-
-var code204 = {
-	code: '204',
-	gameID: null,
-	field: {
-		field: arrayOfField,
-		gameOver: true,
-		maxX: code101.maxX,
-		maxY: code101.maxY
-	},
-	reason: "Game had ended, check result"
-};
-
-var playerData = {
-	userID: 1,
-	username: "player",
-	email: "player@com",
-	playerID: null,
-	online: true
-};
-
-var code201 = {
-	code: '201',
-	step: {
-		src: {
-			x: 0,
-			z: 0
-		},
-		dst: {
-			x: 0,
-			z: 0
-		}
-	},
-	reason: "Game step"
-};
-
-var userID = code101.player.userID;
-
-var code112 = {
-	code: '112',
-	gameID: code101.gameID,
-	reason: "Returns your userID",
-	userID: userID
-};
-
-function makeGameField(size) {
-	var array = [];
-	for (var k = 0; k < size; k ++) {
-		array[k] = [];
-	}
-	for (var i = 0; i < size; i ++) {
-		for (var j = 0; j < size; j ++) {
-			array[i][j] = 0;
-		}
-	}
-	return array;
-}
-
-function createGame(data) {
-	code101.maxX = data.maxX;
-	code101.maxY = data.maxY;
-	arrayOfField = makeGameField(data.maxX);
-	arrayOfField = startArray;
-	code101.numberOfPlayers = +data.numberOfPlayers;
-	return code101;
-}
-
-function getGameInfo() {
-	gamers.push(code101.player);
-	code104.game.bots = bots;
-	code104.game.gameID = code101.gameID;
-	code104.game.field.field = arrayOfField;
-	code104.game.field.maxX = code101.maxX;
-	code104.game.field.maxY = code101.maxY;
-	code104.game.gamers = gamers;
-	code104.game.numberOfPlayers = code101.numberOfPlayers;
-	code104.game.watchers = code101.watchersCount;
-	code104.game.gameID = code101.gameID;
-
-	return code104;
-}
-
-function startGame() {
-	arrayOfField = startArray;
-	code200.game.field.field = arrayOfField;
-	code200.game.field.maxX = code101.maxX;
-	code200.game.field.maxY = code101.maxY;
-	code200.game.gamers = gamers;
-	code200.game.gameID = code101.gameID;
-	code200.game.numberOfPlayers = code101.numberOfPlayers;
-	code200.game.watchers = code101.watchersCount;
-
-	return code200;
-}
-
-function addBot() {
-	code101.botsCount++;
-	playerData.username = `bot`;
-	playerData.userID++;
-	playerData.email = `bot@com`;
-	bots.push(playerData);
-	code101.player = playerData;
-
-	return code101;
-}
-
-function getUserID() {
-	code112.gameID = code101.gameID;
-	return code112;
-}
-
-function returnPlayerStep(data) {
-	code201.step.src.x = data.step.src.x;
-	code201.step.src.z = data.step.src.z;
-	code201.step.dst.x = data.step.dst.x;
-	code201.step.dst.z = data.step.dst.z;
-
-	return code201;
-}
-
-function returnBotStep() {
-	moveOrClone(code201.step);
-	step(code201.step);
-
-	if (gameOver()) {
-		code204.field.maxX = code101.maxX;
-		code204.field.maxY = code101.maxY;
-		code204.field.field = arrayOfField;
-
-		return code204;
-	}
-
-	botStep();
-	moveOrClone(code201.step);
-	step(code201.step);
-
-	if (gameOver()) {
-		code204.field.maxX = code101.maxX;
-		code204.field.maxY = code101.maxY;
-		code204.field.field = arrayOfField;
-
-		return code204;
-	}
-
-	return code201;
-}
-
-function moveOrClone(step) {
-	if (Math.abs(step.src.x - step.dst.x) <= 1 && Math.abs(step.src.z - step.dst.z) <= 1) {
-		arrayOfField[step.dst.x][step.dst.z] = arrayOfField[step.src.x][step.src.z];
-	}
-	else {
-		arrayOfField[step.dst.x][step.dst.z] = arrayOfField[step.src.x][step.src.z];
-		arrayOfField[step.src.x][step.src.z] = 0;
-	}
-}
-
-function step(step) {
-	var idx = step.dst.x;
-	var idz = step.dst.z;
-	for (var i = 0; i < code101.maxX; i++) {
-		for (var j = 0; j < code101.maxY; j++) {
-			// Первые два условия проверяют, что перебираемая в цикле клетка находится вплотную к заданной.
-			if (Math.abs(i - idx) <= 1 &&
-				Math.abs(j - idz) <= 1) {
-				// Затем идет проверка, что на этой клетке есть фигура и что она отлична от той, которая совершила ход.
-				if (arrayOfField[i][j] !== 0 &&
-					arrayOfField[i][j] !== arrayOfField[idx][idz]) {
-					// И затем в массив клеток вносятся соответствующие изменения по фигурам.
-					arrayOfField[i][j] = arrayOfField[idx][idz];
-				}
-			}
-		}
-	}
-}
-
-function botStep() {
-	for (var i = 0; i < code101.maxX; i++) {
-		for (var j = 0; j < code101.maxY; j++) {
-			if (arrayOfField[i][j] === 2) {
-				for (var k = 0; k < code101.maxX; k++) {
-					for (var m = 0; m < code101.maxY; m++) {
-						if (Math.abs(k - i) >= 3 ||
-							Math.abs(m - j) >= 3 ||
-							arrayOfField[k][m] !== 0
-						) {}
-						else {
-							code201.step.src.x = i;
-							code201.step.src.z = j;
-							code201.step.dst.x = k;
-							code201.step.dst.z = m; //массив координат фигурок бота, а не четверная вложенность.
-							return;
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-function gameOver() {
-	var notFreePlane = 0;
-	var countFigure = [];
-	for (var k = 0; k < code101.numberOfPlayers; k++) {
-		countFigure[k] = 0;
-	}
-	for (var i = 0; i < code101.maxX; i++) {
-		for (var j = 0; j < code101.maxY; j++) {
-			if (arrayOfField[i][j] !== 0) {
-				notFreePlane++;
-				countFigure[arrayOfField[i][j]-1]++;
-			}
-		}
-	}
-	if (notFreePlane === code101.maxX * code101.maxY)
-		return true;
-	for (var m = 0; m < code101.numberOfPlayers; m++) {
-		if (countFigure[m] === 0)
-			return true;
-	}
-	return false;
-}
 

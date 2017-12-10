@@ -31,8 +31,8 @@ new class StartLoader {
 	loadMainScript() {
 		const script = document.createElement('script');
 		setTimeout(() => {
-			script.src = '/application.js';
-		}, 4000);
+			script.src = 'application.js';
+		}, 500);
 		document.body.appendChild(script);
 	}
 };

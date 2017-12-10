@@ -103,6 +103,7 @@ export default class Router {
 				this.findNewState(sliceRoutes_);
 			}
 		} catch (err) {
+			console.log(err);
 			this.bus.emit('unauth');
 			const sliceRoutes_ = this._routes.slice(6);
 			this.findNewState(sliceRoutes_);
@@ -171,4 +172,3 @@ export default class Router {
 		}
 	}
 }
-

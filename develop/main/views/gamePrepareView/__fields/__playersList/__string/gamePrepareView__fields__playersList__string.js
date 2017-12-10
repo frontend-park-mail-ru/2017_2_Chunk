@@ -11,7 +11,7 @@ export default class PlayersListString extends Block {
 		const block = Block.create('div', {}, ['gamePrepareView__fields__playersList__string']);
 		super(block.el);
 		this.fields = {
-			userID: Block.create('div', attrs, ['gamePrepareView__fields__playersList__string__fields__userId',
+			kickField: Block.create('div', attrs, ['gamePrepareView__fields__playersList__string__fields__userId',
 				'gamePrepareView__fields__playersList__string__fields'], `${data.userID}`),
 			username: Block.create('div', attrs, ['gamePrepareView__fields__playersList__string__fields__username',
 				'gamePrepareView__fields__playersList__string__fields'], `${data.username}`),
