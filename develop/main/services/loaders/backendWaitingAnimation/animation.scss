@@ -1,21 +1,27 @@
 .animation {
-  animation: rotation infinite ease;
+  animation: rotation 3s cubic-bezier(0.57, -0.51, 0.49, 1.6);
+  animation-iteration-count: infinite;
 }
+
+.opacityAnimation {
+  animation: opacityOff 1s ease-in-out;
+}
+
 
 @keyframes rotation {
   0% {
-     transform :rotate(90deg);
-  }
-  25% {
-     transform :rotate(180deg);
-  }
-  50% {
-     transform :rotate(270deg);
-  }
-  75% {
-     transform :rotate(360deg);
+     transform: rotate(360deg);
   }
   100% {
-     transform :rotate(0deg);
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes opacityOff {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }

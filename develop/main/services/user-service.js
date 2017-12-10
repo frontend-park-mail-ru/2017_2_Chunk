@@ -52,9 +52,11 @@ export default class UserService {
 			return response;
 		}
 
-
+		eventBus.emit('waitingBackend');
 		const resp = await Http.fetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
+		eventBus.emit('backendResponseReceived');
+
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -90,9 +92,8 @@ export default class UserService {
 			return response;
 		}
 		eventBus.emit('waitingBackend');
-		debugger;
-		// eventBus.emit('backendRequest');
 		const resp = await Http.fetchPost('/user/sign_in', {login, password});
+		eventBus.emit('backendResponseReceived');
 		// eventBus.emit('backendResponse');
 		response.json = await resp.json();
 		if (resp.status >= 400) {
@@ -127,8 +128,12 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
+		eventBus.emit('waitingBackend');
+
 		const resp = await Http.fetchPost('/user/update', {username, email, password, oldPassword});
 		response.json = await resp.json();
+		eventBus.emit('backendResponseReceived');
+
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -137,6 +142,7 @@ export default class UserService {
 		this.user = response.json;
 		return response;
 	}
+
 
 
 	/**

@@ -1,6 +1,5 @@
 const backendWaitingAnimationHtml =
-	'<section class="stripe" id="starlord">\n' +
-	'\t<div class="container">\n' +
+	'<div class="container">\n' +
 	'\t\t<div class="face"></div>\n' +
 	'\t\t<div class="hair"></div>\n' +
 	'\t\t<div class="pouf"></div>\n' +
@@ -19,7 +18,6 @@ const backendWaitingAnimationHtml =
 	'\t\t<div class="body">\n' +
 	'\t\t\t<div class="jacket"></div>\n' +
 	'\t\t</div>\t\n' +
-	'\t</div>\n' +
-	'</section>';
+	'\t</div>';
 
 export default backendWaitingAnimationHtml;

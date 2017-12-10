@@ -1,12 +1,15 @@
 .stripe {
+  box-sizing: border-box;
   position: fixed;
-  bottom: 200px;
-  right: 302px;
-  width: 60px;
-  height: 60px;
+  bottom: 20px;
+  right: 70px;
+  width: 200px;
+  height: 200px;
 }
 
 .container {
+  transform: scale(0.5);
+  box-sizing: border-box;
   width: 200px;
   height: 200px;
   border-radius: 50%;
@@ -22,11 +25,15 @@
 #starlord {
 
   .container {
+    box-sizing: border-box;
+
     background: #fff;
     border: 2px solid darken(#ccc, 10%);
   }
 
   .body {
+    box-sizing: border-box;
+
     position: absolute;
     width: 100px;
     height: 150px;
@@ -40,6 +47,8 @@
   }
 
   .jacket {
+    box-sizing: border-box;
+
     position: absolute;
     background: #6C6B72;
     width: 24px;
@@ -51,6 +60,8 @@
   }
 
   .jacket:before {
+    box-sizing: border-box;
+
     content: "";
     position: absolute;
     top: 0;
@@ -63,6 +74,8 @@
   }
 
   .jacket:after {
+    box-sizing: border-box;
+
     content: "";
     position: absolute;
     top: 0;
@@ -75,6 +88,7 @@
   }
 
   .collar {
+    box-sizing: border-box;
     position: absolute;
     background: darken(#6A2422, 10%);
     top: 126px;
@@ -87,6 +101,8 @@
   }
 
   .face {
+    box-sizing: border-box;
+
     position: absolute;
     width: 60px;
     height: 80px;
@@ -99,6 +115,8 @@
   }
 
   .mask {
+    box-sizing: border-box;
+
     position: absolute;
     background: #808281;
     width: 60px;
@@ -110,6 +128,8 @@
     z-index: 10;
   }
   .mask:before {
+    box-sizing: border-box;
+
     content: "";
     position: absolute;
     left: 0;
@@ -122,6 +142,8 @@
 
   }
   .faceplate {
+    box-sizing: border-box;
+
     position: absolute;
     width: 80%;
     height: 50px;
@@ -133,6 +155,8 @@
   }
 
   .faceplate:before {
+    box-sizing: border-box;
+
     content: "";
     position: absolute;
     background: #808281;
@@ -144,6 +168,8 @@
   }
 
   .faceplate:after {
+    box-sizing: border-box;
+
     content: "";
     position: absolute;
     background: #808281;
@@ -155,6 +181,8 @@
   }
 
   .eye {
+    box-sizing: border-box;
+
     position: absolute;
     border-radius: 50%;
     width: 20px;
@@ -165,14 +193,20 @@
   }
 
   .eye.one {
+    box-sizing: border-box;
+
     left: 1px;
   }
 
   .eye.two {
+    box-sizing: border-box;
+
     right: 1px;
   }
 
   .mouthpiece {
+    box-sizing: border-box;
+
     position: absolute;
     left: 50%;
     bottom: 0px;
@@ -184,6 +218,8 @@
   }
 
   .mouthpiece:before {
+    box-sizing: border-box;
+
     content: "";
     position: absolute;
     bottom: -2px;
@@ -196,6 +232,8 @@
   }
 
   .mouthpiece:after {
+    box-sizing: border-box;
+
     content: "";
     position: absolute;
     bottom: 2px;
@@ -208,6 +246,8 @@
   }
 
   .tube {
+    box-sizing: border-box;
+
     position: absolute;
     border-radius: 50%;
     bottom: -2px;
@@ -218,14 +258,20 @@
   }
 
   .tube.one {
+    box-sizing: border-box;
+
     left: 16px;
   }
 
   .tube.two {
+    box-sizing: border-box;
+
     right: 16px;
   }
 
   .neck {
+    box-sizing: border-box;
+
     position: absolute;
     z-index: 5;
     width: 30px;
@@ -238,6 +284,8 @@
   }
 
   .hair {
+    box-sizing: border-box;
+
     position: absolute;
     width: 60px;
     height: 55px;
@@ -249,6 +297,8 @@
   }
 
   .pouf {
+    box-sizing: border-box;
+
     position: absolute;
     width: 30px;
     height: 20px;
@@ -261,6 +311,8 @@
   }
 
   .pomp {
+    box-sizing: border-box;
+
     position: absolute;
     width: 51px;
     height: 23px;
