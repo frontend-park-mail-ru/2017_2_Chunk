@@ -13,7 +13,7 @@ export default class webSocket {
 	}
 
 
-	gameHandler() {
+	requestHandler() {
 		this.socketListeners[lobbyCodes.requestEventName]
 			= this.bus.on(lobbyCodes.requestEventName, (data) => {
 			this.socket.send(JSON.stringify(data));
@@ -30,7 +30,7 @@ export default class webSocket {
 
 
 	gettingStart() {
-		this.gameHandler();
+		this.requestHandler();
 		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.getGamesFullList);
 		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.subscribeLobbyUpdates);
 		this.keepAliveEvent();

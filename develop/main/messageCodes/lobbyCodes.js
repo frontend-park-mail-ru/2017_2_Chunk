@@ -44,7 +44,7 @@ const lobbyCodes = {
 		tabMessage: 'Game finish',
 	},
 	getGamesFullList: {
-		code: 111,
+		code: 102,
 		tabMessage: '',
 	},
 	whoIsIt: {

@@ -1,11 +1,11 @@
 'use strict';
-
 const gameWorker = new class GameWorker {
 	constructor(eventBus) {
 		this.bus = eventBus;
 		this.queue = [];
 		this.stepIndicator = true;
 	}
+
 
 	getUserID(data) {
 		this.userID = data.userID;
@@ -14,22 +14,24 @@ const gameWorker = new class GameWorker {
 			func: 'figureType',
 			figureType: this.figureType
 		};
-
 		return request;
 	}
+
 
 	winOrLose(data) {
 		let win = false;
 		const finishArray = data.field.field;
 		this.result = this.findMaxFiguresCount(this.countFigure(finishArray));
-		if (this.result === this.figureType) { win = true; }
+		if (this.result === this.figureType) {
+			win = true;
+		}
 		let request = {
 			func: 'winnerOrLooser',
 			win: win
 		};
-
 		return request;
 	}
+
 
 	stepEnable(data) {
 		let array = data.array;
@@ -54,22 +56,23 @@ const gameWorker = new class GameWorker {
 			func: 'stepEnable',
 			arrayAfterStep: reqArray
 		};
-
 		return request;
 	}
+
 
 	startArray(data) {
 		this.fieldSize = data.game.field.maxX;
 		this.arrayOfField = data.game.field.field;
 		this.gamers = data.game.gamers;
 		this.countPlayers = this.gamers.length;
-
 		this.fullStep();
 	}
+
 
 	step(data) {
 		this.queue.push(data);
 	}
+
 
 	fullStep() {
 		if (typeof this.queue !== 'undefined' && this.queue !== null &&
@@ -89,10 +92,8 @@ const gameWorker = new class GameWorker {
 				z: 0,
 			};
 			let clone = false;
-
 			vector.x = dst.x - src.x;
 			vector.z = dst.z - src.z;
-
 			if (Math.abs(dst.x - src.x) <= 1 && Math.abs(dst.z - src.z) <= 1) {
 				clone = true;
 				this.arrayOfField[dst.x][dst.z] = this.arrayOfField[src.x][src.z];
@@ -100,7 +101,6 @@ const gameWorker = new class GameWorker {
 				this.arrayOfField[dst.x][dst.z] = this.arrayOfField[src.x][src.z];
 				this.arrayOfField[src.x][src.z] = 0;
 			}
-
 			for (let i = 0; i < this.fieldSize; i++) {
 				for (let j = 0; j < this.fieldSize; j++) {
 					// Первые два условия проверяют, что перебираемая в цикле клетка находится вплотную к заданной.
@@ -122,7 +122,6 @@ const gameWorker = new class GameWorker {
 					}
 				}
 			}
-
 			const request = {
 				func: 'coordinatesForStep',
 				vector: vector,
@@ -130,14 +129,12 @@ const gameWorker = new class GameWorker {
 				step: step,
 				figureForPaint: figureForPaint
 			};
-
 			this.stepIndicator = true;
-
 			self.postMessage(request);
 		}
-
 		setTimeout(this.fullStep.bind(this), 1000);
 	}
+
 
 	countFigure(array) {
 		const countFigure = [];
@@ -154,6 +151,7 @@ const gameWorker = new class GameWorker {
 		return countFigure;
 	}
 
+
 	findMaxFiguresCount(array) {
 		let max = 0;
 		let maxI = 0;
@@ -166,6 +164,7 @@ const gameWorker = new class GameWorker {
 		return maxI;
 	}
 
+
 	detectFigureByUserID(userID) {
 		for (let i = 0; i < this.gamers.length; i++) {
 			if (this.gamers[i].userID === userID) {
@@ -174,8 +173,6 @@ const gameWorker = new class GameWorker {
 		}
 	}
 };
-
-
 self.onmessage = (workerRequest) => {
 	let data = workerRequest.data;
 	let workerResponse;
