@@ -23,8 +23,15 @@ export default class PlayersList extends Block {
 	addPlayer(data) {
 		const string = new PLayerListString(data);
 		this.strings = this.strings || {};
-		this.strings[data.userID] = string;
-		this.append(string);
+		this.botStrings = this.botStrings || [];
+		if (data.userID) {
+			this.strings[data.userID] = string;
+			this.append(string);
+		}
+		else {
+			this.botStrings.push(string);
+			this.append(string);
+		}
 	}
 
 
@@ -36,9 +43,19 @@ export default class PlayersList extends Block {
 	}
 
 
+	removeBots() {
+		this.botStrings.forEach((botString, idx) => {
+			this.remove(botString);
+			delete this.botStrings[idx];
+		});
+		delete this.botStrings;
+
+	}
 	clear() {
 		for (let key in this.strings) {
 			this.removePlayer(key);
 		}
+		delete this.strings;
+		this.removeBots();
 	}
 }

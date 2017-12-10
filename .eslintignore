@@ -1,6 +1,6 @@
 node_modules
 .idea
 public
-public/application.js
+public/js/application.js
 /develop/main/templates/scoreBoard.js
 

@@ -4,6 +4,7 @@ import gamePrepareFields from './__fields/gamePrepareView__fields';
 import eventBus from '../../modules/eventBus';
 import messageCodes from '../../messageCodes/lobbyCodes';
 
+
 /**
  * Класс секции ожидания набора игроков
  * @module GamePrepareView
@@ -18,6 +19,7 @@ export default class gamePrepareView extends View {
 		this.clear = false;
 		this.active = false;
 		this.gamePrepareListeners = {};
+		this.masterEvents();
 		this.addPlayer();
 		this.addBot();
 		this.removePLayer();
@@ -26,6 +28,7 @@ export default class gamePrepareView extends View {
 		this.gameStatusEvents();
 		// this.source = 'socket';
 		this.hide();
+		eventBus.emit('hideMasterFields');
 	}
 
 
@@ -55,10 +58,11 @@ export default class gamePrepareView extends View {
 
 
 	removeGamePrepareListeners() {
-		for(let listener in this.gamePrepareListeners) {
+		for (let listener in this.gamePrepareListeners) {
 			this.bus.remove(listener, this.gamePrepareListeners[listener]);
 		}
 	}
+
 
 	// добавление пользователя
 	addPlayer() {
@@ -107,21 +111,48 @@ export default class gamePrepareView extends View {
 		this.bus.on(`${messageCodes.responseEventName}${messageCodes.startGame.code}`, () => {
 			this.bus.emit('goToGame');
 		});
-	}
+	};
 
 
 	updateGameData() {
-		this.gamePrepareListeners[`${messageCodes.responseEventName}${messageCodes.getGameInfo.code}`]
-			= this.bus.on(`${messageCodes.responseEventName}${messageCodes.getGameInfo.code}`, (response) => {
+		// this.gamePrepareListeners[`${messageCodes.responseEventName}${messageCodes.getGameInfo.code}`] =
+			this.bus.on(`${messageCodes.responseEventName}${messageCodes.getGameInfo.code}`, (response) => {
 			this.fields.header.updateGameData(response.game);
 			this.clear = false;
-			this.gameInformationObject = response;
+			this.gameInfo = response;
+			if (this.userID !== response.game.masterID) {
+				eventBus.emit('hideMasterFields');
+			}
+			else
+				eventBus.emit('showMasterFields');
 			response.game.gamers.forEach((gamer) => {
-				if (gamer.userID !== this.userID) { this.fields.playersList.addPlayer(gamer); }
+				if (gamer.userID !== this.userID) {
+					this.fields.playersList.addPlayer(gamer);
+				}
 			});
 		});
 	}
 
+
+	masterEvents() {
+		eventBus.on('hideMasterFields', () => {
+			this.hideMasterFields();
+		});
+		eventBus.on('showMasterFields', () => {
+			this.showMasterFields();
+		});
+	}
+
+
+	hideMasterFields() {
+		this.fields.startGame.hide();
+		this.fields.addBot.hide();
+	}
+
+	showMasterFields() {
+		this.fields.startGame.show();
+		this.fields.addBot.show();
+	}
 
 	gameClose() {
 		this.gamePrepareListeners[`${messageCodes.responseEventName}${messageCodes.deleteGame.code}`]
@@ -146,6 +177,7 @@ export default class gamePrepareView extends View {
 			this.bus.emit(`${messageCodes.startGame.request}`, (request));
 		});
 	}
+
 
 //удалить обработчик при включении игры
 	whoIsItEvent() {

@@ -1,27 +1,29 @@
-.themeButtonView {
-    box-sizing: border-box;
-    border: 0.1em solid white;
-    font-size: calc(10px + 1.3vh);
-    text-align: center;
-    opacity: 1;
-    padding: 0.1em 0.1em;
+/*.themeButtonView {*/
+    /*box-sizing: border-box;*/
+    /*border: 0.1em solid red !important;*/
+    /*font-size: calc(10px + 1.3vh);*/
+    /*text-align: center;*/
+    /*opacity: 1;*/
+    /*padding: 0.1em 0.1em;*/
 
-    color: white;
-    border-radius: 0.4em;
-    box-shadow: none;
+    /*color: red !important;*/
+    /*border-radius: 0.8em;*/
+    /*box-shadow: none;*/
 
-    background-color: transparent;
-    cursor: pointer;
-    margin: auto;
-    transition: all .2s;
-    outline: none;
+    /*background-color: transparent;*/
+    /*cursor: pointer;*/
+    /*margin: auto;*/
+    /*transition: all .2s;*/
+    /*outline: none;*/
 
-}
+/*}*/
 
 
-.themeButtonView:hover {
-    outline: none;
-    opacity: 1;
-    color: #ff8700 ; /* Цвет ссылки */
-    border: 0.1em solid #ff8700;
-}
+/*.themeButtonView:hover {*/
+    /*outline: none;*/
+    /*opacity: 1;*/
+    /*color: #ff8700 ; !* Цвет ссылки *!*/
+    /*border: 0.1em solid #ff8700;*/
+/*}*/
+
+

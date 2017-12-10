@@ -1,5 +1,6 @@
 .view__view-button_theme-black-orange {
-    color: white;
+    /*color: #ffc000;*/
+    color: #492242;
     /*border: solid #ff8700;*/
-    border-color: white;
+    border-color: #611b1b;
 }

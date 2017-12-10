@@ -2,6 +2,12 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const NODE_ENV = process.env.NODE_ENV || 'development';
+
+
+const extractPlugin = new ExtractTextPlugin({
+	filename: '[name].css',
+});
+
 module.exports = {
 	context: __dirname + '/develop',
 	entry: {
@@ -9,6 +15,7 @@ module.exports = {
 		loading: './loading/loading.js',
 		botWorker: './workers/botWorker',
 		gameWorker: './workers/gameWorker',
+		serviceWorker: './workers/serviceWorker',
 	},
 	output: {
 		path: __dirname + '/public',
@@ -25,25 +32,30 @@ module.exports = {
 			exclude: /(node_modules|bower_components)/,
 			loader: 'babel-loader',
 		}, {
+			test: /\.scss$/,
+			use: [{
+				loader: "style-loader"
+			}, {
+				loader: "css-loader", options: {
+					sourceMap: true
+				}
+			}, {
+				loader: "sass-loader", options: {
+					sourceMap: true
+				}
+			}]
+		}, {
 			test: /\.css$/,
 			use: ExtractTextPlugin.extract({
 				fallback: 'style-loader',
-				use: 'css-loader'
+				use: {
+					loader: 'css-loader',
+				},
 			})
-		},
-		// 	{
-		// 	test: /\.scss$/,
-		// 	use: [{
-		// 		loader: 'style-loader'
-		// 	}, {
-		// 		loader: 'css-loader'
-		// 	}, {
-		// 		loader: 'sass-loader',
-		// 	}]
-		// },
-			{
-			test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
-			loader: 'url-loader?limit=30000&name=./[name]-[hash].[ext]',
+		}, {
+			test: /\.(eot|woff|woff2|ttf|otf|svg|png|jpg)$/,
+			// loader: 'url-loader?limit=30000&name=./[name]-[hash].[ext]',
+			loader: 'url-loader?limit=30000&name=./[name].[ext]',
 		}, {
 			test: /\.json$/,
 			loader: 'json-loader'
@@ -54,15 +66,18 @@ module.exports = {
 			// }
 		],
 	},
-	plugins:
-		[
-			new webpack.DefinePlugin({
-				'process.env': {
-					NODE_ENV: JSON.stringify(NODE_ENV),
-					BROWSER: JSON.stringify(true)
-				}
-			}),
-			new ExtractTextPlugin('./application.css'),
-		],
-}
-;
+	plugins: [
+		new webpack.DefinePlugin({
+			'process.env': {
+				NODE_ENV: JSON.stringify(NODE_ENV),
+				BROWSER: JSON.stringify(true)
+			}
+		}),
+		new webpack.optimize.UglifyJsPlugin({
+			compress: { warnings: false },
+			include: '/public' + /\.min\.js$/,
+			minimize: true
+		}),
+		extractPlugin,
+	],
+};

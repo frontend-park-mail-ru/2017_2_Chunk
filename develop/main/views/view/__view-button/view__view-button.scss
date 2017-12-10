@@ -1,0 +1,55 @@
+.view__view-button {
+  box-sizing: border-box;
+  /*background: url(../../../../../public/images/buttons/buttonTape0.jpg);*/
+  background-size: cover;
+  background-position: center;
+  font-size: calc(14px + 1.5vh);
+  text-align: center;
+  width: 300px;
+  height: 48px;
+  padding: 0.1em;
+
+  margin: 0.7em;
+  min-height: 41px;
+
+  border-radius: 0.1em;
+  box-shadow: none;
+
+  border-width: 0.04em;
+  border-style: solid;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all .1s;
+  transition: filter 0.2s ease !important;
+  transition: transform 0.3s ease !important;
+
+}
+
+@media screen and (min-width: 360px) and (max-width: 1200px) {
+  .view__view-button {
+    font-size: calc(14px + 2vh);
+    width: 8em;
+    margin: 0.4em;
+    min-width: 0;
+  }
+}
+
+.view__view-button:active {
+  outline: none;
+  color: #009fff !important;
+}
+
+.view__view-button:hover {
+  transform: scale(1.02);
+  filter: brightness(150%);
+  color: #492242; /* Цвет ссылки */
+  border: 0.04em solid #611b1b;
+}
+
+A:link {
+  text-decoration: none; /* Убирает подчеркивание для ссылок */
+}
+
+A:hover {
+  color: black; /* Цвет ссылки */
+}

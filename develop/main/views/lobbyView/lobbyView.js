@@ -22,8 +22,10 @@ export default class LobbyView extends View {
 		this.el.classList.add('lobbyView');
 		this.gameList = {};
 		this.socketListeners = {};
+		this.isAuth();
 		this.gameCreateBannerEvent();
 		this.socketClose();
+		this.botWorkerClose();
 		this.hide();
 	}
 
@@ -32,7 +34,7 @@ export default class LobbyView extends View {
 		this.addSocketEvent();
 		super.show();
 		this.el.classList.remove('lobbyView_filter-smooth');
-		if (navigator.onLine) {
+		if (navigator.onLine && this.auth) {
 			if (!this.webSocket) {
 				this.webSocket = new WebSocket();
 			}
@@ -46,6 +48,16 @@ export default class LobbyView extends View {
 		super.hide();
 		this.removeSocketEvent();
 		this.clearGameList();
+	}
+
+
+	isAuth() {
+		this.bus.on('auth', () => {
+			this.auth = true;
+		});
+		this.bus.on('unauth', () => {
+			this.auth = false;
+		})
 	}
 
 
@@ -143,15 +155,18 @@ export default class LobbyView extends View {
 	socketClose() {
 		// закрытие сокета, удаление всех игр
 		this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`, () => {
-			if (this.botWorker) {
-				delete this.botWorker;
-			} else {
-				delete this.webSocket;
-			}
+			delete this.webSocket;
 			for (const gameID in this.gameList) {
 				this.removeGameNode(gameID);
 				delete this.gameList;
 			}
+		});
+	}
+
+
+	botWorkerClose() {
+		this.bus.on(`worker${lobbyCodes.close}`, () => {
+			delete this.botWorker;
 		});
 	}
 }

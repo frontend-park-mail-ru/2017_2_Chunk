@@ -400,6 +400,14 @@ export default class Draw {
 		this.mouse.y = (-(event.clientY / window.screen.availHeight) * 2) + 1;
 	}
 
+	// // Handlers
+	// onDocumentMouseMove(event) {
+	// 	event.preventDefault();
+	//
+	// 	this.mouse.x = ((event.clientX * this.cssScale/ window.screen.availWidth) * 2) - 1;
+	// 	this.mouse.y = (-(event.clientY * this.cssScale / window.screen.availHeight) * 2) + 1;
+	// }
+
 	fullStep(stepObject) {
 		this.vector = stepObject.vector;
 		this.gameVariebles.distance = this.calculateDistance(this.point1, this.point2);

@@ -1,5 +1,6 @@
 'use strict';
 import Block from '../../blocks/block/block.js';
+import eventBus from '../../modules/eventBus';
 
 
 /**
@@ -11,13 +12,18 @@ export default class themeButtonView extends Block {
 	 * @constructor - конструктор класса кнопки возврата в меню
 	 */
 	constructor() {
-		const themeButton = Block.create('div', {}, ['themeButtonView',
-			'view__view-button_theme-black-orange'], 'Theme');
+		// const themeButton = Block.create('div', {}, ['themeButtonView',
+		// 	'view__view-button_theme-black-orange'], 'Theme');
+		// const themeButtonContainer = Block.create('div', {}, ['button__holder']);
+		const themeButton = Block.create('button', {}, ['plus', 'themeButtonView']);
+		// themeButtonContainer.append(themeButton);
 		super(themeButton.el);
-		this.themeButton = themeButton;
-		this.themeButton.on('click', () => {
-			this.changeTheme();
+		// this.themeButtonContainer = themeButtonContainer;
+		eventBus.on('changeTheme', () => {
+				this.changeTheme();
 		});
+		// this.themeButton.on('click', () => {
+		// });
 		this.hide();
 	}
 

@@ -59,6 +59,7 @@ const lobbyCodes = {
 	requestEventName: 'request',
 	responseEventName: 'response',
 	close: 'Close',
+	open: 'Open',
 	connectGame: {
 		internal: 'connectGame',
 		request: 'request',

@@ -26,12 +26,9 @@ export default class GameCreateFields {
 						'lobbyView__gameCreateView__fields'],
 					'Field size: '),
 			// voyeurButton: ViewButton.create({href: '/game'}, ['auth'], 'Play');
-			playButtonSingle:
-				Block.create('input', {type: 'submit', value: 'Single play'}, ['lobbyView__gameCreateView__fields__playButton',
-					'lobbyView__gameCreateView__fields', 'view__view-button']),
-			playButtonWithFriends:
-				Block.create('input', {type: 'submit', value: 'Play with friends'}, ['lobbyView__gameCreateView__fields__playButton',
-					'lobbyView__gameCreateView__fields', 'view__view-button', 'auth'])
+			playButton:
+				Block.create('input', {type: 'submit', value: 'Create'}, ['lobbyView__gameCreateView__fields__playButton',
+					'lobbyView__gameCreateView__fields', 'view__view-button', 'button']),
 		};
 		this.addRadioPLayers();
 		this.addRadioFieldSize();

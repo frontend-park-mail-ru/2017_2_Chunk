@@ -35,6 +35,7 @@ export default class ThreeView extends CommonView {
 
 	hide() {
 		if (!this.clear) {
+			console.log("DELETEEE");
 			this.bus.emit('deleteTree');
 			this.clear = true;
 		}

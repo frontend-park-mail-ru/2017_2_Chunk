@@ -25,6 +25,6 @@
 }
 
 .backButtonView:hover {
-    color: #ff8700;
-    border: 0.1em solid #ff8700 !important; /* Параметры рамки */
+    color: #00c2ff;
+    border: 0.1em solid #00c2ff !important; /* Параметры рамки */
 }

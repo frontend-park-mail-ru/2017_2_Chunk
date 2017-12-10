@@ -1,29 +1,30 @@
 .backMenuButtonView {
     background-color: transparent;
-    transition: all .2s;
 
     text-align: center;
     font-size: calc(16px + 1.1vh);
-    color: white;
     opacity: 1;
     border: 0.1em solid white !important;
     margin: auto;
 
     padding: 0.1em 0.5em;
-
+    color: #ff9f00;
     border-radius: 0.4em;
     box-shadow: none;
     z-index: 2;
+    transition: all .2s;
+    transition: transform 0.3s ease !important;
 }
 
-.backMenuButtonView:focus {
-    outline: none;
-    opacity: 1;
-    border: 0.1em solid #ff8700 !important; /* Параметры рамки */
-    color: #ff8700;
-}
 
 .backMenuButtonView:hover {
-    color: #ff8700;
-    border: 0.1em solid #ff8700 !important; /* Параметры рамки */
+    transform: scale(1.1);
+    color: #00c2ff;
+    border-color: #00c2ff !important; /* Параметры рамки */
+}
+
+.backMenuButtonView:active {
+    outline: none;
+    color: #009fff;
+    border-color: #009fff !important; /* Параметры рамки */
 }

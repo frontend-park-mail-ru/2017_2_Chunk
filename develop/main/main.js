@@ -43,11 +43,13 @@ import ThreeView from './views/treeView/threeView.js';
 
 import Game3D from './game3D/gameMain';
 
-import ServiceWorker from '../../public/serviceWorker';
+import ServiceWorker from '../workers/serviceWorker';
 
 import visibilityViewer from './services/visibilityViewer/visibilityViewer';
 
-import TabBlink from './views/tabBlink/tabBlink';
+import SoundsEvents from './services/sound/soundEvents/soundEvents';
+
+import VideoEvents from './services/video/videoEvents/videoEvents';
 
 
 const gameNameView = new GameNameView();
@@ -56,9 +58,9 @@ const userService = new UserService();
 
 const eventBus = EventBus;
 
-const app = new Block(document.body);
+const app = Block.create('main', {}, ['main_theme-black-orange', 'main']);
 
-app.el.classList.add('main_theme-black-orange');
+document.body.appendChild(app.el);
 
 const router = new Router(eventBus, userService);
 
@@ -94,7 +96,10 @@ const game3D = new Game3D(gameContainer);
 
 const serviceWorker = ServiceWorker;
 
-const tabBlink = new TabBlink();
+const soundsEvents = new SoundsEvents();
+
+const videoEvents = new VideoEvents();
+
 
 const Views = [];
 Views.push(gameNameView);
@@ -241,16 +246,33 @@ if ('serviceWorker' in navigator) {
 		});
 }
 
-//убрать адресную строку на мобилке
-// document.documentElement.scrollTop;
-// document.body.scrollTop;
-// window.scrollTo(0, 0);
-// window.scrollTo(1, 0)
 
+
+
+const canvas = document.body.getElementsByClassName('treeView')[0];
+
+function fullScreenOn() {
+	document.body.addEventListener("keydown", function(e) {
+		if (e.keyCode == 13) {
+			canvas.requestFullscreen();
+		}
+	}, true);
+}
+
+function fullScreenOff(){
+	document.addEventListener("keydown", function(e) {
+		if (e.keyCode == 27) {
+			canvas.cancelFullscreen();
+		}
+	});
+}
+
+fullScreenOff();
+fullScreenOn();
 
 
 // window.onbeforeunload = function() {
 // 	return "Вы уверены, что хотите покинут страницу?";
 // };
-
+eventBus.emit('jsReady');
 router.start();

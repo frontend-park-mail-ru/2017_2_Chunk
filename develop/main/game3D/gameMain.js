@@ -13,6 +13,7 @@ export default class Game3D {
 		this.bus = eventBus;
 		this.draw = new Draw(container);
 		this.gameWorker = new internalWorker('./gameWorker.js');
+
 		this.gameEvents();
 
 		this.bus.on(`${gameWorkerMessage.requestEventName}`, (data) => {

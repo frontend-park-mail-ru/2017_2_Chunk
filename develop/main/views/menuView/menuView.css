@@ -9,11 +9,11 @@
     margin: 0.7em;
     min-height: 30px;
     min-width: 260px;
-    color: white;
 
     border-radius: 0.4em;
     box-shadow: none;
 
+    color: #492242;
     background-color: transparent;
     cursor: pointer;
 }

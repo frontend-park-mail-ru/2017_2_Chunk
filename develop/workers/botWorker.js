@@ -1,13 +1,6 @@
 'use strict';
 
-const startArray = [
-	[1,0,0,0,0,2],
-	[0,0,0,0,0,0],
-	[0,0,0,0,0,0],
-	[0,0,0,0,0,0],
-	[0,0,0,0,0,0],
-	[2,0,0,0,0,1],
-];
+
 
 const offBot = new class BotWorker {
 	constructor() {
@@ -111,10 +104,16 @@ const offBot = new class BotWorker {
 			userID: this.userID
 		};
 
+		this.sendUserID();
+
 		this.exitGameObject = {
 			code: '110',
 			gameID: this.connectGameObject.gameID
 		}
+	}
+
+	sendUserID() {
+		self.postMessage(this.userIdObject);
 	}
 
 	makeGameField(size) {
@@ -130,18 +129,34 @@ const offBot = new class BotWorker {
 		return array;
 	}
 
+	createStartArray(size, countOfPlayers) {
+		let startArray = this.makeGameField(size);
+		if (countOfPlayers === 2) {
+			startArray[0][0] = 1;
+			startArray[0][size - 1] = 2;
+			startArray[size - 1][0] = 2;
+			startArray[size - 1][size - 1] = 1;
+		} else {
+			startArray[0][0] = 1;
+			startArray[0][size - 1] = 2;
+			startArray[size - 1][0] = 3;
+			startArray[size - 1][size - 1] = 4;
+		}
+		return startArray;
+	}
+
 	createGame(data) {
 		this.connectGameObject.maxX = data.maxX;
 		this.connectGameObject.maxY = data.maxY;
 		this.arrayOfField = this.makeGameField(data.maxX);
-		this.arrayOfField = startArray;
 		this.connectGameObject.numberOfPlayers = +data.numberOfPlayers;
+		this.arrayOfField = this.createStartArray(data.maxX, +data.numberOfPlayers);
 
 		return this.connectGameObject;
 	}
 
 	getGameInfo() {
-		this.gamers.push(this.connectGameObject.player);
+		this.gamers.push(JSON.parse(JSON.stringify(this.connectGameObject.player)));
 		this.gameInformationObject.game.bots = this.bots;
 		this.gameInformationObject.game.gameID = this.connectGameObject.gameID;
 		this.gameInformationObject.game.field.field = this.arrayOfField;
@@ -156,7 +171,6 @@ const offBot = new class BotWorker {
 	}
 
 	startGame() {
-		this.arrayOfField = startArray;
 		this.startGameObject.game.field.field = this.arrayOfField;
 		this.startGameObject.game.field.maxX = this.connectGameObject.maxX;
 		this.startGameObject.game.field.maxY = this.connectGameObject.maxY;
@@ -170,10 +184,10 @@ const offBot = new class BotWorker {
 
 	addBot() {
 		this.connectGameObject.botsCount++;
-		this.playerData.username = `bot`;
+		this.playerData.username = `bot${this.connectGameObject.botsCount}`;
 		this.playerData.userID++;
-		this.playerData.email = `bot@com`;
-		this.bots.push(this.playerData);
+		this.playerData.email = `${this.playerData.username}@com`;
+		this.bots.push(JSON.parse(JSON.stringify(this.playerData)));
 		this.connectGameObject.player = this.playerData;
 
 		return this.connectGameObject;
