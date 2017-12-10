@@ -169,31 +169,31 @@ export default class Draw {
 		// То самое движения, для которого нужен включенный индикатор.
 		this.moving();
 		this.scaling();
-		this.lightFigure();
+		// this.lightFigure();
 		// Зацикливание
 		this.gameVariebles.animation = requestAnimationFrame(this.animate.bind(this));
 		this.render();
 	}
 
-	lightFigure() {
-		if (this.gameVariebles.lightIndicator) {
-			this.raycasterMove.setFromCamera(this.mouse, this.camera);
-			let intersects = this.raycasterMove.intersectObjects(
-				this.playerContainer.children.concat(this.cellContainer.children)
-			);
-			if (intersects.length > 0) {
-				if (this.IntersectedMove !== intersects[0].object) {
-					if (this.IntersectedMove) this.IntersectedMove.material.emissive.setHex(this.IntersectedMove.currentHex);
-					this.IntersectedMove = intersects[0].object;
-					this.IntersectedMove.currentHex = this.IntersectedMove.material.emissive.getHex();
-					this.IntersectedMove.material.emissive.setHex(tools.COLORS.MOVE);
-				}
-			}  else {
-				if (this.IntersectedMove) this.IntersectedMove.material.emissive.setHex(this.IntersectedMove.currentHex);
-				this.IntersectedMove = null;
-			}
-		}
-	}
+	// lightFigure() {
+	// 	if (this.gameVariebles.lightIndicator) {
+	// 		this.raycasterMove.setFromCamera(this.mouse, this.camera);
+	// 		let intersects = this.raycasterMove.intersectObjects(
+	// 			this.playerContainer.children.concat(this.cellContainer.children)
+	// 		);
+	// 		if (intersects.length > 0) {
+	// 			if (this.IntersectedMove !== intersects[0].object) {
+	// 				if (this.IntersectedMove) this.IntersectedMove.material.emissive.setHex(this.IntersectedMove.currentHex);
+	// 				this.IntersectedMove = intersects[0].object;
+	// 				this.IntersectedMove.currentHex = this.IntersectedMove.material.emissive.getHex();
+	// 				this.IntersectedMove.material.emissive.setHex(tools.COLORS.MOVE);
+	// 			}
+	// 		}  else {
+	// 			if (this.IntersectedMove) this.IntersectedMove.material.emissive.setHex(this.IntersectedMove.currentHex);
+	// 			this.IntersectedMove = null;
+	// 		}
+	// 	}
+	// }
 
 	queueStep() {
 		if (typeof this.gameVariebles.queue !== 'undefined' &&
@@ -222,7 +222,7 @@ export default class Draw {
 					this.IntersectedClick.material.emissive.setHex(this.IntersectedClick.currentHex);
 				}
 				this.IntersectedClick = intersects[0].object;
-				if (this.IntersectedClick.material.emissive.getHex() !== tools.COLORS.MOVE)
+				// if (this.IntersectedClick.material.emissive.getHex() !== tools.COLORS.MOVE)
 					this.IntersectedClick.currentHex = this.IntersectedClick.material.emissive.getHex();
 
 				// Если нажали на фигурку, у которой наш цвет
