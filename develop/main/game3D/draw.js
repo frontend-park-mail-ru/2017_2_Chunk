@@ -47,7 +47,12 @@ export default class Draw {
 		this.renderer.render(this.scene, this.camera);
 
 		this.controls = new OrbitControl(this.camera, this.renderer.domElement);
-		this.controls.maxPolarAngle = Math.PI * 0.495;
+		this.controls.minPolarAngle = Math.PI / 6;
+		this.controls.maxPolarAngle = Math.PI / 2.3;
+
+		// this.controls.minAzimuthAngle = -Math.PI/3;
+		// this.controls.maxAzimuthAngle = Math.PI/2;
+
 		this.controls.target.set(20, -5, 20);
 		this.controls.enablePan = false;
 		this.controls.minDistance = 40.0;
@@ -55,8 +60,12 @@ export default class Draw {
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = 0.2;
 		this.controls.autoRotate = false;
+		// this.controls.autoRotateSpeed = 2;
 		this.controls.enableKeys = false;
 		this.controls.rotateSpeed = 0.5;
+
+		this.angle = 0;
+		this.angleIndicator = false;
 
 		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('mousemove', this.onDocumentMouseMove.bind(this), false);
@@ -74,6 +83,8 @@ export default class Draw {
 			this.scene.remove(this.playerContainer);
 			cancelAnimationFrame(this.gameVariebles.animation);
 		});
+
+		this.d = 180;
 	}
 
 	startGame(response) {
@@ -160,9 +171,42 @@ export default class Draw {
 
 	animate() {
 		this.controls.update();
-		if (this.camera.position.y < 20) {
-			this.camera.position.y += 0.5;
+		// if (this.camera.position.y < 20) {
+		// 	this.camera.position.y += 0.5;
+		// }
+
+		// console.log(this.controls.getAzimuthalAngle());
+
+		// if (this.controls.getAzimuthalAngle() >= this.controls.maxAzimuthAngle) {
+		// 	console.log("MAX");
+		// 	this.controls.autoRotate = false;
+		// 	this.controls.minAzimuthAngle = -Infinity;
+		// 	this.controls.maxAzimuthAngle = Infinity;
+		// }
+		//
+		// if (this.controls.getAzimuthalAngle() <= this.controls.minAzimuthAngle) {
+		// 	console.log("MIN");
+		// 	this.controls.autoRotate = false;
+		// 	this.controls.minAzimuthAngle = -Infinity;
+		// 	this.controls.maxAzimuthAngle = Infinity;
+		// }
+
+		if (this.controls.getAzimuthalAngle() < this.angle + 0.1 &&
+			this.controls.getAzimuthalAngle() > this.angle - 0.1 &&
+			this.angleIndicator) {
+			this.controls.autoRotate = false;
+			this.angleIndicator = false;
+			console.log(this.controls.getAzimuthalAngle());
 		}
+
+		if (this.controls.getAzimuthalAngle() < 0.1 &&
+			this.controls.getAzimuthalAngle() > -0.1)
+			console.log("00000000000000");
+
+		if (this.controls.getAzimuthalAngle() < 3.16 &&
+			this.controls.getAzimuthalAngle() > 3.13)
+			console.log("PIIIIII");
+
 
 		this.queueStep();
 
@@ -227,8 +271,8 @@ export default class Draw {
 
 				// Если нажали на фигурку, у которой наш цвет
 				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-					intersects[0].object.material.color.getHex()
-					=== tools.PLAYER_COLORS[this.figureType] &&
+					// intersects[0].object.material.color.getHex()
+					// === tools.PLAYER_COLORS[this.figureType] &&
 					// Проверяем, можно ли изменять первую точку.
 					// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
 					!Object.isFrozen(this.point1)) {
@@ -238,6 +282,8 @@ export default class Draw {
 						if (intersects[0].object.position.x > i * tools.PLANE_X) { this.point1.x = i; }
 						if (intersects[0].object.position.z > i * tools.PLANE_Z) { this.point1.z = i; }
 					}
+
+					this.azimuthAngle(this.point1.x, this.point1.z);
 					// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
 					this.getStepEnable();
 
@@ -287,6 +333,79 @@ export default class Draw {
 			}
 			this.IntersectedClick = null;
 		}
+	}
+
+	azimuthAngle(x, z) {
+		let xAnlge = (x*5 + 2.5) - 15;
+		let zAnlge = (z*5 + 2.5) - 15;
+
+		let angle = xAnlge/zAnlge;
+		let atan2 = 0;
+		let atan = 0;
+		console.log("angle " + angle);
+
+		if (angle > 0) {
+			console.log(1);
+			atan2 = Math.atan2(zAnlge, xAnlge);
+			console.log("atan2 " + atan2);
+			atan = Math.atan(angle) - Math.PI;
+			console.log("atan " + atan);
+			if (angle === 1)
+				this.angle = atan2;
+			else
+				this.angle = atan;
+		}
+		if (xAnlge < 0 && zAnlge > 0) {
+			console.log(2);
+			atan2 = Math.atan2(zAnlge, xAnlge) - Math.PI;
+			console.log("atan2 " + atan2);
+			atan = Math.atan(angle);
+			console.log("atan " + atan);
+			this.angle = atan;
+		}
+		if (xAnlge > 0 && zAnlge < 0) {
+			console.log(3);
+			atan2 = Math.atan2(zAnlge, xAnlge) + Math.PI;
+			console.log("atan2 " + atan2);
+			atan = Math.atan(angle) + Math.PI;
+			console.log("atan " + atan);
+			this.angle = atan;
+		}
+		//
+		if (this.controls.getAzimuthalAngle() > 0 && this.angle > 0) {
+			if (this.controls.getAzimuthalAngle() > this.angle) {
+				this.controls.autoRotateSpeed = -8;
+			} else {
+				this.controls.autoRotateSpeed = 8;
+			}
+		}
+		if (this.controls.getAzimuthalAngle() > 0 && this.angle < 0) {
+			if (this.controls.getAzimuthalAngle() > this.angle) {
+				this.controls.autoRotateSpeed = 8;
+			} else {
+				this.controls.autoRotateSpeed = 8;
+			}
+		}
+		if (this.controls.getAzimuthalAngle() < 0 && this.angle > 0) {
+			if (this.controls.getAzimuthalAngle() > this.angle) {
+				this.controls.autoRotateSpeed = 8;
+			} else {
+				this.controls.autoRotateSpeed = 8;
+			}
+		}
+		if (this.controls.getAzimuthalAngle() < 0 && this.angle < 0) {
+			if (this.controls.getAzimuthalAngle() > this.angle) {
+				this.controls.autoRotateSpeed = -8;
+			} else {
+				this.controls.autoRotateSpeed = 8;
+			}
+		}
+
+		this.controls.autoRotate = true;
+		// this.controls.autoRotateSpeed = 8;
+		this.angleIndicator = true;
+
+		console.log(this.controls.getAzimuthalAngle());
 	}
 
 	getStepEnable() {
@@ -400,14 +519,6 @@ export default class Draw {
 		this.mouse.x = ((event.clientX / window.screen.availWidth) * 2) - 1;
 		this.mouse.y = (-(event.clientY / window.screen.availHeight) * 2) + 1;
 	}
-
-	// // Handlers
-	// onDocumentMouseMove(event) {
-	// 	event.preventDefault();
-	//
-	// 	this.mouse.x = ((event.clientX * this.cssScale/ window.screen.availWidth) * 2) - 1;
-	// 	this.mouse.y = (-(event.clientY * this.cssScale / window.screen.availHeight) * 2) + 1;
-	// }
 
 	fullStep(stepObject) {
 		this.vector = stepObject.vector;
