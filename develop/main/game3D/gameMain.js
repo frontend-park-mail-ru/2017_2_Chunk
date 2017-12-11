@@ -32,6 +32,8 @@ export default class Game3D {
 		this.winDetected();
 		this.exitGame();
 		this.stepEnable();
+		this.azimuthAngle();
+		this.rotate();
 	}
 
 	getGameInfo() {
@@ -84,6 +86,13 @@ export default class Game3D {
 		});
 	}
 
+	rotate() {
+		this.bus.on('rotate', (response) => {
+			const request = response;
+			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
+		});
+	}
+
 	figureType() {
 		this.bus.on('figureType', (response) => {
 			this.draw.getGameInfo(response);
@@ -105,6 +114,12 @@ export default class Game3D {
 	stepEnable() {
 		this.bus.on('stepEnable', (response) => {
 			this.draw.makeStepEnable(response);
+		})
+	}
+
+	azimuthAngle() {
+		this.bus.on('azimuthAngle', (response) => {
+			this.draw.azimuthAngle(response);
 		})
 	}
 }

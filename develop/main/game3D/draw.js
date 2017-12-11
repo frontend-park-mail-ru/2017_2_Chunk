@@ -175,38 +175,12 @@ export default class Draw {
 		// 	this.camera.position.y += 0.5;
 		// }
 
-		// console.log(this.controls.getAzimuthalAngle());
-
-		// if (this.controls.getAzimuthalAngle() >= this.controls.maxAzimuthAngle) {
-		// 	console.log("MAX");
-		// 	this.controls.autoRotate = false;
-		// 	this.controls.minAzimuthAngle = -Infinity;
-		// 	this.controls.maxAzimuthAngle = Infinity;
-		// }
-		//
-		// if (this.controls.getAzimuthalAngle() <= this.controls.minAzimuthAngle) {
-		// 	console.log("MIN");
-		// 	this.controls.autoRotate = false;
-		// 	this.controls.minAzimuthAngle = -Infinity;
-		// 	this.controls.maxAzimuthAngle = Infinity;
-		// }
-
 		if (this.controls.getAzimuthalAngle() < this.angle + 0.1 &&
 			this.controls.getAzimuthalAngle() > this.angle - 0.1 &&
 			this.angleIndicator) {
 			this.controls.autoRotate = false;
 			this.angleIndicator = false;
-			console.log(this.controls.getAzimuthalAngle());
 		}
-
-		if (this.controls.getAzimuthalAngle() < 0.1 &&
-			this.controls.getAzimuthalAngle() > -0.1)
-			console.log("00000000000000");
-
-		if (this.controls.getAzimuthalAngle() < 3.16 &&
-			this.controls.getAzimuthalAngle() > 3.13)
-			console.log("PIIIIII");
-
 
 		this.queueStep();
 
@@ -271,8 +245,8 @@ export default class Draw {
 
 				// Если нажали на фигурку, у которой наш цвет
 				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-					// intersects[0].object.material.color.getHex()
-					// === tools.PLAYER_COLORS[this.figureType] &&
+					intersects[0].object.material.color.getHex()
+					=== tools.PLAYER_COLORS[this.figureType] &&
 					// Проверяем, можно ли изменять первую точку.
 					// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
 					!Object.isFrozen(this.point1)) {
@@ -283,7 +257,8 @@ export default class Draw {
 						if (intersects[0].object.position.z > i * tools.PLANE_Z) { this.point1.z = i; }
 					}
 
-					this.azimuthAngle(this.point1.x, this.point1.z);
+					this.getAzimuthAngle();
+
 					// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
 					this.getStepEnable();
 
@@ -335,77 +310,21 @@ export default class Draw {
 		}
 	}
 
-	azimuthAngle(x, z) {
-		let xAnlge = (x*5 + 2.5) - 15;
-		let zAnlge = (z*5 + 2.5) - 15;
+	getAzimuthAngle() {
+		const request = {
+			code: 'rotateAngle',
+			x: this.point1.x,
+			z: this.point1.z,
+			currentAngle: this.controls.getAzimuthalAngle()
+		};
+		this.bus.emit('rotate', request);
+	}
 
-		let angle = xAnlge/zAnlge;
-		let atan2 = 0;
-		let atan = 0;
-		console.log("angle " + angle);
-
-		if (angle > 0) {
-			console.log(1);
-			atan2 = Math.atan2(zAnlge, xAnlge);
-			console.log("atan2 " + atan2);
-			atan = Math.atan(angle) - Math.PI;
-			console.log("atan " + atan);
-			if (angle === 1)
-				this.angle = atan2;
-			else
-				this.angle = atan;
-		}
-		if (xAnlge < 0 && zAnlge > 0) {
-			console.log(2);
-			atan2 = Math.atan2(zAnlge, xAnlge) - Math.PI;
-			console.log("atan2 " + atan2);
-			atan = Math.atan(angle);
-			console.log("atan " + atan);
-			this.angle = atan;
-		}
-		if (xAnlge > 0 && zAnlge < 0) {
-			console.log(3);
-			atan2 = Math.atan2(zAnlge, xAnlge) + Math.PI;
-			console.log("atan2 " + atan2);
-			atan = Math.atan(angle) + Math.PI;
-			console.log("atan " + atan);
-			this.angle = atan;
-		}
-		//
-		if (this.controls.getAzimuthalAngle() > 0 && this.angle > 0) {
-			if (this.controls.getAzimuthalAngle() > this.angle) {
-				this.controls.autoRotateSpeed = -8;
-			} else {
-				this.controls.autoRotateSpeed = 8;
-			}
-		}
-		if (this.controls.getAzimuthalAngle() > 0 && this.angle < 0) {
-			if (this.controls.getAzimuthalAngle() > this.angle) {
-				this.controls.autoRotateSpeed = 8;
-			} else {
-				this.controls.autoRotateSpeed = 8;
-			}
-		}
-		if (this.controls.getAzimuthalAngle() < 0 && this.angle > 0) {
-			if (this.controls.getAzimuthalAngle() > this.angle) {
-				this.controls.autoRotateSpeed = 8;
-			} else {
-				this.controls.autoRotateSpeed = 8;
-			}
-		}
-		if (this.controls.getAzimuthalAngle() < 0 && this.angle < 0) {
-			if (this.controls.getAzimuthalAngle() > this.angle) {
-				this.controls.autoRotateSpeed = -8;
-			} else {
-				this.controls.autoRotateSpeed = 8;
-			}
-		}
-
+	azimuthAngle(response) {
+		this.controls.autoRotateSpeed = response.speed;
+		this.angle = response.angle;
 		this.controls.autoRotate = true;
-		// this.controls.autoRotateSpeed = 8;
 		this.angleIndicator = true;
-
-		console.log(this.controls.getAzimuthalAngle());
 	}
 
 	getStepEnable() {
@@ -416,7 +335,7 @@ export default class Draw {
 				arrayOfFigureForPost[i][j] = this.arrayOfPlane[i][j].figure;
 		}
 		let request = {
-			code: '215',
+			code: 'stepEnable',
 			array: arrayOfFigureForPost,
 			x: this.point1.x,
 			z: this.point1.z

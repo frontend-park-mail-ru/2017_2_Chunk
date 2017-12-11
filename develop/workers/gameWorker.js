@@ -173,6 +173,63 @@ const gameWorker = new class GameWorker {
 			}
 		}
 	}
+
+	azimuthAngle(data) {
+		let xAnlge = (data.x * 5 + 2.5) - 15;
+		let zAnlge = (data.z * 5 + 2.5) - 15;
+		let angle = xAnlge/zAnlge;
+		
+		let angleRotate = 0;
+		let azimuthAngle = data.currentAngle;
+		let speed = 0;
+
+		if (angle > 0) {
+			if (angle === 1)
+				angleRotate = Math.atan2(zAnlge, xAnlge);
+			else
+				angleRotate = Math.atan(angle) - Math.PI;
+		}
+		if (xAnlge < 0 && zAnlge > 0)
+			angleRotate = Math.atan(angle);
+		if (xAnlge > 0 && zAnlge < 0)
+			angleRotate = Math.atan(angle) + Math.PI;
+
+		if (azimuthAngle > 0 && angleRotate > 0 ||
+			azimuthAngle < 0 && angleRotate < 0) {
+			if (azimuthAngle > angleRotate) {
+				speed = 8;
+			} else {
+				speed = -8;
+			}
+		}
+		if (azimuthAngle > 0 && angleRotate < 0) {
+			if (azimuthAngle-Math.PI > angleRotate) {
+				speed = -8;
+			} else {
+				speed = 8;
+			}
+		}
+		if (azimuthAngle < 0 && angleRotate > 0) {
+			if (azimuthAngle+Math.PI > angleRotate) {
+				speed = -8;
+			} else {
+				speed = 8;
+			}
+		}
+
+		console.log(data.x);
+		console.log(data.z);
+		console.log(azimuthAngle);
+		console.log(speed);
+
+		const request = {
+			func: 'azimuthAngle',
+			speed: speed,
+			angle: angleRotate
+		};
+
+		return request;
+	}
 };
 
 
@@ -183,8 +240,11 @@ self.onmessage = (workerRequest) => {
 		case '204':
 			workerResponse = gameWorker.winOrLose(data);
 			break;
-		case '215':
+		case 'stepEnable':
 			workerResponse = gameWorker.stepEnable(data);
+			break;
+		case 'rotateAngle':
+			workerResponse = gameWorker.azimuthAngle(data);
 			break;
 		case '200':
 			gameWorker.startArray(data);
