@@ -93,9 +93,8 @@ export default class UserService {
 		}
 		eventBus.emit('waitingBackend');
 		const resp = await Http.fetchPost('/user/sign_in', {login, password});
-		eventBus.emit('backendResponseReceived');
-		// eventBus.emit('backendResponse');
 		response.json = await resp.json();
+		eventBus.emit('backendResponseReceived');
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -129,7 +128,6 @@ export default class UserService {
 			return response;
 		}
 		eventBus.emit('waitingBackend');
-
 		const resp = await Http.fetchPost('/user/update', {username, email, password, oldPassword});
 		response.json = await resp.json();
 		eventBus.emit('backendResponseReceived');

@@ -1,7 +1,7 @@
 'use strict';
 
 import routerFields from './__fields/router__fields';
-import Block from '../../blocks/block/block';
+import eventBus from '../../modules/eventBus';
 
 
 /**
@@ -14,7 +14,7 @@ export default class Router {
 	 * @param {class} userService - общий для всех модулей объект класса
 	 * @constructor
 	 */
-	constructor(eventBus, userService) {
+	constructor(userService) {
 		this.routes = routerFields;
 		this._routes = [];
 		this.bus = eventBus;
@@ -91,7 +91,6 @@ export default class Router {
 		this.addHrefListeners();
 		try {
 			const resp = await this.userService.getDataFetch();
-			this.bus.emit('removeStartLoader');
 			if (resp.ok) {
 				this.bus.emit('auth', resp.json.username);
 				const sliceRoutes_ = this._routes.slice(0, 8);
@@ -101,11 +100,12 @@ export default class Router {
 				const sliceRoutes_ = this._routes.slice(6);
 				this.findNewState(sliceRoutes_);
 			}
+			eventBus.emit('JSReady');
 		} catch (err) {
-			console.log(err);
 			this.bus.emit('unauth');
 			const sliceRoutes_ = this._routes.slice(6);
 			this.findNewState(sliceRoutes_);
+			eventBus.emit('JSReady');
 		}
 	}
 

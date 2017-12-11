@@ -11,7 +11,7 @@ new class StartLoader {
 	start() {
 		this.createStartCssLoader();
 		// this.loadBackgroundImage();
-		this.loadMainScript();
+		// this.loadMainScript();
 	}
 
 
@@ -22,10 +22,6 @@ new class StartLoader {
 		document.body.appendChild(this.startLoader);
 	}
 
-
-
-	loadBackgroundImage() {
-	}
 
 
 	loadMainScript() {

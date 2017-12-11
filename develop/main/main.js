@@ -51,6 +51,8 @@ import SoundsEvents from './services/sound/soundEvents/soundEvents';
 
 import VideoEvents from './services/video/videoEvents/videoEvents';
 
+import MusicPlayer from './services/sound/musicPlayer/musicPlayer';
+
 import TabBlink from './views/tabBlink/tabBlink';
 
 
@@ -101,6 +103,8 @@ const serviceWorker = ServiceWorker;
 const soundsEvents = new SoundsEvents();
 
 const videoEvents = new VideoEvents();
+
+const musicPlayer = new MusicPlayer();
 
 const tabBlink = new TabBlink();
 
@@ -277,5 +281,6 @@ fullScreenOn();
 // window.onbeforeunload = function() {
 // 	return "Вы уверены, что хотите покинут страницу?";
 // };
-eventBus.emit('jsReady');
+
+
 router.start();

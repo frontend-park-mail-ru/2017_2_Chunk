@@ -1,6 +1,7 @@
 'use strict';
 
 import Block from '../../../blocks/block/block';
+import eventBus from '../../../modules/eventBus';
 
 
 /**

@@ -1,8 +1,8 @@
 'use strict';
-
 import eventBus from '../../../modules/eventBus';
 import Block from '../../../blocks/block/block';
 import backendWaitingAnimationHtml from './starLord/starLordHtml'
+
 
 new class BackendWaitingAnimation {
 	constructor() {
@@ -22,6 +22,7 @@ new class BackendWaitingAnimation {
 		});
 	}
 
+
 	backendResponseReceived() {
 		eventBus.on('backendResponseReceived', () => {
 			setTimeout(() => {
@@ -37,13 +38,19 @@ new class BackendWaitingAnimation {
 	animationOn() {
 		this.animationContainer.el.classList.add('animation');
 	}
+
+
 	animationOff() {
 		this.animationContainer.el.classList.remove('animation');
 	}
+
+
 	opacityAnimationOn() {
 		const container = this.animationContainer.el.getElementsByClassName('container')[0];
 		container.classList.add('opacityAnimation');
 	}
+
+
 	opacityAnimationOff() {
 		const container = this.animationContainer.el.getElementsByClassName('container')[0];
 		container.classList.remove('opacityAnimation');

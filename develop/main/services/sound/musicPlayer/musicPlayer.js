@@ -4,24 +4,28 @@ import audioLoaderHtml from './musicPlayerHtml';
 import playlist from './playlist';
 
 
-new class MusicPlayer {
+export default class MusicPlayer {
 	constructor() {
 		this.start();
-		this.musicStart();
 	}
 
 
 	start() {
-		this.removeStartCssLoader();
+		this.onJSReady();
+	}
+
+	onJSReady() {
+		eventBus.on('JSReady', () => {
+			this.removeStartCssLoader();
+			this.musicStart();
+		})
 	}
 
 
 	removeStartCssLoader() {
 		const startLoader = document.body.getElementsByClassName('startLoader')[0];
-		eventBus.on('removeStartLoader', () => {
-			document.body.removeChild(startLoader);
-		});
-	}
+		document.body.removeChild(startLoader);
+	};
 
 
 	musicStart() {
