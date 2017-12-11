@@ -104,6 +104,7 @@ export default class MusicPlayer {
 		this.onPreviousSongClick();
 		this.onPauseClick();
 		this.onPlayClick();
+		this.onRandomClick();
 	}
 
 
@@ -195,6 +196,22 @@ export default class MusicPlayer {
 		})
 	};
 
+
+	onRandomClick() {
+		const randomButton = this.controlButtons.el.getElementsByClassName('player-button-random')[0];
+		randomButton.addEventListener('click', () => {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			if (!this.random) {
+				randomButton.classList.add(('random-play'));
+				this.random = true;
+			}
+			else {
+				randomButton.classList.remove(('random-play'));
+				this.random = false;
+			}
+		})
+	}
 
 	videoEvents() {
 		eventBus.on('videoPlay', () => {
