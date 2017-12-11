@@ -36,7 +36,8 @@
     "three-orbitcontrols": "^1.2.1",
     "url-loader": "^0.6.2",
     "uuid": "^3.1.0",
-    "visibilityjs": "^1.2.6"
+    "visibilityjs": "^1.2.6",
+    "webpack": "^3.10.0"
   },
   "repository": {
     "type": "git",
@@ -58,7 +59,6 @@
     "pug-loader": "^2.3.0",
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",
-    "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.5"
   },
   "scripts": {
