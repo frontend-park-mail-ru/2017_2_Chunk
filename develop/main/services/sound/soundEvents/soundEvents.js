@@ -2,7 +2,7 @@ import eventBus from '../../../modules/eventBus';
 
 export default class soundEvents {
 	constructor() {
-		eventBus.on('jsReady', () => {this.buttonSounds()});
+		eventBus.on('JSReady', () => {this.buttonSounds()});
 	};
 
 	buttonSounds() {
