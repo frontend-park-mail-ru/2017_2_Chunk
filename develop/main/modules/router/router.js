@@ -2,7 +2,7 @@
 
 import routerFields from './__fields/router__fields';
 import eventBus from '../../modules/eventBus';
-
+import userService from '../../services/user-service';
 
 /**
  * Модуль, отвечающий за работу ссылками и роутинг
@@ -10,11 +10,9 @@ import eventBus from '../../modules/eventBus';
  */
 export default class Router {
 	/**
-	 * @param {class} eventBus - общий для всех модулей объект класса
-	 * @param {class} userService - общий для всех модулей объект класса
 	 * @constructor
 	 */
-	constructor(userService) {
+	constructor() {
 		this.routes = routerFields;
 		this._routes = [];
 		this.bus = eventBus;
@@ -102,6 +100,7 @@ export default class Router {
 			}
 			eventBus.emit('JSReady');
 		} catch (err) {
+			debugger;
 			this.bus.emit('unauth');
 			const sliceRoutes_ = this._routes.slice(6);
 			this.findNewState(sliceRoutes_);
@@ -157,17 +156,19 @@ export default class Router {
 		if (location.pathname === '/waiting-hall' || location.pathname === '/game') {
 			this.goTo('/lobby');
 		}
-		const idx = sliceRoutes_.findIndex(function (_route) {
-			return location.pathname.match(_route.url_pattern);
-		});
-		if (idx > -1) {
-			const _route = sliceRoutes_[idx];
-			window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
-			this.changeState(_route.url_pattern);
-		} else {
-			const _route = this._routes[0];
-			window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
-			this.changeState(this.routes[0].url);
+		else {
+			const idx = sliceRoutes_.findIndex(function (_route) {
+				return location.pathname.match(_route.url_pattern);
+			});
+			if (idx > -1) {
+				const _route = sliceRoutes_[idx];
+				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+				this.changeState(_route.url_pattern);
+			} else {
+				const _route = this._routes[0];
+				window.history.replaceState(_route.url_pattern, _route.url_pattern, _route.url_pattern);
+				this.changeState(this.routes[0].url);
+			}
 		}
 	}
 }

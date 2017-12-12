@@ -3,6 +3,9 @@ import CommonView from '../view/view';
 import Form from '../../blocks/form/form.js';
 import Message from '../../blocks/form/__message/form__message.js';
 import loginFields from './__fields/loginView__fields';
+import eventBus from '../../modules/eventBus';
+import userService from '../../services/user-service';
+import router from '../../modules/router/router';
 
 
 /**
@@ -16,7 +19,7 @@ export default class LoginView extends CommonView {
 	 * @param {class} router - общий для всех модулей объект класса
 	 * @constructor - конструктор секции логина
 	 */
-	constructor(eventBus, userService, router) {
+	constructor() {
 		const form = new Form(loginFields);
 		super({form});
 		this.form = form;

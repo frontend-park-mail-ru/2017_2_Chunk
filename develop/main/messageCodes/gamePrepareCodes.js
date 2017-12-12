@@ -26,6 +26,9 @@ const gamePrepareCodes = {
 	startGame: {
 		code: 135,
 	},
+	exit: {
+		code: 132,
+	},
 	requestEventName: 'request',
 	responseEventName: 'response',
 

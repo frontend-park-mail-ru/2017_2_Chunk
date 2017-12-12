@@ -65,6 +65,7 @@ export default class GameCreateView extends Block {
 	onSubmit() {
 		this.el.addEventListener('submit', (event) => {
 			event.preventDefault();
+			this.bus.emit('waitingBackend');
 			let numberOfPlayer = this.el.elements.playersNumberChoice.value;
 			let fieldSize = this.el.elements.fieldSizeChoice.value;
 			const request = {

@@ -30,11 +30,10 @@ export default class headerFields {
 
 	update(socketReceiveData) {
 		const masterID = socketReceiveData.masterID;
-		// const masterInfo = socketReceiveData.realPlayers.filter((gamer) => {
-		// 	return gamer.userID === masterID;
-		// })[0];
-		// const masterUsername = masterInfo.username;
-		const masterUsername = 'Igor';
+		const masterInfo = socketReceiveData.realPlayers.filter((gamer) => {
+			return gamer.userID === masterID;
+		})[0];
+		const masterUsername = masterInfo.username;
 
 		this.fields.creator.el.innerHTML = `Creator: ${masterUsername}`;
 		this.fields.gameID.el.innerHTML = this.fields.gameID.el.innerHTML.replace(/\d+/g, socketReceiveData.gameID);

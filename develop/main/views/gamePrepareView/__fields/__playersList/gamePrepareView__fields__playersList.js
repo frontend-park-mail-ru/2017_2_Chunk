@@ -1,6 +1,8 @@
 'use strict';
 import Block from '../../../../blocks/block/block.js';
 import PLayerListString from './__string/gamePrepareView__fields__playersList__string';
+import eventBus from '../../../../modules/eventBus';
+import prepareGameCodes from '../../../../messageCodes/gamePrepareCodes';
 
 
 /**
@@ -11,54 +13,95 @@ export default class PlayersList extends Block {
 	constructor() {
 		const block = Block.create('div', {}, ['gamePrepareView__fields__playersList']);
 		super(block.el);
-		const header = {
-			userID: 'User ID',
-			username: 'Username',
-			email: 'Email',
-		};
-		const header_attrs = {
-			'font-size': '18px !important',
-		};
-		this.addPlayer(header, header_attrs);
+		this.addHeader();
+		this.isMaster();
 	}
 
 
-	addPlayer(data, attrs = {}) {
-		const string = new PLayerListString(data, attrs);
-		this.strings = this.strings || {};
-		this.botStrings = this.botStrings || [];
-		if (data.userID) {
-			this.strings[data.userID] = string;
-			this.append(string);
-		}
-		else {
-			this.botStrings.push(string);
-			this.append(string);
-		}
+	isMaster() {
+		this.master = false;
+		eventBus.on(`${prepareGameCodes.responseEventName}${prepareGameCodes.createGame.code}`, () => {
+			this.master = true;
+		})
+	}
+
+
+	addPlayer(data) {
+		let type = '';
+		if (this.master)
+			type = 'playerFromMaster';
+		else
+			type = 'player';
+		const string = new PLayerListString(type, data);
+		this.playersStrings = this.playersStrings || {};
+		this.playersStrings[data.userID] = string;
+		this.append(string);
+	}
+
+
+	addMaster(data) {
+		const type = 'master';
+		const string = new PLayerListString(type, data);
+		this.playersStrings = this.playersStrings || {};
+		this.playersStrings[data.userID] = string;
+		this.append(string);
+	}
+
+
+	addBot(data) {
+		let type = '';
+		if (this.master)
+			type = 'playerFromMaster';
+		else
+			type = 'player';
+		const string = new PLayerListString(type, data);
+		this.botsStrings = this.botsStrings || {};
+		this.botsStrings[data.botID] = string;
+		this.append(string);
+	}
+
+
+	addHeader() {
+		const type = 'header';
+		const string = new PLayerListString(type);
+		this.append(string);
 	}
 
 
 	removePlayer(userID) {
 		if (userID !== 'User ID') {
-			this.remove(this.strings[userID]);
-			delete this.strings[userID];
+			this.remove(this.playersStrings[userID]);
+			delete this.playersStrings[userID];
 		}
+	}
+
+
+	removeBot(botID) {
+		this.remove(this.botsStrings[botID]);
+		delete this.botsStrings[botID];
 	}
 
 
 	removeBots() {
-		this.botStrings.forEach((botString, idx) => {
-			this.remove(botString);
-			delete this.botStrings[idx];
-		});
-		delete this.botStrings;
-
+		for (let key in this.botsStrings) {
+			this.removeBot(key);
+		}
+		delete this.botsStrings;
 	}
-	clear() {
-		for (let key in this.strings) {
+
+
+	removePlayers() {
+		for (let key in this.playersStrings) {
 			this.removePlayer(key);
 		}
-		delete this.strings;
-		this.removeBots();
+		delete this.playersStrings;
+	}
+
+
+	clear() {
+		setTimeout(() => {
+			this.removePlayers();
+			this.removeBots();
+		}, 500);
 	}
 }

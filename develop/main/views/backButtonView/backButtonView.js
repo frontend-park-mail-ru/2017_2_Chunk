@@ -22,12 +22,12 @@ export default class backButtonView extends Block {
 			const request = {
 				code: `${gamePrepareCodes.exit.code}`,
 			};
-			const listener = bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`,
-				() => {
-					window.history.back();
-					bus.remove(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`, listener);
-				});
-			bus.emit(`${gamePrepareCodes.exit.request}`, request);
+			// const listener = bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`,
+			// 	() => {
+			// 		window.history.back();
+			// 		bus.remove(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`, listener);
+			// 	});
+			bus.emit(`${gamePrepareCodes.requestEventName}`, request);
 		});
 	}
 }

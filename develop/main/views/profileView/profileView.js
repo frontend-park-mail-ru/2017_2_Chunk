@@ -1,7 +1,8 @@
 'use strict';
 
 import Block from '../../blocks/block/block.js';
-import ViewButton from '../view/__view-button/view__view-button';
+import eventBus from '../../modules/eventBus';
+
 
 
 /**
@@ -13,7 +14,7 @@ export default class ProfileView extends Block {
 	 * @constructor
 	 * @param eventBus -
 	 */
-	constructor(eventBus) {
+	constructor() {
 		const profile = Block.create('div', {}, ['userData', 'auth', 'profileView', 'profile']);
 		super(profile.el);
 

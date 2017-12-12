@@ -130,9 +130,11 @@ export default class LobbyView extends View {
 	gameStartEvents() {
 		this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.createGame.code}`, () => {
 			this.bus.emit('createGame');
+			this.bus.emit('backendResponseReceived');
 		});
 		this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.connectGame.code}`, () => {
 			this.bus.emit('connectGame');
+			this.bus.emit('backendResponseReceived');
 		});
 	}
 

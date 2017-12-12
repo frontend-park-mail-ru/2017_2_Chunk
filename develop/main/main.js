@@ -33,7 +33,7 @@ import GamePrepareView from './views/gamePrepareView/gamePrepareView';
 
 import Block from './blocks/block/block.js';
 
-import UserService from './services/user-service.js';
+import userService from './services/user-service.js';
 
 import EventBus from './modules/eventBus';
 
@@ -58,27 +58,25 @@ import TabBlink from './views/tabBlink/tabBlink';
 
 const gameNameView = new GameNameView();
 
-const userService = new UserService();
-
 const eventBus = EventBus;
 
 const app = Block.create('main', {}, ['main_theme-black-orange', 'main']);
 
 document.body.appendChild(app.el);
 
-const router = new Router(eventBus, userService);
+const router = new Router();
 
-const menuView = new MenuView(eventBus, router);
+const menuView = new MenuView();
 
-const signUpView = new SignUpView(eventBus, userService, router);
+const signUpView = new SignUpView();
 
-const loginView = new LoginView(eventBus, userService, router);
+const loginView = new LoginView();
 
-const updateView = new UpdateView(eventBus, userService, router);
+const updateView = new UpdateView();
 
-const profileView = new ProfileView(eventBus);
+const profileView = new ProfileView();
 
-const rulesView = new RulesView(eventBus);
+const rulesView = new RulesView();
 
 const backMenuButtonView = new BackMenuButtonView();
 
@@ -86,7 +84,7 @@ const backButtonView = new BackButtonView();
 
 const themeButtonView = new ThemeButtonView();
 
-const scoreboardView = new ScoreboardView(eventBus, userService);
+const scoreboardView = new ScoreboardView();
 
 const lobbyView = new LobbyView();
 
@@ -125,10 +123,16 @@ Views.push(gamePrepareView);
 // Views.push(gameContainer);
 
 
-eventBus.on('openSignUp', function () {
+function hideAllView() {
 	Views.forEach((view) => {
-		view.hide();
+		if (!view.hidden)
+			view.hide();
 	});
+}
+
+
+eventBus.on('openSignUp', function () {
+	hideAllView();
 	gameNameView.show();
 	signUpView.show();
 	backMenuButtonView.show();
@@ -136,9 +140,7 @@ eventBus.on('openSignUp', function () {
 
 
 eventBus.on('openLogin', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
+	hideAllView();
 	gameNameView.show();
 	loginView.show();
 	backMenuButtonView.show();
@@ -146,9 +148,7 @@ eventBus.on('openLogin', function () {
 
 
 eventBus.on('openUpdate', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
+	hideAllView();
 	gameNameView.show();
 	updateView.show();
 	backMenuButtonView.show();
@@ -156,9 +156,7 @@ eventBus.on('openUpdate', function () {
 
 
 eventBus.on('openRules', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
+	hideAllView();
 	gameNameView.show();
 	rulesView.show();
 	backMenuButtonView.show();
@@ -166,9 +164,7 @@ eventBus.on('openRules', function () {
 
 
 eventBus.on('openMenu', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
+	hideAllView();
 	themeButtonView.show();
 	const browserStorage = window.localStorage;
 	gameNameView.show();
@@ -188,9 +184,7 @@ eventBus.on('exit', function () {
 
 
 eventBus.on('openScoreboard', function () {
-	Views.forEach((view) => {
-		view.hide();
-	});
+	hideAllView();
 	gameNameView.show();
 	scoreboardView.show();
 	backMenuButtonView.show();

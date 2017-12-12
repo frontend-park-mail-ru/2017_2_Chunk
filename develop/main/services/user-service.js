@@ -7,7 +7,7 @@ import eventBus from '../modules/eventBus';
  * Сервис для работы с юзерами
  * @module UserService
  */
-export default class UserService {
+export default new class UserService {
 	constructor() {
 		this.user = null;
 		this.users = [];

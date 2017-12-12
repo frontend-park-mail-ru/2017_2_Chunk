@@ -60,6 +60,42 @@ export default class gamePrepareView extends View {
 	}
 
 
+
+
+
+	kickPlayer() {
+	}
+
+
+	showViewEvents() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.createGame.code}`, (response) => {
+			eventBus.emit('showMasterFields');
+			this.fields.header.updateGameData(response.game);
+			this.fields.playersList.addMaster(response.game.realPlayers[0])
+		});
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.connectGame.code}`, () => {
+			eventBus.emit('hideMasterFields');
+			this.fields.header.updateGameData(response.game);
+		})
+	}
+
+
+	gameStatusEvents() {
+		// this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.startGame.code}`, () => {
+		this.bus.on(`${gamePrepareCodes.responseEventName}200`, () => {
+			this.bus.emit('goToGame');
+		});
+	};
+
+
+	updateGameData() {
+		this.addPlayer();
+		this.removePLayer();
+		this.addBot();
+		this.removeBot();
+	};
+
+
 	addPlayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addPlayer.code}`, (response) => {
 			this.fields.playersList.addPlayer(response.player);
@@ -68,72 +104,27 @@ export default class gamePrepareView extends View {
 	}
 
 
-	addBot() {
-		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addBot.code}`, (response) => {
-			this.fields.playersList.addPlayer(response.player);
-			this.clear = false;
-		});
-	}
-
-
 	removePLayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removePlayer.code}`, (response) => {
-			// if (this.active) {
 			this.fields.playersList.removePlayer(response.player.userID);
 		});
 	}
 
 
-	// removeBot() {
-	// 	this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removePlayer.code}`, (response) => {
-	// 		// if (this.active) {
-	// 			this.fields.playersList.removePlayer(response.player.userID);
-	// 	});
-	// }
-
-
-	kickPlayer() {
-
+	addBot() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addBot.code}`, (response) => {
+			this.fields.playersList.addBot(response);
+			this.clear = false;
+		});
 	}
 
 
-	showViewEvents() {
-		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.createGame.code}`, (response) => {
-			debugger;
-			eventBus.emit('showMasterFields');
-			this.fields.header.updateGameData(response.game);
+	removeBot() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removeBot.code}`, (response) => {
+			this.fields.playersList.removeBot(response.bot.botID);
 		});
-		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.connectGame.code}`, () => {
-			eventBus.emit('hideMasterFields');
-			this.fields.header.updateGameData(response.game);
-		})
 	}
 
-	gameStatusEvents() {
-		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.startGame.code}`, () => {
-			this.bus.emit('goToGame');
-		});
-	};
-
-
-	// updateGameData() {
-	// 	// this.gamePrepareListeners[`${lobbyCodes.responseEventName}${lobbyCodes.getGameInfo.code}`] =
-	// 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.getGameInfo.code}`, (response) => {
-	// 		this.fields.header.updateGameData(response.game);
-	// 		this.clear = false;
-	// 		this.gameInfo = response;
-	// 		if (this.userID !== response.game.masterID) {
-	// 			eventBus.emit('hideMasterFields');
-	// 		}
-	// 		else
-	// 			eventBus.emit('showMasterFields');
-	// 		response.game.gamers.forEach((gamer) => {
-	// 			if (gamer.userID !== this.userID) {
-	// 				this.fields.playersList.addPlayer(gamer);
-	// 			}
-	// 		});
-	// 	});
-	// }
 	masterEvents() {
 		eventBus.on('hideMasterFields', () => {
 			this.hideMasterFields();
@@ -165,19 +156,19 @@ export default class gamePrepareView extends View {
 
 
 	buttonsEvents() {
-		// this.fields.addBot.on('click', () => {
-		// 	const request = {
-		// 		code: '108',
-		// 		lvlbot: '3',
-		// 	};
-		// 	this.bus.emit(`${gamePrepareCodes.addBot.request}`, (request));
-		// });
-		// this.fields.startGame.on('click', () => {
-		// 	const request = {
-		// 		code: '105',
-		// 	};
-		// 	this.bus.emit(`${gamePrepareCodes.startGame.request}`, (request));
-		// });
+		this.fields.addBot.on('click', () => {
+			const request = {
+				code: `${gamePrepareCodes.addBot.code}`,
+				lvlbot: '3',
+			};
+			this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
+		});
+		this.fields.startGame.on('click', () => {
+			const request = {
+				code: `${gamePrepareCodes.startGame.code}`,
+			};
+			this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
+		});
 	}
 
 

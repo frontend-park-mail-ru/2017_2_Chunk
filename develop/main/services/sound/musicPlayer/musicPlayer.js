@@ -46,15 +46,16 @@ export default class MusicPlayer {
 
 
 	audioSettings() {
-		this.audioPlaying = false;
 		this.musicNode = document.createElement('div');
 		this.musicNode.innerHTML = audioLoaderHtml;
 		document.body.appendChild(this.musicNode);
 		this.backgroundaudio = document.getElementById('backgroundaudio');
 		this.audio = new Audio();
-		this.audio.volume = 0.3;
+		this.audio.volume = 0.5;
+		this.volume = true;
 		this.audio.type = 'audio/mpeg';
 		this.audio.autoplay = 'autoplay';
+		this.play = true;
 		this.backgroundaudio.appendChild(this.audio);
 		this.audio.onended = () => {
 			this.onEndedSong()
@@ -89,14 +90,16 @@ export default class MusicPlayer {
 
 	audioControlHandler(event) {
 		const _self = event.target;
-		if (!this.audioPlaying) {
+		if (this.volume) {
 			_self.classList.add('noVolume');
 			this.audio.volume = 0;
 		} else {
-			_self.classList.remove('noVolume');
-			this.audio.volume = 0.3;
+			if (this.play) {
+				_self.classList.remove('noVolume');
+				this.audio.volume = 0.6;
+			}
 		}
-		this.audioPlaying = !this.audioPlaying;
+		this.volume = !this.volume;
 	}
 
 
@@ -168,8 +171,7 @@ export default class MusicPlayer {
 
 
 	previousSong() {
-		this.lastSong = false;
-		if (this.currentSongPosition != 0) {
+		if (this.currentSongPosition) {
 			this.currentSongPosition--;
 			this.setSongByNumber(this.previousSongs[this.currentSongPosition]);
 		}
@@ -184,6 +186,7 @@ export default class MusicPlayer {
 			pauseButton.classList.remove('paused');
 			playButton.classList.remove('paused');
 			this.audio.pause();
+			this.play = false;
 		})
 	};
 
@@ -195,6 +198,7 @@ export default class MusicPlayer {
 			pauseButton.classList.add('paused');
 			playButton.classList.add('paused');
 			this.audio.play();
+			this.play = true;
 		})
 	};
 
