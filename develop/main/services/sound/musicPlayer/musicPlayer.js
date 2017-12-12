@@ -71,6 +71,7 @@ export default class MusicPlayer {
 	muteHandler() {
 		this.audioControlVolume = document.getElementById('audio-control');
 		this.audioControlVolume.addEventListener('click', (event) => {
+			event.preventDefault();
 			this.audioControlHandler(event);
 		}, false);
 		this.appendControlButtons();
@@ -110,7 +111,9 @@ export default class MusicPlayer {
 
 	onNextSongClick() {
 		const nextSongButtons = this.controlButtons.el.getElementsByClassName('player-button-next')[0];
-		nextSongButtons.addEventListener('click', () => {
+		nextSongButtons.addEventListener('click', (event) => {
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			if ((this.previousSongs.length - 1) === this.currentSongPosition) {
 				if (this.random)
 					this.nextSongRandom();
@@ -129,10 +132,7 @@ export default class MusicPlayer {
 
 	nextSongRandom() {
 		this.songNumber = Math.round(Math.random() * (this.numberOfSongs - 1));
-		const songUrl = playlist[this.songNumber].url;
-		this.audio.pause();
-		this.audio.src = songUrl;
-		this.audio.load();
+		this.setSongByNumber(this.songNumber);
 	}
 
 
@@ -149,6 +149,7 @@ export default class MusicPlayer {
 
 
 	setSongByNumber(songNumber) {
+		console.log('song number: ', songNumber);
 		const songUrl = playlist[songNumber].url;
 		this.audio.pause();
 		this.audio.src = songUrl;
@@ -158,7 +159,9 @@ export default class MusicPlayer {
 
 	onPreviousSongClick() {
 		const previousSongButton = this.controlButtons.el.getElementsByClassName('player-button-prev')[0];
-		previousSongButton.addEventListener('click', () => {
+		previousSongButton.addEventListener('click', (event) => {
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			this.previousSong();
 		})
 	}
@@ -173,17 +176,17 @@ export default class MusicPlayer {
 	}
 
 
-
 	onPauseClick() {
 		const pauseButton = this.controlButtons.el.getElementsByClassName('player-button-pause')[0];
 		const playButton = this.controlButtons.el.getElementsByClassName('player-button-play')[0];
-		pauseButton.addEventListener('click', () => {
+		pauseButton.addEventListener('click', (event) => {
+			event.preventDefault();
 			pauseButton.classList.remove('paused');
 			playButton.classList.remove('paused');
 			this.audio.pause();
-
 		})
 	};
+
 
 	onPlayClick() {
 		const pauseButton = this.controlButtons.el.getElementsByClassName('player-button-pause')[0];
@@ -192,7 +195,6 @@ export default class MusicPlayer {
 			pauseButton.classList.add('paused');
 			playButton.classList.add('paused');
 			this.audio.play();
-
 		})
 	};
 
@@ -212,6 +214,7 @@ export default class MusicPlayer {
 			}
 		})
 	}
+
 
 	videoEvents() {
 		eventBus.on('videoPlay', () => {
