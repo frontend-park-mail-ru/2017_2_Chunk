@@ -8,23 +8,23 @@ import eventBus from '../../modules/eventBus';
 export default class ThreeView extends CommonView {
 	constructor() {
 		const gameContainer = Block.create('div');
-		const winDiv = Block.create('div', {}, ['canvasView__winDiv'], '');
-		super([gameContainer, winDiv]);
+		const playersDiv = Block.create('div', {}, ['gameDiv'], '');
+		super([gameContainer, playersDiv]);
 		this.el.style.setProperty('border', 'none');
 		this.el.classList.add('treeView');
-		this.winDiv = winDiv;
-		this.winDiv.hide();
+		this.playersDiv = playersDiv;
+		this.playersDiv.hide();
 		this.bus = eventBus;
 		this.clear = true;
-		this.bus.on('endOfGame', (win) => {
-			if (win) {
-				this.winDiv.setText('You win! =)');
-			} else {
-				this.winDiv.setText('You lose! =(');
-			}
-			this.winDiv.show();
+		this.bus.on('beginPlaying', () => {
+			this.playersDiv.show();
+		});
+		this.bus.on('changePlayerDiv', (text) => {
+			this.playersDiv.setText(text);
+		});
+		this.bus.on('endOfGame', () => {
 			setTimeout(() => {
-				this.winDiv.hide();
+				this.playersDiv.hide();
 				//нужно переделать, надо подумать как
 				this.bus.emit('goToLobby');//точка выхода из игры в меню
 			}, 3000);

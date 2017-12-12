@@ -18,7 +18,7 @@ const gameWorker = new class GameWorker {
 		return request;
 	}
 
-	winOrLose(data) {
+	fullWinOrLose(data) {
 		let win = false;
 		const finishArray = data.field.field;
 		this.result = this.findMaxFiguresCount(this.countFigure(finishArray));
@@ -28,7 +28,7 @@ const gameWorker = new class GameWorker {
 			win: win
 		};
 
-		return request;
+		self.postMessage(request);
 	}
 
 	stepEnable(data) {
@@ -71,12 +71,21 @@ const gameWorker = new class GameWorker {
 		this.queue.push(data);
 	}
 
+	winOrLose(data) {
+		this.queue.push(data);
+	}
+
 	fullStep() {
 		if (typeof this.queue !== 'undefined' && this.queue !== null &&
 			this.queue.length > 0 && this.stepIndicator
 		) {
 			this.stepIndicator = false;
 			const response = this.queue.shift();
+			if (response.code === 204) {
+				this.fullWinOrLose(response);
+				this.stepIndicator = true;
+				return;
+			}
 			const src = response.step.src;
 			const dst = response.step.dst;
 			let figureForPaint = [];
@@ -128,7 +137,8 @@ const gameWorker = new class GameWorker {
 				vector: vector,
 				clone: clone,
 				step: step,
-				figureForPaint: figureForPaint
+				figureForPaint: figureForPaint,
+				playerString: this.playerString()
 			};
 
 			this.stepIndicator = true;
@@ -136,7 +146,7 @@ const gameWorker = new class GameWorker {
 			self.postMessage(request);
 		}
 
-		setTimeout(this.fullStep.bind(this), 1000);
+		setTimeout(this.fullStep.bind(this), 800);
 	}
 
 	countFigure(array) {
@@ -152,6 +162,15 @@ const gameWorker = new class GameWorker {
 			}
 		}
 		return countFigure;
+	}
+
+	playerString() {
+		let playerString = '';
+		let countFigure = this.countFigure(this.arrayOfField);
+		for (let i = 0; i < this.countPlayers; i++) {
+			playerString += `${this.gamers[i].username}` + ': ' + `${countFigure[i]}` + '\n';
+		}
+		return playerString;
 	}
 
 	findMaxFiguresCount(array) {
@@ -186,6 +205,8 @@ const gameWorker = new class GameWorker {
 		if (angle > 0) {
 			if (angle === 1)
 				angleRotate = Math.atan2(zAnlge, xAnlge);
+			else if (xAnlge > 0 && zAnlge > 0)
+				angleRotate = Math.atan(angle);
 			else
 				angleRotate = Math.atan(angle) - Math.PI;
 		}
@@ -196,31 +217,23 @@ const gameWorker = new class GameWorker {
 
 		if (azimuthAngle > 0 && angleRotate > 0 ||
 			azimuthAngle < 0 && angleRotate < 0) {
-			if (azimuthAngle > angleRotate) {
-				speed = 8;
-			} else {
-				speed = -8;
-			}
+			if (azimuthAngle > angleRotate)
+				speed = 10;
+			else
+				speed = -10;
 		}
 		if (azimuthAngle > 0 && angleRotate < 0) {
-			if (azimuthAngle-Math.PI > angleRotate) {
-				speed = -8;
-			} else {
-				speed = 8;
-			}
+			if (azimuthAngle - Math.PI > angleRotate)
+				speed = -10;
+			else
+				speed = 10;
 		}
 		if (azimuthAngle < 0 && angleRotate > 0) {
-			if (azimuthAngle+Math.PI > angleRotate) {
-				speed = -8;
-			} else {
-				speed = 8;
-			}
+			if (azimuthAngle + Math.PI > angleRotate)
+				speed = -10;
+			else
+				speed = 10;
 		}
-
-		console.log(data.x);
-		console.log(data.z);
-		console.log(azimuthAngle);
-		console.log(speed);
 
 		const request = {
 			func: 'azimuthAngle',
@@ -238,7 +251,7 @@ self.onmessage = (workerRequest) => {
 	let workerResponse;
 	switch (`${data.code}`) {
 		case '204':
-			workerResponse = gameWorker.winOrLose(data);
+			gameWorker.winOrLose(data);
 			break;
 		case 'stepEnable':
 			workerResponse = gameWorker.stepEnable(data);
@@ -250,7 +263,8 @@ self.onmessage = (workerRequest) => {
 			gameWorker.startArray(data);
 			break;
 		case '112':
-			workerResponse = gameWorker.getUserID(data);
+			if (data.gameID !== null)
+				workerResponse = gameWorker.getUserID(data);
 			break;
 		case '201':
 			gameWorker.step(data);

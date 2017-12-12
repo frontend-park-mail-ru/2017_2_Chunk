@@ -34,6 +34,7 @@ export default class Game3D {
 		this.stepEnable();
 		this.azimuthAngle();
 		this.rotate();
+		this.getGameInfo();
 	}
 
 	getGameInfo() {
@@ -52,7 +53,6 @@ export default class Game3D {
 			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
 			this.draw.startGame(response);
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, response);
-			this.getGameInfo();
 		});
 	}
 
