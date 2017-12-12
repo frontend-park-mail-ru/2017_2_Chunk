@@ -15,6 +15,11 @@ const playlist = [
 	{url: '/music/playlist/Awesome Mix Vol.2 - 8. Silver - Wham Bam Shang-A-Lang.mp3'},
 	{url: '/music/playlist/Awesome Mix Vol.2 - 9. Looking Glass - Brandy (You\'re A Fine Girl).mp3'},
 	{url: '/music/playlist/Awesome Mix Vol.2 - 13. Parliament - Flashlight.mp3'},
+	{url: '/music/playlist/Awesome Mix Vol.2 - 14. The Sneepers - Guardians Inferno (feat. David Hasselhoff).mp3'},
+	{url: '/music/playlist/Awesome Mix Vol. 2 - Sam Cooke - Bring It on Home to Me.mp3'},
+	{url: '/music/playlist/Blondie - Call Me.mp3'},
+	{url: '/music/playlist/David Bowie - Fame.mp3'},
+	{url: '/music/playlist/David Bowie - Young Americans.mp3'},
 ];
 
 export default playlist;
