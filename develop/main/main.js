@@ -256,7 +256,7 @@ if ('serviceWorker' in navigator) {
 
 
 
-const canvas = document.body.getElementsByClassName('treeView')[0];
+const canvas = document.body;
 
 function fullScreenOn() {
 	document.body.addEventListener("keydown", function(e) {

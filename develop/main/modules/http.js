@@ -1,6 +1,6 @@
 'use strict';
-// const backendUrl = 'https://backend-java-spring.herokuapp.com';
-const backendUrl = 'http://localhost:5050';
+const backendUrl = 'https://backend-java-spring.herokuapp.com';
+// const backendUrl = 'http://localhost:5050';
 const baseUrl = `${window.location.protocol}//${window.location.host}:5050`;
 console.log('baseUrl = ', baseUrl);
 
