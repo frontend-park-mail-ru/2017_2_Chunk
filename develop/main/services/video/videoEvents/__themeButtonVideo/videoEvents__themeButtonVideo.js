@@ -1,15 +1,15 @@
 'use strict';
-
 import Block from '../../../../blocks/block/block';
 import eventBus from '../../../../modules/eventBus';
 
-export default class ThemeButtonVideo extends Block{
+
+export default class ThemeButtonVideo extends Block {
 	constructor(url) {
 		const themeButtonVideo = Block.create('video', {
-			'type': 'video/mp4',
-			'src': `${url}`,
-			'preload': 'auto',
-		},
+				'type': 'video/mp4',
+				'src': `${url}`,
+				'preload': 'auto',
+			},
 			['videoEvents__themeButtonVideo']);
 		const themeVideoContainer = Block.create('div', {}, ['videoEvents__themeVideoContainer']);
 		themeVideoContainer.append(themeButtonVideo);
@@ -22,10 +22,12 @@ export default class ThemeButtonVideo extends Block{
 		this.hide();
 	}
 
+
 	pause() {
 		this.themeButtonVideo.el.pause();
 		this.hide();
 	}
+
 
 	play() {
 		const numberOfInterval = this.numberOfClick % 4;
@@ -34,10 +36,10 @@ export default class ThemeButtonVideo extends Block{
 			this.themeButtonVideo.el.play();
 			console.log('video volume: ', this.themeButtonVideo.el.volume);
 			this.show();
-
 		}
 		this.setInterval();
 	}
+
 
 	setCurrentTime(time) {
 		this.themeButtonVideo.el.currentTime = time;
@@ -81,15 +83,18 @@ export default class ThemeButtonVideo extends Block{
 		this.setCurrentTime(time);
 	}
 
+
 	setPauseTime(time) {
 		this.pauseTime = time;
 	}
+
 
 	setPausePoints() {
 		this.themeButtonVideo.el.addEventListener('timeupdate', () => {
 			this.checkTime();
 		})
 	}
+
 
 	checkTime() {
 		const current_time = this.themeButtonVideo.el.currentTime.toFixed(2);
