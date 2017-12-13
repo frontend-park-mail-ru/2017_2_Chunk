@@ -26,6 +26,15 @@ export default class PlayersList extends Block {
 	}
 
 
+	addMaster(data) {
+		const type = 'master';
+		const string = new PLayerListString(type, data);
+		this.playersStrings = this.playersStrings || {};
+		this.playersStrings[data.userID] = string;
+		this.append(string);
+	}
+
+
 	addPlayer(data) {
 		let type = '';
 		if (this.master)
@@ -35,15 +44,9 @@ export default class PlayersList extends Block {
 		const string = new PLayerListString(type, data);
 		this.playersStrings = this.playersStrings || {};
 		this.playersStrings[data.userID] = string;
-		this.append(string);
-	}
-
-
-	addMaster(data) {
-		const type = 'master';
-		const string = new PLayerListString(type, data);
-		this.playersStrings = this.playersStrings || {};
-		this.playersStrings[data.userID] = string;
+		if (this.master) {
+			this.onPlayerKickButtonClick(data.playerID);
+		}
 		this.append(string);
 	}
 
@@ -57,6 +60,9 @@ export default class PlayersList extends Block {
 		const string = new PLayerListString(type, data);
 		this.botsStrings = this.botsStrings || {};
 		this.botsStrings[data.botID] = string;
+		if (this.master) {
+			this.onBotKickButtonClick(data.botID);
+		}
 		this.append(string);
 	}
 
@@ -98,10 +104,32 @@ export default class PlayersList extends Block {
 	}
 
 
+	onPlayerKickButtonClick(playerID) {
+		const string = this.playersStrings[playerID];
+		string.fields.kickButton.on('click', () => {
+			const request = {
+				code: `${prepareGameCodes.kickPlayer.code}`,
+				playerID: `${playerID}`,
+			};
+			eventBus.emit(`${prepareGameCodes.requestEventName}`, request)
+		})
+	}
+
+
+	onBotKickButtonClick(botID) {
+		const string = this.botsStrings[botID];
+		string.fields.kickButton.on('click', () => {
+			const request = {
+				code: `${prepareGameCodes.removeBot.code}`,
+				botID: `${botID}`,
+			};
+			eventBus.emit(`${prepareGameCodes.requestEventName}`, request)
+		})
+	}
+
+
 	clear() {
-		setTimeout(() => {
-			this.removePlayers();
-			this.removeBots();
-		}, 500);
+		this.removePlayers();
+		this.removeBots();
 	}
 }

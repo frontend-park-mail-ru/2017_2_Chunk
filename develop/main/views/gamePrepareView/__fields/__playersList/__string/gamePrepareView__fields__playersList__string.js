@@ -1,5 +1,7 @@
 'use strict';
 import Block from '../../../../../blocks/block/block.js';
+import eventBus from '../../../../../modules/eventBus';
+
 
 /**
  * Поля данных игры
@@ -34,9 +36,12 @@ export default class PlayersListString extends Block {
 
 	addStingWithPlayer(data) {
 		let name = '';
-		if (data.userID)
+		if (data.userID) {
+			this.playerType = 'player';
 			name = data.username;
+		}
 		else {
+			this.playerType = 'bot';
 			name = data.botname;
 		}
 		this.fields = {
@@ -51,10 +56,13 @@ export default class PlayersListString extends Block {
 
 	addStingWithPlayerMaster(data) {
 		let name = '';
-		if (data.userID)
+		if (data.userID) {
 			name = data.username;
+			this.typeOfPlayer = 'player';
+		}
 		else {
 			name = data.botname;
+			this.typeOfPlayer = 'bot';
 		}
 		this.fields = {
 			username: Block.create('div', {}, ['gamePrepareView__fields__playersList__string__fields__username',

@@ -1,6 +1,6 @@
 'use strict';
 import Block from '../../blocks/block/block.js';
-import bus from '../../modules/eventBus';
+import eventBus from '../../modules/eventBus';
 import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
 
 
@@ -19,15 +19,11 @@ export default class backButtonView extends Block {
 		this.button = backButton;
 		this.hide();
 		this.button.on('click', () => {
+			eventBus.emit('waitingBackend');
 			const request = {
 				code: `${gamePrepareCodes.exit.code}`,
 			};
-			// const listener = bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`,
-			// 	() => {
-			// 		window.history.back();
-			// 		bus.remove(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`, listener);
-			// 	});
-			bus.emit(`${gamePrepareCodes.requestEventName}`, request);
+			eventBus.emit(`${gamePrepareCodes.requestEventName}`, request);
 		});
 	}
 }
