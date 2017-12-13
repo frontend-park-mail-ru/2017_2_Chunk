@@ -19,7 +19,8 @@
 
 
 body {
-    background: black url(../../public/images/galaxy.jpg) no-repeat;
+    /*background: black url(../../public/images/galaxy.jpg) no-repeat;*/
+    background-color: black;
     background-size: cover;
     font-family: Road_Rage, "Comic Sans MS";
     box-sizing: border-box;
