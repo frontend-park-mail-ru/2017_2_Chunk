@@ -92,11 +92,15 @@ export default class Router {
 			if (resp.ok) {
 				this.bus.emit('auth', resp.json.username);
 				const sliceRoutes_ = this._routes.slice(0, 8);
-				this.findNewState(sliceRoutes_);
+				this.bus.on('showApp', () => {
+					this.findNewState(sliceRoutes_);
+				});
 			} else {
 				this.bus.emit('unauth');
 				const sliceRoutes_ = this._routes.slice(6);
-				this.findNewState(sliceRoutes_);
+				this.bus.on('showApp', () => {
+					this.findNewState(sliceRoutes_);
+				});
 			}
 			eventBus.emit('JSReady');
 		} catch (err) {

@@ -22,25 +22,23 @@ export default class MusicPlayer {
 
 	onJSReady() {
 		eventBus.on('JSReady', () => {
-			this.removeStartCssLoader();
 			this.musicStart();
 		})
 	}
 
 
-	removeStartCssLoader() {
-		const startLoader = document.body.getElementsByClassName('startLoader')[0];
-		document.body.removeChild(startLoader);
-	};
+
 
 
 	musicStart() {
 		this.audioSettings();
 		this.audioControlsSettings();
 		this.numberOfSongs = playlist.length;
-		this.nextSongRandom();
+		// this.nextSongRandom();
+		this.songNumber = 16;
 		this.previousSongs.push(this.songNumber);
 		this.currentSongPosition = this.previousSongs.length - 1;
+		this.setSongByNumber(this.songNumber);
 		this.videoEvents();
 	}
 
@@ -84,18 +82,18 @@ export default class MusicPlayer {
 		this.controlButtons = Block.create('div', {}, ['controlButtons']);
 		this.controlButtons.el.innerHTML = controlButtons;
 		this.backgroundaudio.appendChild(this.controlButtons.el);
-		this.songControls = Array.from(document.getElementsByClassName('player-button'));
 	};
 
 
 	audioControlHandler(event) {
-		const _self = event.target;
+		const audioAnimation = document.getElementById('audio-control');
+		event.preventDefault();
 		if (this.volume) {
-			_self.classList.add('noVolume');
+			audioAnimation.classList.add('noVolume');
 			this.audio.volume = 0;
 		} else {
 			if (this.play) {
-				_self.classList.remove('noVolume');
+				audioAnimation.classList.remove('noVolume');
 				this.audio.volume = 0.6;
 			}
 		}
@@ -117,19 +115,23 @@ export default class MusicPlayer {
 		nextSongButtons.addEventListener('click', (event) => {
 			event.preventDefault();
 			event.stopImmediatePropagation();
-			if ((this.previousSongs.length - 1) === this.currentSongPosition) {
-				if (this.random)
-					this.nextSongRandom();
-				else
-					this.nextSong();
-				this.previousSongs.push(this.songNumber);
-				this.currentSongPosition = this.previousSongs.length - 1;
-			}
-			else {
-				this.currentSongPosition++;
-				this.setSongByNumber(this.previousSongs[this.currentSongPosition]);
-			}
+			this.setNextSong();
 		})
+	}
+
+	setNextSong() {
+		if ((this.previousSongs.length - 1) === this.currentSongPosition) {
+			if (this.random)
+				this.nextSongRandom();
+			else
+				this.nextSong();
+			this.previousSongs.push(this.songNumber);
+			this.currentSongPosition = this.previousSongs.length - 1;
+		}
+		else {
+			this.currentSongPosition++;
+			this.setSongByNumber(this.previousSongs[this.currentSongPosition]);
+		}
 	}
 
 
@@ -140,7 +142,7 @@ export default class MusicPlayer {
 
 
 	onEndedSong() {
-		this.nextSong();
+		this.setNextSong();
 	}
 
 
@@ -185,6 +187,8 @@ export default class MusicPlayer {
 			event.preventDefault();
 			pauseButton.classList.remove('paused');
 			playButton.classList.remove('paused');
+			const audioAnimation = document.getElementById('audio-control');
+			audioAnimation.classList.add('noVolume');
 			this.audio.pause();
 			this.play = false;
 		})
@@ -197,6 +201,8 @@ export default class MusicPlayer {
 		playButton.addEventListener('click', () => {
 			pauseButton.classList.add('paused');
 			playButton.classList.add('paused');
+			const audioAnimation = document.getElementById('audio-control');
+			audioAnimation .classList.remove('noVolume');
 			this.audio.play();
 			this.play = true;
 		})
