@@ -105,7 +105,11 @@ node-js-getting-git started
 /public/botWorker.js.map
 /public/botWorker.js
 /public/gameWorker.js
-/public/gameWorker.js.map
 /public/application.css
 /public/application.css.map
 
+/.vscode/
+Будет удалено .vscode/
+Будет удалено develop/main/image/
+Будет удалено develop/main/views/gamePrepareView/__fields/__startButton/
+/public/gameWorker.js.map

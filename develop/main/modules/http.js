@@ -1,6 +1,7 @@
 'use strict';
-const backendUrl = 'https://backend-java-spring.herokuapp.com';
-const baseUrl = `${window.location.protocol}//${window.location.host}`;
+// const backendUrl = 'https://backend-java-spring.herokuapp.com';
+const backendUrl = 'http://localhost:5050';
+const baseUrl = `${window.location.protocol}//${window.location.host}:5050`;
 console.log('baseUrl = ', baseUrl);
 
 
@@ -34,7 +35,7 @@ export default class Http {
 	 * @return {Promise}
 	 */
 	static fetchPost(address, body) {
-		const url = backendUrl + address;
+		const url = backendUrl+ address;
 		const myHeaders = new Headers();
 		myHeaders.set('Content-Type', 'application/json; charset=utf-8');
 		return fetch(url, {

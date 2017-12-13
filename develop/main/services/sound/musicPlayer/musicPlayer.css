@@ -1,5 +1,5 @@
 #audio-control {
-    position: fixed;
+    /*position: fixed;*/
     bottom: 30px;
     right: 30px;
     width: 60px;
@@ -45,8 +45,8 @@
 #backgroundaudio {
     display: block;
     position: fixed;
-    bottom: -43px;
-    left: 5px;
+    bottom: 20px;
+    right: 20px;
     -webkit-transition: all 1s ease-in-out;
     -moz-transition: all 1s ease-in-out;
     -ms-transition: all 1s ease-in-out;
@@ -55,12 +55,13 @@
 }
 
 #backgroundaudio:hover {
-    bottom: 0;
+    bottom: 80px;
     -webkit-transition: all 1s ease-in-out;
     -moz-transition: all 1s ease-in-out;
     -ms-transition: all 1s ease-in-out;
     -o-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
+    transition: all 1s cubic-bezier(0.6, -0.9, 0.35, 1.84);
+    transition-delay: 0.3s;
 }
 
 #backgroundaudio audio {
@@ -74,14 +75,14 @@
 }
 
 #backgroundaudio i {
-    height: 20px;
+    height: 60px;
     border-radius: 5px;
     display: block;
-    background: #ff00dd;
-    padding: 5px;
-    width: 50px;
+    background: transparent;
+    padding: 0px;
+    width: 60px;
     float: none;
-    margin-bottom: -6px;
+    margin-bottom: 0px;
     z-index: 9999;
 }
 

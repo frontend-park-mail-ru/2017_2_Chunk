@@ -7,7 +7,7 @@ import eventBus from '../modules/eventBus';
  * Сервис для работы с юзерами
  * @module UserService
  */
-export default class UserService {
+export default new class UserService {
 	constructor() {
 		this.user = null;
 		this.users = [];
@@ -52,8 +52,11 @@ export default class UserService {
 			return response;
 		}
 
+		eventBus.emit('waitingBackend');
 		const resp = await Http.fetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
+		eventBus.emit('backendResponseReceived');
+
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -88,10 +91,10 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
-		// eventBus.emit('backendRequest');
+		eventBus.emit('waitingBackend');
 		const resp = await Http.fetchPost('/user/sign_in', {login, password});
-		// eventBus.emit('backendResponse');
 		response.json = await resp.json();
+		eventBus.emit('backendResponseReceived');
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -124,8 +127,11 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
+		eventBus.emit('waitingBackend');
 		const resp = await Http.fetchPost('/user/update', {username, email, password, oldPassword});
 		response.json = await resp.json();
+		eventBus.emit('backendResponseReceived');
+
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -134,6 +140,7 @@ export default class UserService {
 		this.user = response.json;
 		return response;
 	}
+
 
 
 	/**

@@ -11,7 +11,7 @@ new class StartLoader {
 	start() {
 		this.createStartCssLoader();
 		// this.loadBackgroundImage();
-		this.loadMainScript();
+		// this.loadMainScript();
 	}
 
 
@@ -24,14 +24,10 @@ new class StartLoader {
 
 
 
-	loadBackgroundImage() {
-	}
-
-
 	loadMainScript() {
 		const script = document.createElement('script');
 		setTimeout(() => {
-			script.src = '/application.js';
+			script.src = 'application.js';
 		}, 500);
 		document.body.appendChild(script);
 	}

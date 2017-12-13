@@ -61,7 +61,7 @@ export default class Game3D {
 			const request = {
 				gameID: this.gameID
 			};
-			this.bus.emit(`${gameCodes.gameDelete.request}`, request);
+			this.bus.emit(`${gameCodes.deleteGame.request}`, request);
 		});
 	}
 

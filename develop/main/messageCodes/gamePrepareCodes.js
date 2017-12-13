@@ -1,20 +1,35 @@
 const gamePrepareCodes = {
-	getGameInfo: {
-		code: 112,
-		request: 'request'
-	},
-	exit: {
+	whoIsIt: {
 		code: 103,
-		request: 'request'
 	},
-	deleteGame: {
+	createGame: {
 		code: 110,
-		tabMessage: 'Game finish',
+	},
+	connectGame: {
+		code: 111,
+	},
+	addPlayer: {
+		code: 130,
+	},
+	removePlayer: {
+		code: 132,
+	},
+	addBot: {
+		code: 131,
+	},
+	removeBot: {
+		code: 133,
+	},
+	kickPlayer: {
+		code: 134,
 	},
 	startGame: {
-		code: 200,
-		request: 'request'
+		code: 135,
 	},
+	exit: {
+		code: 132,
+	},
+	requestEventName: 'request',
 	responseEventName: 'response',
 
 };

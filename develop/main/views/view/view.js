@@ -21,6 +21,7 @@ export default class View extends Block {
 		for (const _block in this.elements) {
 			this.append(this.elements[_block]);
 		}
+		this.hidden = false;
 	}
 
 
@@ -28,13 +29,13 @@ export default class View extends Block {
 	 * Показывает вьюху
 	 */
 	show() {
-
 		setTimeout(() => {
 			this.el.style.setProperty('display', 'flex');
 		}, 170);
 		setTimeout(() => {
 			this.el.classList.remove('main_hidden');
 		}, 130);
+		this.hidden = false;
 	}
 
 
@@ -46,6 +47,7 @@ export default class View extends Block {
 		setTimeout(() => {
 			this.el.style.setProperty('display', 'none');
 		}, 170);
+		this.hidden = true;
 	}
 }
 

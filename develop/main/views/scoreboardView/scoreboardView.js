@@ -2,6 +2,7 @@
 
 import ScoreboardTemplate from '../../templates/scoreBoard';
 import View from '../view/view';
+import eventBus from '../../modules/eventBus';
 
 
 /**
@@ -10,14 +11,12 @@ import View from '../view/view';
  */
 export default class ScoreboardView extends View {
 	/**
-	 * @param EventBus
-	 * @param UserService
 	 * @constructor
 	 */
-	constructor(EventBus, UserService) {
+	constructor() {
 		super({});
 
-		this.bus = EventBus;
+		this.bus = eventBus;
 
 		this.bus.on('openScoreboard', () => {
 			const users = [

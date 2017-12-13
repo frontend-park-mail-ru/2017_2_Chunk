@@ -6,17 +6,10 @@ import lobbyCodes from '../messageCodes/lobbyCodes';
 export default class webSocket {
 	constructor() {
 		this.bus = eventBus;
-		this.socket = new WebSocket('wss://backend-java-spring.herokuapp.com/play');
+		// this.socket = new WebSocket('wss://backend-java-spring.herokuapp.com/play');
+		this.socket = new WebSocket('ws://localhost:5050/play');
 		this.socketListeners = {};
 		this.socketCallbacks();
-	}
-
-
-	gameHandler() {
-		this.socketListeners[lobbyCodes.requestEventName]
-			= this.bus.on(lobbyCodes.requestEventName, (data) => {
-			this.socket.send(JSON.stringify(data));
-		});
 	}
 
 
@@ -29,11 +22,18 @@ export default class webSocket {
 
 
 	gettingStart() {
-		this.gameHandler();
-		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.getGamesFullList);
-		this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.subscribeLobbyUpdates);
+		this.requestHandler();
 		this.keepAliveEvent();
 		this.openMenuEvent();
+		this.openEmit();
+	}
+
+
+	requestHandler() {
+		this.socketListeners[lobbyCodes.requestEventName]
+			= this.bus.on(lobbyCodes.requestEventName, (data) => {
+			this.socket.send(JSON.stringify(data));
+		});
 	}
 
 
@@ -67,6 +67,11 @@ export default class webSocket {
 				delete this.socket;
 			}
 		});
+	}
+
+
+	openEmit() {
+		this.bus.emit('socketOpen');
 	}
 
 

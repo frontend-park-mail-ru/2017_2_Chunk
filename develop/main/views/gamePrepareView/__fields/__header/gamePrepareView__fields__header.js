@@ -28,6 +28,20 @@ export default class GamePrepareViewHeader extends Block {
 		this.headerFields.update(socketReceiveData);
 	}
 
+	addPlayer() {
+		this.headerFields.addPlayer();
+	}
+
+	addBot() {
+		this.headerFields.addBot();
+	}
+
+	removePlayer() {
+		this.headerFields.removePlayer();
+	}
+	removeBot() {
+		this.headerFields.removeBot();
+	}
 
 	clear() {
 		this.headerFields.clear();

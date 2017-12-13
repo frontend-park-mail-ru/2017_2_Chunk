@@ -44,7 +44,7 @@ export default class Draw {
 		this.controls.target.set(20, -5, 20);
 		this.controls.enablePan = false;
 		this.controls.enableDamping = true;
-		this.controls.dampingFactor = 0.2;
+		this.controls.dampingFactor = 0.01;
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
 		this.controls.rotateSpeed = 0.5;

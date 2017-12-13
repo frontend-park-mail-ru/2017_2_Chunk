@@ -2,7 +2,7 @@
 import View from '../view/view';
 import gamePrepareFields from './__fields/gamePrepareView__fields';
 import eventBus from '../../modules/eventBus';
-import messageCodes from '../../messageCodes/lobbyCodes';
+import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
 
 
 /**
@@ -12,30 +12,31 @@ import messageCodes from '../../messageCodes/lobbyCodes';
 export default class gamePrepareView extends View {
 	constructor() {
 		super(gamePrepareFields);
-		this.source = navigator.onLine ? 'socket' : 'worker';
 		this.fields = gamePrepareFields;
 		this.bus = eventBus;
 		this.el.classList.add('gamePrepareView');
 		this.clear = false;
-		this.active = false;
 		this.gamePrepareListeners = {};
-		this.masterEvents();
-		this.addPlayer();
-		this.addBot();
-		this.removePLayer();
-		this.whoIsItEvent();//работает дважды
-		this.buttonsEvents();
-		this.gameStatusEvents();
-		// this.source = 'socket';
+		this.events();
 		this.hide();
 		eventBus.emit('hideMasterFields');
 	}
 
 
+	events() {
+		this.masterEvents();
+		this.addPlayer();
+		this.addBot();
+		this.removePLayer();
+		this.removeBot();
+		this.buttonsEvents();
+		this.gameStatusEvents();
+		this.showViewEvents();
+	}
+
+
 	show() {
-		this.addGamePrepareListeners();
 		super.show();
-		this.active = true;
 		this.clear = false;
 	}
 
@@ -44,16 +45,12 @@ export default class gamePrepareView extends View {
 		this.removeGamePrepareListeners();
 		super.hide();
 		if (!this.clear) {
-			this.fields.playersList.clear();
-			this.fields.header.clear();
+			setTimeout(() => {
+				this.fields.playersList.clear();
+				this.fields.header.clear();
+			}, 300);
 		}
 		this.clear = true;
-		this.active = false;
-	}
-
-
-	addGamePrepareListeners() {
-		this.gameClose();
 	}
 
 
@@ -64,72 +61,68 @@ export default class gamePrepareView extends View {
 	}
 
 
-	// добавление пользователя
-	addPlayer() {
-		this.bus.on(`${messageCodes.responseEventName}${messageCodes.connectGamePLayer.code}`, (response) => {
-			this.fields.playersList.addPlayer(response.player);
-			this.clear = false;
-			const request = {
-				code: '104',
-				gameID: response.gameID,
-			};
-			this.bus.emit(`${messageCodes.getGameInfo.request}`, request);
+	showViewEvents() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.createGame.code}`, (response) => {
+			eventBus.emit('showMasterFields');
+			this.fields.header.updateGameData(response.game);
+			this.fields.playersList.addMaster(response.game.realPlayers[0]);
+			this.whoIsItEvent();
 		});
-	}
-
-
-	addBot() {
-		this.bus.on(`${messageCodes.responseEventName}${messageCodes.addBot.code}`, (response) => {
-			this.fields.playersList.addPlayer(response.player);
-			this.clear = false;
-			const request = {
-				code: '104',
-				gameID: response.gameID,
-			};
-			this.bus.emit(`${messageCodes.getGameInfo.request}`, request);
-		});
-	}
-
-
-	// удаление пользователя
-	removePLayer() {
-		this.bus.on(`${messageCodes.responseEventName}${messageCodes.exitFromPreparingGame.code}`, (response) => {
-			if (this.active) {
-				this.fields.playersList.removePlayer(response.player.userID);
-				const request = {
-					code: '104',
-					gameID: response.gameID
-				};
-				this.bus.emit(`${messageCodes.getGameInfo.request}`, request);
-			}
-		});
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.connectGame.code}`, () => {
+			eventBus.emit('hideMasterFields');
+			this.fields.header.updateGameData(response.game);
+			this.whoIsItEvent();
+		})
 	}
 
 
 	gameStatusEvents() {
-		this.updateGameData();
-		this.bus.on(`${messageCodes.responseEventName}${messageCodes.startGame.code}`, () => {
+		// this.eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.startGame.code}`, () => {
+		this.bus.on(`${gamePrepareCodes.responseEventName}200`, () => {
 			this.bus.emit('goToGame');
 		});
 	};
 
 
 	updateGameData() {
-		// this.gamePrepareListeners[`${messageCodes.responseEventName}${messageCodes.getGameInfo.code}`] =
-			this.bus.on(`${messageCodes.responseEventName}${messageCodes.getGameInfo.code}`, (response) => {
-			this.fields.header.updateGameData(response.game);
+		this.addPlayer();
+		this.removePLayer();
+		this.addBot();
+		this.removeBot();
+	};
+
+
+	addPlayer() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addPlayer.code}`, (response) => {
+			this.fields.playersList.addPlayer(response.player);
 			this.clear = false;
-			this.gameInfo = response;
-			if (this.userID !== response.game.masterID) {
-				eventBus.emit('hideMasterFields');
-			}
+		});
+	}
+
+
+	removePLayer() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removePlayer.code}`, (response) => {
+			if (this.userID === response.userID)
+				this.exitToLobby();
 			else
-				eventBus.emit('showMasterFields');
-			response.game.gamers.forEach((gamer) => {
-				if (gamer.userID !== this.userID) {
-					this.fields.playersList.addPlayer(gamer);
-				}
-			});
+				this.fields.playersList.removePlayer(response.userID);
+		});
+	}
+
+
+	addBot() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addBot.code}`, (response) => {
+			this.fields.playersList.addBot(response);
+			this.fields.header.addBot();
+			this.clear = false;
+		});
+	}
+
+
+	removeBot() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removeBot.code}`, (response) => {
+			this.fields.playersList.removeBot(response.userID);
+			this.fields.header.removeBot();
 		});
 	}
 
@@ -149,40 +142,51 @@ export default class gamePrepareView extends View {
 		this.fields.addBot.hide();
 	}
 
+
 	showMasterFields() {
 		this.fields.startGame.show();
 		this.fields.addBot.show();
 	}
 
+
 	gameClose() {
-		this.gamePrepareListeners[`${messageCodes.responseEventName}${messageCodes.deleteGame.code}`]
-			= this.bus.on(`${messageCodes.responseEventName}${messageCodes.deleteGame.code}`, (response) => {
-			this.bus.emit('openLobby');
-		});
+		// this.gamePrepareListeners[`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`]
+		// 	= this.eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`, (response) => {
+		// 	this.eventBus.emit('openLobby');
+		// });
 	}
 
 
 	buttonsEvents() {
 		this.fields.addBot.on('click', () => {
 			const request = {
-				code: '108',
+				code: `${gamePrepareCodes.addBot.code}`,
 				lvlbot: '3',
 			};
-			this.bus.emit(`${messageCodes.addBot.request}`, (request));
+			this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
 		});
 		this.fields.startGame.on('click', () => {
 			const request = {
-				code: '105',
+				code: `${gamePrepareCodes.startGame.code}`,
 			};
-			this.bus.emit(`${messageCodes.startGame.request}`, (request));
+			this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
 		});
 	}
 
 
-//удалить обработчик при включении игры
+	exitToLobby() {
+		eventBus.emit('goToLobby');
+		eventBus.emit('backendResponseReceived');
+	}
+
+
 	whoIsItEvent() {
-		this.bus.on(`${messageCodes.responseEventName}${messageCodes.whoIsIt.code}`, (request) => {
-			this.userID = request.userID;
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, (response) => {
+			this.userID = response.userID;
 		});
+		const request = {
+			code: `${gamePrepareCodes.whoIsIt.code}`,
+		};
+		this.bus.emit(`${gamePrepareCodes.requestEventName}`, request);
 	}
 }
