@@ -4,23 +4,24 @@ const offBot = new class BotWorker {
 	constructor() {
 		this.arrayOfField = [];
 		this.countFigure = [];
+		this.playerLastMove = false;
 		this.gamers = {};
 
 		this.initCodes();
 	}
 
 	initCodes() {
-		this.init102();
-		this.init103();
-		this.init110();
-		this.init131();
-		this.init200();
-		this.init201();
-		this.init204();
+		this.initFullGameInfo();
+		this.initUserId();
+		this.initNewActive();
+		this.initAddBot();
+		this.initStartActive();
+		this.initStepObject();
+		this.initEndGame();
 	}
 
-	init102() {
-		this.code102 = {
+	initFullGameInfo() {
+		this.fullGameInfo = {
 			code: 102,
 			games: [],
 			reason: "Get full information about all preparing games"
@@ -36,11 +37,11 @@ const offBot = new class BotWorker {
 			realSize: 1
 		};
 
-		this.code102.games.push(this.gameData);
+		this.fullGameInfo.games.push(this.gameData);
 	}
 
-	init110() {
-		this.code110 = {
+	initNewActive() {
+		this.newActive = {
 			code: 110,
 			game: {
 				botPlayers: [],
@@ -64,11 +65,11 @@ const offBot = new class BotWorker {
 
 		this.gamers[this.playerData.userID] = JSON.parse(JSON.stringify(this.playerData));
 
-		this.code110.game.realPlayers.push(this.playerData);
+		this.newActive.game.realPlayers.push(this.playerData);
 	}
 
-	init103() {
-		this.code103 = {
+	initUserId() {
+		this.returnUserId = {
 			code: 103,
 			gameID: 1,
 			userID: 1,
@@ -76,8 +77,8 @@ const offBot = new class BotWorker {
 		}
 	}
 
-	init131() {
-		this.code131 = {
+	initAddBot() {
+		this.addBot = {
 			code: 131,
 			botID: null,
 			botlvl: 3,
@@ -87,8 +88,8 @@ const offBot = new class BotWorker {
 		};
 	}
 
-	init200() {
-		this.code200 = {
+	initStartActive() {
+		this.startActive = {
 			code: 200,
 			game: {
 				currentPlayerID: 1,
@@ -107,12 +108,12 @@ const offBot = new class BotWorker {
 		}
 	}
 
-	init201() {
+	initStepObject() {
 		this.stepObject = {}
 	}
 
-	init204() {
-		this.code204 = {
+	initEndGame() {
+		this.endGame = {
 			code: 204,
 			field: {
 				field: [],
@@ -125,57 +126,88 @@ const offBot = new class BotWorker {
 		}
 	}
 
-	handle110(data) {
-		this.code110.game.maxX = data.maxX;
-		this.code110.game.maxY = data.maxY;
-		this.code110.game.numberOfPlayers = data.numberOfPlayers;
+	createNewActive(data) {
+		this.newActive.game.maxX = data.maxX;
+		this.newActive.game.maxY = data.maxY;
+		this.newActive.game.numberOfPlayers = data.numberOfPlayers;
 
-		return this.code110;
+		return this.newActive;
 	}
 
-	handle103() {
-		return this.code103;
+	getUserId() {
+		return this.returnUserId;
 	}
 
-	handle131(data) {
-		this.code131.botlvl = data.lvlbot;
-		this.code131.botsCount++;
-		this.code131.botname = `bot${this.code131.botsCount}`;
+	addBotPlayer(data) {
+		if (this.addBot.botsCount+1 === +this.newActive.game.numberOfPlayers) {
+			let request = {
+				code: 309,
+				gameID: 1,
+				reason: "All places in the active are already occupied"
+			};
+			return request;
+		}
+
+		this.addBot.botlvl = data.lvlbot;
+		this.addBot.botsCount++;
+		this.addBot.botID = this.addBot.botsCount+1;
+		this.addBot.botname = `bot${this.addBot.botsCount}`;
 
 		this.playerData.userID = null;
-		this.playerData.username = this.code131.botname;
-		this.playerData.email = `${this.code131.botname}@com`;
-		this.playerData.playerID = this.code131.botsCount+1;
-		this.gamers[this.code131.botsCount+1] = JSON.parse(JSON.stringify(this.playerData));
+		this.playerData.botID = this.addBot.botID;
+		this.playerData.username = this.addBot.botname;
+		this.playerData.email = `${this.addBot.botname}@com`;
+		this.playerData.playerID = this.addBot.botsCount+1;
+		this.gamers[this.addBot.botsCount+1] = JSON.parse(JSON.stringify(this.playerData));
 
-		return this.code131;
+		return this.addBot;
 	}
 
-	handle135() {
+	startGame() {
+		if (+this.newActive.game.numberOfPlayers !== this.addBot.botsCount+1) {
+			let request = {
+				code: 304,
+				gameID: 1,
+				reason: "Not enough players (the active master is able to add bots)"
+			};
+			return request;
+		}
+
 		this.arrayOfField = this.createStartArray(
-			this.code110.game.maxX,
-			this.code110.game.numberOfPlayers
+			this.newActive.game.maxX,
+			this.newActive.game.numberOfPlayers
 		);
-		this.code200.game.field.field = this.arrayOfField;
-		this.code200.game.field.maxX = this.code110.game.maxX;
-		this.code200.game.field.maxY = this.code110.game.maxY;
-		this.code200.game.numberOfPlayers = this.code110.game.numberOfPlayers;
-		this.code200.game.gamers = this.gamers;
+		this.startActive.game.field.field = this.arrayOfField;
+		this.startActive.game.field.maxX = this.newActive.game.maxX;
+		this.startActive.game.field.maxY = this.newActive.game.maxY;
+		this.startActive.game.numberOfPlayers = this.newActive.game.numberOfPlayers;
+		this.startActive.game.gamers = this.gamers;
 
-		return this.code200;
+		return this.startActive;
 	}
 
-	handle201(data) {
+	playerStep(data) {
 		this.stepObject = data;
 		self.postMessage(this.stepObject);
+		this.playerLastMove = true;
 		this.returnBotStep();
 	}
 
-	handle102() {
-		return this.code102;
+	returnFullGameInfo() {
+		return this.fullGameInfo;
 	}
 
-	handle132() {
+	kickBot(data) {
+		let request = {
+			code: 133,
+			userID: data.botID,
+			reason: "The bot player was kicked out from the active"
+		};
+		this.addBot.botsCount--;
+		return request;
+	}
+
+	backBotton() {
 		let request = {
 			code: 132,
 			userID: 1
@@ -216,26 +248,18 @@ const offBot = new class BotWorker {
 		this.moveOrClone(this.stepObject.step);
 		this.step(this.stepObject.step);
 
-		if (this.isGameOver()) {
-			console.log("HERE 1");
-			return;
-		}
+		if (this.isGameOver()) { return; }
+		this.playerLastMove = false;
 
-		for (let i = 0; i < this.code131.botsCount; i++) {
-			if (this.isGameOver()) {
-				console.log("HERE 2");
-				return;
-			}
+		for (let i = 0; i < this.addBot.botsCount; i++) {
+			if (this.isGameOver()) { return; }
 			if (this.countFigure[i+1] === 0)
 				continue;
 			this.botStep(i+2);
 			this.moveOrClone(this.stepObject.step);
 			this.step(this.stepObject.step);
 
-			if (this.isGameOver()) {
-				console.log("HERE 3");
-				return;
-			}
+			if (this.isGameOver()) { return; }
 
 			self.postMessage(this.stepObject);
 		}
@@ -243,12 +267,16 @@ const offBot = new class BotWorker {
 
 	isGameOver() {
 		if (this.gameOver()) {
-			this.code204.field.field = this.arrayOfField;
-			this.code204.field.maxX = this.code110.game.maxX;
-			this.code204.field.maxY = this.code110.game.maxY;
+			this.endGame.field.field = this.arrayOfField;
+			this.endGame.field.maxX = this.newActive.game.maxX;
+			this.endGame.field.maxY = this.newActive.game.maxY;
+
+			if (!this.playerLastMove)
+				self.postMessage(this.stepObject);
+
 			this.clearGame();
 
-			self.postMessage(this.code204);
+			self.postMessage(this.endGame);
 			return true;
 		}
 		else
@@ -257,14 +285,15 @@ const offBot = new class BotWorker {
 
 	clearGame() {
 		this.arrayOfField = [];
+		this.playerLastMove = false;
 		this.gamers = [];
 
-		this.init102();
-		this.init103();
-		this.init110();
-		this.init131();
-		this.init200();
-		this.init201();
+		this.initFullGameInfo();
+		this.initUserId();
+		this.initNewActive();
+		this.initAddBot();
+		this.initStartActive();
+		this.initStepObject();
 	}
 
 	moveOrClone(step) {
@@ -280,8 +309,8 @@ const offBot = new class BotWorker {
 	step(step) {
 		let idx = step.dst.x;
 		let idz = step.dst.z;
-		for (let i = 0; i < this.code110.game.maxX; i++) {
-			for (let j = 0; j < this.code110.game.maxY; j++) {
+		for (let i = 0; i < this.newActive.game.maxX; i++) {
+			for (let j = 0; j < this.newActive.game.maxY; j++) {
 				// Первые два условия проверяют, что перебираемая в цикле клетка находится вплотную к заданной.
 				if (Math.abs(i - idx) <= 1 &&
 					Math.abs(j - idz) <= 1) {
@@ -297,8 +326,8 @@ const offBot = new class BotWorker {
 	}
 
 	botStep(figure) {
-		for (let i = 0; i < this.code110.game.maxX; i++) {
-			for (let j = 0; j < this.code110.game.maxY; j++) {
+		for (let i = 0; i < this.newActive.game.maxX; i++) {
+			for (let j = 0; j < this.newActive.game.maxY; j++) {
 				if (this.arrayOfField[i][j] === figure) {
 					const step = this.makeStepEnable(i ,j);
 					if (step) {
@@ -313,8 +342,8 @@ const offBot = new class BotWorker {
 	}
 
 	makeStepEnable(x, z) {
-		for (let k = 0; k < this.code110.game.maxX; k++) {
-			for (let m = 0; m < this.code110.game.maxY; m++) {
+		for (let k = 0; k < this.newActive.game.maxX; k++) {
+			for (let m = 0; m < this.newActive.game.maxY; m++) {
 				if (!(Math.abs(k - x) >= 3 || Math.abs(m - z) >= 3 || this.arrayOfField[k][m] !== 0)) {
 					const step = {
 						x: k,
@@ -330,25 +359,25 @@ const offBot = new class BotWorker {
 	gameOver() {
 		let notFreePlane = 0;
 		let zeroPlayers = 0;
-		for (let k = 0; k < this.code110.game.numberOfPlayers; k++) {
+		for (let k = 0; k < this.newActive.game.numberOfPlayers; k++) {
 			this.countFigure[k] = 0;
 		}
-		for (let i = 0; i < this.code110.game.maxX; i++) {
-			for (let j = 0; j < this.code110.game.maxY; j++) {
+		for (let i = 0; i < this.newActive.game.maxX; i++) {
+			for (let j = 0; j < this.newActive.game.maxY; j++) {
 				if (this.arrayOfField[i][j] !== 0) {
 					notFreePlane++;
 					this.countFigure[this.arrayOfField[i][j]-1]++;
 				}
 			}
 		}
-		if (notFreePlane === this.code110.game.maxX * this.code110.game.maxY)
+		if (notFreePlane === this.newActive.game.maxX * this.newActive.game.maxY)
 			return true;
-		for (let m = 0; m < this.code110.game.numberOfPlayers; m++) {
+		for (let m = 0; m < this.newActive.game.numberOfPlayers; m++) {
 			if (this.countFigure[m] === 0)
 				zeroPlayers++;
 		}
-		if ((+this.code110.game.numberOfPlayers === 2 && zeroPlayers === 1) ||
-			(+this.code110.game.numberOfPlayers === 4 && zeroPlayers === 3) ||
+		if ((+this.newActive.game.numberOfPlayers === 2 && zeroPlayers === 1) ||
+			(+this.newActive.game.numberOfPlayers === 4 && zeroPlayers === 3) ||
 			this.countFigure[0] === 0)
 			return true;
 		return false;
@@ -361,25 +390,28 @@ self.onmessage = (workerRequest) => {
 	console.log(data);
 	switch (data.code) {
 		case '102':
-			workerResponse = offBot.handle102();
-			break;
-		case '110':
-			workerResponse = offBot.handle110(data);
+			workerResponse = offBot.returnFullGameInfo();
 			break;
 		case '103':
-			workerResponse = offBot.handle103();
+			workerResponse = offBot.getUserId();
+			break;
+		case '110':
+			workerResponse = offBot.createNewActive(data);
 			break;
 		case '131':
-			workerResponse = offBot.handle131(data);
+			workerResponse = offBot.addBotPlayer(data);
 			break;
 		case '132':
-			workerResponse = offBot.handle132();
+			workerResponse = offBot.backBotton();
+			break;
+		case '133':
+			workerResponse = offBot.kickBot(data);
 			break;
 		case '135':
-			workerResponse = offBot.handle135();
+			workerResponse = offBot.startGame();
 			break;
 		case '201':
-			offBot.handle201(data);
+			offBot.playerStep(data);
 			break;
 		default:
 			console.log('Error');
