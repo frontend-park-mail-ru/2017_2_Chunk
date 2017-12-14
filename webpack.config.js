@@ -1,7 +1,8 @@
 'use strict';
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const NODE_ENV = process.env.NODE_ENV || 'development';
+// const NODE_ENV = process.env.NODE_ENV || 'development';
+const NODE_ENV = 'travis';
 
 
 const extractPlugin = new ExtractTextPlugin({
