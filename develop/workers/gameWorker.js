@@ -1,4 +1,5 @@
 'use strict';
+
 const gameWorker = new class GameWorker {
 	constructor(eventBus) {
 		this.bus = eventBus;
@@ -61,7 +62,10 @@ const gameWorker = new class GameWorker {
 		this.fieldSize = data.game.field.maxX;
 		this.arrayOfField = data.game.field.field;
 		this.gamers = data.game.gamers;
-		this.countPlayers = this.gamers.length;
+		this.countPlayers = 0;
+		for (let key in this.gamers) {
+			this.countPlayers++;
+		}
 		this.fullStep();
 	}
 
@@ -160,8 +164,8 @@ const gameWorker = new class GameWorker {
 	playerString() {
 		let playerString = '';
 		let countFigure = this.countFigure(this.arrayOfField);
-		for (let i = 0; i < this.countPlayers; i++) {
-			playerString += `${this.gamers[i].username}` + ': ' + `${countFigure[i]}` + '\n';
+		for (let key in this.gamers) {
+			playerString += `${this.gamers[key].username}` + ': ' + `${countFigure[key-1]}` + '\n';
 		}
 		return playerString;
 	}
@@ -180,9 +184,9 @@ const gameWorker = new class GameWorker {
 
 
 	detectFigureByUserID(userID) {
-		for (let i = 0; i < this.gamers.length; i++) {
-			if (this.gamers[i].userID === userID) {
-				return i;
+		for (let key in this.gamers) {
+			if (key == userID) {
+				return key-1;
 			}
 		}
 	}
@@ -254,8 +258,8 @@ self.onmessage = (workerRequest) => {
 		case '200':
 			gameWorker.startArray(data);
 			break;
-		case '112':
-			if (data.gameID !== null)
+		case '103':
+			if (gameWorker.gamers !== undefined)
 				workerResponse = gameWorker.getUserID(data);
 			break;
 		case '201':

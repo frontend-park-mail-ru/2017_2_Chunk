@@ -30,7 +30,7 @@ export default class Game3D {
 		this.coordinatesForStep();
 		this.figureType();
 		this.winDetected();
-		this.exitGame();
+		// this.exitGame();
 		this.stepEnable();
 		this.azimuthAngle();
 		this.rotate();
@@ -56,14 +56,14 @@ export default class Game3D {
 		});
 	}
 
-	exitGame() {
-		this.bus.on(`${gameCodes.responseEventName}${gameCodes.exitFromPreparingGame.code}`, (response) => {
-			const request = {
-				gameID: this.gameID
-			};
-			this.bus.emit(`${gameCodes.deleteGame.request}`, request);
-		});
-	}
+	// exitGame() {
+	// 	this.bus.on(`${gameCodes.responseEventName}${gameCodes.exitFromPreparingGame.code}`, (response) => {
+	// 		const request = {
+	// 			gameID: this.gameID
+	// 		};
+	// 		this.bus.emit(`${gameCodes.deleteGame.request}`, request);
+	// 	});
+	// }
 
 	gameStep() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameStep.code}`, (response) => {

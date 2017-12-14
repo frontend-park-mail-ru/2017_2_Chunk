@@ -1,119 +1,186 @@
 'use strict';
 
-
-
 const offBot = new class BotWorker {
 	constructor() {
-		this.arrayOfField = 0;
-		this.bots = [];
-		this.gamers = [];
+		this.arrayOfField = [];
+		this.countFigure = [];
+		this.gamers = {};
 
-		this.connectGameObject = {
-			botsCount: 0,
-			code: '101',
+		this.initCodes();
+	}
+
+	initCodes() {
+		this.init102();
+		this.init103();
+		this.init110();
+		this.init131();
+		this.init200();
+		this.init201();
+		this.init204();
+	}
+
+	init102() {
+		this.code102 = {
+			code: 102,
+			games: [],
+			reason: "Get full information about all preparing games"
+		};
+
+		this.gameData = {
+			botSize: 1,
 			gameID: 1,
-			gamersCount: 1,
-			maxX: 8,
-			maxY: 8,
+			masterUsername: "Player",
+			maxX: 6,
+			maxY: 6,
 			numberOfPlayers: 2,
-			player: {
-				userID: 1,
-				username: "player",
-				email: "player@com",
-				playerID: null,
-				online: true
-			},
-			reason: "Connect to preparing game as a player",
-			watchersCount: 0
+			realSize: 1
 		};
 
-		this.gameInformationObject = {
-			code: '104',
+		this.code102.games.push(this.gameData);
+	}
+
+	init110() {
+		this.code110 = {
+			code: 110,
 			game: {
-				bots: this.bots,
-				gameID: this.connectGameObject.gameID,
-				field: {
-					field: this.arrayOfField,
-					gameOver: false,
-					maxX: this.connectGameObject.maxX,
-					maxY: this.connectGameObject.maxY
-				},
-				gamers: this.gamers,
+				botPlayers: [],
+				gameID: 1,
 				masterID: 1,
-				numberOfPlayers: this.connectGameObject.numberOfPlayers,
-				watchers: this.connectGameObject.watchersCount
+				maxX: 6,
+				maxY: 6,
+				numberOfPlayers: 2,
+				realPlayers: []
 			},
-			gameID: this.connectGameObject.gameID,
-			player: null,
-			reason: "Get full information about explicit game"
-		};
-
-		this.startGameObject = {
-			code: '200',
-			game: {
-				currentPlayerID: 1,
-				field: {
-					field: this.arrayOfField,
-					gameOver: false,
-					maxX: this.connectGameObject.maxX,
-					maxY: this.connectGameObject.maxY
-				},
-				gameID: this.connectGameObject.gameID,
-				gamers: this.gamers,
-				numberOfPlayers: this.connectGameObject.numberOfPlayers,
-				watchers: this.connectGameObject.watchersCount
-			},
-			reason: "start the game"
-		};
-
-		this.gameEndObject = {
-			code: '204',
-			gameID: null,
-			field: {
-				field: this.arrayOfField,
-				gameOver: true,
-				maxX: this.connectGameObject.maxX,
-				maxY: this.connectGameObject.maxY
-			},
-			reason: "Game had ended, check result"
+			reason: "You have created a new active"
 		};
 
 		this.playerData = {
-			userID: 1,
-			username: "player",
 			email: "player@com",
-			playerID: null,
-			online: true
+			online: true,
+			playerID: 1,
+			userID: 1,
+			username: "Player"
 		};
 
-		this.stepObject = {
-			code: '201',
-			step: {
-				src: { x: 0, z: 0 },
-				dst: {x: 0, z: 0 }
-			},
-			reason: "Game step"
-		};
+		this.gamers[this.playerData.userID] = JSON.parse(JSON.stringify(this.playerData));
 
-		this.userID = this.connectGameObject.player.userID;
+		this.code110.game.realPlayers.push(this.playerData);
+	}
 
-		this.userIdObject = {
-			code: '112',
-			gameID: this.connectGameObject.gameID,
-			reason: "Returns your userID",
-			userID: this.userID
-		};
-
-		this.sendUserID();
-
-		this.exitGameObject = {
-			code: '110',
-			gameID: this.connectGameObject.gameID
+	init103() {
+		this.code103 = {
+			code: 103,
+			gameID: 1,
+			userID: 1,
+			reason: "Returns your userID, gameID"
 		}
 	}
 
-	sendUserID() {
-		self.postMessage(this.userIdObject);
+	init131() {
+		this.code131 = {
+			code: 131,
+			botID: null,
+			botlvl: 3,
+			botsCount: 0,
+			botname: "bot",
+			reason: "A new bot player joined"
+		};
+	}
+
+	init200() {
+		this.code200 = {
+			code: 200,
+			game: {
+				currentPlayerID: 1,
+				field: {
+					field: [],
+					gameOver: false,
+					maxX: 6,
+					maxY: 6
+				},
+				gameID: 1,
+				gamers: {},
+				numberOfPlayers: 2,
+				watchers: {}
+			},
+			reason: "Start the active"
+		}
+	}
+
+	init201() {
+		this.stepObject = {}
+	}
+
+	init204() {
+		this.code204 = {
+			code: 204,
+			field: {
+				field: [],
+				gameOver: true,
+				maxX: 6,
+				maxY: 6
+			},
+			gameID: 1,
+			reason: "Game had ended, check result"
+		}
+	}
+
+	handle110(data) {
+		this.code110.game.maxX = data.maxX;
+		this.code110.game.maxY = data.maxY;
+		this.code110.game.numberOfPlayers = data.numberOfPlayers;
+
+		return this.code110;
+	}
+
+	handle103() {
+		return this.code103;
+	}
+
+	handle131(data) {
+		this.code131.botlvl = data.lvlbot;
+		this.code131.botsCount++;
+		this.code131.botname = `bot${this.code131.botsCount}`;
+
+		this.playerData.userID = null;
+		this.playerData.username = this.code131.botname;
+		this.playerData.email = `${this.code131.botname}@com`;
+		this.playerData.playerID = this.code131.botsCount+1;
+		this.gamers[this.code131.botsCount+1] = JSON.parse(JSON.stringify(this.playerData));
+
+		return this.code131;
+	}
+
+	handle135() {
+		this.arrayOfField = this.createStartArray(
+			this.code110.game.maxX,
+			this.code110.game.numberOfPlayers
+		);
+		this.code200.game.field.field = this.arrayOfField;
+		this.code200.game.field.maxX = this.code110.game.maxX;
+		this.code200.game.field.maxY = this.code110.game.maxY;
+		this.code200.game.numberOfPlayers = this.code110.game.numberOfPlayers;
+		this.code200.game.gamers = this.gamers;
+
+		return this.code200;
+	}
+
+	handle201(data) {
+		this.stepObject = data;
+		self.postMessage(this.stepObject);
+		this.returnBotStep();
+	}
+
+	handle102() {
+		return this.code102;
+	}
+
+	handle132() {
+		let request = {
+			code: 132,
+			userID: 1
+		};
+		return request;
 	}
 
 	makeGameField(size) {
@@ -131,7 +198,7 @@ const offBot = new class BotWorker {
 
 	createStartArray(size, countOfPlayers) {
 		let startArray = this.makeGameField(size);
-		if (countOfPlayers === 2) {
+		if (countOfPlayers === '2') {
 			startArray[0][0] = 1;
 			startArray[0][size - 1] = 2;
 			startArray[size - 1][0] = 2;
@@ -145,122 +212,59 @@ const offBot = new class BotWorker {
 		return startArray;
 	}
 
-	createGame(data) {
-		this.connectGameObject.maxX = data.maxX;
-		this.connectGameObject.maxY = data.maxY;
-		this.arrayOfField = this.makeGameField(data.maxX);
-		this.connectGameObject.numberOfPlayers = +data.numberOfPlayers;
-		this.arrayOfField = this.createStartArray(data.maxX, +data.numberOfPlayers);
-
-		return this.connectGameObject;
-	}
-
-	getGameInfo() {
-		this.gamers.push(JSON.parse(JSON.stringify(this.connectGameObject.player)));
-		this.gameInformationObject.game.bots = this.bots;
-		this.gameInformationObject.game.gameID = this.connectGameObject.gameID;
-		this.gameInformationObject.game.field.field = this.arrayOfField;
-		this.gameInformationObject.game.field.maxX = this.connectGameObject.maxX;
-		this.gameInformationObject.game.field.maxY = this.connectGameObject.maxY;
-		this.gameInformationObject.game.gamers = this.gamers;
-		this.gameInformationObject.game.numberOfPlayers = this.connectGameObject.numberOfPlayers;
-		this.gameInformationObject.game.watchers = this.connectGameObject.watchersCount;
-		this.gameInformationObject.game.gameID = this.connectGameObject.gameID;
-
-		return this.gameInformationObject;
-	}
-
-	startGame() {
-		this.startGameObject.game.field.field = this.arrayOfField;
-		this.startGameObject.game.field.maxX = this.connectGameObject.maxX;
-		this.startGameObject.game.field.maxY = this.connectGameObject.maxY;
-		this.startGameObject.game.gamers = this.gamers;
-		this.startGameObject.game.gameID = this.connectGameObject.gameID;
-		this.startGameObject.game.numberOfPlayers = this.connectGameObject.numberOfPlayers;
-		this.startGameObject.game.watchers = this.connectGameObject.watchersCount;
-
-		return this.startGameObject;
-	}
-
-	addBot() {
-		this.connectGameObject.botsCount++;
-		this.playerData.username = `bot${this.connectGameObject.botsCount}`;
-		this.playerData.userID++;
-		this.playerData.email = `${this.playerData.username}@com`;
-		this.bots.push(JSON.parse(JSON.stringify(this.playerData)));
-		this.connectGameObject.player = this.playerData;
-
-		return this.connectGameObject;
-	}
-
-	getUserID() {
-		this.userIdObject.gameID = this.connectGameObject.gameID;
-		return this.userIdObject;
-	}
-
-	returnPlayerStep(data) {
-		this.stepObject.step.src.x = data.step.src.x;
-		this.stepObject.step.src.z = data.step.src.z;
-		this.stepObject.step.dst.x = data.step.dst.x;
-		this.stepObject.step.dst.z = data.step.dst.z;
-
-		return this.stepObject;
-	}
-
 	returnBotStep() {
 		this.moveOrClone(this.stepObject.step);
 		this.step(this.stepObject.step);
 
-		if (this.gameOver()) {
-			this.gameEndObject.field.field = this.arrayOfField;
-			this.clearGame();
-			return this.gameEndObject;
+		if (this.isGameOver()) {
+			console.log("HERE 1");
+			return;
 		}
 
-		this.botStep();
-		this.moveOrClone(this.stepObject.step);
-		this.step(this.stepObject.step);
+		for (let i = 0; i < this.code131.botsCount; i++) {
+			if (this.isGameOver()) {
+				console.log("HERE 2");
+				return;
+			}
+			if (this.countFigure[i+1] === 0)
+				continue;
+			this.botStep(i+2);
+			this.moveOrClone(this.stepObject.step);
+			this.step(this.stepObject.step);
 
-		if (this.gameOver()) {
-			this.gameEndObject.field.field = this.arrayOfField;
-			this.clearGame();
-			return this.gameEndObject;
+			if (this.isGameOver()) {
+				console.log("HERE 3");
+				return;
+			}
+
+			self.postMessage(this.stepObject);
 		}
+	}
 
-		return this.stepObject;
+	isGameOver() {
+		if (this.gameOver()) {
+			this.code204.field.field = this.arrayOfField;
+			this.code204.field.maxX = this.code110.game.maxX;
+			this.code204.field.maxY = this.code110.game.maxY;
+			this.clearGame();
+
+			self.postMessage(this.code204);
+			return true;
+		}
+		else
+			return false;
 	}
 
 	clearGame() {
-		this.arrayOfField = 0;
-		this.bots = [];
+		this.arrayOfField = [];
 		this.gamers = [];
 
-		this.playerData = {
-			userID: 1,
-			username: "player",
-			email: "player@com",
-			playerID: null,
-			online: true
-		};
-
-		this.connectGameObject = {
-			botsCount: 0,
-			code: '101',
-			gameID: 1,
-			gamersCount: 1,
-			maxX: 8,
-			maxY: 8,
-			numberOfPlayers: 2,
-			player: {
-				userID: 1,
-				username: "player",
-				email: "player@com",
-				playerID: null,
-				online: true
-			},
-			reason: "Connect to preparing game as a player",
-			watchersCount: 0
-		};
+		this.init102();
+		this.init103();
+		this.init110();
+		this.init131();
+		this.init200();
+		this.init201();
 	}
 
 	moveOrClone(step) {
@@ -276,8 +280,8 @@ const offBot = new class BotWorker {
 	step(step) {
 		let idx = step.dst.x;
 		let idz = step.dst.z;
-		for (let i = 0; i < this.connectGameObject.maxX; i++) {
-			for (let j = 0; j < this.connectGameObject.maxY; j++) {
+		for (let i = 0; i < this.code110.game.maxX; i++) {
+			for (let j = 0; j < this.code110.game.maxY; j++) {
 				// Первые два условия проверяют, что перебираемая в цикле клетка находится вплотную к заданной.
 				if (Math.abs(i - idx) <= 1 &&
 					Math.abs(j - idz) <= 1) {
@@ -292,16 +296,15 @@ const offBot = new class BotWorker {
 		}
 	}
 
-	botStep() {
-		for (let i = 0; i < this.connectGameObject.maxX; i++) {
-			for (let j = 0; j < this.connectGameObject.maxY; j++) {
-				if (this.arrayOfField[i][j] === 2) {
+	botStep(figure) {
+		for (let i = 0; i < this.code110.game.maxX; i++) {
+			for (let j = 0; j < this.code110.game.maxY; j++) {
+				if (this.arrayOfField[i][j] === figure) {
 					const step = this.makeStepEnable(i ,j);
 					if (step) {
 						this.stepObject.step.src.x = i;
 						this.stepObject.step.src.z = j;
-						this.stepObject.step.dst.x = step.x;
-						this.stepObject.step.dst.z = step.z;
+						this.stepObject.step.dst = step;
 						return;
 					}
 				}
@@ -310,8 +313,8 @@ const offBot = new class BotWorker {
 	}
 
 	makeStepEnable(x, z) {
-		for (let k = 0; k < this.connectGameObject.maxX; k++) {
-			for (let m = 0; m < this.connectGameObject.maxY; m++) {
+		for (let k = 0; k < this.code110.game.maxX; k++) {
+			for (let m = 0; m < this.code110.game.maxY; m++) {
 				if (!(Math.abs(k - x) >= 3 || Math.abs(m - z) >= 3 || this.arrayOfField[k][m] !== 0)) {
 					const step = {
 						x: k,
@@ -326,30 +329,29 @@ const offBot = new class BotWorker {
 
 	gameOver() {
 		let notFreePlane = 0;
-		let countFigure = [];
-		for (let k = 0; k < this.connectGameObject.numberOfPlayers; k++) {
-			countFigure[k] = 0;
+		let zeroPlayers = 0;
+		for (let k = 0; k < this.code110.game.numberOfPlayers; k++) {
+			this.countFigure[k] = 0;
 		}
-		for (let i = 0; i < this.connectGameObject.maxX; i++) {
-			for (let j = 0; j < this.connectGameObject.maxY; j++) {
+		for (let i = 0; i < this.code110.game.maxX; i++) {
+			for (let j = 0; j < this.code110.game.maxY; j++) {
 				if (this.arrayOfField[i][j] !== 0) {
 					notFreePlane++;
-					countFigure[this.arrayOfField[i][j]-1]++;
+					this.countFigure[this.arrayOfField[i][j]-1]++;
 				}
 			}
 		}
-		if (notFreePlane === this.connectGameObject.maxX * this.connectGameObject.maxY)
+		if (notFreePlane === this.code110.game.maxX * this.code110.game.maxY)
 			return true;
-		for (let m = 0; m < this.connectGameObject.numberOfPlayers; m++) {
-			if (countFigure[m] === 0)
-				return true;
+		for (let m = 0; m < this.code110.game.numberOfPlayers; m++) {
+			if (this.countFigure[m] === 0)
+				zeroPlayers++;
 		}
+		if ((+this.code110.game.numberOfPlayers === 2 && zeroPlayers === 1) ||
+			(+this.code110.game.numberOfPlayers === 4 && zeroPlayers === 3) ||
+			this.countFigure[0] === 0)
+			return true;
 		return false;
-	}
-
-	exitGame() {
-		this.clearGame();
-		return this.exitGameObject;
 	}
 };
 
@@ -358,32 +360,31 @@ self.onmessage = (workerRequest) => {
 	let workerResponse;
 	console.log(data);
 	switch (data.code) {
-		case '100':
-			workerResponse = offBot.createGame(data);
+		case '102':
+			workerResponse = offBot.handle102();
+			break;
+		case '110':
+			workerResponse = offBot.handle110(data);
 			break;
 		case '103':
-			workerResponse = offBot.exitGame();
+			workerResponse = offBot.handle103();
 			break;
-		case '104':
-			workerResponse = offBot.getGameInfo();
+		case '131':
+			workerResponse = offBot.handle131(data);
 			break;
-		case '105':
-			workerResponse = offBot.startGame();
+		case '132':
+			workerResponse = offBot.handle132();
 			break;
-		case '108':
-			workerResponse = offBot.addBot();
-			break;
-		case '112':
-			workerResponse = offBot.getUserID();
+		case '135':
+			workerResponse = offBot.handle135();
 			break;
 		case '201':
-			workerResponse = offBot.returnPlayerStep(data);
-			self.postMessage(workerResponse);
-			workerResponse = offBot.returnBotStep();
+			offBot.handle201(data);
 			break;
 		default:
 			console.log('Error');
 	}
-	self.postMessage(workerResponse);
+	if (workerResponse !== undefined)
+		self.postMessage(workerResponse);
 };
 

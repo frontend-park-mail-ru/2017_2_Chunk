@@ -1,14 +1,6 @@
 const gameCodes = {
-	exitFromPreparingGame: {
-		code: 103,
-		request: 'request'
-	},
-	deleteGame: {
-		code: 110,
-		tabMessage: 'Game finish',
-	},
 	getGameInfo: {
-		code: 112,
+		code: 103,
 		request: 'request'
 	},
 	startGame: {
@@ -27,4 +19,4 @@ const gameCodes = {
 	requestEventName: 'request',
 };
 
-// export default gameCodes;
+export default gameCodes;

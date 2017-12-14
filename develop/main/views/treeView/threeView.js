@@ -4,7 +4,6 @@ import Block from '../../blocks/block/block.js';
 import eventBus from '../../modules/eventBus';
 
 
-//тоже уродский класс. надо почистить
 export default class ThreeView extends CommonView {
 	constructor() {
 		const gameContainer = Block.create('div');
@@ -25,7 +24,6 @@ export default class ThreeView extends CommonView {
 		this.bus.on('endOfGame', () => {
 			setTimeout(() => {
 				this.playersDiv.hide();
-				//нужно переделать, надо подумать как
 				this.bus.emit('goToLobby');//точка выхода из игры в меню
 			}, 3000);
 		});
@@ -35,7 +33,6 @@ export default class ThreeView extends CommonView {
 
 	hide() {
 		if (!this.clear) {
-			console.log("DELETEEE");
 			this.bus.emit('deleteTree');
 			this.clear = true;
 		}

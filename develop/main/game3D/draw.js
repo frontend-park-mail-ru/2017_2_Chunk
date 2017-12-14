@@ -23,7 +23,6 @@ export default class Draw {
 		);
 
 		this.camera.position.set(-25, 35, -16);
-
 		this.camera.lookAt(this.scene.position);
 
 		this.point1 = new Point();
@@ -40,11 +39,10 @@ export default class Draw {
 		this.controls = new OrbitControl(this.camera, this.renderer.domElement);
 		this.controls.minPolarAngle = Math.PI / 6;
 		this.controls.maxPolarAngle = Math.PI / 2.3;
-
 		this.controls.target.set(20, -5, 20);
 		this.controls.enablePan = false;
 		this.controls.enableDamping = true;
-		this.controls.dampingFactor = 0.01;
+		this.controls.dampingFactor = 0.2;
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
 		this.controls.rotateSpeed = 0.5;
@@ -65,8 +63,6 @@ export default class Draw {
 			this.scene.remove(this.playerContainer);
 			cancelAnimationFrame(this.gameVariebles.animation);
 		});
-
-		this.d = 180;
 	}
 
 	startGame(response) {
@@ -514,5 +510,4 @@ export default class Draw {
 			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.PLANE_COLOR);
 		});
 	}
-
 }
