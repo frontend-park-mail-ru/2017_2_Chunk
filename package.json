@@ -62,8 +62,8 @@
   },
   "scripts": {
     "test": "vows --spec",
-    "build": "babel public -d public_ES",
     "start": "webpack && node ./server/index.js",
+    "build": "webpack",
     "lint": "./node_modules/.bin/eslint ./develop/**/**/*.js",
     "lint-fix": "./node_modules/.bin/eslint --fix ./develop/**/**/*.js"
   }
