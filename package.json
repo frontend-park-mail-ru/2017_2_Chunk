@@ -58,8 +58,7 @@
     "nodemon": "^1.12.1",
     "pug-loader": "^2.3.0",
     "style-loader": "^0.19.0",
-    "url-loader": "^0.6.2",
-    "webpack-dev-server": "^2.9.5"
+    "url-loader": "^0.6.2"
   },
   "scripts": {
     "test": "vows --spec",
