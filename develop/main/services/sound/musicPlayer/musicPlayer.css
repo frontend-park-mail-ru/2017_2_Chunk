@@ -47,6 +47,7 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
+    height: 60px;
     -webkit-transition: all 1s ease-in-out;
     -moz-transition: all 1s ease-in-out;
     -ms-transition: all 1s ease-in-out;
