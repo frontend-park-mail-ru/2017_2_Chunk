@@ -5,7 +5,7 @@ script:
 - eval "$(ssh-agent -s)"
 - ssh-keyscan -H $195.133.147.209 >> ~/.ssh/known_hosts
 - chmod 600 $HOME/.ssh/guardians-game
-- ssh-add $HOME/.ssh/technopark
+- ssh-add $HOME/.ssh/guardians-game
 - npm run start
 - scp -r ./dist root@$195.133.147.209:/var/www
 before_install:
