@@ -62,7 +62,7 @@
     "webpack-dev-server": "^2.9.5"
   },
   "scripts": {
-    "compile-pug": "pug --client --no-debug ./public/templates/recordIndex.pug",
+    "test": "vows --spec",
     "build": "babel public -d public_ES",
     "start": "webpack && node ./server/index.js",
     "lint": "./node_modules/.bin/eslint ./develop/**/**/*.js",
