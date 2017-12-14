@@ -10,4 +10,4 @@ script:
 - scp -r ./dist root@$195.133.147.209:/var/www
 before_install:
 - openssl aes-256-cbc -K $encrypted_6fcde884f84f_key -iv $encrypted_6fcde884f84f_iv
-  -in guardians-game.enc -out ~\/.ssh/guardians-game -d
+  -in guardians-game.enc -out $HOME/.ssh/guardians-game -d
