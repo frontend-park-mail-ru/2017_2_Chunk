@@ -205,4 +205,4 @@ export default new class UserService {
 	loadUsersList() {
 		return Http.fetchGet('');
 	}
-};
+}();

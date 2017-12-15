@@ -54,7 +54,7 @@ export default class commonWorker {
 
 
 	goToMenu() {
-		this.listeners[`openMenu`] =
+		this.listeners.openMenu =
 			this.bus.on(`openMenu`, () => {
 				if (this.worker) {
 					this.bus.emit(`worker${lobbyCodes.close}`);
