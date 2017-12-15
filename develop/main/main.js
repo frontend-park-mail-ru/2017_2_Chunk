@@ -94,7 +94,7 @@ const gamePrepareView = new GamePrepareView();
 
 const gameContainer = new ThreeView();
 
-// const game3D = new Game3D(gameContainer);
+const game3D = new Game3D(gameContainer);
 
 const serviceWorker = ServiceWorker;
 
