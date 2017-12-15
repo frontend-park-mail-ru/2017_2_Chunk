@@ -25,31 +25,17 @@ export default class LobbyGameData extends Block {
 			this.append(this.gameDataFields.fields[field]);
 		}
 		this.playButtonOnClick();
-		this.playerExitFromPreparingGameEvent();
 	}
 
 
 	playButtonOnClick() {
 		this.gameDataFields.fields.playButton.on('click', () => {
 			const request = {
-				code: '101',
+				code: `${lobbyCodes.connectGame.code}`,
 				gameID: `${this.gameID}`,
 			};
-			this.bus.emit(`${lobbyCodes.connectGame.internal}`);
-			this.bus.emit(`${lobbyCodes.connectGame.request}`, request);
-		});
-	}
-
-
-	playerExitFromPreparingGameEvent() {
-		this.bus.on(`${lobbyCodes.exitFromPreparingGame.code}`, (response) => {
-			if (response.gameID === this.gameID) {
-				let gamersNumberHtml = this.gameDataFields.fields.gamersNumber.el;
-				//debugger;
-				let gamersNumber = +gamersNumberHtml.innerHTML.match(/\d+/)[0];
-				gamersNumber -= 1;
-				gamersNumberHtml.innerHTML = gamersNumberHtml.innerHTML.replace(/\d+/g, gamersNumber);
-			}
+			// this.bus.emit(`${lobbyCodes.connectGame.internal}`);
+			this.bus.emit(`${lobbyCodes.requestEventName}`, request);
 		});
 	}
 
