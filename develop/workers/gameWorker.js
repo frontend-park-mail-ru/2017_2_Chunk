@@ -185,7 +185,7 @@ const gameWorker = new class GameWorker {
 
 	detectFigureByUserID(userID) {
 		for (let key in this.gamers) {
-			if (key == userID) {
+			if (this.gamers[key].userID == userID) {
 				return key-1;
 			}
 		}
