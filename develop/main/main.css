@@ -1,45 +1,55 @@
 /*@viewport {*/
-    /*width: device-width;*/
-    /*height: device-height;*/
-    /*zoom: 1;*/
-    /*max-zoom: 1;*/
-    /*min-zoom: 1;*/
-    /*user-zoom: fixed;*/
-    /*orientation: landscape;*/
+/*width: device-width;*/
+/*height: device-height;*/
+/*zoom: 1;*/
+/*max-zoom: 1;*/
+/*min-zoom: 1;*/
+/*user-zoom: fixed;*/
+/*orientation: landscape;*/
 /*}*/
-
-
-
-@media screen{
-    body {
-        background: url('./image/galaxy.jpg') no-repeat;
-        background-size: 100vw 100vh;
-        font-family: "Comic Sans MS";
-        box-sizing: border-box;
-        margin: 0 !important;
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-        display: grid;
-        grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";
-        grid-template-columns: 1fr 3fr 1fr;
-        grid-template-rows: 6vh 5vh auto;
-    }
+@font-face {
+    font-family: Guardians; /* Гарнитура шрифта */
+    src: url(../../public/fonts/Guardians.ttf); /* Путь к файлу со шрифтом */
 }
 
-@media screen and (min-width: 640px) and (max-width: 1100px) and (orientation: landscape){
+@font-face {
+    font-family: Road_Rage; /* Гарнитура шрифта */
+    src: url(../../public/fonts/Road_Rage.otf); /* Путь к файлу со шрифтом */
+}
+
+body {
+    /*background: black url(../../public/images/galaxy.jpg) no-repeat;*/
+    background-color: black;
+    background-size: cover;
+    font-family: Road_Rage, "Comic Sans MS";
+    box-sizing: border-box;
+    margin: 0 !important;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+main {
+    width: 100%;
+    height: 100%;
+    display: grid !important;
+    grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 100px 100px auto;
+}
+
+@media screen and (min-width: 640px) and (max-width: 1100px) and (orientation: landscape) {
     @viewport {
         min-width: 360px;
         max-zoom: 2;
         orientation: portrait;
     }
-    body {
-        background: url('./image/galaxy.jpg') no-repeat;
-        background-size: 100vw 100vh;
-        font-family: "Comic Sans MS";
-        box-sizing: border-box;
-        margin: 0 !important;
 
+    main {
         display: grid;
         grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";
         grid-template-columns: 1fr 3fr 1fr;
@@ -47,56 +57,59 @@
     }
 }
 
-@media screen and (min-width: 360px) and (max-width: 1100px) and (orientation: portrait) {
+@media screen and (min-width: 360px) and (max-width: 640px) and (orientation: portrait) {
     @viewport {
         min-width: 360px;
-        max-zoom: 2;
+        max-zoom: 1;
         orientation: portrait;
     }
-    body {
-        background: url('./image/galaxy.jpg') no-repeat;
-        background-size: auto 100vh;
-        font-family: "Comic Sans MS";
-        margin: 0 !important;
 
+    main {
         grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place8 place8 place8";
         grid-template-rows: 6vw 10vw auto;
         grid-template-columns: 2fr 3fr 2fr;
-
     }
 
 }
 
-body > .gameName {
+main > .gameName {
     grid-area: place2;
 }
 
-body > .profileView {
+main > .profileView {
     grid-area: place3;
 }
 
-body > .themeButtonView {
+main > .themeButtonView {
     grid-area: place6;
 }
 
-body > .backMenuButtonView {
+main > .backMenuButtonView {
     grid-area: place4;
 }
 
-body > .backButtonView {
+main > .backButtonView {
     grid-area: place4;
 }
 
-body > .view {
+main > .view {
     grid-area: place8;
 }
 
-body > .treeView {
+main > .treeView {
     grid-column: 1 / 3;
     grid-row: 1 / 3;
 }
 
+main > .lobbyView {
+    grid-column: 2;
+    grid-row: 2 / 3;
+}
 
+main > .gamePrepareView {
+    grid-column: 2;
+    grid-row: 2 / 3;
+}
 
 .hidden {
     opacity: 0;

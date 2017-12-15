@@ -1,0 +1,31 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300);
+
+
+
+.plus{
+  font-family: Guardians;
+  z-index: 1;
+  margin: auto;
+  width: 100px;
+  height: 40px;
+  color: #1a1a1a;
+  background: #ff0000;
+  border-radius: 50%;
+  border: none;
+  transition: box-shadow 400ms cubic-bezier(.2,0,.7,1), transform 200ms cubic-bezier(.2,0,.7,1);
+  &:after{
+    content: "THEME";
+    font-size: 12px;
+    line-height: 1.1em;
+  }
+  &:hover{
+    // transform: rotate(45deg);
+    transform: scale(1.2);
+    box-shadow: 0 0 1px 15px rgba(#8A3B58, 0.4),
+    0 0 1px 30px rgba(#8A3B58, 0.1),
+    0 0 1px 45px rgba(#8A3B58, 0.1);
+  }
+  &:focus {
+    outline: none;
+  }
+}

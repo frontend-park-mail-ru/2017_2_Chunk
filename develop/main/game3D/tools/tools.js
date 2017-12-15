@@ -1,29 +1,53 @@
 'use strict';
 
 export const BACKGROUND_COLOR = 0xEEEEEE;
-export const HOVER_COLOR = 0xff0000;
+export const HOVER_COLOR = 0xFF0000;
 export const PLANE_X = 5;
 export const PLANE_Z = 5;
 export const PLAYER_HEIGHT = 7;
-export const COLORS = {
-	RED: 0x8B0000,
-	GREEN: 0x32CD32,
-	AQUA: 0x7FFFD4,
-	YELLOW: 0xFFFF00,
-	BLUE: 0x00008B,
-	BLACK: 0x000000,
-	WHITE: 0xFFFFFF,
-	SNOW: 0xFFFAFA,
-	MILK: 0xEEEEEE,
-	L_BLUE: 0xA8D8FF,
 
-	BACKGROUND: 0xF4DE9E,
-	PLANE_COLOR: 0x69869D
+export const COLORS = {
+	HOVER: 0xF4DE9E,
+	PLANE_COLOR: 0x69869D,
+	MOVE: 0xdfcc14
 };
+
 export const PLAYER_COLORS = [
-	0x7A6014,
-	0x492C70,
-	0x55A62A,
-	0x9A001E
+	0x7A6014,   //желтый
+	0x50147B,   //фиолетовый
+	0x1B7B14,   //зеленый
+	0x7B1425    //красный
 ];
+
+export const PLAYER_COLORS_CLICK = [
+	0xd3a622,   //светло-желтый
+	0x8922d3,   //светло-фиолетовый
+	0x2ed322,   //светло-зеленый
+	0xd32240    //светло-красный
+];
+
+export const PLAYER_COLORS_MOVE = [
+	0xe8cb73,   //светло-светло-желтый
+	0xb773e8,   //светло-светло-фиолетовый
+	0x7ae873,   //светло-светло-зеленый
+	0xe87386    //светло-светло-красный
+];
+
 export const SPEED = 0.1;
+
+export const GAME_VARIABLES = {
+	distance: 0,
+	end: false,
+	diff: 0,
+	grow: 0.01,
+	moveIndicator: false,
+	scaleIndicator: false,
+	stepIndicator: false,
+	lightIndicator: false,
+	queue: [],
+	arrayOfStepEnablePlane: [],
+	animation: 0,
+	angle: 0,
+	angleIndicator: false,
+	cameraRotateIndicator: false
+};

@@ -1,5 +1,7 @@
 'use strict';
 import Block from '../../blocks/block/block.js';
+import eventBus from '../../modules/eventBus';
+import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
 
 
 /**
@@ -11,12 +13,18 @@ export default class backButtonView extends Block {
 	 * @constructor - конструктор класса кнопки возврата в меню
 	 */
 	constructor() {
-		const backButton = Block.create('div', {}, ['backButtonView', 'view__view-button_theme-black-orange'], 'Back');
+		const backButton = Block.create('div', {},
+			['backButtonView', 'button'], 'Back');
 		super(backButton.el);
 		this.button = backButton;
 		this.hide();
 		this.button.on('click', () => {
-			window.history.back();
+			eventBus.emit('waitingBackend');
+			const request = {
+				code: `${gamePrepareCodes.exit.code}`,
+			};
+			console.log('request back button');
+			eventBus.emit(`${gamePrepareCodes.requestEventName}`, request);
 		});
 	}
 }

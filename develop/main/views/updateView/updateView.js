@@ -5,14 +5,16 @@ import View from '../view/view';
 import Form from '../../blocks/form/form.js';
 import Message from '../../blocks/form/__message/form__message.js';
 import updateFields from './__fields/updateView__fields';
-
+import eventBus from '../../modules/eventBus';
+import userService from '../../services/user-service';
+import router from '../../modules/router/router';
 
 /**
  * Класс секции обновления данных пользователя
  * @module UpdateView
  */
 export default class UpdateView extends View {
-	constructor(eventBus, userService, router) {
+	constructor() {
 		const form = new Form(updateFields);
 		super({form});
 		this.form = form;

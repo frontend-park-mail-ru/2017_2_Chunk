@@ -3,6 +3,9 @@ import CommonView from '../view/view';
 import Form from '../../blocks/form/form.js';
 import Message from '../../blocks/form/__message/form__message.js';
 import loginFields from './__fields/loginView__fields';
+import eventBus from '../../modules/eventBus';
+import userService from '../../services/user-service';
+import router from '../../modules/router/router';
 
 
 /**
@@ -16,7 +19,7 @@ export default class LoginView extends CommonView {
 	 * @param {class} router - общий для всех модулей объект класса
 	 * @constructor - конструктор секции логина
 	 */
-	constructor(eventBus, userService, router) {
+	constructor() {
 		const form = new Form(loginFields);
 		super({form});
 		this.form = form;
@@ -25,10 +28,19 @@ export default class LoginView extends CommonView {
 		this.userService = userService;
 		this.message = new Message();
 		this.append(this.message);
+		this.onSubmitEvent();
+		this.addBackGround();
+		this.hide();
+	}
+
+
+
+	onSubmitEvent() {
 		this.el.addEventListener('submit', (event) => {
 			event.preventDefault();
 			const formData = {};
 			const fields = this.form.fields;
+
 			for (const field in fields) {
 				formData[fields[field].el.name] = fields[field].el.value;
 			}
@@ -37,9 +49,17 @@ export default class LoginView extends CommonView {
 					console.log(err.message);
 				});
 		}, true);
-		this.hide();
 	}
 
+
+	addBackGround() {
+		const fields = this.form.fields;
+		for (const field in fields) {
+			if (fields[field].el.type !== 'submit') {
+				// fields[field].el.style.backgroundImage = 'url(/images/buttons/buttonTape0.jpg)';
+			}
+		}
+	}
 
 	/**
 	 * Функция вызываемаемая при отправке данных

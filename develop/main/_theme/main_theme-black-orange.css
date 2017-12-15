@@ -1,3 +1,7 @@
 .main_theme-black-orange {
     background-color: black;
+    background: black url(../../../public/images/galaxy.jpg) no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: block;
 }

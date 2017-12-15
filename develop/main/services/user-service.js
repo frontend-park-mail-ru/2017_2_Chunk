@@ -1,12 +1,13 @@
 'use strict';
 import Http from '../modules/http';
+import eventBus from '../modules/eventBus';
 
 
 /**
  * Сервис для работы с юзерами
  * @module UserService
  */
-export default class UserService {
+export default new class UserService {
 	constructor() {
 		this.user = null;
 		this.users = [];
@@ -50,8 +51,12 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
+
+		eventBus.emit('waitingBackend');
 		const resp = await Http.fetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
+		eventBus.emit('backendResponseReceived');
+
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -86,8 +91,10 @@ export default class UserService {
 			response.message = 'Internet connections error!';
 			return response;
 		}
+		eventBus.emit('waitingBackend');
 		const resp = await Http.fetchPost('/user/sign_in', {login, password});
 		response.json = await resp.json();
+		eventBus.emit('backendResponseReceived');
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -112,36 +119,19 @@ export default class UserService {
 			json: {},
 			message: '',
 		};
-		if (username.length < 4) {
-			response.message = 'Длина логина должна быть не меньше 4 символов!';
-			return response;
-		}
-		if (username.length > 12) {
-			response.message = 'Длина логина не должна превышать 12 символов!';
-			return response;
-		}
 		if (password.length < 6) {
 			response.message = 'Длина пароля должна быть не меньше 6 символов!';
-			return response;
-		}
-		if (oldPassword.length < 6) {
-			response.message = 'Длина пароля должна быть не меньше 6 символов!';
-			return response;
-		}
-		if (password === username) {
-			response.message = 'Логин и пароль не должны совпадать!';
-			return response;
-		}
-		if (oldPassword === username) {
-			response.message = 'Логин и пароль не должны совпадать!';
 			return response;
 		}
 		if (!navigator.onLine) {
 			response.message = 'Internet connections error!';
 			return response;
 		}
+		eventBus.emit('waitingBackend');
 		const resp = await Http.fetchPost('/user/update', {username, email, password, oldPassword});
 		response.json = await resp.json();
+		eventBus.emit('backendResponseReceived');
+
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -215,4 +205,4 @@ export default class UserService {
 	loadUsersList() {
 		return Http.fetchGet('');
 	}
-}
+};

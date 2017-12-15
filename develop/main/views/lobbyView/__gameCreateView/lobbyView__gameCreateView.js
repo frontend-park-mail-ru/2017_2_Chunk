@@ -2,6 +2,7 @@
 import Block from '../../../blocks/block/block';
 import GameCreateViewFields from './__fields/lobbyView__gameCreateView__fields';
 import eventBus from '../../../modules/eventBus';
+import lobbyCodes from '../../../messageCodes/lobbyCodes';
 
 
 /**
@@ -24,11 +25,9 @@ export default class GameCreateView extends Block {
 		for (let field in this.fields) {
 			this.append(this.fields[field]);
 		}
-
 		this.stateCreateBanner();
 		this.onSubmit();
 	}
-
 
 
 	//определяет отктрытие баннера и закрытие по клику вокруг банера
@@ -36,7 +35,7 @@ export default class GameCreateView extends Block {
 		this.bus.on('openCreateGameBanner', () => {
 			this.show();
 			const body = document.body;
-			body.addEventListener('click', (event) => {
+			this.listener = body.addEventListener('click', (event) => {
 				const path = event.path;
 				const ifFormInPath = path.some((elem) => {
 					return elem.tagName === 'FORM';
@@ -48,24 +47,34 @@ export default class GameCreateView extends Block {
 			}, true);
 		});
 		this.bus.on('closeCreateGameBanner', () => {
+			const body = document.body;
+			body.removeEventListener('click', this.listener);
 			this.hide();
 		});
+		this.onGameCreate();
 	}
+
+
+	onGameCreate() {
+		this.bus.on(`${lobbyCodes.createGame.code}`, () => {
+			this.bus.emit('closeCreateGameBanner');
+		})
+	}
+
 
 	onSubmit() {
 		this.el.addEventListener('submit', (event) => {
 			event.preventDefault();
-			const data = {
-				code: '100',
-				numberOfPlayers: '2',
-				maxX: 8,
-				maxY: 8,
+			this.bus.emit('waitingBackend');
+			let numberOfPlayer = this.el.elements.playersNumberChoice.value;
+			let fieldSize = this.el.elements.fieldSizeChoice.value;
+			const request = {
+				code: `${lobbyCodes.createGame.code}`,
+				numberOfPlayers: numberOfPlayer,
+				maxX: fieldSize,
+				maxY: fieldSize,
 			};
-
-			this.bus.emit('createGame', data);
-			this.hide();
+			this.bus.emit(`${lobbyCodes.requestEventName}`, request);
 		});
-
-		
 	}
 }

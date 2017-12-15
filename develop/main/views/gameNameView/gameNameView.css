@@ -1,13 +1,19 @@
 .gameNameView {
+    font-family: Guardians;
     margin: auto;
     font-size: calc(14px + 3vh);
-    color: white;
+    /*color: #ff8e00;*/
+    color: #ffff00;
+    cursor: pointer;
+    font-style: italic;
 }
+
 
 @media screen and (min-width: 360px) and (max-width: 1200px) {
     .gameNameView {
         margin: auto;
         font-size: calc(18px);
-        color: white;
+        /*color: #ff8e00;*/
+        color: #ffff00;
     }
 }

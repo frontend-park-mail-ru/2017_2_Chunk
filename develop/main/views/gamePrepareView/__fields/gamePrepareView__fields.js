@@ -16,9 +16,11 @@ const gamePrepareFields = {
 	header: new Header(),
 	playersList: new PlayList(),
 	startGame: Block.create('div', {},
-		['gamePrepareView__fields__starGameButton', 'view__view-button'], 'Start game'),
+		['gamePrepareView__fields__starGameButton',
+			'form__button', 'button', 'masterField'], 'Start game'),
 	addBot: Block.create('div', {},
-		['gamePrepareView__fields__addBotButton', 'view__view-button'], 'Add bot'),
+		['gamePrepareView__fields__addBotButton',
+			'form__button', 'button', 'masterField'], 'Add bot'),
 };
 
 export default gamePrepareFields;

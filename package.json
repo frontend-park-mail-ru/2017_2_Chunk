@@ -17,22 +17,27 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
     "body-parser": "^1.18.1",
+    "bootstrap": "^4.0.0-beta.2",
     "cookie-parser": "^1.4.3",
     "cool-ascii-faces": "1.3.4",
     "css-loader": "^0.28.7",
+    "editorconfig": "^0.15.0",
     "express": "^4.16.2",
     "express-history-api-fallback": "^2.2.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "imports-loader": "^0.7.1",
     "morgan": "^1.9.0",
+    "node-sass": "^4.7.2",
     "pug": "^2.0.0-rc.4",
+    "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
     "three": "^0.84.0",
     "three-orbitcontrols": "^1.2.1",
     "url-loader": "^0.6.2",
     "uuid": "^3.1.0",
-    "webpack": "^3.8.1"
+    "visibilityjs": "^1.2.6",
+    "webpack": "^3.10.0"
   },
   "repository": {
     "type": "git",
@@ -42,7 +47,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.7",
-    "eslint": "^4.10.0",
+    "eslint": "^4.12.1",
     "eslint-config-airbnb": "^11.2.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
@@ -51,16 +56,15 @@
     "file-loader": "^1.1.5",
     "imports-loader": "^0.7.1",
     "nodemon": "^1.12.1",
+    "pug-loader": "^2.3.0",
     "style-loader": "^0.19.0",
-    "url-loader": "^0.6.2",
-    "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
+    "url-loader": "^0.6.2"
   },
   "scripts": {
-    "compile-pug": "pug --client --no-debug ./public/templates/recordIndex.pug",
-    "build": "babel public -d public_ES",
-    "start": "./node_modules/.bin/webpack && node ./server/index.js",
-    "lint": "./node_modules/.bin/eslint ./develop/*/*.js",
-    "lint-fix": "./node_modules/.bin/eslint --fix ./develop/*/*.js"
+    "test": "vows --spec",
+    "start": "webpack && node ./server/index.js",
+    "build": "webpack",
+    "lint": "./node_modules/.bin/eslint ./develop/**/**/*.js",
+    "lint-fix": "./node_modules/.bin/eslint --fix ./develop/**/**/*.js"
   }
 }

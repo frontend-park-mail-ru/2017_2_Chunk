@@ -1,0 +1,95 @@
+.player-controls {
+  position: absolute;
+
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  width: 300px;
+  height: 20px;
+  bottom: -80px;
+  right: 0px;
+  padding: calc(20px * 2);
+  box-sizing: border-box;
+  align-items: center;
+  z-index: 6;
+
+  .player-button {
+
+    position: relative;
+    margin: 0 calc(20px / 2);
+    padding:0 calc(20px / 2);
+    background-color: transparent;
+
+    svg {
+
+      max-height: 24px;
+      width: 100%;
+
+      path {
+        fill: #009fff;
+        transition: .01s;
+      }
+    }
+
+    &:focus, &:hover {
+
+      outline: none;
+      cursor: pointer;
+
+      svg path {
+        fill: #ff9f00;
+      }
+
+    }
+
+    &:first-child {
+      margin-left: 0;
+      padding-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+      padding-right: 0;
+    }
+
+    &.player-button-play {
+
+      display: inline;
+
+      &.paused { display: none; }
+
+    }
+
+    &.player-button-random {
+      transform: scale(1.6);
+      color: #009fff;
+
+      &.random-play {
+        color: red;
+      }
+
+      &:hover, &:focus {
+        color: #ff9f00;
+      }
+    }
+
+    &.player-button-prev {
+      transform: scale(2);
+    }
+
+    &.player-button-next {
+      transform: scale(2);
+    }
+
+    &.player-button-pause {
+
+      display: none;
+
+      &.paused { display: inline; }
+
+    }
+
+  }
+
+}

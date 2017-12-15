@@ -10,6 +10,7 @@ export default class Block {
 	 */
 	constructor(el) {
 		this.el = el;
+		this.hidden = false;
 	}
 
 	/**
@@ -54,6 +55,7 @@ export default class Block {
 	 * Скрывает блок
 	 */
 	hide() {
+		this.hidden = true;
 		this.el.classList.add('main_hidden');
 		this.el.setAttribute('hidden', 'true');
 	}
@@ -62,6 +64,7 @@ export default class Block {
 	 * Отображает блок
 	 */
 	show() {
+		this.hidden = false;
 		this.el.removeAttribute('hidden');
 		this.el.classList.remove('main_hidden');
 	}

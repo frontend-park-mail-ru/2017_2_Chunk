@@ -5,25 +5,26 @@ import eventBus from '../../modules/eventBus';
 
 
 export default class ThreeView extends CommonView {
-	constructor(router) {
+	constructor() {
 		const gameContainer = Block.create('div');
-		const winDiv = Block.create('div', {}, ['canvasView__winDiv'], '');
-		super([gameContainer, winDiv]);
+		const playersDiv = Block.create('div', {}, ['gameDiv'], '');
+		super([gameContainer, playersDiv]);
 		this.el.style.setProperty('border', 'none');
 		this.el.classList.add('treeView');
-		this.winDiv = winDiv;
-		this.winDiv.hide();
+		this.playersDiv = playersDiv;
+		this.playersDiv.hide();
 		this.bus = eventBus;
-		this.bus.on('endOfGame', (win) => {
-			if (win) {
-				this.winDiv.setText('You win! =)');
-			} else {
-				this.winDiv.setText('You lose! =(');
-			}
-			this.winDiv.show();
+		this.clear = true;
+		this.bus.on('beginPlaying', () => {
+			this.playersDiv.show();
+		});
+		this.bus.on('changePlayerDiv', (text) => {
+			this.playersDiv.setText(text);
+		});
+		this.bus.on('endOfGame', () => {
 			setTimeout(() => {
-				this.winDiv.hide();
-				router.goTo('/menu');
+				this.playersDiv.hide();
+				this.bus.emit('goToLobby');//точка выхода из игры в меню
 			}, 3000);
 		});
 		super.hide();
@@ -31,10 +32,18 @@ export default class ThreeView extends CommonView {
 
 
 	hide() {
-		this.bus.emit('deleteTree');
+		if (!this.clear) {
+			this.bus.emit('deleteTree');
+			this.clear = true;
+		}
 		super.hide();
 	}
 
+
+	show() {
+		this.clear = false;
+		super.show();
+	}
 
 	getElement() {
 		return this.el;

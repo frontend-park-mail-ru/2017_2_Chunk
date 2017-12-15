@@ -3,7 +3,10 @@
 import View from '../view/view';
 import Form from '../../blocks/form/form.js';
 import Message from '../../blocks/form/__message/form__message.js';
-import signUpFields from '../../templates/signUpFileds';
+import signUpFields from './signUpFields';
+import eventBus from '../../modules/eventBus';
+import userService from '../../services/user-service';
+import router from '../../modules/router/router';
 
 
 /**
@@ -17,7 +20,7 @@ export default class SignUpView extends View {
 	 * @param router - общий для всех модулей объект класса
 	 * @constructor - общий для всех модулей объект класса
 	 */
-	constructor(eventBus, userService, router) {
+	constructor() {
 		const form = new Form(signUpFields);
 		super({form});
 

@@ -2,6 +2,7 @@
 import View from '../view/view';
 import gamePrepareFields from './__fields/gamePrepareView__fields';
 import eventBus from '../../modules/eventBus';
+import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
 
 
 /**
@@ -11,144 +12,201 @@ import eventBus from '../../modules/eventBus';
 export default class gamePrepareView extends View {
 	constructor() {
 		super(gamePrepareFields);
-		this.source = navigator.onLine ? 'socket' : 'worker';
 		this.fields = gamePrepareFields;
 		this.bus = eventBus;
 		this.el.classList.add('gamePrepareView');
 		this.clear = false;
-		this.active = false;
+		this.gamePrepareListeners = {};
+		this.events();
+		this.hide();
+		eventBus.emit('hideMasterFields');
+	}
+
+
+	events() {
+		this.masterEvents();
 		this.addPlayer();
 		this.addBot();
 		this.removePLayer();
-		this.gameClose();
-		this.gameStatusEvents();
+		this.removeBot();
 		this.buttonsEvents();
-		this.whoIsItEvent();
-		// this.source = 'socket';
-		this.hide();
+		this.gameStatusEvents();
+		this.showViewEvents();
 	}
 
 
 	show() {
 		super.show();
-		this.active = true;
+		this.clear = false;
 	}
 
 
 	hide() {
+		this.removeGamePrepareListeners();
 		super.hide();
 		if (!this.clear) {
-			this.fields.playersList.clear();
-			this.fields.header.clear();
+			setTimeout(() => {
+				this.fields.playersList.clear();
+				this.fields.header.clear();
+			}, 300);
 		}
 		this.clear = true;
-		this.active = false;
 	}
 
 
-	// добавление пользователя
-	addPlayer() {
-		this.bus.on(`${this.source}Code101`, (sourceResponse) => {
-			this.fields.playersList.addPlayer(sourceResponse.player);
+	removeGamePrepareListeners() {
+		for (let listener in this.gamePrepareListeners) {
+			this.bus.remove(listener, this.gamePrepareListeners[listener]);
+		}
+	}
+
+
+	showViewEvents() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.createGame.code}`, (response) => {
+			eventBus.emit('showMasterFields');
+			this.fields.header.updateGameData(response.game);
+			this.fields.playersList.addMaster(response.game.realPlayers[0]);
+			this.whoIsItEvent();
+		});
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.connectGame.code}`, (response) => {
+			eventBus.emit('hideMasterFields');
+			this.fields.header.updateGameData(response.game);
+			this.whoIsItEvent();
+			eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, () => {
+				debugger;
+				this.addPlayers(response.game.realPlayers);
+				this.addBots(response.game.botPlayers);
+			})
+		})
+	}
+
+
+	addPlayers(players) {
+		players.forEach((player) => {
+			this.fields.playersList.addPlayer(player);
 			this.clear = false;
-			const socketRequest = {
-				code: '104',
-				gameID: sourceResponse.gameID,
-			};
-			this.bus.emit('getGameInfo', socketRequest);
 		});
 	}
 
-
-	addBot() {
-		this.bus.on(`${this.source}Code108`, (socketResponse) => {
-			this.fields.playersList.addPlayer(socketResponse.player);
+	addBots(bots) {
+		bots.forEach((bot) => {
+			this.fields.playersList.addPlayer(bot);
 			this.clear = false;
-			const socketRequest = {
-				code: '104',
-				gameID: socketResponse.gameID,
-			};
-			this.bus.emit('getGameInfo', socketRequest);
-		});
-	}
-
-
-	// удаление пользователя
-	removePLayer() {
-		this.bus.on(`${this.source}Code103`, (socketReceiveData) => {
-			if (this.active) {
-				this.fields.playersList.removePlayer(socketReceiveData.player.userID);
-				const socketSendData = {
-					code: '104',
-					gameID: socketReceiveData.gameID
-				};
-				this.bus.emit('getGameInfo', socketSendData);
-			}
 		});
 	}
 
 
 	gameStatusEvents() {
-		this.bus.on('connectGame', () => {
-			this.updateGameDataSlave();
-		});
-		this.bus.on('createGame', () => {
-			this.updateGameDataMaster();
-		});
-		this.bus.on(`${this.source}Code200`, () => {
+		// this.eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.startGame.code}`, () => {
+		this.bus.on(`${gamePrepareCodes.responseEventName}200`, () => {
 			this.bus.emit('goToGame');
 		});
-	}
+	};
 
 
-	updateGameDataMaster() {
-		this.bus.on(`${this.source}Code104`, (socketReceiveData) => {
-			this.fields.header.updateGameData(socketReceiveData.game);
+	updateGameData() {
+		this.addPlayer();
+		this.removePLayer();
+		this.addBot();
+		this.removeBot();
+	};
+
+
+	addPlayer() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addPlayer.code}`, (response) => {
+			this.fields.playersList.addPlayer(response);
 			this.clear = false;
-			this.gameInfo = socketReceiveData;
 		});
 	}
 
 
-	updateGameDataSlave() {
-		this.bus.on(`${this.source}Code104`, (socketReceiveData) => {
-			this.fields.header.updateGameData(socketReceiveData.game);
-			this.clear = false;
-			this.gameInfo = socketReceiveData;
-			socketReceiveData.game.gamers.forEach((gamer) => {
-				if (gamer.userID !== this.userID) { this.fields.playersList.addPlayer(gamer); }
-			});
+	removePLayer() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removePlayer.code}`, (response) => {
+			if (this.userID === response.userID)
+				this.exitToLobby();
+			else
+				this.fields.playersList.removePlayer(response.userID);
 		});
+	}
+
+
+	addBot() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addBot.code}`, (response) => {
+			this.fields.playersList.addBot(response);
+			this.fields.header.addBot();
+			this.clear = false;
+		});
+	}
+
+
+	removeBot() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removeBot.code}`, (response) => {
+			this.fields.playersList.removeBot(response.userID);
+			this.fields.header.removeBot();
+		});
+	}
+
+
+	masterEvents() {
+		eventBus.on('hideMasterFields', () => {
+			this.hideMasterFields();
+		});
+		eventBus.on('showMasterFields', () => {
+			this.showMasterFields();
+		});
+	}
+
+
+	hideMasterFields() {
+		this.fields.startGame.hide();
+		this.fields.addBot.hide();
+	}
+
+
+	showMasterFields() {
+		this.fields.startGame.show();
+		this.fields.addBot.show();
 	}
 
 
 	gameClose() {
-		this.bus.on(`${this.source}Code110`, (socketReceiveData) => {
-			this.bus.emit('openLobby');
-		});
+		// this.gamePrepareListeners[`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`]
+		// 	= this.eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.deleteGame.code}`, (response) => {
+		// 	this.eventBus.emit('openLobby');
+		// });
 	}
 
 
 	buttonsEvents() {
 		this.fields.addBot.on('click', () => {
 			const request = {
-				code: '108',
-				lvlbot: '1',
+				code: `${gamePrepareCodes.addBot.code}`,
+				lvlbot: '3',
 			};
-			this.bus.emit(`${this.source}Message`, (request));
+			this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
 		});
 		this.fields.startGame.on('click', () => {
 			const request = {
-				code: '105',
+				code: `${gamePrepareCodes.startGame.code}`,
 			};
-			this.bus.emit(`${this.source}Message`, (request));
+			this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
 		});
 	}
 
 
+	exitToLobby() {
+		eventBus.emit('goToLobby');
+		eventBus.emit('backendResponseReceived');
+	}
+
+
 	whoIsItEvent() {
-		this.bus.on('socketCode112', (socketResponse) => {
-			this.userID = socketResponse.userID;
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, (response) => {
+			this.userID = response.userID;
 		});
+		const request = {
+			code: `${gamePrepareCodes.whoIsIt.code}`,
+		};
+		this.bus.emit(`${gamePrepareCodes.requestEventName}`, request);
 	}
 }

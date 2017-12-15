@@ -42,7 +42,7 @@ app.use(bodyParser.json()); // С помощью какой-то древней 
 app.use(cookieParser()); // всё то же волшебство, но уже для кук
 
 
-// app.get('/menu', (request, response) => {
+// app.get('*', (request, response) => {
 // 	response.redirect('/menu');
 // });
 

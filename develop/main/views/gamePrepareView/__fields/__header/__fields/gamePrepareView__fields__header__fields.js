@@ -30,18 +30,45 @@ export default class headerFields {
 
 	update(socketReceiveData) {
 		const masterID = socketReceiveData.masterID;
-		const masterInfo = socketReceiveData.gamers.filter((gamer) => {
+		const masterInfo = socketReceiveData.realPlayers.filter((gamer) => {
 			return gamer.userID === masterID;
 		})[0];
 		const masterUsername = masterInfo.username;
-
+		this.gameInfo = {
+			botsNumber: Number(socketReceiveData.botPlayers.length),
+			playersNumber: Number(socketReceiveData.realPlayers.length),
+			summaryNumber: Number(socketReceiveData.numberOfPlayers),
+		};
 		this.fields.creator.el.innerHTML = `Creator: ${masterUsername}`;
 		this.fields.gameID.el.innerHTML = this.fields.gameID.el.innerHTML.replace(/\d+/g, socketReceiveData.gameID);
-		this.fields.gamersNumber.el.innerHTML = this.fields.gamersNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.gamers.length);
-		this.fields.botsNumber.el.innerHTML = this.fields.botsNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.bots.length);
+		this.fields.gamersNumber.el.innerHTML = this.fields.gamersNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.realPlayers.length);
+		this.fields.botsNumber.el.innerHTML = this.fields.botsNumber.el.innerHTML.replace(/\d+/g, socketReceiveData.botPlayers.length);
 		this.fields.numberOfPlayers.el.innerHTML = this.fields.numberOfPlayers.el.innerHTML.replace(/\d+/g, socketReceiveData.numberOfPlayers);
-		// this.fields.watchers.el.innerHTML = this.fields.watchers.el.innerHTML.replace(/\d+/g, socketReceiveData.watchers);
-		this.fields.fieldSize.el.innerHTML = this.fields.fieldSize.el.innerHTML.replace(/\d+/g, socketReceiveData.field.maxX);
+		this.fields.fieldSize.el.innerHTML = this.fields.fieldSize.el.innerHTML.replace(/\d+/g, socketReceiveData.maxX);
+	}
+
+
+	addPlayer() {
+		this.gameInfo.playersNumber++;
+		this.fields.gamersNumber.el.innerHTML = `Players: ${this.gameInfo.playersNumber}`;
+	}
+
+
+	addBot() {
+		this.gameInfo.botsNumber++;
+		this.fields.botsNumber.el.innerHTML = `Bots: ${this.gameInfo.botsNumber}`;
+	}
+
+
+	removePLayer() {
+		this.gameInfo.playersNumber--;
+		this.fields.gamersNumber.el.innerHTML = `Players: ${this.gameInfo.playersNumber}`;
+	}
+
+
+	removeBot() {
+		this.gameInfo.botsNumber--;
+		this.fields.botsNumber.el.innerHTML = `Bots: ${this.gameInfo.botsNumber}`;
 	}
 
 
