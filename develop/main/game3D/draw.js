@@ -21,18 +21,8 @@ export default class Draw {
 			0.1,
 			1000
 		);
-		//
-		// this.camera.position.set(-25, 35, -16);
-		// this.camera = new Three.OrthographicCamera(
-		// 	window.screen.availWidth / - 30,
-		// 	window.screen.availWidth / 30,
-		// 	window.screen.availHeight / 30,
-		// 	window.screen.availHeight / - 30,
-		// 	-200,
-		// 	500
-		// );
-		this.camera.position.set(-25, 35, -16);
 
+		this.camera.position.set(-25, 35, -16);
 		this.camera.lookAt(this.scene.position);
 
 		this.point1 = new Point();
@@ -47,13 +37,12 @@ export default class Draw {
 		this.renderer.render(this.scene, this.camera);
 
 		this.controls = new OrbitControl(this.camera, this.renderer.domElement);
-		this.controls.maxPolarAngle = Math.PI * 0.495;
+		this.controls.minPolarAngle = Math.PI / 6;
+		this.controls.maxPolarAngle = Math.PI / 2.3;
 		this.controls.target.set(20, -5, 20);
 		this.controls.enablePan = false;
-		this.controls.minDistance = 40.0;
-		this.controls.maxDistance = 200.0;
 		this.controls.enableDamping = true;
-		this.controls.dampingFactor = 0.01;
+		this.controls.dampingFactor = 0.2;
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
 		this.controls.rotateSpeed = 0.5;
@@ -88,6 +77,13 @@ export default class Draw {
 		this.addMeshes();
 		this.gameVariebles.moveIndicator = false;
 		this.gameVariebles.lightIndicator = true;
+		this.gameVariebles.cameraRotateIndicator = true;
+		this.controls.autoRotateSpeed = 4;
+		this.controls.minDistance = 200.0;
+		this.controls.maxDistance = 200.0;
+
+		this.bus.emit('beginPlaying');
+		// this.bus.emit('changePlayerDiv', 'HELLO');
 
 		this.animate();
 	}
@@ -101,10 +97,15 @@ export default class Draw {
 	}
 
 	gameEnd(response) {
+		this.gameVariebles.queue.push(response);
+	}
+
+	gameClose(response) {
 		const request = response.win;
 		this.bus.emit('endOfGame', request);
 		this.scene.remove(this.light);
 		this.gameVariebles.lightIndicator = false;
+		this.gameVariebles.cameraRotateIndicator = false;
 	}
 
 	addMeshes() {
@@ -160,9 +161,9 @@ export default class Draw {
 
 	animate() {
 		this.controls.update();
-		if (this.camera.position.y < 20) {
-			this.camera.position.y += 0.5;
-		}
+
+		this.startRotate();
+		this.stopAzimuthRotate();
 
 		this.queueStep();
 
@@ -175,6 +176,30 @@ export default class Draw {
 		this.render();
 	}
 
+	stopAzimuthRotate() {
+		if (this.controls.getAzimuthalAngle() < this.gameVariebles.angle + 0.1 &&
+			this.controls.getAzimuthalAngle() > this.gameVariebles.angle - 0.1 &&
+			this.gameVariebles.angleIndicator) {
+			this.controls.autoRotate = false;
+			this.gameVariebles.angleIndicator = false;
+		}
+	}
+
+	startRotate() {
+		if (this.gameVariebles.cameraRotateIndicator) {
+			if (this.controls.minDistance > 60) {
+				this.controls.autoRotate = true;
+				this.controls.minDistance -= 2;
+				this.controls.maxDistance -= 2;
+			} else {
+				this.controls.autoRotate = false;
+				this.controls.maxDistance = 200;
+				this.controls.minDistance = 40;
+				this.gameVariebles.cameraRotateIndicator = false;
+			}
+		}
+	}
+
 	lightFigure() {
 		if (this.gameVariebles.lightIndicator) {
 			this.raycasterMove.setFromCamera(this.mouse, this.camera);
@@ -183,13 +208,24 @@ export default class Draw {
 			);
 			if (intersects.length > 0) {
 				if (this.IntersectedMove !== intersects[0].object) {
-					if (this.IntersectedMove) this.IntersectedMove.material.emissive.setHex(this.IntersectedMove.currentHex);
+					if (this.IntersectedMove) {
+						this.IntersectedMove.material.color.setHex(this.IntersectedMove.currentHex);
+					}
 					this.IntersectedMove = intersects[0].object;
-					this.IntersectedMove.currentHex = this.IntersectedMove.material.emissive.getHex();
-					this.IntersectedMove.material.emissive.setHex(tools.COLORS.MOVE);
+					if (this.IntersectedMove.material.color.getHex() === tools.COLORS.PLANE_COLOR) {
+						this.IntersectedMove.currentHex = tools.COLORS.PLANE_COLOR;
+						this.IntersectedMove.material.color.setHex(tools.PLAYER_COLORS_MOVE[this.figureType]);
+					} else if (this.IntersectedMove.material.color.getHex() === tools.PLAYER_COLORS[this.figureType]) {
+						this.IntersectedMove.currentHex = tools.PLAYER_COLORS[this.figureType];
+						this.IntersectedMove.material.color.setHex(tools.PLAYER_COLORS_MOVE[this.figureType]);
+					} else {
+						this.IntersectedMove.currentHex = this.IntersectedMove.material.color.getHex();
+					}
 				}
-			}  else {
-				if (this.IntersectedMove) this.IntersectedMove.material.emissive.setHex(this.IntersectedMove.currentHex);
+			} else {
+				if (this.IntersectedMove) {
+					this.IntersectedMove.material.color.setHex(this.IntersectedMove.currentHex);
+				}
 				this.IntersectedMove = null;
 			}
 		}
@@ -202,11 +238,16 @@ export default class Draw {
 			!this.gameVariebles.stepIndicator &&
 			!Object.isFrozen(this.point1)
 		) {
-			this.gameVariebles.stepIndicator = true;
 			this.stepObject = this.gameVariebles.queue.shift();
-			this.point1 = this.stepObject.step.src;
-			this.point2 = this.stepObject.step.dst;
-			this.fullStep(this.stepObject);
+			this.bus.emit('changePlayerDiv', this.stepObject.playerString);
+			if (this.stepObject.func === 'winnerOrLooser') {
+				this.gameClose(this.stepObject);
+			} else {
+				this.gameVariebles.stepIndicator = true;
+				this.point1 = this.stepObject.step.src;
+				this.point2 = this.stepObject.step.dst;
+				this.fullStep(this.stepObject);
+			}
 		}
 	}
 
@@ -219,16 +260,16 @@ export default class Draw {
 		if (intersects.length > 0) {
 			if (this.IntersectedClick !== intersects[0].object) {
 				if (this.IntersectedClick) {
-					this.IntersectedClick.material.emissive.setHex(this.IntersectedClick.currentHex);
+					if (this.IntersectedClick.material.color.getHex() === tools.PLAYER_COLORS_CLICK[this.figureType])
+						this.IntersectedClick.material.color.setHex(tools.PLAYER_COLORS[this.figureType]);
 				}
 				this.IntersectedClick = intersects[0].object;
-				if (this.IntersectedClick.material.emissive.getHex() !== tools.COLORS.MOVE)
-					this.IntersectedClick.currentHex = this.IntersectedClick.material.emissive.getHex();
 
 				// Если нажали на фигурку, у которой наш цвет
 				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-					intersects[0].object.material.color.getHex()
-					=== tools.PLAYER_COLORS[this.figureType] &&
+					(intersects[0].object.material.color.getHex() === tools.PLAYER_COLORS_MOVE[this.figureType] ||
+					intersects[0].object.material.color.getHex() === tools.PLAYER_COLORS[this.figureType])
+					&&
 					// Проверяем, можно ли изменять первую точку.
 					// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
 					!Object.isFrozen(this.point1)) {
@@ -238,8 +279,13 @@ export default class Draw {
 						if (intersects[0].object.position.x > i * tools.PLANE_X) { this.point1.x = i; }
 						if (intersects[0].object.position.z > i * tools.PLANE_Z) { this.point1.z = i; }
 					}
+
+					this.getAzimuthAngle();
 					// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
 					this.getStepEnable();
+
+					this.IntersectedClick.material.color.setHex(tools.PLAYER_COLORS_CLICK[this.figureType]);
+					this.gameVariebles.lightIndicator = false;
 				}
 
 				let idx = 0;
@@ -276,16 +322,33 @@ export default class Draw {
 						};
 						this.bus.emit(`${gameCodes.gameStep.request}`, request);
 					} else this.deleteAllStepEnable();
-
 				}
-				this.IntersectedClick.material.emissive.setHex(tools.HOVER_COLOR);
 			}
 		} else {
 			if (this.IntersectedClick) {
-				this.IntersectedClick.material.emissive.setHex(this.IntersectedClick.currentHex);
+				if (this.IntersectedClick.material.color.getHex() === tools.PLAYER_COLORS_CLICK[this.figureType])
+					this.IntersectedClick.material.color.setHex(tools.PLAYER_COLORS[this.figureType]);
 			}
 			this.IntersectedClick = null;
+			this.gameVariebles.lightIndicator = true;
 		}
+	}
+
+	getAzimuthAngle() {
+		const request = {
+			code: 'rotateAngle',
+			x: this.point1.x,
+			z: this.point1.z,
+			currentAngle: this.controls.getAzimuthalAngle()
+		};
+		this.bus.emit('rotate', request);
+	}
+
+	azimuthAngle(response) {
+		this.controls.autoRotateSpeed = response.speed;
+		this.gameVariebles.angle = response.angle;
+		this.controls.autoRotate = true;
+		this.gameVariebles.angleIndicator = true;
 	}
 
 	getStepEnable() {
@@ -296,7 +359,7 @@ export default class Draw {
 				arrayOfFigureForPost[i][j] = this.arrayOfPlane[i][j].figure;
 		}
 		let request = {
-			code: '215',
+			code: 'stepEnable',
 			array: arrayOfFigureForPost,
 			x: this.point1.x,
 			z: this.point1.z
@@ -315,6 +378,7 @@ export default class Draw {
 				this.gameVariebles.scaleIndicator = false;
 				delete this.point1;
 				this.point1 = new Point();
+				this.gameVariebles.lightIndicator = true;
 			}
 		}
 	}
@@ -363,6 +427,7 @@ export default class Draw {
 				// Ну и в конце движения делаем обработку хода.
 				this.step(this.stepObject.figureForPaint);
 				this.gameVariebles.stepIndicator = false;
+				this.gameVariebles.lightIndicator = true;
 			}
 		}
 	}
@@ -377,7 +442,7 @@ export default class Draw {
 	makeStepEnable(response) {
 		this.gameVariebles.arrayOfStepEnablePlane = response.arrayAfterStep;
 		response.arrayAfterStep.forEach((coord) => {
-			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.HOVER);
+			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.PLAYER_COLORS_MOVE[this.figureType]);
 			this.arrayOfPlane[coord.x][coord.z].stepEnable = true;
 		})
 	}
@@ -386,7 +451,7 @@ export default class Draw {
 		figureForPaint.forEach((figure) => {
 			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(tools.PLAYER_COLORS[figure.color-1]);
 			this.arrayOfPlane[figure.x][figure.z].figure = figure.color;
-		})
+		});
 	}
 
 	render() {
@@ -445,5 +510,4 @@ export default class Draw {
 			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.PLANE_COLOR);
 		});
 	}
-
 }

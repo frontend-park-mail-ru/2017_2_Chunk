@@ -19,6 +19,20 @@ export const PLAYER_COLORS = [
 	0x7B1425    //красный
 ];
 
+export const PLAYER_COLORS_CLICK = [
+	0xd3a622,   //светло-желтый
+	0x8922d3,   //светло-фиолетовый
+	0x2ed322,   //светло-зеленый
+	0xd32240    //светло-красный
+];
+
+export const PLAYER_COLORS_MOVE = [
+	0xe8cb73,   //светло-светло-желтый
+	0xb773e8,   //светло-светло-фиолетовый
+	0x7ae873,   //светло-светло-зеленый
+	0xe87386    //светло-светло-красный
+];
+
 export const SPEED = 0.1;
 
 export const GAME_VARIABLES = {
@@ -33,4 +47,7 @@ export const GAME_VARIABLES = {
 	queue: [],
 	arrayOfStepEnablePlane: [],
 	animation: 0,
+	angle: 0,
+	angleIndicator: false,
+	cameraRotateIndicator: false
 };

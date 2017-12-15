@@ -11,9 +11,9 @@ export default class Game3D {
 
 	constructor(container) {
 		this.bus = eventBus;
-
 		this.draw = new Draw(container);
 		this.gameWorker = new internalWorker('./gameWorker.js');
+
 		this.gameEvents();
 
 		this.bus.on(`${gameWorkerMessage.requestEventName}`, (data) => {
@@ -30,8 +30,11 @@ export default class Game3D {
 		this.coordinatesForStep();
 		this.figureType();
 		this.winDetected();
-		this.exitGame();
+		// this.exitGame();
 		this.stepEnable();
+		this.azimuthAngle();
+		this.rotate();
+		this.getGameInfo();
 	}
 
 	getGameInfo() {
@@ -50,18 +53,17 @@ export default class Game3D {
 			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
 			this.draw.startGame(response);
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, response);
-			this.getGameInfo();
 		});
 	}
 
-	exitGame() {
-		this.bus.on(`${gameCodes.responseEventName}${gameCodes.exitFromPreparingGame.code}`, (response) => {
-			const request = {
-				gameID: this.gameID
-			};
-			this.bus.emit(`${gameCodes.deleteGame.request}`, request);
-		});
-	}
+	// exitGame() {
+	// 	this.bus.on(`${gameCodes.responseEventName}${gameCodes.exitFromPreparingGame.code}`, (response) => {
+	// 		const request = {
+	// 			gameID: this.gameID
+	// 		};
+	// 		this.bus.emit(`${gameCodes.deleteGame.request}`, request);
+	// 	});
+	// }
 
 	gameStep() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameStep.code}`, (response) => {
@@ -77,9 +79,15 @@ export default class Game3D {
 		});
 	}
 
-
 	figureClick() {
 		this.bus.on('makeStepEnable', (response) => {
+			const request = response;
+			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
+		});
+	}
+
+	rotate() {
+		this.bus.on('rotate', (response) => {
 			const request = response;
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
 		});
@@ -106,6 +114,12 @@ export default class Game3D {
 	stepEnable() {
 		this.bus.on('stepEnable', (response) => {
 			this.draw.makeStepEnable(response);
+		})
+	}
+
+	azimuthAngle() {
+		this.bus.on('azimuthAngle', (response) => {
+			this.draw.azimuthAngle(response);
 		})
 	}
 }

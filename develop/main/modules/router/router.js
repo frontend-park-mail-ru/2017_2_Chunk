@@ -104,7 +104,7 @@ export default class Router {
 			}
 			eventBus.emit('JSReady');
 		} catch (err) {
-			debugger;
+			//debugger;
 			this.bus.emit('unauth');
 			const sliceRoutes_ = this._routes.slice(6);
 			this.findNewState(sliceRoutes_);
