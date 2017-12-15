@@ -37,6 +37,8 @@ export default class Draw {
 		container.getElement().appendChild(this.renderer.domElement);
 		this.renderer.render(this.scene, this.camera);
 
+		this.loadBackgroundCube();
+
 		this.controls = new OrbitControl(this.camera, this.renderer.domElement);
 		this.controls.minPolarAngle = Math.PI / 6;
 		this.controls.maxPolarAngle = Math.PI / 2.3;
@@ -86,6 +88,32 @@ export default class Draw {
 		// this.bus.emit('changePlayerDiv', 'HELLO');
 
 		this.animate();
+	}
+
+	loadBackgroundCube() {
+		// В качестве фона используются 6 отдельных кубических проекций
+		let path = "background/space/dark-s_";
+		let jpg = ".jpg";
+		let urls = [
+			path + 'px' + jpg, path + 'nx' + jpg,
+			path + 'py' + jpg, path + 'ny' + jpg,
+			path + 'pz' + jpg, path + 'nz' + jpg,
+		];
+
+		let reflectionCube = new Three.CubeTextureLoader().load(urls);
+		reflectionCube.format = Three.RGBFormat;
+		this.scene.background = reflectionCube;
+	}
+
+	loadBackgroundSpherical() {
+		// В качестве фона используется сферическая эквидистантная проекция
+		this.geometry = new Three.SphereBufferGeometry( 500, 60, 40 );
+		this.geometry.scale( - 1, 1, 1 );
+		this.material = new Three.MeshBasicMaterial( {
+			map: new Three.TextureLoader().load( 'background/4.jpg' )
+		} );
+		this.mesh = new Three.Mesh( this.geometry, this.material );
+		this.scene.add( this.mesh );
 	}
 
 	getGameInfo(response) {
