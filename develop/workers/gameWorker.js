@@ -24,8 +24,15 @@ const gameWorker = new class GameWorker {
 		if (this.result === this.figureType) {
 			win = true;
 		}
+		let playerString = '';
+		if (win) {
+			playerString = this.playerString() + 'You win! :)';
+		} else {
+			playerString = this.playerString() + 'You lose! :(';
+		}
 		let request = {
 			func: 'winnerOrLooser',
+			playerString: playerString,
 			win: win
 		};
 

@@ -28,6 +28,7 @@ export default class Draw {
 		this.point1 = new Point();
 		this.point2 = new Point();
 		this.vector = new Point();
+		this.lightPoint = new Point();
 
 		this.gameVariebles = tools.GAME_VARIABLES;
 
@@ -197,7 +198,7 @@ export default class Draw {
 		// То самое движения, для которого нужен включенный индикатор.
 		this.moving();
 		this.scaling();
-		this.lightFigure();
+		// this.lightFigure();
 		// Зацикливание
 		this.gameVariebles.animation = requestAnimationFrame(this.animate.bind(this));
 		this.render();
@@ -227,41 +228,47 @@ export default class Draw {
 		}
 	}
 
-	lightFigure() {
-		if (this.gameVariebles.lightIndicator) {
-			this.raycasterMove.setFromCamera(this.mouse, this.camera);
-			const intersects = this.raycasterMove.intersectObjects(
-				this.playerContainer.children.concat(this.cellContainer.children)
-			);
-			if (intersects.length > 0) {
-				if (this.IntersectedMove !== intersects[0].object) {
-					if (this.IntersectedMove) {
-						this.IntersectedMove.material.color.setHex(this.IntersectedMove.currentHex);
-					}
-					this.IntersectedMove = intersects[0].object;
-					if (this.IntersectedMove.material.color.getHex() ===
-						tools.COLORS.PLANE_COLOR) {
-						this.IntersectedMove.currentHex = tools.COLORS.PLANE_COLOR;
-						this.IntersectedMove.material.color.setHex(
-							tools.PLAYER_COLORS_MOVE[this.figureType]);
-					} else if (this.IntersectedMove.material.color.getHex() ===
-						tools.PLAYER_COLORS[this.figureType]) {
-						this.IntersectedMove.currentHex = tools.PLAYER_COLORS[this.figureType];
-						this.IntersectedMove.material.color.setHex(
-							tools.PLAYER_COLORS_MOVE[this.figureType]);
-					} else {
-						this.IntersectedMove.currentHex =
-							this.IntersectedMove.material.color.getHex();
-					}
-				}
-			} else {
-				if (this.IntersectedMove) {
-					this.IntersectedMove.material.color.setHex(this.IntersectedMove.currentHex);
-				}
-				this.IntersectedMove = null;
-			}
-		}
-	}
+	// lightFigure() {
+	// 	if (this.gameVariebles.lightIndicator) {
+	// 		this.raycasterMove.setFromCamera(this.mouse, this.camera);
+	// 		const intersects = this.raycasterMove.intersectObjects(
+	// 			this.playerContainer.children.concat(this.cellContainer.children)
+	// 		);
+	// 		if (intersects.length > 0) {
+	// 			if (this.IntersectedMove !== intersects[0].object) {
+	// 					this.IntersectedMove.material.color.setHex(this.IntersectedMove.currentHex);
+	// 				this.IntersectedMove = intersects[0].object;
+	// 				if (this.IntersectedMove.material.color.getHex() ===
+	// 					tools.COLORS.PLANE_COLOR) {
+	// 					this.IntersectedMove.currentHex = tools.COLORS.PLANE_COLOR;
+	// 					this.IntersectedMove.material.color.setHex(
+	// 						tools.PLAYER_COLORS_MOVE[this.figureType]);
+	// 				} else if (this.IntersectedMove.material.color.getHex() ===
+	// 					tools.PLAYER_COLORS[this.figureType]) {
+	// 					this.IntersectedMove.currentHex = tools.PLAYER_COLORS[this.figureType];
+	//
+	// 					// for (let i = 0; i < this.planeSize; i++) {
+	// 					// 	if (intersects[0].object.position.x > i * tools.PLANE_X) {
+	// 					// 		this.lightPoint.x = i;
+	// 					// 	}
+	// 					// 	if (intersects[0].object.position.z > i * tools.PLANE_Z) {
+	// 					// 		this.lightPoint.z = i;
+	// 					// 	}
+	// 					// }
+	// 					this.IntersectedMove.material.color.setHex(
+	// 						tools.PLAYER_COLORS_MOVE[this.figureType]);
+	// 				} else {
+	// 					this.IntersectedMove.currentHex =
+	// 						this.IntersectedMove.material.color.getHex();
+	// 				}
+	// 			}
+	// 		} else {
+	//
+	// 				this.IntersectedMove.material.color.setHex(this.IntersectedMove.currentHex);
+	// 			this.IntersectedMove = null;
+	// 		}
+	// 	}
+	// }
 
 	queueStep() {
 		if (typeof this.gameVariebles.queue !== 'undefined' &&
