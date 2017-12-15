@@ -114,7 +114,7 @@ export default class gamePrepareView extends View {
 
 	addPlayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addPlayer.code}`, (response) => {
-			this.fields.playersList.addPlayer(response.player);
+			this.fields.playersList.addPlayer(response);
 			this.clear = false;
 		});
 	}
