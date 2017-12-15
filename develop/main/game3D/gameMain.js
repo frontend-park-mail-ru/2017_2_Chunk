@@ -3,7 +3,7 @@
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
 import gameWorkerMessage from '../messageCodes/gameWorkerMessage';
-import internalWorker from '../modules/internalWorker';
+import InternalWorker from '../modules/internalWorker';
 
 import Draw from './draw';
 
@@ -12,7 +12,7 @@ export default class Game3D {
 	constructor(container) {
 		this.bus = eventBus;
 		this.draw = new Draw(container);
-		this.gameWorker = new internalWorker('./gameWorker.js');
+		this.gameWorker = new InternalWorker('./gameWorker.js');
 
 		this.gameEvents();
 
@@ -108,18 +108,18 @@ export default class Game3D {
 	coordinatesForStep() {
 		this.bus.on('coordinatesForStep', (response) => {
 			this.draw.gameStep(response);
-		})
+		});
 	}
 
 	stepEnable() {
 		this.bus.on('stepEnable', (response) => {
 			this.draw.makeStepEnable(response);
-		})
+		});
 	}
 
 	azimuthAngle() {
 		this.bus.on('azimuthAngle', (response) => {
 			this.draw.azimuthAngle(response);
-		})
+		});
 	}
 }

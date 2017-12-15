@@ -14,8 +14,7 @@ export default class commonWorker {
 			console.log('web worker constructor');
 			this.gameHandler();
 			this.workerCallbacks();
-		}
-		else {
+		} else {
 			console.log('no workers');
 		}
 	}
@@ -39,7 +38,7 @@ export default class commonWorker {
 
 	onMessage() {
 		this.worker.onmessage = (workerResponse) => {
-			this.onMessageCallback(workerResponse)
+			this.onMessageCallback(workerResponse);
 		};
 	}
 
@@ -47,8 +46,9 @@ export default class commonWorker {
 	workerClose() {
 		this.listeners[`worker${lobbyCodes.close}`] =
 			this.bus.on(`worker${lobbyCodes.close}`, () => {
-				if (this.worker)
+				if (this.worker) {
 					this.close();
+				}
 			});
 	}
 
@@ -56,8 +56,9 @@ export default class commonWorker {
 	goToMenu() {
 		this.listeners[`openMenu`] =
 			this.bus.on(`openMenu`, () => {
-				if (this.worker)
+				if (this.worker) {
 					this.bus.emit(`worker${lobbyCodes.close}`);
+				}
 			});
 	}
 
@@ -65,8 +66,9 @@ export default class commonWorker {
 	socketOpen() {
 		this.listeners[`${lobbyCodes.responseEventName}${lobbyCodes.open}`] =
 			this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.open}`, () => {
-				if (this.worker)
+				if (this.worker) {
 					this.close();
+				}
 			});
 	}
 
@@ -81,7 +83,7 @@ export default class commonWorker {
 
 
 	removeListeners() {
-		for (let key in this.listeners) {
+		for (const key in this.listeners) {
 			this.bus.remove(key, this.listeners[key]);
 		}
 		delete this.listeners;

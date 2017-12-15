@@ -35,7 +35,7 @@ export default class Http {
 	 * @return {Promise}
 	 */
 	static fetchPost(address, body) {
-		const url = backendUrl+ address;
+		const url = backendUrl + address;
 		const myHeaders = new Headers();
 		myHeaders.set('Content-Type', 'application/json; charset=utf-8');
 		return fetch(url, {

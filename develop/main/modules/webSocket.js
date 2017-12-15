@@ -17,7 +17,7 @@ export default class webSocket {
 		this.socket.onopen = () => this.onOpenCallback();
 		this.socket.onclose = (event) => this.onCloseCallback(event);
 		this.socket.onmessage = (event) => this.onMessageCallback(event);
-		this.socket.onerror = (event) => this.onErrorCallback(event)
+		this.socket.onerror = (event) => this.onErrorCallback(event);
 	}
 
 
@@ -30,10 +30,10 @@ export default class webSocket {
 
 
 	requestHandler() {
-		this.socketListeners[lobbyCodes.requestEventName]
-			= this.bus.on(lobbyCodes.requestEventName, (data) => {
-			this.socket.send(JSON.stringify(data));
-		});
+		this.socketListeners[lobbyCodes.requestEventName] = this.bus.on(
+			lobbyCodes.requestEventName,
+			(data) => this.socket.send(JSON.stringify(data))
+		);
 	}
 
 
@@ -61,12 +61,13 @@ export default class webSocket {
 
 	socketCloseListener() {
 		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.close}`]
-			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`, () => {
-			if (this.socket) {
-				this.socket.close();
-				delete this.socket;
-			}
-		});
+			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`,
+				() => {
+					if (this.socket) {
+						this.socket.close();
+						delete this.socket;
+					}
+				});
 	}
 
 
@@ -97,7 +98,7 @@ export default class webSocket {
 
 
 	removeSocketListeners() {
-		for (let listener in this.socketListeners) {
+		for (const listener in this.socketListeners) {
 			this.bus.remove(`${listener}`, this.socketListeners[listener]);
 		}
 	}

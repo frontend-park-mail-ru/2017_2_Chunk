@@ -17,7 +17,7 @@ export default new class EventBus {
 	on(event, listener) {
 		this.listeners[event] = this.listeners[event] || [];
 		this.listeners[event].push(listener);
-		return listener
+		return listener;
 	}
 
 

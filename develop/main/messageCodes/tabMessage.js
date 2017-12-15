@@ -5,5 +5,4 @@ const tabMessage = {
 	}
 };
 
-
 export default tabMessage;
