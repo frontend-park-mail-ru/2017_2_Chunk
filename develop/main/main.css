@@ -17,7 +17,6 @@
     src: url(../../public/fonts/Road_Rage.otf); /* Путь к файлу со шрифтом */
 }
 
-
 body {
     /*background: black url(../../public/images/galaxy.jpg) no-repeat;*/
     background-color: black;

@@ -23,6 +23,7 @@ export default class backButtonView extends Block {
 			const request = {
 				code: `${gamePrepareCodes.exit.code}`,
 			};
+			console.log('request back button');
 			eventBus.emit(`${gamePrepareCodes.requestEventName}`, request);
 		});
 	}

@@ -17,7 +17,7 @@ const messageCodes = {
 		tabMessage: 'New watcher',
 	},
 	exitFromPreparingGame: {
-		code: 103,
+		code: 132,
 		tabMessage: '',
 	},
 	getGameInfo: {

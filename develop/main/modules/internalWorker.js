@@ -11,7 +11,9 @@ export default class internalWorker {
 			console.log('web worker constructor');
 			this.gameHandler();
 			this.workerCallbacks();
-		} else { console.log('no workers'); }
+		} else {
+			console.log('no workers');
+		}
 	}
 
 
@@ -28,7 +30,6 @@ export default class internalWorker {
 			console.log(data);
 			this.bus.emit(`${gameWorkerMessage.requestEventName}`, (data));
 		};
-
 		this.bus.on('workerClose', () => {
 			this.worker.close();
 		});

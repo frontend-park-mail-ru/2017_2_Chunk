@@ -68,11 +68,31 @@ export default class gamePrepareView extends View {
 			this.fields.playersList.addMaster(response.game.realPlayers[0]);
 			this.whoIsItEvent();
 		});
-		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.connectGame.code}`, () => {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.connectGame.code}`, (response) => {
 			eventBus.emit('hideMasterFields');
 			this.fields.header.updateGameData(response.game);
 			this.whoIsItEvent();
+			eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, () => {
+				debugger;
+				this.addPlayers(response.game.realPlayers);
+				this.addBots(response.game.botPlayers);
+			})
 		})
+	}
+
+
+	addPlayers(players) {
+		players.forEach((player) => {
+			this.fields.playersList.addPlayer(player);
+			this.clear = false;
+		});
+	}
+
+	addBots(bots) {
+		bots.forEach((bot) => {
+			this.fields.playersList.addPlayer(bot);
+			this.clear = false;
+		});
 	}
 
 

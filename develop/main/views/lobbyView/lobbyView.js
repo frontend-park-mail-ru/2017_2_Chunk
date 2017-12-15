@@ -119,10 +119,7 @@ export default class LobbyView extends View {
 		// закрытие сокета, удаление всех игр
 		this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.close}`, () => {
 			delete this.webSocket;
-			for (const gameID in this.gameList) {
-				this.removeGameNode(gameID);
-				delete this.gameList;
-			}
+			this.clearGameList();
 		});
 	}
 
@@ -176,6 +173,7 @@ export default class LobbyView extends View {
 
 
 	addGameNode(data) {
+		console.log(`add game id: ${data.gameID}`);
 		const lobbyGameData = new LobbyGameData(data);
 		this.gameList[data.gameID] = lobbyGameData;
 		this.elements.gameList.append(lobbyGameData);
@@ -215,7 +213,6 @@ export default class LobbyView extends View {
 	clearGameList() {
 		for (const gameID in this.gameList) {
 			this.removeGameNode(gameID);
-			delete this.gameList;
 		}
 	}
 
