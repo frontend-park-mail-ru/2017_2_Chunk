@@ -142,7 +142,6 @@ export default new class UserService {
 	}
 
 
-
 	/**
 	 * Проверяет, авторизован ли пользователь
 	 * @return {boolean}
@@ -206,4 +205,4 @@ export default new class UserService {
 	loadUsersList() {
 		return Http.fetchGet('');
 	}
-}
+};

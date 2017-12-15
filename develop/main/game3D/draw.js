@@ -55,7 +55,6 @@ export default class Draw {
 		this.raycasterClick = new Three.Raycaster();
 		this.raycasterMove = new Three.Raycaster();
 
-		//203, 209, 306, 307
 
 		this.bus.on('deleteTree', () => {
 			this.scene.remove(this.spotLight);
@@ -68,7 +67,7 @@ export default class Draw {
 	startGame(response) {
 		this.startArray = response.game.field.field;
 		this.planeSize = response.game.field.maxX;
-		const size = this.planeSize / 2 * tools.PLANE_X;
+		const size = (this.planeSize / 2) * tools.PLANE_X;
 		this.controls.target.set(size, -5, size);
 		// Двумерный массив клеток поля.
 		this.arrayOfPlane = [];
@@ -203,7 +202,7 @@ export default class Draw {
 	lightFigure() {
 		if (this.gameVariebles.lightIndicator) {
 			this.raycasterMove.setFromCamera(this.mouse, this.camera);
-			let intersects = this.raycasterMove.intersectObjects(
+			const intersects = this.raycasterMove.intersectObjects(
 				this.playerContainer.children.concat(this.cellContainer.children)
 			);
 			if (intersects.length > 0) {
@@ -212,14 +211,19 @@ export default class Draw {
 						this.IntersectedMove.material.color.setHex(this.IntersectedMove.currentHex);
 					}
 					this.IntersectedMove = intersects[0].object;
-					if (this.IntersectedMove.material.color.getHex() === tools.COLORS.PLANE_COLOR) {
+					if (this.IntersectedMove.material.color.getHex() ===
+						tools.COLORS.PLANE_COLOR) {
 						this.IntersectedMove.currentHex = tools.COLORS.PLANE_COLOR;
-						this.IntersectedMove.material.color.setHex(tools.PLAYER_COLORS_MOVE[this.figureType]);
-					} else if (this.IntersectedMove.material.color.getHex() === tools.PLAYER_COLORS[this.figureType]) {
+						this.IntersectedMove.material.color.setHex(
+							tools.PLAYER_COLORS_MOVE[this.figureType]);
+					} else if (this.IntersectedMove.material.color.getHex() ===
+						tools.PLAYER_COLORS[this.figureType]) {
 						this.IntersectedMove.currentHex = tools.PLAYER_COLORS[this.figureType];
-						this.IntersectedMove.material.color.setHex(tools.PLAYER_COLORS_MOVE[this.figureType]);
+						this.IntersectedMove.material.color.setHex(
+							tools.PLAYER_COLORS_MOVE[this.figureType]);
 					} else {
-						this.IntersectedMove.currentHex = this.IntersectedMove.material.color.getHex();
+						this.IntersectedMove.currentHex =
+							this.IntersectedMove.material.color.getHex();
 					}
 				}
 			} else {
@@ -260,15 +264,20 @@ export default class Draw {
 		if (intersects.length > 0) {
 			if (this.IntersectedClick !== intersects[0].object) {
 				if (this.IntersectedClick) {
-					if (this.IntersectedClick.material.color.getHex() === tools.PLAYER_COLORS_CLICK[this.figureType])
-						this.IntersectedClick.material.color.setHex(tools.PLAYER_COLORS[this.figureType]);
+					if (this.IntersectedClick.material.color.getHex() ===
+						tools.PLAYER_COLORS_CLICK[this.figureType]) {
+						this.IntersectedClick.material.color.setHex(
+							tools.PLAYER_COLORS[this.figureType]);
+					}
 				}
 				this.IntersectedClick = intersects[0].object;
 
 				// Если нажали на фигурку, у которой наш цвет
 				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-					(intersects[0].object.material.color.getHex() === tools.PLAYER_COLORS_MOVE[this.figureType] ||
-					intersects[0].object.material.color.getHex() === tools.PLAYER_COLORS[this.figureType])
+					(intersects[0].object.material.color.getHex() ===
+						tools.PLAYER_COLORS_MOVE[this.figureType] ||
+						intersects[0].object.material.color.getHex() ===
+						tools.PLAYER_COLORS[this.figureType])
 					&&
 					// Проверяем, можно ли изменять первую точку.
 					// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
@@ -276,15 +285,20 @@ export default class Draw {
 					this.deleteAllStepEnable();
 					// Тут определяются номера по х и z фигуры, на которую нажали.
 					for (let i = 0; i < this.planeSize; i++) {
-						if (intersects[0].object.position.x > i * tools.PLANE_X) { this.point1.x = i; }
-						if (intersects[0].object.position.z > i * tools.PLANE_Z) { this.point1.z = i; }
+						if (intersects[0].object.position.x > i * tools.PLANE_X) {
+							this.point1.x = i;
+						}
+						if (intersects[0].object.position.z > i * tools.PLANE_Z) {
+							this.point1.z = i;
+						}
 					}
 
 					this.getAzimuthAngle();
 					// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
 					this.getStepEnable();
 
-					this.IntersectedClick.material.color.setHex(tools.PLAYER_COLORS_CLICK[this.figureType]);
+					this.IntersectedClick.material.color.setHex(
+						tools.PLAYER_COLORS_CLICK[this.figureType]);
 					this.gameVariebles.lightIndicator = false;
 				}
 
@@ -299,7 +313,7 @@ export default class Draw {
 					}
 
 					if (this.arrayOfFigure[idx][idz] !== undefined &&
-						this.arrayOfFigure[idx][idz].color === this.figureType+1) {
+						this.arrayOfFigure[idx][idz].color === this.figureType + 1) {
 						this.IntersectedClick = this.arrayOfFigure[idx][idz].mesh;
 
 						this.point1.x = idx;
@@ -308,7 +322,7 @@ export default class Draw {
 						this.getStepEnable();
 					}
 					// Проверяем, что она доступна для хода
-					else if (this.arrayOfPlane[idx][idz].stepEnable) {
+					if (this.arrayOfPlane[idx][idz].stepEnable) {
 						// Если да, то вторая точка
 						this.point2.x = idx;
 						this.point2.z = idz;
@@ -321,13 +335,19 @@ export default class Draw {
 							}
 						};
 						this.bus.emit(`${gameCodes.gameStep.request}`, request);
-					} else this.deleteAllStepEnable();
+					} else {
+						this.deleteAllStepEnable();
+					}
+
 				}
 			}
 		} else {
 			if (this.IntersectedClick) {
-				if (this.IntersectedClick.material.color.getHex() === tools.PLAYER_COLORS_CLICK[this.figureType])
-					this.IntersectedClick.material.color.setHex(tools.PLAYER_COLORS[this.figureType]);
+				if (this.IntersectedClick.material.color.getHex() ===
+					tools.PLAYER_COLORS_CLICK[this.figureType]) {
+					this.IntersectedClick.material.color.setHex(
+						tools.PLAYER_COLORS[this.figureType]);
+				}
 			}
 			this.IntersectedClick = null;
 			this.gameVariebles.lightIndicator = true;
@@ -355,10 +375,11 @@ export default class Draw {
 		const arrayOfFigureForPost = [];
 		for (let i = 0; i < this.planeSize; i++) {
 			arrayOfFigureForPost[i] = [];
-			for (let j = 0; j < this.planeSize; j++)
+			for (let j = 0; j < this.planeSize; j++) {
 				arrayOfFigureForPost[i][j] = this.arrayOfPlane[i][j].figure;
+			}
 		}
-		let request = {
+		const request = {
 			code: 'stepEnable',
 			array: arrayOfFigureForPost,
 			x: this.point1.x,
@@ -371,7 +392,8 @@ export default class Draw {
 	scaling() {
 		if (this.gameVariebles.scaleIndicator) {
 			if (this.gameVariebles.grow < 1) {
-				this.arrayOfFigure[this.point2.x][this.point2.z].mesh.scale.set(1, this.gameVariebles.grow, 1);
+				this.arrayOfFigure[this.point2.x][this.point2.z].mesh.scale.set(
+					1, this.gameVariebles.grow, 1);
 				this.gameVariebles.grow += 0.04;
 			} else {
 				this.gameVariebles.grow = 0.01;
@@ -442,14 +464,16 @@ export default class Draw {
 	makeStepEnable(response) {
 		this.gameVariebles.arrayOfStepEnablePlane = response.arrayAfterStep;
 		response.arrayAfterStep.forEach((coord) => {
-			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.PLAYER_COLORS_MOVE[this.figureType]);
+			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(
+				tools.PLAYER_COLORS_MOVE[this.figureType]);
 			this.arrayOfPlane[coord.x][coord.z].stepEnable = true;
-		})
+		});
 	}
 
 	step(figureForPaint) {
 		figureForPaint.forEach((figure) => {
-			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(tools.PLAYER_COLORS[figure.color-1]);
+			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(
+				tools.PLAYER_COLORS[figure.color - 1]);
 			this.arrayOfPlane[figure.x][figure.z].figure = figure.color;
 		});
 	}
