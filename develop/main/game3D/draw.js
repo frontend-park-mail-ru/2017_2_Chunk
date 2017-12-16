@@ -39,8 +39,8 @@ export default class Draw {
 		this.loader
 			.load('models/obj/Rocket/Rocket.obj')
 			.then( model => {
-				console.log(model);
-				model.scale.set(5, 5, 5);
+				model.scale.set(15, 15, 15);
+				model.position.z = 30;
 				return model;
 			})
 			.then( model => this.scene.add(model) );
@@ -48,11 +48,14 @@ export default class Draw {
 		this.loader
 			.load('models/dae/BabyGroot/model.dae')
 			.then( model => {
-				console.log(model);
-				model.scale.set(5, 5, 5);
-				model.position.x = 50;
+				model.scale.set(2, 2, 2);
+				model.position.x = 30;
 				return model;
 			})
+			.then( model => this.scene.add(model) );
+
+		this.loader
+			.load('models/fbx/Madness/madness.fbx')
 			.then( model => this.scene.add(model) );
 
 
