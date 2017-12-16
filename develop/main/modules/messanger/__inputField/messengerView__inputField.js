@@ -9,5 +9,17 @@ export default new class InputField {
 			'messengerView__inputField__container']);
 		this.fields.el.innerHTML = templateText;
 	};
+
+
+	getText() {
+		const text = this.fields.el.getElementsByClassName('messengerView__inputField__form__input__text')[0];
+		return text.value;
+	}
+
+
+	clear() {
+		const text = this.fields.el.getElementsByClassName('messengerView__inputField__form__input__text')[0];
+		text.value = '';
+	}
 }
 
