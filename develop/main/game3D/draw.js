@@ -8,6 +8,7 @@ import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
+import modelLoader from './models/modelLoader.js'
 
 export default class Draw {
 
@@ -31,6 +32,29 @@ export default class Draw {
 		this.lightPoint = new Point();
 
 		this.gameVariebles = tools.GAME_VARIABLES;
+
+		this.loader = new modelLoader();
+
+
+		this.loader
+			.load('models/obj/Rocket/Rocket.obj')
+			.then( model => {
+				console.log(model);
+				model.scale.set(5, 5, 5);
+				return model;
+			})
+			.then( model => this.scene.add(model) );
+
+		this.loader
+			.load('models/dae/BabyGroot/model.dae')
+			.then( model => {
+				console.log(model);
+				model.scale.set(5, 5, 5);
+				model.position.x = 50;
+				return model;
+			})
+			.then( model => this.scene.add(model) );
+
 
 		this.renderer = new Three.WebGLRenderer({antialias: true, alpha: true});
 		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
