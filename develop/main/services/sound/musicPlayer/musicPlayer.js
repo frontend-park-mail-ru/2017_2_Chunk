@@ -94,7 +94,7 @@ export default class MusicPlayer {
 		} else {
 			if (this.play) {
 				audioAnimation.classList.remove('noVolume');
-				this.audio.volume = 0.6;
+				this.audio.volume = 0.5;
 			}
 		}
 		this.volume = !this.volume;
@@ -229,11 +229,11 @@ export default class MusicPlayer {
 	videoEvents() {
 		eventBus.on('videoPlay', () => {
 			if (this.audio.volume > 0)
-				this.audio.volume = 0.1;
+				this.audio.volume = 0.05;
 		});
 		eventBus.on('videoPause', () => {
 			if (this.audio.volume > 0)
-				this.audio.volume = 0.3;
+				this.audio.volume = 0.5;
 		})
 	}
 };

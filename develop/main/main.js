@@ -252,13 +252,13 @@ if ('serviceWorker' in navigator) {
 
 const canvas = document.body;
 
-function fullScreenOn() {
-	document.body.addEventListener("keydown", function(e) {
-		if (e.keyCode == 13) {
-			canvas.requestFullscreen();
-		}
-	}, true);
-}
+// function fullScreenOn() {
+// 	document.body.addEventListener("keydown", function(e) {
+// 		if (e.keyCode == 13) {
+// 			canvas.requestFullscreen();
+// 		}
+// 	}, true);
+// }
 
 function fullScreenOff(){
 	document.addEventListener("keydown", function(e) {
@@ -269,7 +269,7 @@ function fullScreenOff(){
 }
 
 fullScreenOff();
-fullScreenOn();
+// fullScreenOn();
 
 
 // window.onbeforeunload = function() {

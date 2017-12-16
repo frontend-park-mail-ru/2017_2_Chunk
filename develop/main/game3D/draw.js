@@ -92,28 +92,28 @@ export default class Draw {
 
 	loadBackgroundCube() {
 		// В качестве фона используются 6 отдельных кубических проекций
-		let path = "background/space/dark-s_";
-		let jpg = ".jpg";
-		let urls = [
+		const path = 'background/space/dark-s_';
+		const jpg = '.jpg';
+		const urls = [
 			path + 'px' + jpg, path + 'nx' + jpg,
 			path + 'py' + jpg, path + 'ny' + jpg,
 			path + 'pz' + jpg, path + 'nz' + jpg,
 		];
 
-		let reflectionCube = new Three.CubeTextureLoader().load(urls);
+		const reflectionCube = new Three.CubeTextureLoader().load(urls);
 		reflectionCube.format = Three.RGBFormat;
 		this.scene.background = reflectionCube;
 	}
 
 	loadBackgroundSpherical() {
 		// В качестве фона используется сферическая эквидистантная проекция
-		this.geometry = new Three.SphereBufferGeometry( 500, 60, 40 );
-		this.geometry.scale( - 1, 1, 1 );
-		this.material = new Three.MeshBasicMaterial( {
-			map: new Three.TextureLoader().load( 'background/4.jpg' )
-		} );
-		this.mesh = new Three.Mesh( this.geometry, this.material );
-		this.scene.add( this.mesh );
+		this.geometry = new Three.SphereBufferGeometry(500, 60, 40);
+		this.geometry.scale(-1, 1, 1);
+		this.material = new Three.MeshBasicMaterial({
+			map: new Three.TextureLoader().load('background/4.jpg')
+		});
+		this.mesh = new Three.Mesh(this.geometry, this.material);
+		this.scene.add(this.mesh);
 	}
 
 	getGameInfo(response) {

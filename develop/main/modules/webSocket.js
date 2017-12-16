@@ -53,7 +53,7 @@ export default class webSocket {
 
 
 	socketCloseEvent() {
-		this.socketListeners['openMenu'] = this.bus.on('openMenu', () => {
+		this.socketListeners.openMenu = this.bus.on('openMenu', () => {
 			this.bus.emit(`${lobbyCodes.responseEventName}${lobbyCodes.close}`);
 		});
 	}

@@ -1,0 +1,63 @@
+.messengerView__chatHistory__container {
+  font-family: RobotoRegular !important;
+  overflow: auto;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  resize: none;
+  width: 420px;
+  height: 200px;
+
+
+  .chatHistoryStringContainer {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 400px;
+
+    &.me {
+      justify-content: flex-end !important;
+    }
+
+    .chatHistoryString {
+      box-sizing: border-box;
+      display: grid;
+      grid-template-areas: "author text";
+      grid-template-columns: 100px auto;
+      word-wrap: break-word;
+      margin: 0 10px;
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+      font-size: 16px;
+      text-align: justify;
+      width: 350px;
+
+
+      .author {
+        font-style: italic;
+
+        &.colorBlue {
+          color: blue !important;
+        }
+
+        &.colorOrange {
+          color: orange !important;
+        }
+      }
+
+      .text {
+        width: 250px;
+      }
+    }
+
+    .chatHistoryString > .author {
+      grid-area: author;
+    }
+
+    .chatHistoryString > .text {
+      grid-area: text;
+    }
+  }
+}
