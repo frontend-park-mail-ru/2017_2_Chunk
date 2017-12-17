@@ -5,6 +5,7 @@ import gameCodes from '../messageCodes/gameCodes';
 import gameWorkerMessage from '../messageCodes/gameWorkerMessage';
 import InternalWorker from '../modules/internalWorker';
 
+
 import Draw from './draw';
 
 export default class Game3D {

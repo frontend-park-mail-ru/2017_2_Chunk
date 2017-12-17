@@ -3,7 +3,7 @@ import OBJLoader from 'three-obj-loader';
 import FBXLoader from 'three-fbx-loader';
 import ColladaLoader from 'three-collada-loader';
 
-export default class Loader {
+export default new class Loader {
 
 	constructor() {
 
@@ -19,7 +19,7 @@ export default class Loader {
 
 	load(modelPath) {
 
-		console.log(modelPath);
+		console.log("Loading model from " + modelPath);
 
 		const extension = modelPath.substr(modelPath.length - 4, modelPath.length);
 		let resolve, reject;

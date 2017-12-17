@@ -9,6 +9,7 @@ import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
 import modelLoader from './models/modelLoader.js'
+import GrootFactory from "./models/BabyGroot";
 
 export default class Draw {
 
@@ -33,30 +34,34 @@ export default class Draw {
 
 		this.gameVariebles = tools.GAME_VARIABLES;
 
-		this.loader = new modelLoader();
 
+		// modelLoader
+		// 	.load('models/dae/BabyGroot/model.dae')
+		// 	.then( model => {
+		// 		model.scale.set(2, 2, 2);
+		// 		// let new_model = model.clone();
+		// 		model.position.x = 20;
+		// 		// this.scene.add(new_model);
+		// 		// new_model.position.z = 20;
+		// 		this.scene.add(model);
+		//
+		// 	});
+		//
+		// modelLoader
+		// 	.load('models/obj/Rocket/Rocket.obj')
+		// 	.then( model => {
+		// 		model.scale.set(15, 15, 15);
+		// 		model.position.z = 30;
+		// 		return model;
+		// 	})
+		// 	.then( model => this.scene.add(model) );
 
-		this.loader
-			.load('models/obj/Rocket/Rocket.obj')
-			.then( model => {
-				model.scale.set(15, 15, 15);
-				model.position.z = 30;
-				return model;
-			})
-			.then( model => this.scene.add(model) );
+		//
+		// let baby = new GrootFactory(this.scene);
+		// baby.position(15, -50, 15);
+		// this.grootFactory = new GrootFactory();
+		this.preloadModels();
 
-		this.loader
-			.load('models/dae/BabyGroot/model.dae')
-			.then( model => {
-				model.scale.set(2, 2, 2);
-				model.position.x = 30;
-				return model;
-			})
-			.then( model => this.scene.add(model) );
-
-		this.loader
-			.load('models/fbx/Madness/madness.fbx')
-			.then( model => this.scene.add(model) );
 
 
 		this.renderer = new Three.WebGLRenderer({antialias: true, alpha: true});
@@ -92,6 +97,10 @@ export default class Draw {
 			this.scene.remove(this.playerContainer);
 			cancelAnimationFrame(this.gameVariebles.animation);
 		});
+	}
+
+	async preloadModels() {
+
 	}
 
 	startGame(response) {
@@ -211,6 +220,14 @@ export default class Draw {
 					this.addOnePlayers(this.playerContainer, i, j, this.arrayOfPlane[i][j].figure);
 				}
 			}
+		}
+		// await GrootFactory.getNew();
+		for (let i = 0; i < 5; ++i) {
+			let groot = GrootFactory.getNew().then((model) => {
+				model.position.x = i * 5;
+				this.scene.add(model);
+			});
+			// this.scene.add(groot);
 		}
 	}
 
