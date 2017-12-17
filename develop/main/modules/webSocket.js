@@ -6,8 +6,8 @@ import lobbyCodes from '../messageCodes/lobbyCodes';
 export default class webSocket {
 	constructor() {
 		this.bus = eventBus;
-		this.socket = new WebSocket('wss://backend-java-spring.herokuapp.com/play');
-		// this.socket = new WebSocket('ws://localhost:5050/play');
+		// this.socket = new WebSocket('wss://backend-java-spring.herokuapp.com/play');
+		this.socket = new WebSocket('ws://localhost:5050/play');
 		this.socketListeners = {};
 		this.socketCallbacks();
 	}
@@ -40,7 +40,6 @@ export default class webSocket {
 	keepAliveEvent() {
 		const emitKeepAlive = () => {
 			this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.keepAlive);
-			console.log('keepAlive');
 		};
 		this.interval = setInterval(emitKeepAlive, 30000);
 	}

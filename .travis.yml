@@ -7,7 +7,7 @@ script:
 - chmod 600 $HOME/.ssh/guardians
 - ssh-add $HOME/.ssh/guardians
 - npm run build
-- scp -r ./public root@195.133.147.209:/usr/share/nginx/html
+- scp -r ./public root@195.133.147.209:/home/guardians
 before_install:
 - openssl aes-256-cbc -K $encrypted_6fcde884f84f_key -iv $encrypted_6fcde884f84f_iv
-  -in guardians.enc -out $HOME/.ssh/guardians -d
+  -in guardians.enc -out ~\/.ssh/guardians -d
