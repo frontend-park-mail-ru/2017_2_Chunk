@@ -4,24 +4,27 @@ export default class ModelFactory {
 
 	constructor(path, setOrientation) {
 
-		this.i = 0;
 		// Путь до модели
 		this.path = path;
-
 		// Функция которая масштабирует и ставит
 		// в правильное положение "сырые" модели
 		this.setOrientation = setOrientation || function (model) {
 			model.scale.set(1, 1, 1);
 		};
 
-		this.getNew();
+		modelLoader
+			.load(this.path)
+			.then(model => {
+				this.model = model;
+				this.setOrientation(this.model);
+				console.info("Модель " + path + " успешно загружена");
+			});
 	}
 
-	async getNew() {
-		console.log(++this.i);
+	getNew() {
 		if (this.model === undefined) {
-			this.model = await modelLoader.load(this.path);
-			this.setOrientation(this.model);
+			console.error("Модель еще не загружена");
+			return null;
 		}
 		return this.model.clone();
 	}

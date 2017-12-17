@@ -221,13 +221,14 @@ export default class Draw {
 				}
 			}
 		}
-		// await GrootFactory.getNew();
-		for (let i = 0; i < 5; ++i) {
-			let groot = GrootFactory.getNew().then((model) => {
-				model.position.x = i * 5;
-				this.scene.add(model);
-			});
-			// this.scene.add(groot);
+
+		for (let i = 0; i < 3; ++i) {
+			for (let y = 1; y < 4; ++y) {
+				let groot = GrootFactory.getNew();
+				groot.position.x = i * 10;
+				groot.position.z = y * 10;
+				this.scene.add(groot);
+			}
 		}
 	}
 
