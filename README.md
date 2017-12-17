@@ -4,7 +4,10 @@
 > ***Не строй башни, не уничтожай врагов!<br>
 > (пока только авторизируйся и посмотри на плейсхолдеры)***
 
+
 Посмотреть работу приложения можно [здесь](https://chunk-frontend.herokuapp.com/menu)
+
+[![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
 
 ## API
 | Действие | Тип запроса, URL | Тело запроса | Тело ответа |
