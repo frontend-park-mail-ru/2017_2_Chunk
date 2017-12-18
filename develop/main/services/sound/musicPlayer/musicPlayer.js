@@ -166,6 +166,7 @@ export default class MusicPlayer {
 		}
 	}
 
+
 	mute() {
 		this.audioControlVolume.classList.add('noVolume');
 		this.audio.volume = 0;
@@ -347,9 +348,6 @@ export default class MusicPlayer {
 			this.mute();
 		})
 	}
-
-
-
 
 
 	ifExpired() {
