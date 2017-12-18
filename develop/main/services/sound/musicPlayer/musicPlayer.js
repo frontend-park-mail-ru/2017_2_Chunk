@@ -357,9 +357,9 @@ export default class MusicPlayer {
 		if (localStorage.getItem('lastDateModified')) {
 			const lastDateModified = +localStorage.getItem('lastDateModified');
 			const diff = date - lastDateModified;
-			console.log('last date: ', lastDateModified);
-			console.log('current date: ', date);
-			console.log('Difference: ', diff);
+			// console.log('last date: ', lastDateModified);
+			// console.log('current date: ', date);
+			// console.log('Difference: ', diff);
 			if (diff / (1000) > 6) {
 				localStorage.removeItem('lastConfiguration');
 			}
