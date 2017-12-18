@@ -1,13 +1,20 @@
 # Tower Defense
 ### 2017_2_Chunk
 
-> ***Не строй башни, не уничтожай врагов!<br>
+## It Is Not Defense
+> ***Поглощай или будь поглощен<br>***
 > (пока только авторизируйся и посмотри на плейсхолдеры)***
 
 
 Посмотреть работу приложения можно [здесь](https://chunk-frontend.herokuapp.com/menu)
+Серверную часть можно увидить [здесь]
 
 [![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
+
+## Members
+* Андрей Савосин
+* Игорь Дружинин
+* Дима Трубников
 
 ## API
 | Действие | Тип запроса, URL | Тело запроса | Тело ответа |
