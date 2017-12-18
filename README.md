@@ -19,7 +19,7 @@
 
 ### 2
 - clone or download [repository](https://github.com/java-park-mail-ru/Chunk-09-2017)
-- run > mvn install
+- run > `mvn install`
 - run > java -jar ./target/Chunk-1.0-SNAPSHOT.jar
 
 ### 3
