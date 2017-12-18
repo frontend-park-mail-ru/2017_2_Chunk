@@ -41,4 +41,17 @@
 | Запросить данные пользователя текущей сессии | GET, /whoisit | | "username", "email" | |
 | Разлогиниться | GET, /exit |  |  |
 
-##About project
+## About project
+### We use:
+- node js
+- ES6
+- babel
+- webpack
+- tree js
+- visability js
+- service worker
+- derived workers
+- shared workers
+- scss
+- web video API
+- web audio API
