@@ -29,7 +29,6 @@ export default class LoginView extends CommonView {
 		this.message = new Message();
 		this.append(this.message);
 		this.onSubmitEvent();
-		this.addBackGround();
 		this.hide();
 	}
 
@@ -52,14 +51,6 @@ export default class LoginView extends CommonView {
 	}
 
 
-	addBackGround() {
-		const fields = this.form.fields;
-		for (const field in fields) {
-			if (fields[field].el.type !== 'submit') {
-				// fields[field].el.style.backgroundImage = 'url(/images/buttons/buttonTape0.jpg)';
-			}
-		}
-	}
 
 	/**
 	 * Функция вызываемаемая при отправке данных
