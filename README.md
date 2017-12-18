@@ -14,8 +14,8 @@
 ## How to install localy
 ### 1
 - clone or download [repository](https://github.com/frontend-park-mail-ru/2017_2_Chunk/tree/drujinin)
-- run ># npm install
-- run ># npm run start
+- run `npm install`
+- run ```npm run start```
 
 ### 2
 - clone or download [repository](https://github.com/java-park-mail-ru/Chunk-09-2017)
