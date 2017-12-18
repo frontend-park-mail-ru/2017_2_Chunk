@@ -312,7 +312,7 @@ export default class MusicPlayer {
 	removeRandom() {
 		this.randomButton.classList.remove(('random-play'));
 		this.random = 0;
-		localStorage.setItem('audioRandom', '0')
+		localStorage.setItem('audioRandom', '0');
 	}
 
 
