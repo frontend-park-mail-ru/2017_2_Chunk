@@ -17,6 +17,11 @@
     src: url(../../public/fonts/Road_Rage.otf); /* Путь к файлу со шрифтом */
 }
 
+@font-face {
+    font-family: RobotoRegular; /* Гарнитура шрифта */
+    src: url(../../public/fonts/roboto.ttf); /* Путь к файлу со шрифтом */
+}
+
 body {
     /*background: black url(../../public/images/galaxy.jpg) no-repeat;*/
     background-color: black;

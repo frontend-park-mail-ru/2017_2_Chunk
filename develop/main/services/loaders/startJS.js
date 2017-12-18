@@ -14,7 +14,7 @@ new class startJS {
 		setTimeout(() => {
 			this.removeStartCssLoader();
 			eventBus.emit('showApp');
-		}, 4000);
+		}, 200);
 	}
 
 

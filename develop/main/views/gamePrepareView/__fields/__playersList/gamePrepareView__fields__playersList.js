@@ -41,11 +41,12 @@ export default class PlayersList extends Block {
 			type = 'playerFromMaster';
 		else
 			type = 'player';
+		debugger;
 		const string = new PLayerListString(type, data);
 		this.playersStrings = this.playersStrings || {};
 		this.playersStrings[data.userID] = string;
 		if (this.master) {
-			this.onPlayerKickButtonClick(data.playerID);
+			this.onPlayerKickButtonClick(data.userID);
 		}
 		this.append(string);
 	}
@@ -109,7 +110,7 @@ export default class PlayersList extends Block {
 		string.fields.kickButton.on('click', () => {
 			const request = {
 				code: `${prepareGameCodes.kickPlayer.code}`,
-				playerID: `${playerID}`,
+				userID: `${playerID}`,
 			};
 			eventBus.emit(`${prepareGameCodes.requestEventName}`, request)
 		})

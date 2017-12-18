@@ -8,6 +8,8 @@ import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
+import modelLoader from './models/modelLoader.js'
+import GrootFactory from "./models/BabyGroot";
 
 export default class Draw {
 
@@ -31,6 +33,36 @@ export default class Draw {
 		this.lightPoint = new Point();
 
 		this.gameVariebles = tools.GAME_VARIABLES;
+
+
+		// modelLoader
+		// 	.load('models/dae/BabyGroot/model.dae')
+		// 	.then( model => {
+		// 		model.scale.set(2, 2, 2);
+		// 		// let new_model = model.clone();
+		// 		model.position.x = 20;
+		// 		// this.scene.add(new_model);
+		// 		// new_model.position.z = 20;
+		// 		this.scene.add(model);
+		//
+		// 	});
+		//
+		// modelLoader
+		// 	.load('models/obj/Rocket/Rocket.obj')
+		// 	.then( model => {
+		// 		model.scale.set(15, 15, 15);
+		// 		model.position.z = 30;
+		// 		return model;
+		// 	})
+		// 	.then( model => this.scene.add(model) );
+
+		//
+		// let baby = new GrootFactory(this.scene);
+		// baby.position(15, -50, 15);
+		// this.grootFactory = new GrootFactory();
+		this.preloadModels();
+
+
 
 		this.renderer = new Three.WebGLRenderer({antialias: true, alpha: true});
 		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
@@ -67,6 +99,10 @@ export default class Draw {
 		});
 	}
 
+	async preloadModels() {
+
+	}
+
 	startGame(response) {
 		this.startArray = response.game.field.field;
 		this.planeSize = response.game.field.maxX;
@@ -92,28 +128,28 @@ export default class Draw {
 
 	loadBackgroundCube() {
 		// В качестве фона используются 6 отдельных кубических проекций
-		let path = "background/space/dark-s_";
-		let jpg = ".jpg";
-		let urls = [
+		const path = 'background/space/dark-s_';
+		const jpg = '.jpg';
+		const urls = [
 			path + 'px' + jpg, path + 'nx' + jpg,
 			path + 'py' + jpg, path + 'ny' + jpg,
 			path + 'pz' + jpg, path + 'nz' + jpg,
 		];
 
-		let reflectionCube = new Three.CubeTextureLoader().load(urls);
+		const reflectionCube = new Three.CubeTextureLoader().load(urls);
 		reflectionCube.format = Three.RGBFormat;
 		this.scene.background = reflectionCube;
 	}
 
 	loadBackgroundSpherical() {
 		// В качестве фона используется сферическая эквидистантная проекция
-		this.geometry = new Three.SphereBufferGeometry( 500, 60, 40 );
-		this.geometry.scale( - 1, 1, 1 );
-		this.material = new Three.MeshBasicMaterial( {
-			map: new Three.TextureLoader().load( 'background/4.jpg' )
-		} );
-		this.mesh = new Three.Mesh( this.geometry, this.material );
-		this.scene.add( this.mesh );
+		this.geometry = new Three.SphereBufferGeometry(500, 60, 40);
+		this.geometry.scale(-1, 1, 1);
+		this.material = new Three.MeshBasicMaterial({
+			map: new Three.TextureLoader().load('background/4.jpg')
+		});
+		this.mesh = new Three.Mesh(this.geometry, this.material);
+		this.scene.add(this.mesh);
 	}
 
 	getGameInfo(response) {
@@ -183,6 +219,15 @@ export default class Draw {
 				if (this.arrayOfPlane[i][j].figure !== 0) {
 					this.addOnePlayers(this.playerContainer, i, j, this.arrayOfPlane[i][j].figure);
 				}
+			}
+		}
+
+		for (let i = 0; i < 3; ++i) {
+			for (let y = 1; y < 4; ++y) {
+				let groot = GrootFactory.getNew();
+				groot.position.x = i * 10;
+				groot.position.z = y * 10;
+				this.scene.add(groot);
 			}
 		}
 	}
