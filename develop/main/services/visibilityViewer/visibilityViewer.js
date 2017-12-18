@@ -20,6 +20,7 @@ export default new class visibilityViewer {
 
 
 	hiddenCallback() {
+		sessionStorage.setItem('isPageActive', '0');
 		this.hiddenEvent = eventBus.on(`${tabMessage.newGame.name}`, (messageText) => {
 			this.blink(messageText);
 		});
@@ -27,6 +28,8 @@ export default new class visibilityViewer {
 
 
 	visibleCallback() {
+		eventBus.emit('pageActive');
+		sessionStorage.setItem('isPageActive', '1');
 		this.stop();
 		eventBus.remove(`${tabMessage.newGame.name}`, this.hiddenEvent);
 	}

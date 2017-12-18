@@ -4,6 +4,7 @@ import Block from '../../../blocks/block/block';
 import audioLoaderHtml from './musicPlayerHtml';
 import playlist from './playlist';
 import controlButtons from './__controls/musicPlayer__controlsHtml';
+import AudioSharedWorker from './sharedWorker';
 
 
 export default class MusicPlayer {
@@ -57,6 +58,7 @@ export default class MusicPlayer {
 	getLastConfiguration() {
 		let configure = false;
 		this.maxAudioVolume = 0.5;
+		this.ifExpired();
 		if (localStorage.getItem('lastConfiguration')) {
 			configure = true;
 			this.volume = +localStorage.getItem('volume');
@@ -112,6 +114,8 @@ export default class MusicPlayer {
 			this.setPause();
 		setInterval(() => {
 			localStorage.setItem('audioCurrentTime', `${this.audio.currentTime}`);
+			const currentDate = new Date().getTime();
+			localStorage.setItem('lastDateModified', `${currentDate}`);
 		}, 2000);
 	}
 
@@ -160,6 +164,12 @@ export default class MusicPlayer {
 			this.volume = 1;
 			localStorage.setItem('volume', '1');
 		}
+	}
+
+	mute() {
+		this.audioControlVolume.classList.add('noVolume');
+		this.audio.volume = 0;
+		this.volume = 0;
 	}
 
 
@@ -329,20 +339,31 @@ export default class MusicPlayer {
 
 
 	sharedWorkerInit() {
-		this.sharedWorker = new SharedWorker('./audioWorker.js');
-		this.sharedWorker.port.onmessage = (event) => {
-			// console.log('worker message');
-			console.log(event);
-			if (event.eventType === 'pause')
-				this.setPause();
-			else if (event.eventType === 'play')
-				this.setPlay();
-			eventBus.on('thisActive', () => {
-				this.setPlay();
-			});
-		};
-		this.sharedWorker.port.start();
-		this.sharedWorker.port.postMessage("start");
+		this.sharedWorker = new AudioSharedWorker();
+		eventBus.on('setPlay', () => {
+			this.getLastConfiguration();
+		});
+		eventBus.on('Mute', () => {
+			this.mute();
+		})
+	}
+
+
+
+
+
+	ifExpired() {
+		const date = new Date().getTime();
+		if (localStorage.getItem('lastDateModified')) {
+			const lastDateModified = +localStorage.getItem('lastDateModified');
+			const diff = date - lastDateModified;
+			console.log('last date: ', lastDateModified);
+			console.log('current date: ', date);
+			console.log('Difference: ', diff);
+			if (diff / (1000) > 6) {
+				localStorage.removeItem('lastConfiguration');
+			}
+		}
 	}
 };
 
