@@ -7,7 +7,7 @@
 
 
 Посмотреть работу приложения можно [здесь](https://chunk-frontend.herokuapp.com/menu)
-Репозиторий github серверной части можно увидить [здесь](https://github.com/java-park-mail-ru/Chunk-09-2017)
+Репозиторий github серверной части можно увидить [здесь](https://github.com/java-park-mail-ru/Chunk-09-2017)<br>
 
 [![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
 
