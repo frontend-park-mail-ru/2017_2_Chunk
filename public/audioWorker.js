@@ -77,21 +77,19 @@ self.addEventListener('connect', event => {
 	currentPort.onmessage = eventPort => {
 		if (eventPort.data === "start") {
 			if (connected === false) {
-				currentPort.postMessage('worker init');
+				currentPort.postMessage(2);
 				connected = true;
 				currentPort1 = Object.assign({}, currentPort);
 				peers.push(currentPort);
 			} else {
-				// ports.forEach((port) => {
-				// 	console.log(port);
 				peers.push(currentPort);
-				currentPort.postMessage(currentPort1);
+				// peers.forEach(function (port) {
+				// 	port.postMessage(port);
 				// });
 				peers.forEach(function (port) {
-					port.postMessage('next worker create!');
+					if (port !== currentPort) port.postMessage('new worker');
 				});
 			}
-			// currentPort.postMessage('worker already inited');
 		}
 	};
 });

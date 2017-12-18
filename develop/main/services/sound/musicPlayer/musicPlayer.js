@@ -23,7 +23,7 @@ export default class MusicPlayer {
 	onJSReady() {
 		eventBus.on('JSReady', () => {
 			this.musicStart();
-		})
+		});
 	}
 
 
@@ -33,7 +33,7 @@ export default class MusicPlayer {
 		this.previousSongs.push(this.songNumber);
 		this.currentSongPosition = this.previousSongs.length - 1;
 		this.videoEvents();
-		this.sharedWorkerInit()
+		this.sharedWorkerInit();
 	}
 
 
@@ -49,7 +49,7 @@ export default class MusicPlayer {
 		this.audio.autoplay = 'autoplay';
 		this.backgroundaudio.appendChild(this.audio);
 		this.audio.onended = () => {
-			this.onEndedSong()
+			this.onEndedSong();
 		};
 	}
 
@@ -74,6 +74,7 @@ export default class MusicPlayer {
 			this.songNumber = 16;
 			this.random = 0;
 			localStorage.setItem('audioRandom', '0');
+			localStorage.setItem('audioIsPlay', '1');
 			this.play = 1;
 		}
 		this.setConfiguration(configure);
@@ -111,7 +112,7 @@ export default class MusicPlayer {
 			this.setPause();
 		setInterval(() => {
 			localStorage.setItem('audioCurrentTime', `${this.audio.currentTime}`);
-		}, 2000)
+		}, 2000);
 	}
 
 
@@ -270,6 +271,8 @@ export default class MusicPlayer {
 			event.preventDefault();
 			this.setPlay();
 			this.volume = 1;
+			localStorage.setItem('volume', '1');
+			this.audio.volume = 0.5;
 		})
 	};
 
@@ -330,6 +333,13 @@ export default class MusicPlayer {
 		this.sharedWorker.port.onmessage = (event) => {
 			console.log('worker message');
 			console.log(event);
+			if (event.eventType === 'pause')
+				this.setPause();
+			else if (event.eventType === 'play')
+				this.setPlay();
+			eventBus.on('thisActive', () => {
+				this.setPlay();
+			});
 		};
 		this.sharedWorker.port.start();
 		this.sharedWorker.port.postMessage("start");
