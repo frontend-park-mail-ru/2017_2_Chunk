@@ -6,10 +6,10 @@
 > (пока только авторизируйся и посмотри на плейсхолдеры)
 
 
-Посмотреть работу приложения можно [здесь](https://chunk-frontend.herokuapp.com/menu)
-Репозиторий github серверной части можно увидить [здесь](https://github.com/java-park-mail-ru/Chunk-09-2017)<br>
+Посмотреть работу приложения можно [здесь](https://chunk-frontend.herokuapp.com/menu)<br>
+Репозиторий github серверной части можно увидить [здесь](https://github.com/java-park-mail-ru/Chunk-09-2017)
 
-[![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
+# Travis deploy status [![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
 
 ## How to install localy
 ### 1
