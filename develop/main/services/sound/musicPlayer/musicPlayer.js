@@ -9,6 +9,7 @@ import controlButtons from './__controls/musicPlayer__controlsHtml';
 export default class MusicPlayer {
 	constructor() {
 		this.start();
+		this.playlist = playlist;
 		this.random = false;
 		this.previousSongs = [];
 	}
@@ -32,6 +33,7 @@ export default class MusicPlayer {
 		this.previousSongs.push(this.songNumber);
 		this.currentSongPosition = this.previousSongs.length - 1;
 		this.videoEvents();
+		this.sharedWorkerInit()
 	}
 
 
@@ -218,7 +220,7 @@ export default class MusicPlayer {
 
 	setSongByNumber(songNumber) {
 		localStorage.setItem('songNumber', `${this.songNumber}`);
-		const songUrl = playlist[songNumber].url;
+		const songUrl = this.playlist[songNumber].url;
 		this.audio.pause();
 		this.audio.src = songUrl;
 		this.audio.load();
@@ -320,6 +322,17 @@ export default class MusicPlayer {
 			if (this.audio.volume > 0)
 				this.audio.volume = 0.5;
 		})
+	}
+
+
+	sharedWorkerInit() {
+		this.sharedWorker = new SharedWorker('./audioWorker.js');
+		this.sharedWorker.port.onmessage = (event) => {
+			console.log('worker message');
+			console.log(event);
+		};
+		this.sharedWorker.port.start();
+		this.sharedWorker.port.postMessage("start");
 	}
 };
 

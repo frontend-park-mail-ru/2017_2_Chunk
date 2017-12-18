@@ -1,8 +1,8 @@
 'use strict';
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// const NODE_ENV = process.env.NODE_ENV || 'development';
-const NODE_ENV = 'travis';
+const NODE_ENV = process.env.NODE_ENV || 'development';
+// const NODE_ENV = 'travis';
 
 const extractPlugin = new ExtractTextPlugin({
 	filename: '[name].css',
@@ -14,6 +14,7 @@ module.exports = {
 		loading: './loading/loading.js',
 		botWorker: './workers/botWorker',
 		gameWorker: './workers/gameWorker',
+		audioWorker: './workers/audioWorker',
 		serviceWorker: './workers/serviceWorker',
 	},
 	output: {
