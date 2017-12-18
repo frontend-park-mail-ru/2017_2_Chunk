@@ -14,13 +14,15 @@
 ## How to install localy
 ### 1
 - clone or download [repository](https://github.com/frontend-park-mail-ru/2017_2_Chunk/tree/drujinin)
-- run `npm install`
-- run ```npm run start```
+- `$ cd /home/.../2017_2_Chunk`
+- run `$ npm install`
+- run `$ npm run start`
 
 ### 2
 - clone or download [repository](https://github.com/java-park-mail-ru/Chunk-09-2017)
-- run > `mvn install`
-- run > java -jar ./target/Chunk-1.0-SNAPSHOT.jar
+- `$ cd /home/.../Chunk-09-2017`
+- run > `$ mvn install`
+- run > `$ java -jar ./target/Chunk-1.0-SNAPSHOT.jar`
 
 ### 3
 - open localy > url(127.0.0.1:8081)
