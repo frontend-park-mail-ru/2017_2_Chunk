@@ -67,7 +67,8 @@ export default class PlayersListString extends Block {
 		this.fields = {
 			username: Block.create('div', {}, ['gamePrepareView__fields__playersList__string__fields__username',
 				'gamePrepareView__fields__playersList__string__fields'], name),
-			kickButton: Block.create('button', {}, ['gamePrepareView__fields__playersList__string__fields__kickButton',
+			kickButton: Block.create('button', {}, ['formButton', 'button',
+				'gamePrepareView__fields__playersList__string__fields__kickButton',
 				'gamePrepareView__fields__playersList__string__fields'], `kick`),
 		};
 		for (let field in this.fields) {

@@ -1,0 +1,72 @@
+.gamePrepareView__fields__playersList__string {
+  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: 10vw 10vw 10vw;
+  grid-template-areas: "place1 place2 place3";
+  height: 32px;
+
+  .button {
+    font-family: RobotoRegular;
+    background-color: transparent;
+    color: #00d8ff;
+    font-size: 16px !important;
+    margin: 0 auto;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    opacity: 1;
+    border-radius: 0.4em;
+    border-style: solid;
+    /*padding: 0.3em;*/
+    border-width: 2px;
+
+    width: 50px;
+
+    border-color: white;
+    box-shadow: none;
+    cursor: pointer;
+
+    transition: transform 0.1s ease;
+  }
+
+  .button:focus {
+    /*background: #8b2b03; !* Цвет фона *!*/
+    color: white !important;
+    outline: none;
+    border-color: white !important;
+  }
+
+  .button:hover {
+    /*background: #8b2b03; !* Цвет фона *!*/
+    /*transform: scale(1.01);*/
+    background-color: rgba(0, 7, 39, 0.57);
+    opacity: 1;
+    color: #00fbff;
+    border-color: #00fbff; /* Параметры рамки */
+  }
+}
+
+
+@media screen and (min-width: 360px) and (max-width: 1100px) and (orientation: landscape) {
+  .gamePrepareView__fields__playersList__string {
+    grid-template-columns: 15vw 15vw 15vw;
+
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 1100px) and (orientation: portrait) {
+  .gamePrepareView__fields__playersList__string {
+    grid-template-columns: 30vw 30vw 30vw;
+  }
+}
+
+.gamePrepareView__fields__playersList__string > .gamePrepareView__fields__playersList__string__fields__username {
+  grid-area: place1;
+}
+
+.gamePrepareView__fields__playersList__string > .gamePrepareView__fields__playersList__string__username {
+  grid-area: place2;
+}
+
+.gamePrepareView__fields__playersList__string > .gamePrepareView__fields__playersList__string__fields__kickButton {
+  grid-area: place3;
+}

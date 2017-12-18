@@ -1,5 +1,5 @@
 .form__button {
-    font-family: "Comic Sans MS";
+    font-family: RobotoRegular;
     background-color: transparent;
     color: #00d8ff;
     width: 10em;
@@ -39,7 +39,7 @@
 .form__button:hover {
     /*background: #8b2b03; !* Цвет фона *!*/
     /*transform: scale(1.01);*/
-    background-color: #00072791;
+    background-color: rgba(0, 7, 39, 0.57);
     opacity: 1;
     color: #00fbff;
     border-color: #00fbff; /* Параметры рамки */

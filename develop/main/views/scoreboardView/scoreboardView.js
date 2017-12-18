@@ -1,6 +1,6 @@
 'use strict';
 
-import ScoreboardTemplate from '../../templates/scoreBoard';
+import ScoreboardTemplate from './scoreBoardView__text/scoreboardViewText.pug';
 import View from '../view/view';
 import eventBus from '../../modules/eventBus';
 
@@ -18,10 +18,11 @@ export default class ScoreboardView extends View {
 
 		this.bus = eventBus;
 
+		this.el.classList.add('scoreboardView');
 		this.bus.on('openScoreboard', () => {
 			const users = [
-				{name: 'Igor', score: '1904'},
-				{name: 'Sasha', score: '2010'}];
+				{name: 'You', score: 'are'},
+				{name: 'the', score: 'best'}];
 			this.update(users);
 			this.show();
 		});
@@ -35,9 +36,7 @@ export default class ScoreboardView extends View {
 	 * @param users
 	 */
 	update(users = []) {
-		console.log('Scoreboard.update', users[0]);
 		this.clear();
-		const scoreboardTemplate = new ScoreboardTemplate();
-		this.el.innerHTML = scoreboardTemplate.template({users});
+		this.el.innerHTML = ScoreboardTemplate({users});
 	}
 }

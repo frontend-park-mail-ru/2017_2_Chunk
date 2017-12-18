@@ -1,0 +1,8 @@
+div(class='scoreboardViewText')
+    div(class='scoreboardString')
+        span(class='usernameHeader') username
+        span(class='scoreHeader') score
+    each user in users
+        div(class='scoreboardString')
+            span(class='username') #{user.name}
+            span(class='score') #{user.score}
