@@ -84,7 +84,7 @@ self.addEventListener('connect', event => {
 			} else {
 				peers.push(currentPort);
 				// peers.forEach(function (port) {
-				// 	port.postMessage(port);
+				// 	port.postMessaggt e(port);
 				// });
 				peers.forEach(function (port) {
 					if (port !== currentPort) port.postMessage('new worker');

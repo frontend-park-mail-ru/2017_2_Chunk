@@ -22,7 +22,7 @@ export default new class visibilityViewer {
 	hiddenCallback() {
 		this.hiddenEvent = eventBus.on(`${tabMessage.newGame.name}`, (messageText) => {
 			this.blink(messageText);
-		})
+		});
 	}
 
 
@@ -75,6 +75,6 @@ export default new class visibilityViewer {
 			document.title = this.show[1];
 			this.blinkWork = false;
 		}
-		eventBus.emit('grootStop')
+		// eventBus.emit('grootStop');
 	}
 }

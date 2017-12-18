@@ -331,7 +331,7 @@ export default class MusicPlayer {
 	sharedWorkerInit() {
 		this.sharedWorker = new SharedWorker('./audioWorker.js');
 		this.sharedWorker.port.onmessage = (event) => {
-			console.log('worker message');
+			// console.log('worker message');
 			console.log(event);
 			if (event.eventType === 'pause')
 				this.setPause();
