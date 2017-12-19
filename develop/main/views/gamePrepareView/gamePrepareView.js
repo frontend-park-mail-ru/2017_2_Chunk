@@ -1,6 +1,6 @@
 'use strict';
 import View from '../view/view';
-import gamePrepareFields from './__fields/gamePrepareView__fields';
+import GamePrepareFields from './__fields/gamePrepareView__fields';
 import eventBus from '../../modules/eventBus';
 import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
 
@@ -11,8 +11,10 @@ import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
  */
 export default class gamePrepareView extends View {
 	constructor() {
-		super(gamePrepareFields);
-		this.fields = gamePrepareFields;
+		const gamePrepareFields = new GamePrepareFields();
+		super(gamePrepareFields.gamePrepareFields);
+		this.gamePrepareFields = gamePrepareFields;
+		this.fields = this.gamePrepareFields.gamePrepareFields;
 		this.bus = eventBus;
 		this.el.classList.add('gamePrepareView');
 		this.clear = false;
@@ -159,13 +161,13 @@ export default class gamePrepareView extends View {
 
 	hideMasterFields() {
 		this.fields.startGame.hide();
-		this.fields.addBot.hide();
+		this.fields.addBotBlock.hide();
 	}
 
 
 	showMasterFields() {
 		this.fields.startGame.show();
-		this.fields.addBot.show();
+		this.fields.addBotBlock.show();
 	}
 
 
@@ -178,12 +180,15 @@ export default class gamePrepareView extends View {
 
 
 	buttonsEvents() {
-		this.fields.addBot.on('click', () => {
+		const botButton = Array.from(this.fields.addBotBlock.el.getElementsByClassName('gamePrepareView__fields__addBotButton'))[0];
+		botButton.addEventListener('click', () => {
+			console.log(this);
 			const request = {
 				code: `${gamePrepareCodes.addBot.code}`,
-				lvlbot: '3',
+				lvlbot: `${this.gamePrepareFields.lvlBotValue}`,
 			};
-			this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
+			if (this.gamePrepareFields.lvlBotValue)
+				this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
 		});
 		this.fields.startGame.on('click', () => {
 			const request = {

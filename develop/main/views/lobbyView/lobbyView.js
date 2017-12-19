@@ -147,7 +147,7 @@ export default class LobbyView extends View {
 	updateGame() {
 		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.updateGame.code}`]
 			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.updateGame.code}`, (response) => {
-			this.updateGameNode(response);
+			this.updateGameNode(response.game);
 		});
 	}
 
