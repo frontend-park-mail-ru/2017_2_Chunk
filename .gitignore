@@ -124,3 +124,4 @@ node-js-getting-git started
 /nginxConf.txt
 /public/audioWorker.js
 /public/audioWorker.js.map
+/.travis.yml
