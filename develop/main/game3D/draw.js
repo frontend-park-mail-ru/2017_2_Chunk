@@ -34,36 +34,6 @@ export default class Draw {
 
 		this.gameVariebles = tools.GAME_VARIABLES;
 
-
-		// modelLoader
-		// 	.load('models/dae/BabyGroot/model.dae')
-		// 	.then( model => {
-		// 		model.scale.set(2, 2, 2);
-		// 		// let new_model = model.clone();
-		// 		model.position.x = 20;
-		// 		// this.scene.add(new_model);
-		// 		// new_model.position.z = 20;
-		// 		this.scene.add(model);
-		//
-		// 	});
-		//
-		// modelLoader
-		// 	.load('models/obj/Rocket/Rocket.obj')
-		// 	.then( model => {
-		// 		model.scale.set(15, 15, 15);
-		// 		model.position.z = 30;
-		// 		return model;
-		// 	})
-		// 	.then( model => this.scene.add(model) );
-
-		//
-		// let baby = new GrootFactory(this.scene);
-		// baby.position(15, -50, 15);
-		// this.grootFactory = new GrootFactory();
-		this.preloadModels();
-
-
-
 		this.renderer = new Three.WebGLRenderer({antialias: true, alpha: true});
 		this.renderer.setSize(window.screen.availWidth, window.screen.availHeight);
 		container.getElement().appendChild(this.renderer.domElement);
@@ -98,10 +68,12 @@ export default class Draw {
 			this.gameVariebles.stepID = 0;
 			cancelAnimationFrame(this.gameVariebles.animation);
 		});
-	}
 
-	async preloadModels() {
-
+		this.getGameInfo();
+		this.gameEnd();
+		this.gameStep();
+		this.makeStepEnable();
+		this.azimuthAngle();
 	}
 
 	startGame(response) {
@@ -153,17 +125,23 @@ export default class Draw {
 		this.scene.add(this.mesh);
 	}
 
-	getGameInfo(response) {
-		this.figureType = response.figureType;
+	getGameInfo() {
+		this.bus.on('figureType', (response) => {
+			this.figureType = response.figureType;
+		});
 	}
 
-	gameStep(response) {
-		this.gameVariebles.stepID++;
-		this.gameVariebles.queue.push(response);
+	gameStep() {
+		this.bus.on('coordinatesForStep', (response) => {
+			this.gameVariebles.stepID++;
+			this.gameVariebles.queue.push(response);
+		});
 	}
 
-	gameEnd(response) {
-		this.gameVariebles.queue.push(response);
+	gameEnd() {
+		this.bus.on('winnerOrLooser', (response) => {
+			this.gameVariebles.queue.push(response);
+		});
 	}
 
 	gameClose(response) {
@@ -199,11 +177,28 @@ export default class Draw {
 		for (let i = 0; i < this.planeSize; i++) {
 			this.arrayOfPlane[i] = [];
 			for (let j = 0; j < this.planeSize; j++) {
-				this.arrayOfPlane[i][j] = new PlaneCell(i, j);
+				// this.arrayOfPlane[i][j] = new PlaneCell(i, j);
+				// this.arrayOfPlane[i][j].figure = this.startArray[i][j];
+				// this.cellContainer.add(this.arrayOfPlane[i][j].mesh);
+				// let platform = PlarformFactory.getNew();
+				// platform.position.x = i * 22;
+				// platform.position.z = j * 22;
+				// this.scene.add(platform);
+				this.arrayOfPlane[i][j] = PlarformFactory.getNew();
 				this.arrayOfPlane[i][j].figure = this.startArray[i][j];
-				this.cellContainer.add(this.arrayOfPlane[i][j].mesh);
+				this.arrayOfPlane[i][j].position.x = i * 22;
+				this.arrayOfPlane[i][j].position.z = j * 22;
+				this.arrayOfPlane[i][j].stepEnable = false;
+				this.cellContainer.add(this.arrayOfPlane[i][j]);
+
+				// let platform = PlarformFactory.getNew();
+				// platform.position.x = i * 22;
+				// platform.position.z = j * 22;
+				// this.scene.add(platform);
 			}
 		}
+		console.log(this.arrayOfPlane[0][0].figure);
+		console.log(this.arrayOfPlane[0][0]);
 	}
 
 	// Функция добавляет на поле одну фигурку в указанные координаты и вносит изменения в массив клеток поля.
@@ -226,16 +221,12 @@ export default class Draw {
 		
 		for (let i = 0; i < 3; ++i) {
 			for (let y = 1; y < 4; ++y) {
-				console.log("step");
 				let groot = GrootFactory.getNew();
 				groot.position.x = i * 10;
 				groot.position.z = y * 10;
 				this.scene.add(groot);
 			}
 		}
-
-		let platform = PlarformFactory.getNew();
-		this.scene.add(platform);
 	}
 
 	animate() {
@@ -451,11 +442,13 @@ export default class Draw {
 		this.bus.emit('rotate', request);
 	}
 
-	azimuthAngle(response) {
-		this.controls.autoRotateSpeed = response.speed;
-		this.gameVariebles.angle = response.angle;
-		this.controls.autoRotate = true;
-		this.gameVariebles.angleIndicator = true;
+	azimuthAngle() {
+		this.bus.on('azimuthAngle', (response) => {
+			this.controls.autoRotateSpeed = response.speed;
+			this.gameVariebles.angle = response.angle;
+			this.controls.autoRotate = true;
+			this.gameVariebles.angleIndicator = true;
+		});
 	}
 
 	getStepEnable() {
@@ -548,12 +541,14 @@ export default class Draw {
 		this.arrayOfPlane[point1.x][point1.z].figure = 0;
 	}
 
-	makeStepEnable(response) {
-		this.gameVariebles.arrayOfStepEnablePlane = response.arrayAfterStep;
-		response.arrayAfterStep.forEach((coord) => {
-			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(
-				tools.PLAYER_COLORS_MOVE[this.figureType]);
-			this.arrayOfPlane[coord.x][coord.z].stepEnable = true;
+	makeStepEnable() {
+		this.bus.on('stepEnable', (response) => {
+			this.gameVariebles.arrayOfStepEnablePlane = response.arrayAfterStep;
+			response.arrayAfterStep.forEach((coord) => {
+				this.arrayOfPlane[coord.x][coord.z].children[0].children[0].material.materials[0].color.setHex(
+					tools.PLAYER_COLORS_MOVE[this.figureType]);
+				this.arrayOfPlane[coord.x][coord.z].stepEnable = true;
+			});
 		});
 	}
 

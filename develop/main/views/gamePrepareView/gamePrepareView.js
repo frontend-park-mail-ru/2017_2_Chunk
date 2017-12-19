@@ -73,7 +73,7 @@ export default class gamePrepareView extends View {
 			this.fields.header.updateGameData(response.game);
 			this.whoIsItEvent();
 			eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, () => {
-				debugger;
+				// debugger;
 				this.addPlayers(response.game.realPlayers);
 				this.addBots(response.game.botPlayers);
 			})

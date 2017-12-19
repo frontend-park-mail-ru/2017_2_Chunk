@@ -41,7 +41,7 @@ export default class PlayersList extends Block {
 			type = 'playerFromMaster';
 		else
 			type = 'player';
-		debugger;
+		// debugger;
 		const string = new PLayerListString(type, data);
 		this.playersStrings = this.playersStrings || {};
 		this.playersStrings[data.userID] = string;
