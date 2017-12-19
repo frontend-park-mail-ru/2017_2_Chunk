@@ -85,7 +85,7 @@ export default class PlayersListString extends Block {
 			username: Block.create('div', {}, ['gamePrepareView__fields__playersList__string__fields__username',
 				'gamePrepareView__fields__playersList__string__fields'], name),
 			level: Block.create('div', {}, ['gamePrepareView__fields__playersList__string__fields__botLevel',
-				'gamePrepareView__fields__playersList__string__fields'], `bot level: ${data.botlvl}`),
+				'gamePrepareView__fields__playersList__string__fields'], `bot level: ${data.lvlbot}`),
 			kickButton: Block.create('button', {}, ['formButton', 'button',
 				'gamePrepareView__fields__playersList__string__fields__kickButton',
 				'gamePrepareView__fields__playersList__string__fields'], `kick`),

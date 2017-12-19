@@ -41,7 +41,6 @@ export default class PlayersList extends Block {
 			type = 'playerFromMaster';
 		else
 			type = 'player';
-		debugger;
 		const string = new PLayerListString(type, data);
 		this.playersStrings = this.playersStrings || {};
 		this.playersStrings[data.userID] = string;
@@ -76,10 +75,8 @@ export default class PlayersList extends Block {
 
 
 	removePlayer(userID) {
-		if (userID !== 'User ID') {
-			this.remove(this.playersStrings[userID]);
-			delete this.playersStrings[userID];
-		}
+		this.remove(this.playersStrings[userID]);
+		delete this.playersStrings[userID];
 	}
 
 
@@ -98,6 +95,7 @@ export default class PlayersList extends Block {
 
 
 	removePlayers() {
+		debugger;
 		for (let key in this.playersStrings) {
 			this.removePlayer(key);
 		}
