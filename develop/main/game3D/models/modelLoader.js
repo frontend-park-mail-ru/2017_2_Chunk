@@ -11,10 +11,11 @@ export default new class Loader {
 		this.colladaLoader.options.convertUpAxis = true;
 
 		OBJLoader(THREE);
-		this.objLoader = new THREE.OBJLoader();
+		this.THREE = THREE;
+		this.objLoader = new this.THREE.OBJLoader();
 
 		FBXLoader(THREE);
-		this.fbxLoader = new THREE.FBXLoader();
+		this.fbxLoader = new this.THREE.FBXLoader();
 	}
 
 	load(modelPath) {

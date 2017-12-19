@@ -49,5 +49,6 @@ export const GAME_VARIABLES = {
 	animation: 0,
 	angle: 0,
 	angleIndicator: false,
-	cameraRotateIndicator: false
-};
+	cameraRotateIndicator: false,
+	stepID: 0
+}

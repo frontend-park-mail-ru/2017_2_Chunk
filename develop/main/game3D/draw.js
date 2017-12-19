@@ -95,6 +95,7 @@ export default class Draw {
 			this.scene.remove(this.spotLight);
 			this.scene.remove(this.cellContainer);
 			this.scene.remove(this.playerContainer);
+			this.gameVariebles.stepID = 0;
 			cancelAnimationFrame(this.gameVariebles.animation);
 		});
 	}
@@ -222,14 +223,14 @@ export default class Draw {
 			}
 		}
 
-		for (let i = 0; i < 3; ++i) {
-			for (let y = 1; y < 4; ++y) {
-				let groot = GrootFactory.getNew();
-				groot.position.x = i * 10;
-				groot.position.z = y * 10;
-				this.scene.add(groot);
-			}
-		}
+		// for (let i = 0; i < 3; ++i) {
+		// 	for (let y = 1; y < 4; ++y) {
+		// 		let groot = GrootFactory.getNew();
+		// 		groot.position.x = i * 10;
+		// 		groot.position.z = y * 10;
+		// 		this.scene.add(groot);
+		// 	}
+		// }
 	}
 
 	animate() {
@@ -412,9 +413,11 @@ export default class Draw {
 							step: {
 								src: this.point1,
 								dst: this.point2
-							}
+							},
+							stepID: this.gameVariebles.stepID
 						};
 						this.bus.emit(`${gameCodes.gameStep.request}`, request);
+						this.gameVariebles.stepID++;
 					} else {
 						this.deleteAllStepEnable();
 					}
