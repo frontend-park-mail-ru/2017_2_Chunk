@@ -4,13 +4,8 @@ export default class ModelFactory {
 
 	constructor(path, setOrientation) {
 
-		// Путь до модели
 		this.path = path;
-		// Функция которая масштабирует и ставит
-		// в правильное положение "сырые" модели
-		this.setOrientation = setOrientation || function (model) {
-			model.scale.set(1, 1, 1);
-		};
+		this.setOrientation = setOrientation || function () { };
 
 		modelLoader
 			.load(this.path)
