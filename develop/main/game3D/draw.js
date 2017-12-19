@@ -158,6 +158,7 @@ export default class Draw {
 	}
 
 	gameStep(response) {
+		this.gameVariebles.stepID++;
 		this.gameVariebles.queue.push(response);
 	}
 
@@ -421,7 +422,6 @@ export default class Draw {
 							stepID: this.gameVariebles.stepID
 						};
 						this.bus.emit(`${gameCodes.gameStep.request}`, request);
-						this.gameVariebles.stepID++;
 					} else {
 						this.deleteAllStepEnable();
 					}
