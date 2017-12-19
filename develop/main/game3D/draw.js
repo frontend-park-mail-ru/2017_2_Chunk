@@ -8,8 +8,8 @@ import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
-import modelLoader from './models/modelLoader.js'
 import GrootFactory from "./models/BabyGroot";
+import PlarformFactory from "./models/Platform";
 
 export default class Draw {
 
@@ -222,15 +222,19 @@ export default class Draw {
 				}
 			}
 		}
+		
+		for (let i = 0; i < 3; ++i) {
+			for (let y = 1; y < 4; ++y) {
+				console.log("step");
+				let groot = GrootFactory.getNew();
+				groot.position.x = i * 10;
+				groot.position.z = y * 10;
+				this.scene.add(groot);
+			}
+		}
 
-		// for (let i = 0; i < 3; ++i) {
-		// 	for (let y = 1; y < 4; ++y) {
-		// 		let groot = GrootFactory.getNew();
-		// 		groot.position.x = i * 10;
-		// 		groot.position.z = y * 10;
-		// 		this.scene.add(groot);
-		// 	}
-		// }
+		let platform = PlarformFactory.getNew();
+		this.scene.add(platform);
 	}
 
 	animate() {
