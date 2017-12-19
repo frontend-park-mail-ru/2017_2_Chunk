@@ -74,11 +74,10 @@ export default class gamePrepareView extends View {
 			eventBus.emit('hideMasterFields');
 			this.fields.header.updateGameData(response.game);
 			this.whoIsItEvent();
-			eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, () => {
-				debugger;
+			// eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, () => {
 				this.addPlayers(response.game.realPlayers);
 				this.addBots(response.game.botPlayers);
-			})
+			// })
 		})
 	}
 
@@ -126,8 +125,10 @@ export default class gamePrepareView extends View {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removePlayer.code}`, (response) => {
 			if (this.userID === response.userID)
 				this.exitToLobby();
-			else
+			else {
 				this.fields.playersList.removePlayer(response.userID);
+				this.fields.header.removePlayer();
+			}
 		});
 	}
 
