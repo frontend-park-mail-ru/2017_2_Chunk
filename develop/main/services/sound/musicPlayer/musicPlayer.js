@@ -3,6 +3,7 @@ import eventBus from '../../../modules/eventBus';
 import Block from '../../../blocks/block/block';
 import audioLoaderHtml from './musicPlayerHtml';
 import playlist from './playlist';
+import advertisingList from './advertisingList';
 import controlButtons from './__controls/musicPlayer__controlsHtml';
 import AudioSharedWorker from './sharedWorker';
 
@@ -11,8 +12,10 @@ export default class MusicPlayer {
 	constructor() {
 		this.start();
 		this.playlist = playlist;
+		this.advertisingList = advertisingList;
 		this.random = false;
 		this.previousSongs = [];
+		this.advertisingCounter = 0;
 	}
 
 
@@ -231,11 +234,27 @@ export default class MusicPlayer {
 
 
 	setSongByNumber(songNumber) {
-		localStorage.setItem('songNumber', `${this.songNumber}`);
-		const songUrl = this.playlist[songNumber].url;
-		this.audio.pause();
-		this.audio.src = songUrl;
-		this.audio.load();
+		if (this.advertisingCounter && !(this.advertisingCounter % 5)) {
+			const songUrl = this.advertisingList[0].url;
+			this.audio.pause();
+			this.audio.src = songUrl;
+			this.audio.load();
+			this.audio.onended = () => {
+				localStorage.setItem('songNumber', `${this.songNumber}`);
+				const songUrl = this.playlist[songNumber].url;
+				this.audio.pause();
+				this.audio.src = songUrl;
+				this.audio.load();
+			}
+		}
+		else {
+			localStorage.setItem('songNumber', `${this.songNumber}`);
+			const songUrl = this.playlist[songNumber].url;
+			this.audio.pause();
+			this.audio.src = songUrl;
+			this.audio.load();
+		}
+		// this.advertisingCounter++;
 	}
 
 

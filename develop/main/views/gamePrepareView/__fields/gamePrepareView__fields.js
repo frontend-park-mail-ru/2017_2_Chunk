@@ -26,6 +26,7 @@ export default class GamePrepareFields {
 			this.append(this.fields[field]);
 		}
 		this.onAddBotLvlClick();
+
 	}
 
 
