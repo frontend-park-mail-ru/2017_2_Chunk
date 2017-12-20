@@ -254,7 +254,7 @@ export default class MusicPlayer {
 			this.audio.src = songUrl;
 			this.audio.load();
 		}
-		this.advertisingCounter++;
+		// this.advertisingCounter++;
 	}
 
 
