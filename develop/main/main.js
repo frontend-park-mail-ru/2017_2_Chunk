@@ -31,6 +31,8 @@ import GameCreateView from './views/lobbyView/__gameCreateView/lobbyView__gameCr
 
 import GamePrepareView from './views/gamePrepareView/gamePrepareView';
 
+import ValidationInfoView from './views/gamePrepareView/validationFields/validationInfoField';
+
 import Block from './blocks/block/block.js';
 
 import userService from './services/user-service.js';
@@ -44,8 +46,6 @@ import ThreeView from './views/treeView/threeView.js';
 import Game3D from './game3D/gameMain';
 
 import ServiceWorker from '../workers/serviceWorker';
-
-import visibilityViewer from './services/visibilityViewer/visibilityViewer';
 
 import SoundsEvents from './services/sound/soundEvents/soundEvents';
 
@@ -92,6 +92,8 @@ const gameCreateView = new GameCreateView();
 
 const gamePrepareView = new GamePrepareView();
 
+const validationInfoView = new ValidationInfoView();
+
 const gameContainer = new ThreeView();
 
 const game3D = new Game3D(gameContainer);
@@ -121,6 +123,7 @@ Views.push(lobbyView);
 Views.push(gameCreateView);
 Views.push(gamePrepareView);
 Views.push(gameContainer);
+Views.push(validationInfoView);
 
 
 function hideAllView() {
@@ -216,6 +219,7 @@ eventBus.on('openWaitingHall', function () {
 	gameNameView.show();
 	backButtonView.show();
 	gamePrepareView.show();
+	validationInfoView.show();
 });
 
 
@@ -234,6 +238,7 @@ app
 	.append(updateView)
 	.append(gameCreateView)
 	.append(gamePrepareView)
+	.append(validationInfoView)
 	.append(gameContainer);
 
 
@@ -250,26 +255,26 @@ if ('serviceWorker' in navigator) {
 
 
 
-const canvas = document.body;
+const body = document.body;
 
-// function fullScreenOn() {
-// 	document.body.addEventListener("keydown", function(e) {
-// 		if (e.keyCode == 13) {
-// 			canvas.requestFullscreen();
-// 		}
-// 	}, true);
-// }
+function fullScreenOn() {
+	document.body.addEventListener("keydown", function(e) {
+		if (e.keyCode == 70) {
+			body.requestFullscreen();
+		}
+	}, true);
+}
 
 function fullScreenOff(){
 	document.addEventListener("keydown", function(e) {
 		if (e.keyCode == 27) {
-			canvas.cancelFullscreen();
+			body.cancelFullscreen();
 		}
 	});
 }
 
 fullScreenOff();
-// fullScreenOn();
+fullScreenOn();
 
 
 // window.onbeforeunload = function() {

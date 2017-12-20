@@ -39,7 +39,6 @@ export default class PlayersList extends Block {
 
 
 	addPlayer(data) {
-		debugger;
 		let type = '';
 		if (this.master)
 			type = 'playerFromMaster';
@@ -81,7 +80,6 @@ export default class PlayersList extends Block {
 	removePlayer(userID) {
 		userID = +userID;
 		const elemToDel = this.playersStrings[userID];
-		debugger;
 		this.remove(elemToDel);
 		delete this.playersStrings[userID];
 	}

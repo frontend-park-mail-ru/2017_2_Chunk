@@ -98,7 +98,7 @@ export default class gamePrepareView extends View {
 
 
 	gameStatusEvents() {
-		// this.eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.startGame.code}`, () => {
+		// this.eventBus.on(`${gamePrepareCodes.responseEventName}, () => {
 		this.bus.on(`${gamePrepareCodes.responseEventName}200`, () => {
 			this.bus.emit('goToGame');
 		});
@@ -163,12 +163,16 @@ export default class gamePrepareView extends View {
 	hideMasterFields() {
 		this.fields.startGame.hide();
 		this.fields.addBotBlock.hide();
+		this.fields.playersList.el.style.setProperty('margin-bottom', '20px');
+		this.fields.addBotBlock.el.style.setProperty('display', 'none');
 	}
 
 
 	showMasterFields() {
 		this.fields.startGame.show();
 		this.fields.addBotBlock.show();
+		this.fields.playersList.el.style.setProperty('margin-bottom', '0');
+		this.fields.addBotBlock.el.style.setProperty('display', 'flex');
 	}
 
 
