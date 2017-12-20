@@ -9,7 +9,9 @@ import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
 import GrootFactory from "./models/BabyGroot";
-import PlarformFactory from "./models/Platform";
+import IronManFactory from "./models/IronMan";
+import StormtrooperFactory from "./models/StormTrooper";
+import PlatformFactory from "./models/Platform";
 
 export default class Draw {
 
@@ -90,8 +92,8 @@ export default class Draw {
 		this.gameVariebles.lightIndicator = true;
 		this.gameVariebles.cameraRotateIndicator = true;
 		this.controls.autoRotateSpeed = 4;
-		this.controls.minDistance = 200.0;
-		this.controls.maxDistance = 200.0;
+		this.controls.minDistance = 100.0;
+		this.controls.maxDistance = 400.0;
 
 		this.bus.emit('beginPlaying');
 		// this.bus.emit('changePlayerDiv', 'HELLO');
@@ -177,35 +179,49 @@ export default class Draw {
 		for (let i = 0; i < this.planeSize; i++) {
 			this.arrayOfPlane[i] = [];
 			for (let j = 0; j < this.planeSize; j++) {
-				// this.arrayOfPlane[i][j] = new PlaneCell(i, j);
-				// this.arrayOfPlane[i][j].figure = this.startArray[i][j];
-				// this.cellContainer.add(this.arrayOfPlane[i][j].mesh);
-				// let platform = PlarformFactory.getNew();
-				// platform.position.x = i * 22;
-				// platform.position.z = j * 22;
-				// this.scene.add(platform);
-				this.arrayOfPlane[i][j] = PlarformFactory.getNew();
+				this.arrayOfPlane[i][j] = PlatformFactory.getNew();
+				console.log(this.arrayOfPlane[i][j]);
 				this.arrayOfPlane[i][j].figure = this.startArray[i][j];
 				this.arrayOfPlane[i][j].position.x = i * 22;
 				this.arrayOfPlane[i][j].position.z = j * 22;
 				this.arrayOfPlane[i][j].stepEnable = false;
 				this.cellContainer.add(this.arrayOfPlane[i][j]);
-
-				// let platform = PlarformFactory.getNew();
-				// platform.position.x = i * 22;
-				// platform.position.z = j * 22;
-				// this.scene.add(platform);
 			}
 		}
-		console.log(this.arrayOfPlane[0][0].figure);
-		console.log(this.arrayOfPlane[0][0]);
 	}
 
 	// Функция добавляет на поле одну фигурку в указанные координаты и вносит изменения в массив клеток поля.
-	addOnePlayers(container, i, j, figure) {
+	addOnePlayers(i, j, figure) {
 		this.arrayOfPlane[i][j].figure = figure;
-		this.arrayOfFigure[i][j] = new Player(i, j, figure);
-		container.add(this.arrayOfFigure[i][j].mesh);
+		switch (figure) {
+			case 1:
+				this.arrayOfFigure[i][j] = this.addGroot(i, j);
+				break;
+			case 2:
+				this.arrayOfFigure[i][j] = this.addStorm(i, j);
+		}
+		this.playerContainer.add(this.arrayOfFigure[i][j]);
+	}
+
+	addGroot(i, j) {
+		let groot = GrootFactory.getNew();
+		groot.position.x = i * 22;
+		groot.position.z = j * 22 - 15;
+		return groot;
+	}
+
+	// addIronMan(i, j) {
+	// 	let ironMan = IronManFactory.getNew();
+	// 	ironMan.position.x = i * 22 - 14.5;
+	// 	ironMan.position.z = j * 22 - 7;
+	// 	return ironMan;
+	// }
+
+	addStorm(i, j) {
+		let storm = StormtrooperFactory.getNew();
+		storm.position.x = i * 22 - 6.5;
+		storm.position.z = j * 22 - 10;
+		return storm;
 	}
 
 	// Добавляет на поле все фигуры, заданные в массиве клеток поля.
@@ -214,26 +230,40 @@ export default class Draw {
 			this.arrayOfFigure[i] = [];
 			for (let j = 0; j < this.planeSize; j++) {
 				if (this.arrayOfPlane[i][j].figure !== 0) {
-					this.addOnePlayers(this.playerContainer, i, j, this.arrayOfPlane[i][j].figure);
+					this.addOnePlayers(i, j, this.arrayOfPlane[i][j].figure);
 				}
+				// let groot = GrootFactory.getNew();
+				// groot.position.x = i * 22 - 13.5;
+				// groot.position.z = j * 22 - 6;
+				// this.scene.add(groot);
 			}
 		}
 		
-		for (let i = 0; i < 3; ++i) {
-			for (let y = 1; y < 4; ++y) {
-				let groot = GrootFactory.getNew();
-				groot.position.x = i * 10;
-				groot.position.z = y * 10;
-				this.scene.add(groot);
-			}
-		}
+		// for (let i = 0; i < 3; ++i) {
+		// 	for (let y = 1; y < 4; ++y) {
+		// 		let groot = GrootFactory.getNew();
+		// 		groot.position.x = i * 10;
+		// 		groot.position.z = y * 10;
+		// 		this.scene.add(groot);
+		// 	}
+		// }
+
+		// for (let i = 4; i < 7; ++i) {
+		// 	for (let y = 5; y < 8; ++y) {
+		// 		let ironMan = StormtrooperFactory.getNew();
+		// 		ironMan.position.x = i * 10;
+		// 		ironMan.position.z = y * 10;
+		// 		this.scene.add(ironMan);
+		// 	}
+		// }
+
 	}
 
 	animate() {
 		this.controls.update();
 
-		this.startRotate();
-		this.stopAzimuthRotate();
+		// this.startRotate();
+		// this.stopAzimuthRotate();
 
 		this.queueStep();
 
@@ -247,27 +277,27 @@ export default class Draw {
 	}
 
 	stopAzimuthRotate() {
-		if (this.controls.getAzimuthalAngle() < this.gameVariebles.angle + 0.1 &&
-			this.controls.getAzimuthalAngle() > this.gameVariebles.angle - 0.1 &&
-			this.gameVariebles.angleIndicator) {
-			this.controls.autoRotate = false;
-			this.gameVariebles.angleIndicator = false;
-		}
+		// if (this.controls.getAzimuthalAngle() < this.gameVariebles.angle + 0.1 &&
+		// 	this.controls.getAzimuthalAngle() > this.gameVariebles.angle - 0.1 &&
+		// 	this.gameVariebles.angleIndicator) {
+		// 	this.controls.autoRotate = false;
+		// 	this.gameVariebles.angleIndicator = false;
+		// }
 	}
 
 	startRotate() {
-		if (this.gameVariebles.cameraRotateIndicator) {
-			if (this.controls.minDistance > 60) {
-				this.controls.autoRotate = true;
-				this.controls.minDistance -= 2;
-				this.controls.maxDistance -= 2;
-			} else {
-				this.controls.autoRotate = false;
-				this.controls.maxDistance = 200;
-				this.controls.minDistance = 40;
-				this.gameVariebles.cameraRotateIndicator = false;
-			}
-		}
+		// if (this.gameVariebles.cameraRotateIndicator) {
+		// 	if (this.controls.minDistance > 60) {
+		// 		this.controls.autoRotate = true;
+		// 		this.controls.minDistance -= 2;
+		// 		this.controls.maxDistance -= 2;
+		// 	} else {
+		// 		this.controls.autoRotate = false;
+		// 		this.controls.maxDistance = 200;
+		// 		this.controls.minDistance = 40;
+		// 		this.gameVariebles.cameraRotateIndicator = false;
+		// 	}
+		// }
 	}
 
 	// lightFigure() {
@@ -335,9 +365,12 @@ export default class Draw {
 	playerChoice() {
 		// Выбор объектов
 		this.raycasterClick.setFromCamera(this.mouse, this.camera);
+		console.log(this.playerContainer);
+		console.log(this.cellContainer);
 		const intersects = this.raycasterClick.intersectObjects(
 			this.playerContainer.children.concat(this.cellContainer.children)
 		);
+		console.log(intersects);
 		if (intersects.length > 0) {
 			if (this.IntersectedClick !== intersects[0].object) {
 				if (this.IntersectedClick) {
@@ -370,7 +403,7 @@ export default class Draw {
 						}
 					}
 
-					this.getAzimuthAngle();
+					// this.getAzimuthAngle();
 					// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
 					this.getStepEnable();
 
@@ -433,22 +466,22 @@ export default class Draw {
 	}
 
 	getAzimuthAngle() {
-		const request = {
-			code: 'rotateAngle',
-			x: this.point1.x,
-			z: this.point1.z,
-			currentAngle: this.controls.getAzimuthalAngle()
-		};
-		this.bus.emit('rotate', request);
+		// const request = {
+		// 	code: 'rotateAngle',
+		// 	x: this.point1.x,
+		// 	z: this.point1.z,
+		// 	currentAngle: this.controls.getAzimuthalAngle()
+		// };
+		// this.bus.emit('rotate', request);
 	}
 
 	azimuthAngle() {
-		this.bus.on('azimuthAngle', (response) => {
-			this.controls.autoRotateSpeed = response.speed;
-			this.gameVariebles.angle = response.angle;
-			this.controls.autoRotate = true;
-			this.gameVariebles.angleIndicator = true;
-		});
+		// this.bus.on('azimuthAngle', (response) => {
+		// 	this.controls.autoRotateSpeed = response.speed;
+		// 	this.gameVariebles.angle = response.angle;
+		// 	this.controls.autoRotate = true;
+		// 	this.gameVariebles.angleIndicator = true;
+		// });
 	}
 
 	getStepEnable() {
@@ -545,8 +578,11 @@ export default class Draw {
 		this.bus.on('stepEnable', (response) => {
 			this.gameVariebles.arrayOfStepEnablePlane = response.arrayAfterStep;
 			response.arrayAfterStep.forEach((coord) => {
-				this.arrayOfPlane[coord.x][coord.z].children[0].children[0].material.materials[0].color.setHex(
-					tools.PLAYER_COLORS_MOVE[this.figureType]);
+				// this.arrayOfPlane[coord.x][coord.z].children[0].children[2].material.materials[0].color.setHex(
+				// 	tools.PLAYER_COLORS_MOVE[this.figureType]);
+				// this.arrayOfPlane[coord.x][coord.z].rotation.y = Math.PI/4;
+				// this.arrayOfPlane[coord.x][coord.z].position.x += Math.sqrt(2)/2 * 22;
+				// this.arrayOfPlane[coord.x][coord.z].position.z -= Math.sqrt(2)/2 * 22;
 				this.arrayOfPlane[coord.x][coord.z].stepEnable = true;
 			});
 		});
