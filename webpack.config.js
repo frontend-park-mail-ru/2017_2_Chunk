@@ -7,6 +7,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const extractPlugin = new ExtractTextPlugin({
 	filename: '[name].css',
 });
+
 module.exports = {
 	context: __dirname + '/develop',
 	entry: {

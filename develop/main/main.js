@@ -60,7 +60,9 @@ const gameNameView = new GameNameView();
 
 const eventBus = EventBus;
 
-const app = Block.create('main', {}, ['main_theme-black-orange', 'main']);
+document.body.classList.add('main_theme-black-orange');
+
+const app = Block.create('main', {}, [, 'main']);
 
 document.body.appendChild(app.el);
 

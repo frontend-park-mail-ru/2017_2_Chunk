@@ -125,3 +125,4 @@ node-js-getting-git started
 /public/audioWorker.js
 /public/audioWorker.js.map
 
+/develop/loading/loadEventEmitter.js
