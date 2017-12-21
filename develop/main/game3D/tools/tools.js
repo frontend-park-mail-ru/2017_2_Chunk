@@ -3,6 +3,7 @@
 export const BACKGROUND_COLOR = 0xEEEEEE;
 export const HOVER_COLOR = 0xFF0000;
 export const PLANE_X = 5;
+export const PLANE_XX = 22;
 export const PLANE_Z = 5;
 export const PLAYER_HEIGHT = 7;
 
@@ -49,5 +50,6 @@ export const GAME_VARIABLES = {
 	animation: 0,
 	angle: 0,
 	angleIndicator: false,
-	cameraRotateIndicator: false
-};
+	cameraRotateIndicator: false,
+	stepID: 0
+}
