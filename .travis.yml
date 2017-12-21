@@ -1,6 +1,8 @@
 language: node_js
 node_js:
 - 8
+env:
+- NODE_ENV=production
 script:
 - eval "$(ssh-agent -s)"
 - ssh-keyscan -H 195.133.147.209 >> ~/.ssh/known_hosts
