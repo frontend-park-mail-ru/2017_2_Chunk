@@ -148,7 +148,7 @@ const offBot = new class BotWorker {
 			return request;
 		}
 
-		this.addBot.botlvl = data.lvlbot;
+		this.addBot.botlvl = data.botlvl;
 		this.addBot.botsCount++;
 		this.addBot.botID = this.addBot.botsCount+1;
 		this.addBot.botname = `bot${this.addBot.botsCount}`;
