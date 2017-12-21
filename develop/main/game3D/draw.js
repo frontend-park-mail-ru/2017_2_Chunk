@@ -4,13 +4,12 @@ import OrbitControl from 'three-orbitcontrols';
 import * as Three from 'three';
 import PlaneCell from './models/plane.js';
 import Player from './models/player.js';
+import Cylinder from './models/cylinfder';
 import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
-import gameCodes from '../messageCodes/gameCodes';
-import GrootFactory from "./models/BabyGroot";
-import IronManFactory from "./models/IronMan";
-import StormtrooperFactory from "./models/StormTrooper";
+import GrootFactoryBlue from "./models/BabyGrootBlue";
+import GrootFactoryMagenta from "./models/BabyGrootMagenta";
 import PlatformFactory from "./models/Platform";
 
 export default class Draw {
@@ -47,7 +46,7 @@ export default class Draw {
 		this.controls.minPolarAngle = Math.PI / 6;
 		this.controls.maxPolarAngle = Math.PI / 2.3;
 		this.controls.target.set(20, -5, 20);
-		this.controls.enablePan = false;
+		this.controls.enablePan = true;
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = 0.2;
 		this.controls.autoRotate = false;
@@ -61,7 +60,6 @@ export default class Draw {
 		this.mouse = new Three.Vector2();
 		this.raycasterClick = new Three.Raycaster();
 		this.raycasterMove = new Three.Raycaster();
-
 
 		this.bus.on('deleteTree', () => {
 			this.scene.remove(this.spotLight);
@@ -83,10 +81,9 @@ export default class Draw {
 		this.planeSize = response.game.field.maxX;
 		const size = (this.planeSize / 2) * tools.PLANE_X;
 		this.controls.target.set(size, -5, size);
-		// Двумерный массив клеток поля.
 		this.arrayOfPlane = [];
-		// Двумерный массив фигур на поле.
 		this.arrayOfFigure = [];
+		this.arrayOfCylinder = [];
 		this.addMeshes();
 		this.gameVariebles.moveIndicator = false;
 		this.gameVariebles.lightIndicator = true;
@@ -114,17 +111,6 @@ export default class Draw {
 		const reflectionCube = new Three.CubeTextureLoader().load(urls);
 		reflectionCube.format = Three.RGBFormat;
 		this.scene.background = reflectionCube;
-	}
-
-	loadBackgroundSpherical() {
-		// В качестве фона используется сферическая эквидистантная проекция
-		this.geometry = new Three.SphereBufferGeometry(500, 60, 40);
-		this.geometry.scale(-1, 1, 1);
-		this.material = new Three.MeshBasicMaterial({
-			map: new Three.TextureLoader().load('background/4.jpg')
-		});
-		this.mesh = new Three.Mesh(this.geometry, this.material);
-		this.scene.add(this.mesh);
 	}
 
 	getGameInfo() {
@@ -165,98 +151,58 @@ export default class Draw {
 
 		this.playerContainer = new Three.Object3D();
 		this.cellContainer = new Three.Object3D();
+		this.cylinderContainer = new Three.Object3D();
 
-		// Рисование поля и всех фигурок.
 		this.addPlaneByStart();
 		this.addAllPlayers();
 
 		this.scene.add(this.cellContainer);
 		this.scene.add(this.playerContainer);
+		this.scene.add(this.cylinderContainer);
 	}
 
-	// Создает двумерный массив клеточек поля и расстявляет по нему фигуры в соответствии с массивом.
 	addPlaneByStart() {
 		for (let i = 0; i < this.planeSize; i++) {
 			this.arrayOfPlane[i] = [];
 			for (let j = 0; j < this.planeSize; j++) {
-				this.arrayOfPlane[i][j] = PlatformFactory.getNew();
-				// console.log(this.arrayOfPlane[i][j]);
+				this.arrayOfPlane[i][j] = new PlaneCell(i, j);
 				this.arrayOfPlane[i][j].figure = this.startArray[i][j];
-				this.arrayOfPlane[i][j].position.x = i * 22;
-				this.arrayOfPlane[i][j].position.z = j * 22;
-				this.arrayOfPlane[i][j].stepEnable = false;
-				this.cellContainer.add(this.arrayOfPlane[i][j]);
+				let cube = PlatformFactory.getNew();
+				cube.position.x = i * 22;
+				cube.position.z = j * 22;
+				this.scene.add(cube);
+				this.cellContainer.add(this.arrayOfPlane[i][j].mesh);
 			}
 		}
 	}
 
-	// Функция добавляет на поле одну фигурку в указанные координаты и вносит изменения в массив клеток поля.
 	addOnePlayers(i, j, figure) {
 		this.arrayOfPlane[i][j].figure = figure;
 		switch (figure) {
 			case 1:
-				this.arrayOfFigure[i][j] = this.addGroot(i, j);
+				this.arrayOfFigure[i][j] = GrootFactoryBlue.getNew();
+				this.arrayOfCylinder[i][j] = new Cylinder(i, j);
 				break;
 			case 2:
-				this.arrayOfFigure[i][j] = this.addStorm(i, j);
+				this.arrayOfFigure[i][j] = GrootFactoryMagenta.getNew();
+				this.arrayOfCylinder[i][j] = new Cylinder(i, j);
 		}
+		this.arrayOfFigure[i][j].position.x = i * 22 + 1;
+		this.arrayOfFigure[i][j].position.z = j * 22 - 14;
 		this.playerContainer.add(this.arrayOfFigure[i][j]);
+		this.cylinderContainer.add(this.arrayOfCylinder[i][j].mesh);
 	}
 
-	addGroot(i, j) {
-		let groot = GrootFactory.getNew();
-		groot.position.x = i * 22;
-		groot.position.z = j * 22 - 15;
-		return groot;
-	}
-
-	// addIronMan(i, j) {
-	// 	let ironMan = IronManFactory.getNew();
-	// 	ironMan.position.x = i * 22 - 14.5;
-	// 	ironMan.position.z = j * 22 - 7;
-	// 	return ironMan;
-	// }
-
-	addStorm(i, j) {
-		let storm = StormtrooperFactory.getNew();
-		storm.position.x = i * 22 - 6.5;
-		storm.position.z = j * 22 - 10;
-		return storm;
-	}
-
-	// Добавляет на поле все фигуры, заданные в массиве клеток поля.
 	addAllPlayers() {
 		for (let i = 0; i < this.planeSize; i++) {
 			this.arrayOfFigure[i] = [];
+			this.arrayOfCylinder[i] = [];
 			for (let j = 0; j < this.planeSize; j++) {
 				if (this.arrayOfPlane[i][j].figure !== 0) {
 					this.addOnePlayers(i, j, this.arrayOfPlane[i][j].figure);
 				}
-				// let groot = GrootFactory.getNew();
-				// groot.position.x = i * 22 - 13.5;
-				// groot.position.z = j * 22 - 6;
-				// this.scene.add(groot);
 			}
 		}
-		
-		// for (let i = 0; i < 3; ++i) {
-		// 	for (let y = 1; y < 4; ++y) {
-		// 		let groot = GrootFactory.getNew();
-		// 		groot.position.x = i * 10;
-		// 		groot.position.z = y * 10;
-		// 		this.scene.add(groot);
-		// 	}
-		// }
-
-		// for (let i = 4; i < 7; ++i) {
-		// 	for (let y = 5; y < 8; ++y) {
-		// 		let ironMan = StormtrooperFactory.getNew();
-		// 		ironMan.position.x = i * 10;
-		// 		ironMan.position.z = y * 10;
-		// 		this.scene.add(ironMan);
-		// 	}
-		// }
-
 	}
 
 	animate() {
@@ -264,6 +210,8 @@ export default class Draw {
 
 		// this.startRotate();
 		// this.stopAzimuthRotate();
+
+		console.log("x: " + this.camera.position.x + " y: " + this.camera.position.y + " z: " + this.camera.position.z);
 
 		this.queueStep();
 
