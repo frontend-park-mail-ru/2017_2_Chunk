@@ -106,15 +106,14 @@ main > .treeView {
     grid-row: 1 / 3;
 }
 
-main > .lobbyView {
-    grid-column: 2;
-    grid-row: 2 / 3;
+main > .validationInfo {
+    grid-area: place5;
 }
 
-main > .gamePrepareView {
-    grid-column: 2;
-    grid-row: 2 / 3;
-}
+/*main > .gamePrepareView {*/
+    /*grid-column: 2;*/
+    /*grid-row: 2 / 3;*/
+/*}*/
 
 .hidden {
     opacity: 0;

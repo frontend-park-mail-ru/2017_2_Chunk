@@ -1,6 +1,6 @@
 'use strict';
 import View from '../view/view';
-import gamePrepareFields from './__fields/gamePrepareView__fields';
+import GamePrepareFields from './__fields/gamePrepareView__fields';
 import eventBus from '../../modules/eventBus';
 import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
 
@@ -11,8 +11,10 @@ import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
  */
 export default class gamePrepareView extends View {
 	constructor() {
-		super(gamePrepareFields);
-		this.fields = gamePrepareFields;
+		const gamePrepareFields = new GamePrepareFields();
+		super(gamePrepareFields.gamePrepareFields);
+		this.gamePrepareFields = gamePrepareFields;
+		this.fields = this.gamePrepareFields.gamePrepareFields;
 		this.bus = eventBus;
 		this.el.classList.add('gamePrepareView');
 		this.clear = false;
@@ -72,11 +74,10 @@ export default class gamePrepareView extends View {
 			eventBus.emit('hideMasterFields');
 			this.fields.header.updateGameData(response.game);
 			this.whoIsItEvent();
-			eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, () => {
-				// debugger;
+			// eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, () => {
 				this.addPlayers(response.game.realPlayers);
 				this.addBots(response.game.botPlayers);
-			})
+			// })
 		})
 	}
 
@@ -97,7 +98,7 @@ export default class gamePrepareView extends View {
 
 
 	gameStatusEvents() {
-		// this.eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.startGame.code}`, () => {
+		// this.eventBus.on(`${gamePrepareCodes.responseEventName}, () => {
 		this.bus.on(`${gamePrepareCodes.responseEventName}200`, () => {
 			this.bus.emit('goToGame');
 		});
@@ -124,8 +125,10 @@ export default class gamePrepareView extends View {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removePlayer.code}`, (response) => {
 			if (this.userID === response.userID)
 				this.exitToLobby();
-			else
+			else {
 				this.fields.playersList.removePlayer(response.userID);
+				this.fields.header.removePlayer();
+			}
 		});
 	}
 
@@ -159,13 +162,17 @@ export default class gamePrepareView extends View {
 
 	hideMasterFields() {
 		this.fields.startGame.hide();
-		this.fields.addBot.hide();
+		this.fields.addBotBlock.hide();
+		this.fields.playersList.el.style.setProperty('margin-bottom', '20px');
+		this.fields.addBotBlock.el.style.setProperty('display', 'none');
 	}
 
 
 	showMasterFields() {
 		this.fields.startGame.show();
-		this.fields.addBot.show();
+		this.fields.addBotBlock.show();
+		this.fields.playersList.el.style.setProperty('margin-bottom', '0');
+		this.fields.addBotBlock.el.style.setProperty('display', 'flex');
 	}
 
 
@@ -178,12 +185,15 @@ export default class gamePrepareView extends View {
 
 
 	buttonsEvents() {
-		this.fields.addBot.on('click', () => {
+		const botButton = Array.from(this.fields.addBotBlock.el.getElementsByClassName('gamePrepareView__fields__addBotButton'))[0];
+		botButton.addEventListener('click', () => {
+			console.log(this);
 			const request = {
 				code: `${gamePrepareCodes.addBot.code}`,
-				lvlbot: '3',
+				lvlbot: `${this.gamePrepareFields.lvlBotValue}`,
 			};
-			this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
+			if (this.gamePrepareFields.lvlBotValue)
+				this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
 		});
 		this.fields.startGame.on('click', () => {
 			const request = {

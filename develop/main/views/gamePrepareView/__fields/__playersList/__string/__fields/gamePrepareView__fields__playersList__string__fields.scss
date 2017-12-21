@@ -1,11 +1,18 @@
 .gamePrepareView__fields__playersList__string__fields {
     overflow: hidden;
-    font-size: 14px;
+    font-size: 16px;
     display: inline-block;
-    margin: 0.1em 0.8em;
+    font-family: RobotoRegular;
 
     &.gamePrepareView__fields__playersList__string__fields__header {
-        font-size: 18px;
+        font-size: 14px;
+        font-family: Road_Rage;
+    }
+
+    &.gamePrepareView__fields__playersList__string__fields__lvlBot {
+        width: 97px;
+        margin: auto 0;
+        height: 32px;
     }
 }
 

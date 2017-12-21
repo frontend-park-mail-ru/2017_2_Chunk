@@ -22,6 +22,9 @@ export default class PlayersList extends Block {
 		this.master = false;
 		eventBus.on(`${prepareGameCodes.responseEventName}${prepareGameCodes.createGame.code}`, () => {
 			this.master = true;
+		});
+		eventBus.on(`${prepareGameCodes.responseEventName}${prepareGameCodes.connectGame.code}`, () => {
+			this.master = false;
 		})
 	}
 
@@ -30,7 +33,7 @@ export default class PlayersList extends Block {
 		const type = 'master';
 		const string = new PLayerListString(type, data);
 		this.playersStrings = this.playersStrings || {};
-		this.playersStrings[data.userID] = string;
+		this.playersStrings[+data.userID] = string;
 		this.append(string);
 	}
 
@@ -41,10 +44,9 @@ export default class PlayersList extends Block {
 			type = 'playerFromMaster';
 		else
 			type = 'player';
-		// debugger;
 		const string = new PLayerListString(type, data);
 		this.playersStrings = this.playersStrings || {};
-		this.playersStrings[data.userID] = string;
+		this.playersStrings[+data.userID] = string;
 		if (this.master) {
 			this.onPlayerKickButtonClick(data.userID);
 		}
@@ -60,7 +62,7 @@ export default class PlayersList extends Block {
 			type = 'player';
 		const string = new PLayerListString(type, data);
 		this.botsStrings = this.botsStrings || {};
-		this.botsStrings[data.botID] = string;
+		this.botsStrings[+data.botID] = string;
 		if (this.master) {
 			this.onBotKickButtonClick(data.botID);
 		}
@@ -76,14 +78,15 @@ export default class PlayersList extends Block {
 
 
 	removePlayer(userID) {
-		if (userID !== 'User ID') {
-			this.remove(this.playersStrings[userID]);
-			delete this.playersStrings[userID];
-		}
+		userID = +userID;
+		const elemToDel = this.playersStrings[userID];
+		this.remove(elemToDel);
+		delete this.playersStrings[userID];
 	}
 
 
 	removeBot(botID) {
+		botID = +botID;
 		this.remove(this.botsStrings[botID]);
 		delete this.botsStrings[botID];
 	}
@@ -130,7 +133,7 @@ export default class PlayersList extends Block {
 
 
 	clear() {
-		this.removePlayers();
 		this.removeBots();
+		this.removePlayers();
 	}
 }

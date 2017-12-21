@@ -180,7 +180,7 @@ export default class Draw {
 			this.arrayOfPlane[i] = [];
 			for (let j = 0; j < this.planeSize; j++) {
 				this.arrayOfPlane[i][j] = PlatformFactory.getNew();
-				console.log(this.arrayOfPlane[i][j]);
+				// console.log(this.arrayOfPlane[i][j]);
 				this.arrayOfPlane[i][j].figure = this.startArray[i][j];
 				this.arrayOfPlane[i][j].position.x = i * 22;
 				this.arrayOfPlane[i][j].position.z = j * 22;
@@ -365,103 +365,115 @@ export default class Draw {
 	playerChoice() {
 		// Выбор объектов
 		this.raycasterClick.setFromCamera(this.mouse, this.camera);
+
+		console.log("PLAYER");
 		console.log(this.playerContainer);
+		console.log("ARRAY PLAYER 0 0");
+		console.log(this.arrayOfFigure[0][0]);
+		console.log("CELL");
 		console.log(this.cellContainer);
+		console.log("ARRAY CELL 0 0");
+		console.log(this.arrayOfPlane[0][0]);
+		console.log(this.arrayOfPlane[0][0].parent);
+
 		const intersects = this.raycasterClick.intersectObjects(
-			this.playerContainer.children.concat(this.cellContainer.children)
+			this.playerContainer.children.concat(this.cellContainer.children), true
 		);
+		console.log("INTERSECTS");
 		console.log(intersects);
 		if (intersects.length > 0) {
-			if (this.IntersectedClick !== intersects[0].object) {
-				if (this.IntersectedClick) {
-					if (this.IntersectedClick.material.color.getHex() ===
-						tools.PLAYER_COLORS_CLICK[this.figureType]) {
-						this.IntersectedClick.material.color.setHex(
-							tools.PLAYER_COLORS[this.figureType]);
-					}
-				}
-				this.IntersectedClick = intersects[0].object;
 
-				// Если нажали на фигурку, у которой наш цвет
-				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-					(intersects[0].object.material.color.getHex() ===
-						tools.PLAYER_COLORS_MOVE[this.figureType] ||
-						intersects[0].object.material.color.getHex() ===
-						tools.PLAYER_COLORS[this.figureType])
-					&&
-					// Проверяем, можно ли изменять первую точку.
-					// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
-					!Object.isFrozen(this.point1)) {
-					this.deleteAllStepEnable();
-					// Тут определяются номера по х и z фигуры, на которую нажали.
-					for (let i = 0; i < this.planeSize; i++) {
-						if (intersects[0].object.position.x > i * tools.PLANE_X) {
-							this.point1.x = i;
-						}
-						if (intersects[0].object.position.z > i * tools.PLANE_Z) {
-							this.point1.z = i;
-						}
-					}
-
-					// this.getAzimuthAngle();
-					// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
-					this.getStepEnable();
-
-					this.IntersectedClick.material.color.setHex(
-						tools.PLAYER_COLORS_CLICK[this.figureType]);
-					this.gameVariebles.lightIndicator = false;
-				}
-
-				let idx = 0;
-				let idz = 0;
-				// Если нажата клетка
-				if (intersects[0].object.geometry.type === 'PlaneGeometry') {
-					// Также, не очень изящно, определяем ее целые координаты.
-					for (let i = 0; i < this.planeSize; i++) {
-						if (intersects[0].object.position.x > i * tools.PLANE_X) { idx = i; }
-						if (intersects[0].object.position.z > i * tools.PLANE_Z) { idz = i; }
-					}
-
-					if (this.arrayOfFigure[idx][idz] !== undefined &&
-						this.arrayOfFigure[idx][idz].color === this.figureType + 1) {
-						this.IntersectedClick = this.arrayOfFigure[idx][idz].mesh;
-
-						this.point1.x = idx;
-						this.point1.z = idz;
-
-						this.getStepEnable();
-					}
-					// Проверяем, что она доступна для хода
-					if (this.arrayOfPlane[idx][idz].stepEnable) {
-						// Если да, то вторая точка
-						this.point2.x = idx;
-						this.point2.z = idz;
-
-						const request = {
-							code: '201',
-							step: {
-								src: this.point1,
-								dst: this.point2
-							},
-							stepID: this.gameVariebles.stepID
-						};
-						this.bus.emit(`${gameCodes.gameStep.request}`, request);
-					} else {
-						this.deleteAllStepEnable();
-					}
-
-				}
-			}
+			intersects[0].object.position.y += 5;
+		// 	if (this.IntersectedClick !== intersects[0].object) {
+		// 		if (this.IntersectedClick) {
+		// 			if (this.IntersectedClick.material.color.getHex() ===
+		// 				tools.PLAYER_COLORS_CLICK[this.figureType]) {
+		// 				this.IntersectedClick.material.color.setHex(
+		// 					tools.PLAYER_COLORS[this.figureType]);
+		// 			}
+		// 		}
+		// 		this.IntersectedClick = intersects[0].object;
+		//
+		// 		// Если нажали на фигурку, у которой наш цвет
+		// 		if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
+		// 			(intersects[0].object.material.color.getHex() ===
+		// 				tools.PLAYER_COLORS_MOVE[this.figureType] ||
+		// 				intersects[0].object.material.color.getHex() ===
+		// 				tools.PLAYER_COLORS[this.figureType])
+		// 			&&
+		// 			// Проверяем, можно ли изменять первую точку.
+		// 			// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
+		// 			!Object.isFrozen(this.point1)) {
+		// 			this.deleteAllStepEnable();
+		// 			// Тут определяются номера по х и z фигуры, на которую нажали.
+		// 			for (let i = 0; i < this.planeSize; i++) {
+		// 				if (intersects[0].object.position.x > i * tools.PLANE_X) {
+		// 					this.point1.x = i;
+		// 				}
+		// 				if (intersects[0].object.position.z > i * tools.PLANE_Z) {
+		// 					this.point1.z = i;
+		// 				}
+		// 			}
+		//
+		// 			// this.getAzimuthAngle();
+		// 			// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
+		// 			this.getStepEnable();
+		//
+		// 			this.IntersectedClick.material.color.setHex(
+		// 				tools.PLAYER_COLORS_CLICK[this.figureType]);
+		// 			this.gameVariebles.lightIndicator = false;
+		// 		}
+		//
+		// 		let idx = 0;
+		// 		let idz = 0;
+		// 		// Если нажата клетка
+		// 		if (intersects[0].object.geometry.type === 'PlaneGeometry') {
+		// 			// Также, не очень изящно, определяем ее целые координаты.
+		// 			for (let i = 0; i < this.planeSize; i++) {
+		// 				if (intersects[0].object.position.x > i * tools.PLANE_X) { idx = i; }
+		// 				if (intersects[0].object.position.z > i * tools.PLANE_Z) { idz = i; }
+		// 			}
+		//
+		// 			if (this.arrayOfFigure[idx][idz] !== undefined &&
+		// 				this.arrayOfFigure[idx][idz].color === this.figureType + 1) {
+		// 				this.IntersectedClick = this.arrayOfFigure[idx][idz].mesh;
+		//
+		// 				this.point1.x = idx;
+		// 				this.point1.z = idz;
+		//
+		// 				this.getStepEnable();
+		// 			}
+		// 			// Проверяем, что она доступна для хода
+		// 			if (this.arrayOfPlane[idx][idz].stepEnable) {
+		// 				// Если да, то вторая точка
+		// 				this.point2.x = idx;
+		// 				this.point2.z = idz;
+		//
+		// 				const request = {
+		// 					code: '201',
+		// 					step: {
+		// 						src: this.point1,
+		// 						dst: this.point2
+		// 					},
+		// 					stepID: this.gameVariebles.stepID
+		// 				};
+		// 				this.bus.emit(`${gameCodes.gameStep.request}`, request);
+		// 			} else {
+		// 				this.deleteAllStepEnable();
+		// 			}
+		//
+		// 		}
+		// 	}
 		} else {
-			if (this.IntersectedClick) {
-				if (this.IntersectedClick.material.color.getHex() ===
-					tools.PLAYER_COLORS_CLICK[this.figureType]) {
-					this.IntersectedClick.material.color.setHex(
-						tools.PLAYER_COLORS[this.figureType]);
-				}
-			}
-			this.IntersectedClick = null;
-			this.gameVariebles.lightIndicator = true;
+		// 	if (this.IntersectedClick) {
+		// 		if (this.IntersectedClick.material.color.getHex() ===
+		// 			tools.PLAYER_COLORS_CLICK[this.figureType]) {
+		// 			this.IntersectedClick.material.color.setHex(
+		// 				tools.PLAYER_COLORS[this.figureType]);
+		// 		}
+		// 	}
+		// 	this.IntersectedClick = null;
+		// 	this.gameVariebles.lightIndicator = true;
 		}
 	}
 

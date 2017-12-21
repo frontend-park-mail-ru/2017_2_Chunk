@@ -1,6 +1,6 @@
 .gamePrepareView__fields__header__fields {
     display: inline-block;
-    font-size: calc(10px + 0.3vh) !important;
+    font-size: 14px !important;
     color: white;
     margin: 0.1em;
 }

@@ -1,6 +1,7 @@
 'use strict';
 import Block from '../../../../../blocks/block/block.js';
 import eventBus from '../../../../../modules/eventBus';
+import lvlBot from './__fields/lvlBotHtml';
 
 
 /**
@@ -61,17 +62,37 @@ export default class PlayersListString extends Block {
 			this.typeOfPlayer = 'player';
 		}
 		else {
-			name = data.botname;
-			this.typeOfPlayer = 'bot';
+			this.addBot(data);
+			return;
 		}
 		this.fields = {
 			username: Block.create('div', {}, ['gamePrepareView__fields__playersList__string__fields__username',
 				'gamePrepareView__fields__playersList__string__fields'], name),
-			kickButton: Block.create('button', {}, ['gamePrepareView__fields__playersList__string__fields__kickButton',
+			kickButton: Block.create('button', {}, ['formButton', 'button',
+				'gamePrepareView__fields__playersList__string__fields__kickButton',
 				'gamePrepareView__fields__playersList__string__fields'], `kick`),
 		};
 		for (let field in this.fields) {
 			this.append(this.fields[field]);
 		}
+	}
+
+
+	addBot(data) {
+		name = data.botname;
+		this.typeOfPlayer = 'bot';
+		this.fields = {
+			username: Block.create('div', {}, ['gamePrepareView__fields__playersList__string__fields__username',
+				'gamePrepareView__fields__playersList__string__fields'], name),
+			level: Block.create('div', {}, ['gamePrepareView__fields__playersList__string__fields__botLevel',
+				'gamePrepareView__fields__playersList__string__fields'], `bot level: ${data.botlvl}`),
+			kickButton: Block.create('button', {}, ['formButton', 'button',
+				'gamePrepareView__fields__playersList__string__fields__kickButton',
+				'gamePrepareView__fields__playersList__string__fields'], `kick`),
+		};
+		for (let field in this.fields) {
+			this.append(this.fields[field]);
+		}
+		//
 	}
 }

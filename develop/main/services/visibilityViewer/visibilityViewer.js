@@ -20,13 +20,16 @@ export default new class visibilityViewer {
 
 
 	hiddenCallback() {
+		sessionStorage.setItem('isPageActive', '0');
 		this.hiddenEvent = eventBus.on(`${tabMessage.newGame.name}`, (messageText) => {
 			this.blink(messageText);
-		})
+		});
 	}
 
 
 	visibleCallback() {
+		eventBus.emit('pageActive');
+		sessionStorage.setItem('isPageActive', '1');
 		this.stop();
 		eventBus.remove(`${tabMessage.newGame.name}`, this.hiddenEvent);
 	}
@@ -75,6 +78,6 @@ export default new class visibilityViewer {
 			document.title = this.show[1];
 			this.blinkWork = false;
 		}
-		eventBus.emit('grootStop')
+		// eventBus.emit('grootStop');
 	}
 }

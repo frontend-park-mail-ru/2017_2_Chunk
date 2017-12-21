@@ -1,6 +1,13 @@
 .gamePrepareView__fields {
 }
 
+.gamePrepareView__fields__addBotBlock {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 250px !important;
+}
+
 .gamePrepareView__fields__starGameButton {
     text-align: center;
     box-sizing: border-box;
@@ -10,7 +17,11 @@
 .gamePrepareView__fields__addBotButton {
     text-align: center;
     box-sizing: border-box;
+    width: 100px !important;
+    min-width: 100px;
     font-size: 24px !important;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 @media screen and (min-width: 640px) and (max-width: 1100px) and (orientation: landscape) {

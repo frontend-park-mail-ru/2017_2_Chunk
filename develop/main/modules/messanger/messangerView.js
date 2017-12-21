@@ -13,6 +13,7 @@ export default new class Messenger extends Block {
 		this.app = document.getElementsByClassName('main')[0];
 		this.createChatHistory();
 		this.createImportField();
+		this.onEnterPush();
 		// this.app.appendChild(this.chatContainer.el);
 	}
 
@@ -51,5 +52,14 @@ export default new class Messenger extends Block {
 			eventBus.emit('newMessage', message);
 		}
 		this.inputField.clear();
+	}
+
+
+	onEnterPush() {
+		document.body.addEventListener("keydown",  (event) => {
+			if (event.keyCode == 13) {
+				this.form.getElementsByClassName('messengerView__inputField__form__input__button')[0].click();
+			}
+		}, true);
 	}
 }

@@ -55,16 +55,16 @@
 
     &.player-button-play {
 
-      display: inline;
+      display: none;
 
-      &.paused { display: none; }
+      &.paused { display: inline; }
 
     }
 
     &.player-button-random {
-      transform: scale(1.6);
+      transform: scale(1.8);
       color: #009fff;
-
+      margin-top: 3px;
       &.random-play {
         color: red;
       }
@@ -83,10 +83,10 @@
     }
 
     &.player-button-pause {
+      display: inline;
 
-      display: none;
 
-      &.paused { display: inline; }
+      &.paused { display: none; }
 
     }
 

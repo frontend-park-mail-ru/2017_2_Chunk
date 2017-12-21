@@ -3,15 +3,19 @@ import eventBus from '../../../modules/eventBus';
 import Block from '../../../blocks/block/block';
 import audioLoaderHtml from './musicPlayerHtml';
 import playlist from './playlist';
+import advertisingList from './advertisingList';
 import controlButtons from './__controls/musicPlayer__controlsHtml';
+import AudioSharedWorker from './sharedWorker';
 
 
 export default class MusicPlayer {
 	constructor() {
 		this.start();
+		this.playlist = playlist;
+		this.advertisingList = advertisingList;
 		this.random = false;
 		this.previousSongs = [];
-		this.lastSong = true;
+		this.advertisingCounter = 0;
 	}
 
 
@@ -23,23 +27,17 @@ export default class MusicPlayer {
 	onJSReady() {
 		eventBus.on('JSReady', () => {
 			this.musicStart();
-		})
+		});
 	}
-
-
-
 
 
 	musicStart() {
 		this.audioSettings();
-		this.audioControlsSettings();
 		this.numberOfSongs = playlist.length;
-		// this.nextSongRandom();
-		this.songNumber = 16;
 		this.previousSongs.push(this.songNumber);
 		this.currentSongPosition = this.previousSongs.length - 1;
-		this.setSongByNumber(this.songNumber);
 		this.videoEvents();
+		this.sharedWorkerInit();
 	}
 
 
@@ -49,15 +47,79 @@ export default class MusicPlayer {
 		document.body.appendChild(this.musicNode);
 		this.backgroundaudio = document.getElementById('backgroundaudio');
 		this.audio = new Audio();
-		this.audio.volume = 0.5;
-		this.volume = true;
+		this.audioControlsSettings();
+		this.getLastConfiguration();
 		this.audio.type = 'audio/mpeg';
 		this.audio.autoplay = 'autoplay';
-		this.play = true;
 		this.backgroundaudio.appendChild(this.audio);
 		this.audio.onended = () => {
-			this.onEndedSong()
+			this.onEndedSong();
 		};
+	}
+
+
+	getLastConfiguration() {
+		let configure = false;
+		this.maxAudioVolume = 0.5;
+		this.ifExpired();
+		if (localStorage.getItem('lastConfiguration')) {
+			configure = true;
+			this.volume = +localStorage.getItem('volume');
+			this.play = +localStorage.getItem('audioIsPlay');
+			this.songNumber = +localStorage.getItem('songNumber');
+			this.currentTime = +localStorage.getItem('audioCurrentTime');
+			this.random = +localStorage.getItem('audioRandom');
+		}
+		else {
+			localStorage.setItem('lastConfiguration', 'true');
+			this.volume = 1;
+			localStorage.setItem('volume', '1');
+			this.currentTime = 0.0;
+			localStorage.setItem('audioCurrentTime', `${this.currentTime}`);
+			this.songNumber = 16;
+			this.random = 0;
+			localStorage.setItem('audioRandom', '0');
+			localStorage.setItem('audioIsPlay', '1');
+			this.play = 1;
+		}
+		this.setConfiguration(configure);
+	}
+
+
+	setConfiguration(configure) {
+		this.setCurrentTrackDot();
+		if (configure) {
+			if (this.volume) {
+				this.audio.volume = this.maxAudioVolume;
+			}
+			else {
+				this.audio.volume = 0;
+				if (this.play) {
+					this.audioControlVolume.classList.add('noVolume');
+				}
+			}
+		}
+		else {
+			this.audio.volume = this.maxAudioVolume;
+		}
+		if (this.random) {
+			this.setRandom();
+		}
+	}
+
+
+	setCurrentTrackDot() {
+		this.setSongByNumber(this.songNumber);
+		this.audio.currentTime = this.currentTime;
+		if (this.play)
+			this.setPlay();
+		else
+			this.setPause();
+		setInterval(() => {
+			localStorage.setItem('audioCurrentTime', `${this.audio.currentTime}`);
+			const currentDate = new Date().getTime();
+			localStorage.setItem('lastDateModified', `${currentDate}`);
+		}, 2000);
 	}
 
 
@@ -69,9 +131,10 @@ export default class MusicPlayer {
 
 	muteHandler() {
 		this.audioControlVolume = document.getElementById('audio-control');
+		this.audioControlVolume.classList.add('noVolume');
 		this.audioControlVolume.addEventListener('click', (event) => {
 			event.preventDefault();
-			this.audioControlHandler(event);
+			this.audioControlHandler();
 		}, false);
 		this.appendControlButtons();
 		this.songControlsHandler();
@@ -85,23 +148,39 @@ export default class MusicPlayer {
 	};
 
 
-	audioControlHandler(event) {
+	audioControlHandler() {
 		const audioAnimation = document.getElementById('audio-control');
-		event.preventDefault();
 		if (this.volume) {
 			audioAnimation.classList.add('noVolume');
 			this.audio.volume = 0;
 		} else {
 			if (this.play) {
 				audioAnimation.classList.remove('noVolume');
-				this.audio.volume = 0.6;
+				this.audio.volume = 0.5;
 			}
 		}
-		this.volume = !this.volume;
+		if (this.volume) {
+			this.volume = 0;
+			localStorage.setItem('volume', '0');
+		}
+		else {
+			this.volume = 1;
+			localStorage.setItem('volume', '1');
+		}
+	}
+
+
+	mute() {
+		this.audioControlVolume.classList.add('noVolume');
+		this.audio.volume = 0;
+		this.volume = 0;
 	}
 
 
 	songControlsHandler() {
+		this.pauseButton = this.controlButtons.el.getElementsByClassName('player-button-pause')[0];
+		this.playButton = this.controlButtons.el.getElementsByClassName('player-button-play')[0];
+		this.randomButton = this.controlButtons.el.getElementsByClassName('player-button-random')[0];
 		this.onNextSongClick();
 		this.onPreviousSongClick();
 		this.onPauseClick();
@@ -118,6 +197,7 @@ export default class MusicPlayer {
 			this.setNextSong();
 		})
 	}
+
 
 	setNextSong() {
 		if ((this.previousSongs.length - 1) === this.currentSongPosition) {
@@ -154,11 +234,27 @@ export default class MusicPlayer {
 
 
 	setSongByNumber(songNumber) {
-		console.log('song number: ', songNumber);
-		const songUrl = playlist[songNumber].url;
-		this.audio.pause();
-		this.audio.src = songUrl;
-		this.audio.load();
+		if (this.advertisingCounter && !(this.advertisingCounter % 5)) {
+			const songUrl = this.advertisingList[0].url;
+			this.audio.pause();
+			this.audio.src = songUrl;
+			this.audio.load();
+			this.audio.onended = () => {
+				localStorage.setItem('songNumber', `${this.songNumber}`);
+				const songUrl = this.playlist[songNumber].url;
+				this.audio.pause();
+				this.audio.src = songUrl;
+				this.audio.load();
+			}
+		}
+		else {
+			localStorage.setItem('songNumber', `${this.songNumber}`);
+			const songUrl = this.playlist[songNumber].url;
+			this.audio.pause();
+			this.audio.src = songUrl;
+			this.audio.load();
+		}
+		// this.advertisingCounter++;
 	}
 
 
@@ -181,60 +277,110 @@ export default class MusicPlayer {
 
 
 	onPauseClick() {
-		const pauseButton = this.controlButtons.el.getElementsByClassName('player-button-pause')[0];
-		const playButton = this.controlButtons.el.getElementsByClassName('player-button-play')[0];
-		pauseButton.addEventListener('click', (event) => {
+		this.pauseButton.addEventListener('click', (event) => {
 			event.preventDefault();
-			pauseButton.classList.remove('paused');
-			playButton.classList.remove('paused');
-			const audioAnimation = document.getElementById('audio-control');
-			audioAnimation.classList.add('noVolume');
-			this.audio.pause();
-			this.play = false;
+			this.setPause();
+			this.volume = 0;
 		})
 	};
+
+
+	setPause() {
+		this.pauseButton.classList.add('paused');
+		this.playButton.classList.add('paused');
+		const audioAnimation = document.getElementById('audio-control');
+		audioAnimation.classList.add('noVolume');
+		this.audio.pause();
+		this.play = 0;
+		localStorage.setItem('audioIsPlay', '0');
+	}
 
 
 	onPlayClick() {
-		const pauseButton = this.controlButtons.el.getElementsByClassName('player-button-pause')[0];
-		const playButton = this.controlButtons.el.getElementsByClassName('player-button-play')[0];
-		playButton.addEventListener('click', () => {
-			pauseButton.classList.add('paused');
-			playButton.classList.add('paused');
-			const audioAnimation = document.getElementById('audio-control');
-			audioAnimation .classList.remove('noVolume');
-			this.audio.play();
-			this.play = true;
+		this.playButton.addEventListener('click', (event) => {
+			event.preventDefault();
+			this.setPlay();
+			this.volume = 1;
+			localStorage.setItem('volume', '1');
+			this.audio.volume = 0.5;
 		})
 	};
 
 
+	setPlay() {
+		this.pauseButton.classList.remove('paused');
+		this.playButton.classList.remove('paused');
+		const audioAnimation = document.getElementById('audio-control');
+		audioAnimation.classList.remove('noVolume');
+		this.audio.play();
+		this.play = 1;
+		localStorage.setItem('audioIsPlay', '1');
+	}
+
+
 	onRandomClick() {
-		const randomButton = this.controlButtons.el.getElementsByClassName('player-button-random')[0];
-		randomButton.addEventListener('click', () => {
+		this.randomButton.addEventListener('click', (event) => {
 			event.preventDefault();
 			event.stopImmediatePropagation();
 			if (!this.random) {
-				randomButton.classList.add(('random-play'));
-				this.random = true;
+				this.setRandom();
 			}
 			else {
-				randomButton.classList.remove(('random-play'));
-				this.random = false;
+				this.removeRandom();
 			}
 		})
+	}
+
+
+	setRandom() {
+		this.randomButton.classList.add(('random-play'));
+		this.random = 1;
+		localStorage.setItem('audioRandom', '1');
+	}
+
+
+	removeRandom() {
+		this.randomButton.classList.remove(('random-play'));
+		this.random = 0;
+		localStorage.setItem('audioRandom', '0');
 	}
 
 
 	videoEvents() {
 		eventBus.on('videoPlay', () => {
 			if (this.audio.volume > 0)
-				this.audio.volume = 0.1;
+				this.audio.volume = 0.05;
 		});
 		eventBus.on('videoPause', () => {
 			if (this.audio.volume > 0)
-				this.audio.volume = 0.3;
+				this.audio.volume = 0.5;
 		})
+	}
+
+
+	sharedWorkerInit() {
+		this.sharedWorker = new AudioSharedWorker();
+		eventBus.on('setPlay', () => {
+			this.getLastConfiguration();
+		});
+		eventBus.on('Mute', () => {
+			this.mute();
+		})
+	}
+
+
+	ifExpired() {
+		const date = new Date().getTime();
+		if (localStorage.getItem('lastDateModified')) {
+			const lastDateModified = +localStorage.getItem('lastDateModified');
+			const diff = date - lastDateModified;
+			// console.log('last date: ', lastDateModified);
+			// console.log('current date: ', date);
+			// console.log('Difference: ', diff);
+			if (diff / (1000) > 6) {
+				localStorage.removeItem('lastConfiguration');
+			}
+		}
 	}
 };
 

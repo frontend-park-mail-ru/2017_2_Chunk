@@ -3,7 +3,7 @@
 import View from '../view/view';
 import Block from '../../blocks/block/block.js';
 import eventBus from '../../modules/eventBus';
-
+import rulesViewTextTemplate from  './rulesView__text/rulesViewText.pug';
 
 
 /**
@@ -16,7 +16,9 @@ export default class RulesView extends View {
 	 * @constructor
 	 */
 	constructor() {
-		const rules = Block.create('div', {}, ['rulesText', 'main_font-theme-black-orange'], 'text Text text');
+		const rulesViewText = rulesViewTextTemplate();
+		const rules = Block.create('div', {}, ['rulesText', 'main_font-theme-black-orange']);
+		rules.el.innerHTML = `${rulesViewText}`;
 
 		super({rules});
 

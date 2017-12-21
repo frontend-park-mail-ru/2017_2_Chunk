@@ -40,7 +40,6 @@ export default class webSocket {
 	keepAliveEvent() {
 		const emitKeepAlive = () => {
 			this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.keepAlive);
-			console.log('keepAlive');
 		};
 		this.interval = setInterval(emitKeepAlive, 30000);
 	}
