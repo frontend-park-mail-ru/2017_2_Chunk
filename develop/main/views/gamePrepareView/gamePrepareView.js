@@ -190,7 +190,7 @@ export default class gamePrepareView extends View {
 			console.log(this);
 			const request = {
 				code: `${gamePrepareCodes.addBot.code}`,
-				lvlbot: `${this.gamePrepareFields.lvlBotValue}`,
+				botlvl: `${this.gamePrepareFields.lvlBotValue}`,
 			};
 			if (this.gamePrepareFields.lvlBotValue)
 				this.bus.emit(`${gamePrepareCodes.requestEventName}`, (request));
