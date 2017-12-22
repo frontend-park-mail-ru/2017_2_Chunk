@@ -111,6 +111,7 @@ export default class gamePrepareView extends View {
 	updateGameData() {
 		this.addPlayer();
 		this.removePLayer();
+		this.kickPLayer();
 		this.addBot();
 		this.removeBot();
 	};
@@ -124,6 +125,17 @@ export default class gamePrepareView extends View {
 		});
 	}
 
+
+	kickPLayer() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.kickPlayer.code}`, (response) => {
+			if (this.userID === response.userID)
+				this.exitToLobby();
+			else {
+				this.fields.playersList.removePlayer(response.userID);
+				this.fields.header.removePlayer();
+			}
+		});
+	}
 
 	removePLayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removePlayer.code}`, (response) => {
