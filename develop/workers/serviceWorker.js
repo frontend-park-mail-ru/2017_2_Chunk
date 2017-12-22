@@ -34,7 +34,7 @@ self.addEventListener('install', (event) => {
 					// '/music/serviceSounds/ihaveaplan.mp3',
 					// '/music/serviceSounds/red_button.mp3',
 					'/video/dont_push_this_button.mp4',
-					'/images/galaxy.jpg',
+					'/images/opt-galaxy.jpg',
 					'/images/buttons/buttonTape0.jpg',
 					'/images/buttons/buttonTape1.jpg',
 					'/images/buttons/buttonTape2.jpg',

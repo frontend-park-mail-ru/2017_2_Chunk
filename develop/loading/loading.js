@@ -27,7 +27,7 @@ new class StartLoader {
 		img.onload = () => {
 			this.loadMainScript();
 		};
-		document.body.style.backgroundImage = 'url(./images/galaxy.jpg)';
+		document.body.style.backgroundImage = 'url(./images/opt_galaxy.jpg)';
 		document.body.style.setProperty('background-size', 'cover');
 		document.body.style.setProperty('background-position', 'center');
 		document.body.style.setProperty('display', 'block');

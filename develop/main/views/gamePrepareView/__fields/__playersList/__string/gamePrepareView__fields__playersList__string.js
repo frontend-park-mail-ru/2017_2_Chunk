@@ -13,13 +13,13 @@ export default class PlayersListString extends Block {
 		const block = Block.create('div', {}, ['gamePrepareView__fields__playersList__string']);
 		super(block.el);
 		if (type === 'player')
-			this.addStingWithPlayer(data);
+			this.addStingWithPlayerMaster(data, false);
 		else if (type === 'header')
 			this.createHeader();
 		else if (type === 'playerFromMaster')
-			this.addStingWithPlayerMaster(data);
+			this.addStingWithPlayerMaster(data, true);
 		else if (type === 'master')
-			this.addStingWithPlayer(data);
+			this.addStingWithPlayerMaster(data, false, true);
 	}
 
 
@@ -48,21 +48,25 @@ export default class PlayersListString extends Block {
 		this.fields = {
 			username: Block.create('div', {}, ['gamePrepareView__fields__playersList__string__fields__username',
 				'gamePrepareView__fields__playersList__string__fields'], name),
+			kickButton: Block.create('button', {}, ['formButton', 'button',
+				'gamePrepareView__fields__playersList__string__fields__kickButton',
+				'gamePrepareView__fields__playersList__string__fields'], `kick`),
 		};
+		this.fields.kickButton.hide();
 		for (let field in this.fields) {
 			this.append(this.fields[field]);
 		}
 	}
 
 
-	addStingWithPlayerMaster(data) {
+	addStingWithPlayerMaster(data, showKickButton) {
 		let name = '';
 		if (data.userID) {
 			name = data.username;
 			this.typeOfPlayer = 'player';
 		}
 		else {
-			this.addBot(data);
+			this.addBot(data, showKickButton);
 			return;
 		}
 		this.fields = {
@@ -72,13 +76,22 @@ export default class PlayersListString extends Block {
 				'gamePrepareView__fields__playersList__string__fields__kickButton',
 				'gamePrepareView__fields__playersList__string__fields'], `kick`),
 		};
+		this.userID = data.userID;
+		if (!showKickButton)
+			this.fields.kickButton.el.style.setProperty('display', 'none');
+
+		eventBus.on('showMasterFields', (masterID) => {
+			debugger;
+			if (this.userID != masterID)
+				this.fields.kickButton.el.style.setProperty('display', 'inline');
+		});
 		for (let field in this.fields) {
 			this.append(this.fields[field]);
 		}
 	}
 
 
-	addBot(data) {
+	addBot(data, showKickButton) {
 		name = data.botname;
 		this.typeOfPlayer = 'bot';
 		this.fields = {
@@ -90,6 +103,11 @@ export default class PlayersListString extends Block {
 				'gamePrepareView__fields__playersList__string__fields__kickButton',
 				'gamePrepareView__fields__playersList__string__fields'], `kick`),
 		};
+		if (!showKickButton)
+			this.fields.kickButton.el.style.setProperty('display', 'none');
+		eventBus.on('showMasterFields', () => {
+			this.fields.kickButton.el.style.setProperty('display', 'inline');
+		});
 		for (let field in this.fields) {
 			this.append(this.fields[field]);
 		}

@@ -11,6 +11,8 @@
     cursor: pointer;
 
     padding: 0.1em 0.5em;
+    margin-bottom: 0;
+
 
     border-radius: 0.4em;
     box-shadow: none;

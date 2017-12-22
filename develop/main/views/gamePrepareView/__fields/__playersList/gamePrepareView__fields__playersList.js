@@ -25,6 +25,9 @@ export default class PlayersList extends Block {
 		});
 		eventBus.on(`${prepareGameCodes.responseEventName}${prepareGameCodes.connectGame.code}`, () => {
 			this.master = false;
+		});
+		eventBus.on(`showMasterFields`, () => {
+			this.master = true;
 		})
 	}
 
@@ -47,9 +50,7 @@ export default class PlayersList extends Block {
 		const string = new PLayerListString(type, data);
 		this.playersStrings = this.playersStrings || {};
 		this.playersStrings[+data.userID] = string;
-		if (this.master) {
-			this.onPlayerKickButtonClick(data.userID);
-		}
+		this.onPlayerKickButtonClick(+data.userID);
 		this.append(string);
 	}
 
@@ -63,9 +64,7 @@ export default class PlayersList extends Block {
 		const string = new PLayerListString(type, data);
 		this.botsStrings = this.botsStrings || {};
 		this.botsStrings[+data.botID] = string;
-		if (this.master) {
-			this.onBotKickButtonClick(data.botID);
-		}
+		this.onBotKickButtonClick(data.botID);
 		this.append(string);
 	}
 

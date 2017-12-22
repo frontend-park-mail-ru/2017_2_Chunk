@@ -15,6 +15,10 @@ const gameCodes = {
 		code: 204,
 		request: 'request'
 	},
+	playerOffline: {
+		code: 209,
+		request: 'request'
+	},
 	responseEventName: 'response',
 	requestEventName: 'request',
 };

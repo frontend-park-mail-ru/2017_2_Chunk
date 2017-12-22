@@ -1,6 +1,6 @@
 'use strict';
 import Block from '../../../../../blocks/block/block.js';
-
+import eventBus from '../../../../../modules/eventBus';
 
 /**
  * Поля данных игры
@@ -69,6 +69,13 @@ export default class headerFields {
 	removeBot() {
 		this.gameInfo.botsNumber--;
 		this.fields.botsNumber.el.innerHTML = `Bots: ${this.gameInfo.botsNumber}`;
+	}
+
+
+	changeCreator() {
+		eventBus.on('response136', (data) => {
+			this.fields.creator.el.innerHTML = `Creator: ${data.mastername}`;
+		});
 	}
 
 

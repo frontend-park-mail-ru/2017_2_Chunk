@@ -26,6 +26,9 @@ const gamePrepareCodes = {
 	startGame: {
 		code: 135,
 	},
+	changeMaster: {
+		code: 136,
+	},
 	exit: {
 		code: 132,
 	},

@@ -201,7 +201,7 @@ eventBus.on('openGame', () => {
 	Views.forEach((view) => {
 		view.hide();
 	});
-	backButtonView.show();
+	backButtonView.show('game');
 	gameContainer.show();
 });
 
@@ -220,7 +220,7 @@ eventBus.on('openWaitingHall', function () {
 		view.hide();
 	});
 	gameNameView.show();
-	backButtonView.show();
+	backButtonView.show('waiting-hall');
 	gamePrepareView.show();
 	validationInfoView.show();
 });
