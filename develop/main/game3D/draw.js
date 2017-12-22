@@ -3,13 +3,15 @@
 import OrbitControl from 'three-orbitcontrols';
 import * as Three from 'three';
 import PlaneCell from './models/plane.js';
-import Player from './models/player.js';
 import Cylinder from './models/cylinfder';
 import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
+import gameCodes from '../messageCodes/gameCodes';
 import GrootFactoryBlue from "./models/BabyGrootBlue";
 import GrootFactoryMagenta from "./models/BabyGrootMagenta";
+import GrootFactoryRed from "./models/BabyGrootRed";
+import GrootFactoryYellow from "./models/BabyGrootYellow";
 import PlatformFactory from "./models/Platform";
 
 export default class Draw {
@@ -25,13 +27,13 @@ export default class Draw {
 			1000
 		);
 
-		this.camera.position.set(-25, 35, -16);
+		this.camera.position.set(-100, 78, -73);
 		this.camera.lookAt(this.scene.position);
 
 		this.point1 = new Point();
 		this.point2 = new Point();
 		this.vector = new Point();
-		this.lightPoint = new Point();
+		this.firstChoiceObject = new Point();
 
 		this.gameVariebles = tools.GAME_VARIABLES;
 
@@ -51,7 +53,7 @@ export default class Draw {
 		this.controls.dampingFactor = 0.2;
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
-		this.controls.rotateSpeed = 0.5;
+		this.controls.rotateSpeed = 0.3;
 
 		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('mousemove', this.onDocumentMouseMove.bind(this), false);
@@ -59,15 +61,25 @@ export default class Draw {
 
 		this.mouse = new Three.Vector2();
 		this.raycasterClick = new Three.Raycaster();
-		this.raycasterMove = new Three.Raycaster();
 
 		this.bus.on('deleteTree', () => {
 			this.scene.remove(this.spotLight);
 			this.scene.remove(this.cellContainer);
 			this.scene.remove(this.playerContainer);
+			this.scene.remove(this.cylinderContainer);
+			this.scene.remove(this.cubeContainer);
 			this.gameVariebles.stepID = 0;
 			cancelAnimationFrame(this.gameVariebles.animation);
 		});
+
+		this.plane1X = 0;
+		this.plane1Z = 0;
+		this.plane2X = 0;
+		this.plane2Z = 0;
+		this.cube1X = 0;
+		this.cube1Z = 0;
+		this.cube2X = 0;
+		this.cube2Z = 0;
 
 		this.getGameInfo();
 		this.gameEnd();
@@ -79,18 +91,19 @@ export default class Draw {
 	startGame(response) {
 		this.startArray = response.game.field.field;
 		this.planeSize = response.game.field.maxX;
-		const size = (this.planeSize / 2) * tools.PLANE_X;
-		this.controls.target.set(size, -5, size);
+		const size = (this.planeSize / 2) * tools.PLANE_XX;
+		this.controls.target.set(size/1.1, 10, size/1.1);
 		this.arrayOfPlane = [];
 		this.arrayOfFigure = [];
 		this.arrayOfCylinder = [];
+		this.arrayOfCubes = [];
 		this.addMeshes();
 		this.gameVariebles.moveIndicator = false;
 		this.gameVariebles.lightIndicator = true;
 		this.gameVariebles.cameraRotateIndicator = true;
 		this.controls.autoRotateSpeed = 4;
-		this.controls.minDistance = 100.0;
-		this.controls.maxDistance = 400.0;
+		this.controls.minDistance = 500.0;
+		this.controls.maxDistance = 500.0;
 
 		this.bus.emit('beginPlaying');
 		// this.bus.emit('changePlayerDiv', 'HELLO');
@@ -152,6 +165,7 @@ export default class Draw {
 		this.playerContainer = new Three.Object3D();
 		this.cellContainer = new Three.Object3D();
 		this.cylinderContainer = new Three.Object3D();
+		this.cubeContainer = new Three.Object3D();
 
 		this.addPlaneByStart();
 		this.addAllPlayers();
@@ -159,18 +173,20 @@ export default class Draw {
 		this.scene.add(this.cellContainer);
 		this.scene.add(this.playerContainer);
 		this.scene.add(this.cylinderContainer);
+		this.scene.add(this.cubeContainer);
 	}
 
 	addPlaneByStart() {
 		for (let i = 0; i < this.planeSize; i++) {
 			this.arrayOfPlane[i] = [];
+			this.arrayOfCubes[i] = [];
 			for (let j = 0; j < this.planeSize; j++) {
 				this.arrayOfPlane[i][j] = new PlaneCell(i, j);
 				this.arrayOfPlane[i][j].figure = this.startArray[i][j];
-				let cube = PlatformFactory.getNew();
-				cube.position.x = i * 22;
-				cube.position.z = j * 22;
-				this.scene.add(cube);
+				this.arrayOfCubes[i][j] = PlatformFactory.getNew();
+				this.arrayOfCubes[i][j].position.x = i * 22 + 14;
+				this.arrayOfCubes[i][j].position.z = j * 22 + 18;
+				this.cubeContainer.add(this.arrayOfCubes[i][j]);
 				this.cellContainer.add(this.arrayOfPlane[i][j].mesh);
 			}
 		}
@@ -181,15 +197,21 @@ export default class Draw {
 		switch (figure) {
 			case 1:
 				this.arrayOfFigure[i][j] = GrootFactoryBlue.getNew();
-				this.arrayOfCylinder[i][j] = new Cylinder(i, j);
 				break;
 			case 2:
 				this.arrayOfFigure[i][j] = GrootFactoryMagenta.getNew();
-				this.arrayOfCylinder[i][j] = new Cylinder(i, j);
+				break;
+			case 3:
+				this.arrayOfFigure[i][j] = GrootFactoryRed.getNew();
+				break;
+			case 4:
+				this.arrayOfFigure[i][j] = GrootFactoryYellow.getNew();
+				break;
 		}
-		this.arrayOfFigure[i][j].position.x = i * 22 + 1;
-		this.arrayOfFigure[i][j].position.z = j * 22 - 14;
+		this.arrayOfFigure[i][j].position.x = i * 22 + 15;
+		this.arrayOfFigure[i][j].position.z = j * 22 + 4;
 		this.playerContainer.add(this.arrayOfFigure[i][j]);
+		this.arrayOfCylinder[i][j] = new Cylinder(i, j);
 		this.cylinderContainer.add(this.arrayOfCylinder[i][j].mesh);
 	}
 
@@ -208,87 +230,44 @@ export default class Draw {
 	animate() {
 		this.controls.update();
 
-		// this.startRotate();
-		// this.stopAzimuthRotate();
-
-		console.log("x: " + this.camera.position.x + " y: " + this.camera.position.y + " z: " + this.camera.position.z);
+		this.startRotate();
+		this.stopAzimuthRotate();
 
 		this.queueStep();
 
-		// То самое движения, для которого нужен включенный индикатор.
 		this.moving();
 		this.scaling();
-		// this.lightFigure();
+		this.moveUp();
+
+		this.moveDown();
 		// Зацикливание
 		this.gameVariebles.animation = requestAnimationFrame(this.animate.bind(this));
 		this.render();
 	}
 
 	stopAzimuthRotate() {
-		// if (this.controls.getAzimuthalAngle() < this.gameVariebles.angle + 0.1 &&
-		// 	this.controls.getAzimuthalAngle() > this.gameVariebles.angle - 0.1 &&
-		// 	this.gameVariebles.angleIndicator) {
-		// 	this.controls.autoRotate = false;
-		// 	this.gameVariebles.angleIndicator = false;
-		// }
+		if (this.controls.getAzimuthalAngle() < this.gameVariebles.angle + 0.1 &&
+			this.controls.getAzimuthalAngle() > this.gameVariebles.angle - 0.1 &&
+			this.gameVariebles.angleIndicator) {
+			this.controls.autoRotate = false;
+			this.gameVariebles.angleIndicator = false;
+		}
 	}
 
 	startRotate() {
-		// if (this.gameVariebles.cameraRotateIndicator) {
-		// 	if (this.controls.minDistance > 60) {
-		// 		this.controls.autoRotate = true;
-		// 		this.controls.minDistance -= 2;
-		// 		this.controls.maxDistance -= 2;
-		// 	} else {
-		// 		this.controls.autoRotate = false;
-		// 		this.controls.maxDistance = 200;
-		// 		this.controls.minDistance = 40;
-		// 		this.gameVariebles.cameraRotateIndicator = false;
-		// 	}
-		// }
+		if (this.gameVariebles.cameraRotateIndicator) {
+			if (this.controls.minDistance > 200) {
+				this.controls.autoRotate = true;
+				this.controls.minDistance -= 2;
+				this.controls.maxDistance -= 2;
+			} else {
+				this.controls.autoRotate = false;
+				this.controls.maxDistance = 500;
+				this.controls.minDistance = 100;
+				this.gameVariebles.cameraRotateIndicator = false;
+			}
+		}
 	}
-
-	// lightFigure() {
-	// 	if (this.gameVariebles.lightIndicator) {
-	// 		this.raycasterMove.setFromCamera(this.mouse, this.camera);
-	// 		const intersects = this.raycasterMove.intersectObjects(
-	// 			this.playerContainer.children.concat(this.cellContainer.children)
-	// 		);
-	// 		if (intersects.length > 0) {
-	// 			if (this.IntersectedMove !== intersects[0].object) {
-	// 					this.IntersectedMove.material.color.setHex(this.IntersectedMove.currentHex);
-	// 				this.IntersectedMove = intersects[0].object;
-	// 				if (this.IntersectedMove.material.color.getHex() ===
-	// 					tools.COLORS.PLANE_COLOR) {
-	// 					this.IntersectedMove.currentHex = tools.COLORS.PLANE_COLOR;
-	// 					this.IntersectedMove.material.color.setHex(
-	// 						tools.PLAYER_COLORS_MOVE[this.figureType]);
-	// 				} else if (this.IntersectedMove.material.color.getHex() ===
-	// 					tools.PLAYER_COLORS[this.figureType]) {
-	// 					this.IntersectedMove.currentHex = tools.PLAYER_COLORS[this.figureType];
-	//
-	// 					// for (let i = 0; i < this.planeSize; i++) {
-	// 					// 	if (intersects[0].object.position.x > i * tools.PLANE_X) {
-	// 					// 		this.lightPoint.x = i;
-	// 					// 	}
-	// 					// 	if (intersects[0].object.position.z > i * tools.PLANE_Z) {
-	// 					// 		this.lightPoint.z = i;
-	// 					// 	}
-	// 					// }
-	// 					this.IntersectedMove.material.color.setHex(
-	// 						tools.PLAYER_COLORS_MOVE[this.figureType]);
-	// 				} else {
-	// 					this.IntersectedMove.currentHex =
-	// 						this.IntersectedMove.material.color.getHex();
-	// 				}
-	// 			}
-	// 		} else {
-	//
-	// 				this.IntersectedMove.material.color.setHex(this.IntersectedMove.currentHex);
-	// 			this.IntersectedMove = null;
-	// 		}
-	// 	}
-	// }
 
 	queueStep() {
 		if (typeof this.gameVariebles.queue !== 'undefined' &&
@@ -313,135 +292,105 @@ export default class Draw {
 	playerChoice() {
 		// Выбор объектов
 		this.raycasterClick.setFromCamera(this.mouse, this.camera);
-
-		console.log("PLAYER");
-		console.log(this.playerContainer);
-		console.log("ARRAY PLAYER 0 0");
-		console.log(this.arrayOfFigure[0][0]);
-		console.log("CELL");
-		console.log(this.cellContainer);
-		console.log("ARRAY CELL 0 0");
-		console.log(this.arrayOfPlane[0][0]);
-		console.log(this.arrayOfPlane[0][0].parent);
-
 		const intersects = this.raycasterClick.intersectObjects(
-			this.playerContainer.children.concat(this.cellContainer.children), true
+			this.cylinderContainer.children.concat(this.cellContainer.children)
 		);
 		console.log("INTERSECTS");
 		console.log(intersects);
-		if (intersects.length > 0) {
+		if (intersects.length && !this.gameVariebles.moveIndicator && !this.gameVariebles.scaleIndicator) {
+			if (this.IntersectedClick !== intersects[0].object) {
+				if (this.IntersectedClick) {
+					this.gameVariebles.moveDownIndicator = true;
+					this.firstChoiceObject = JSON.parse(JSON.stringify(this.point1));
+				}
 
-			intersects[0].object.position.y += 5;
-		// 	if (this.IntersectedClick !== intersects[0].object) {
-		// 		if (this.IntersectedClick) {
-		// 			if (this.IntersectedClick.material.color.getHex() ===
-		// 				tools.PLAYER_COLORS_CLICK[this.figureType]) {
-		// 				this.IntersectedClick.material.color.setHex(
-		// 					tools.PLAYER_COLORS[this.figureType]);
-		// 			}
-		// 		}
-		// 		this.IntersectedClick = intersects[0].object;
-		//
-		// 		// Если нажали на фигурку, у которой наш цвет
-		// 		if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-		// 			(intersects[0].object.material.color.getHex() ===
-		// 				tools.PLAYER_COLORS_MOVE[this.figureType] ||
-		// 				intersects[0].object.material.color.getHex() ===
-		// 				tools.PLAYER_COLORS[this.figureType])
-		// 			&&
-		// 			// Проверяем, можно ли изменять первую точку.
-		// 			// Пока идет движение, я замораживаю первую точу хода, чтобы она в этом месте не менялась, и чтобы ее можно было использовать в функции move.
-		// 			!Object.isFrozen(this.point1)) {
-		// 			this.deleteAllStepEnable();
-		// 			// Тут определяются номера по х и z фигуры, на которую нажали.
-		// 			for (let i = 0; i < this.planeSize; i++) {
-		// 				if (intersects[0].object.position.x > i * tools.PLANE_X) {
-		// 					this.point1.x = i;
-		// 				}
-		// 				if (intersects[0].object.position.z > i * tools.PLANE_Z) {
-		// 					this.point1.z = i;
-		// 				}
-		// 			}
-		//
-		// 			// this.getAzimuthAngle();
-		// 			// Передаем координаты фигуры в эту функцию, чтобы определить возможные для хода клетки.
-		// 			this.getStepEnable();
-		//
-		// 			this.IntersectedClick.material.color.setHex(
-		// 				tools.PLAYER_COLORS_CLICK[this.figureType]);
-		// 			this.gameVariebles.lightIndicator = false;
-		// 		}
-		//
-		// 		let idx = 0;
-		// 		let idz = 0;
-		// 		// Если нажата клетка
-		// 		if (intersects[0].object.geometry.type === 'PlaneGeometry') {
-		// 			// Также, не очень изящно, определяем ее целые координаты.
-		// 			for (let i = 0; i < this.planeSize; i++) {
-		// 				if (intersects[0].object.position.x > i * tools.PLANE_X) { idx = i; }
-		// 				if (intersects[0].object.position.z > i * tools.PLANE_Z) { idz = i; }
-		// 			}
-		//
-		// 			if (this.arrayOfFigure[idx][idz] !== undefined &&
-		// 				this.arrayOfFigure[idx][idz].color === this.figureType + 1) {
-		// 				this.IntersectedClick = this.arrayOfFigure[idx][idz].mesh;
-		//
-		// 				this.point1.x = idx;
-		// 				this.point1.z = idz;
-		//
-		// 				this.getStepEnable();
-		// 			}
-		// 			// Проверяем, что она доступна для хода
-		// 			if (this.arrayOfPlane[idx][idz].stepEnable) {
-		// 				// Если да, то вторая точка
-		// 				this.point2.x = idx;
-		// 				this.point2.z = idz;
-		//
-		// 				const request = {
-		// 					code: '201',
-		// 					step: {
-		// 						src: this.point1,
-		// 						dst: this.point2
-		// 					},
-		// 					stepID: this.gameVariebles.stepID
-		// 				};
-		// 				this.bus.emit(`${gameCodes.gameStep.request}`, request);
-		// 			} else {
-		// 				this.deleteAllStepEnable();
-		// 			}
-		//
-		// 		}
-		// 	}
+				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
+					!Object.isFrozen(this.point1)) {
+					this.deleteAllStepEnable();
+					let id1x = 0;
+					let id1z = 0;
+					for (let i = 0; i < this.planeSize; i++) {
+						if (intersects[0].object.position.x > i * tools.PLANE_XX) { id1x = i; }
+						if (intersects[0].object.position.z > i * tools.PLANE_XX) { id1z = i; }
+					}
+
+					if (this.arrayOfPlane[id1x][id1z].figure === this.figureType + 1) {
+						this.IntersectedClick = intersects[0].object;
+
+						this.point1.x = id1x;
+						this.point1.z = id1z;
+
+						this.getAzimuthAngle();
+						this.getStepEnable();
+						this.gameVariebles.moveUpIndicator = true;
+					}
+				}
+
+				let id2x = 0;
+				let id2z = 0;
+
+				if (intersects[0].object.geometry.type === 'PlaneGeometry') {
+					for (let i = 0; i < this.planeSize; i++) {
+						if (intersects[0].object.position.x > i * tools.PLANE_XX) { id2x = i; }
+						if (intersects[0].object.position.z > i * tools.PLANE_XX) { id2z = i; }
+					}
+
+					if (this.arrayOfFigure[id2x][id2z] !== undefined &&
+						this.arrayOfPlane[id2x][id2z].figure === this.figureType + 1) {
+						this.IntersectedClick = this.arrayOfCylinder[id2x][id2z];
+
+						this.point1.x = id2x;
+						this.point1.z = id2z;
+
+						this.getAzimuthAngle();
+						this.getStepEnable();
+						this.gameVariebles.moveUpIndicator = true;
+					}
+					if (this.arrayOfPlane[id2x][id2z].stepEnable) {
+						this.point2.x = id2x;
+						this.point2.z = id2z;
+
+						const request = {
+							code: '201',
+							step: {
+								src: this.point1,
+								dst: this.point2
+							},
+							stepID: this.gameVariebles.stepID
+						};
+						this.bus.emit(`${gameCodes.gameStep.request}`, request);
+					} else {
+						this.deleteAllStepEnable();
+					}
+
+				}
+			}
 		} else {
-		// 	if (this.IntersectedClick) {
-		// 		if (this.IntersectedClick.material.color.getHex() ===
-		// 			tools.PLAYER_COLORS_CLICK[this.figureType]) {
-		// 			this.IntersectedClick.material.color.setHex(
-		// 				tools.PLAYER_COLORS[this.figureType]);
-		// 		}
-		// 	}
-		// 	this.IntersectedClick = null;
-		// 	this.gameVariebles.lightIndicator = true;
+			if (this.IntersectedClick && !Object.isFrozen(this.point1)) {
+				this.gameVariebles.moveDownIndicator = true;
+				this.firstChoiceObject = JSON.parse(JSON.stringify(this.point1));
+			}
+			this.IntersectedClick = null;
 		}
 	}
 
 	getAzimuthAngle() {
-		// const request = {
-		// 	code: 'rotateAngle',
-		// 	x: this.point1.x,
-		// 	z: this.point1.z,
-		// 	currentAngle: this.controls.getAzimuthalAngle()
-		// };
-		// this.bus.emit('rotate', request);
+		const request = {
+			code: 'rotateAngle',
+			x: this.point1.x,
+			z: this.point1.z,
+			currentAngle: this.controls.getAzimuthalAngle()
+		};
+		this.bus.emit('rotate', request);
 	}
 
 	azimuthAngle() {
-		// this.bus.on('azimuthAngle', (response) => {
-		// 	this.controls.autoRotateSpeed = response.speed;
-		// 	this.gameVariebles.angle = response.angle;
-		// 	this.controls.autoRotate = true;
-		// 	this.gameVariebles.angleIndicator = true;
-		// });
+		this.bus.on('azimuthAngle', (response) => {
+			this.controls.autoRotateSpeed = response.speed;
+			this.gameVariebles.angle = response.angle;
+			this.controls.autoRotate = true;
+			this.gameVariebles.angleIndicator = true;
+		});
 	}
 
 	getStepEnable() {
@@ -462,87 +411,182 @@ export default class Draw {
 		this.bus.emit('makeStepEnable', request);
 	}
 
+	moveUp() {
+		if (this.gameVariebles.moveUpIndicator) {
+			if (!Object.isFrozen(this.point1) && this.point1.x > -1) {
+				if (this.arrayOfFigure[this.point1.x][this.point1.z].position.y < 25) {
+					this.arrayOfFigure[this.point1.x][this.point1.z].position.y += tools.SPEED;
+					this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y += tools.SPEED;
+					this.arrayOfCubes[this.point1.x][this.point1.z].position.y += tools.SPEED;
+					this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.y += tools.SPEED;
+				} else {
+					this.gameVariebles.moveUpIndicator = false;
+				}
+			}
+		}
+	}
+
+	moveDown() {
+		if (this.gameVariebles.moveDownIndicator) {
+			if (this.firstChoiceObject.x > -1) {
+				if (this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y > 13.5) {
+					this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED;
+					this.arrayOfCylinder[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED;
+					this.arrayOfCubes[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED;
+					this.arrayOfPlane[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED;
+				} else {
+					this.gameVariebles.moveDownIndicator = false;
+				}
+			}
+		}
+	}
+
 	scaling() {
 		if (this.gameVariebles.scaleIndicator) {
-			if (this.gameVariebles.grow < 1) {
-				this.arrayOfFigure[this.point2.x][this.point2.z].mesh.scale.set(
-					1, this.gameVariebles.grow, 1);
-				this.gameVariebles.grow += 0.04;
+			if (this.gameVariebles.grow < 2) {
+				this.arrayOfFigure[this.point2.x][this.point2.z].scale.set(
+					this.gameVariebles.grow, this.gameVariebles.grow, this.gameVariebles.grow);
+				this.gameVariebles.grow += 0.08;
 			} else {
 				this.gameVariebles.grow = 0.01;
 				this.gameVariebles.scaleIndicator = false;
 				delete this.point1;
 				this.point1 = new Point();
-				this.gameVariebles.lightIndicator = true;
+				this.IntersectedClick = null;
 			}
 		}
 	}
 
-	// Функция движения.
 	moving() {
-		// Если индикатор вкдючен
 		if (this.gameVariebles.moveIndicator) {
-			// Замораживаю point1, чтобы она на протяжении всего движения не менялась.
 			Object.freeze(this.point1);
 
 			if (!this.gameVariebles.end) {
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x +=
+				this.gameVariebles.diff += this.gameVariebles.distance * tools.SPEED_Y;
+				let y = 4 * 50 * (this.gameVariebles.diff/this.gameVariebles.distance -
+					Math.pow(this.gameVariebles.diff/this.gameVariebles.distance, 2));
+
+				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.x +=
 					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z +=
+				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.z +=
 					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
-				this.gameVariebles.diff += this.gameVariebles.distance * tools.SPEED;
-				if (this.gameVariebles.diff <= this.gameVariebles.distance * 2) {
-					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y += 0.8;
-				} else if (
-					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y >
-					this.arrayOfFigure[this.point1.x][this.point1.z].y) {
-					this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y -= 0.8;
-				}
-				if (this.gameVariebles.diff >= this.gameVariebles.distance * 4) {
+
+				this.arrayOfFigure[this.point1.x][this.point1.z].position.x +=
+					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
+				this.arrayOfFigure[this.point1.x][this.point1.z].position.z +=
+					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
+
+				this.arrayOfCubes[this.point1.x][this.point1.z].position.x +=
+					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
+				this.arrayOfCubes[this.point1.x][this.point1.z].position.z +=
+					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
+
+				this.arrayOfCubes[this.point2.x][this.point2.z].position.x -=
+					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
+				this.arrayOfCubes[this.point2.x][this.point2.z].position.z -=
+					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
+
+				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.x +=
+					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
+				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.z +=
+					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
+
+				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.x -=
+					tools.SPEED * (this.vector.x + ((0.5 * this.vector.x) / 2));
+				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.z -=
+					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
+
+				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y = y + 13.5;
+				this.arrayOfFigure[this.point1.x][this.point1.z].position.y = y + 13.5;
+				this.arrayOfCubes[this.point1.x][this.point1.z].position.y = y;
+				this.arrayOfCubes[this.point2.x][this.point2.z].position.y = -y;
+				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.y = y + 13.5;
+				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.y = -y;
+
+				if (this.gameVariebles.diff >= this.gameVariebles.distance) {
 					this.gameVariebles.end = true;
 					this.gameVariebles.diff = 0;
 				}
 			} else {
-				// Выключаем индикатор, тоесть останавливаем движение.
+				console.log("END");
 				this.gameVariebles.moveIndicator = false;
 				this.gameVariebles.end = false;
-				// В следующих двух строчках приравниваем длинные кривые координаты фигуры к ровным координатам клеток,
-				// чтобы со временем не получилось большой погрешности.
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.x =
-					this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.x;
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.y =
-					this.arrayOfFigure[this.point1.x][this.point1.z].y;
-				this.arrayOfFigure[this.point1.x][this.point1.z].mesh.position.z =
-					this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.z;
-				// Заменяем фигуры в массиве фигур и в массиве клеток.
-				this.replaceFigure(this.point1, this.point2);
-				// Удаляем замороженную точку и создаем ее снова
+
+				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.x = this.plane2X;
+				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y = 17.5;
+				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.z = this.plane2Z;
+
+				this.arrayOfFigure[this.point1.x][this.point1.z].position.x = this.plane2X + 7;
+				this.arrayOfFigure[this.point1.x][this.point1.z].position.y = 13.5;
+				this.arrayOfFigure[this.point1.x][this.point1.z].position.z = this.plane2Z - 4;
+
+				this.arrayOfCubes[this.point1.x][this.point1.z].position.x = this.cube2X;
+				this.arrayOfCubes[this.point1.x][this.point1.z].position.y = 0;
+				this.arrayOfCubes[this.point1.x][this.point1.z].position.z = this.cube2Z;
+
+				this.arrayOfCubes[this.point2.x][this.point2.z].position.x = this.cube1X;
+				this.arrayOfCubes[this.point2.x][this.point2.z].position.y = 0;
+				this.arrayOfCubes[this.point2.x][this.point2.z].position.z = this.cube1Z;
+
+				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.x = this.plane2X;
+				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.y = 13.5;
+				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.z = this.plane2Z;
+
+				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.x = this.plane1X;
+				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.y = 13.5;
+				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.z = this.plane1Z;
+
+				this.replaceFigure();
 				delete this.point1;
 				this.point1 = new Point();
-				// Ну и в конце движения делаем обработку хода.
 				this.step(this.stepObject.figureForPaint);
 				this.gameVariebles.stepIndicator = false;
-				this.gameVariebles.lightIndicator = true;
+				this.IntersectedClick = null;
 			}
 		}
 	}
 
-	replaceFigure(point1, point2) {
-		this.arrayOfFigure[point2.x][point2.z] = this.arrayOfFigure[point1.x][point1.z];
-		this.arrayOfFigure[point1.x][point1.z] = undefined;
-		this.arrayOfPlane[point2.x][point2.z].figure = this.arrayOfPlane[point1.x][point1.z].figure;
-		this.arrayOfPlane[point1.x][point1.z].figure = 0;
+	replaceFigure() {
+		let cube1 = this.arrayOfCubes[this.point1.x][this.point1.z];
+		let cube2 = this.arrayOfCubes[this.point2.x][this.point2.z];
+
+		this.arrayOfCubes[this.point1.x][this.point1.z] = undefined;
+		this.arrayOfCubes[this.point2.x][this.point2.z] = undefined;
+
+		this.arrayOfCubes[this.point1.x][this.point1.z] = cube2;
+		this.arrayOfCubes[this.point2.x][this.point2.z] = cube1;
+
+		let plane1 = this.arrayOfPlane[this.point1.x][this.point1.z];
+		let plane2 = this.arrayOfPlane[this.point2.x][this.point2.z];
+
+		this.arrayOfPlane[this.point1.x][this.point1.z] = undefined;
+		this.arrayOfPlane[this.point2.x][this.point2.z] = undefined;
+
+		this.arrayOfPlane[this.point1.x][this.point1.z] = plane2;
+		this.arrayOfPlane[this.point2.x][this.point2.z] = plane1;
+
+		this.arrayOfFigure[this.point2.x][this.point2.z] = this.arrayOfFigure[this.point1.x][this.point1.z];
+		this.arrayOfFigure[this.point1.x][this.point1.z] = undefined;
+
+		let cylinder1 = this.arrayOfCylinder[this.point1.x][this.point1.z];
+		let cylinder2 = this.arrayOfCylinder[this.point2.x][this.point2.z];
+
+		this.cylinderContainer.remove(this.arrayOfCylinder[this.point1.x][this.point1.z]);
+		this.cylinderContainer.remove(this.arrayOfCylinder[this.point2.x][this.point2.z]);
+
+		this.arrayOfCylinder[this.point1.x][this.point1.z] = undefined;
+		this.arrayOfCylinder[this.point2.x][this.point2.z] = undefined;
+
+		this.arrayOfCylinder[this.point1.x][this.point1.z] = cylinder2;
+		this.arrayOfCylinder[this.point2.x][this.point2.z] = cylinder1;
 	}
 
 	makeStepEnable() {
 		this.bus.on('stepEnable', (response) => {
 			this.gameVariebles.arrayOfStepEnablePlane = response.arrayAfterStep;
 			response.arrayAfterStep.forEach((coord) => {
-				// this.arrayOfPlane[coord.x][coord.z].children[0].children[2].material.materials[0].color.setHex(
-				// 	tools.PLAYER_COLORS_MOVE[this.figureType]);
-				// this.arrayOfPlane[coord.x][coord.z].rotation.y = Math.PI/4;
-				// this.arrayOfPlane[coord.x][coord.z].position.x += Math.sqrt(2)/2 * 22;
-				// this.arrayOfPlane[coord.x][coord.z].position.z -= Math.sqrt(2)/2 * 22;
+				this.arrayOfPlane[coord.x][coord.z].material.opacity = 0.8;
+				this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.PLAYER_COLORS_CLICK[this.figureType]);
 				this.arrayOfPlane[coord.x][coord.z].stepEnable = true;
 			});
 		});
@@ -550,8 +594,25 @@ export default class Draw {
 
 	step(figureForPaint) {
 		figureForPaint.forEach((figure) => {
-			this.arrayOfFigure[figure.x][figure.z].material.color.setHex(
-				tools.PLAYER_COLORS[figure.color - 1]);
+			this.playerContainer.remove(this.arrayOfFigure[figure.x][figure.z]);
+			this.arrayOfFigure[figure.x][figure.z] = undefined;
+			switch (figure.color) {
+				case 1:
+					this.arrayOfFigure[figure.x][figure.z] = GrootFactoryBlue.getNew();
+					break;
+				case 2:
+					this.arrayOfFigure[figure.x][figure.z] = GrootFactoryMagenta.getNew();
+					break;
+				case 3:
+					this.arrayOfFigure[figure.x][figure.z] = GrootFactoryRed.getNew();
+					break;
+				case 4:
+					this.arrayOfFigure[figure.x][figure.z] = GrootFactoryYellow.getNew();
+					break;
+			}
+			this.arrayOfFigure[figure.x][figure.z].position.x = figure.x * 22 + 15;
+			this.arrayOfFigure[figure.x][figure.z].position.z = figure.z * 22 + 4;
+			this.playerContainer.add(this.arrayOfFigure[figure.x][figure.z]);
 			this.arrayOfPlane[figure.x][figure.z].figure = figure.color;
 		});
 	}
@@ -570,6 +631,7 @@ export default class Draw {
 	fullStep(stepObject) {
 		this.vector = stepObject.vector;
 		this.gameVariebles.distance = this.calculateDistance(this.point1, this.point2);
+		console.log(this.gameVariebles.distance);
 		this.moveOrClone(stepObject);
 		this.deleteAllStepEnable();
 	}
@@ -577,31 +639,41 @@ export default class Draw {
 	calculateDistance(point1, point2) {
 		return Math.sqrt(
 			Math.pow(
-				this.arrayOfFigure[point1.x][point1.z].mesh.position.x -
+				this.arrayOfCylinder[point1.x][point1.z].mesh.position.x -
 				this.arrayOfPlane[point2.x][point2.z].mesh.position.x, 2) +
 			Math.pow(
-				this.arrayOfFigure[point1.x][point1.z].mesh.position.z -
+				this.arrayOfCylinder[point1.x][point1.z].mesh.position.z -
 				this.arrayOfPlane[point2.x][point2.z].mesh.position.z, 2));
 	}
 
 	moveOrClone(stepObject) {
 		const point1 = stepObject.step.src;
 		const point2 = stepObject.step.dst;
-		// Если клетка, куда будет совершен ход, находится вплотную к заданной, то добавляем фигурку рядом.
 		if (stepObject.clone) {
 			Object.freeze(this.point1);
 			this.addOnePlayers(
-				this.playerContainer, point2.x, point2.z,
+				point2.x, point2.z,
 				this.arrayOfPlane[point1.x][point1.z].figure
 			);
 			this.gameVariebles.scaleIndicator = true;
-			// И вызываем функцию обработки хода, то-есть замены фигурок, если они есть рядом.
 			this.step(stepObject.figureForPaint);
 			this.gameVariebles.stepIndicator = false;
 		} else {
-			// если клетка находится через одну, то включаем индикатор для движения фигуры.
 			this.point1 = point1;
 			this.point2 = point2;
+
+			this.plane1X = JSON.parse(JSON.stringify(this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.x));
+			this.plane1Z = JSON.parse(JSON.stringify(this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.z));
+
+			this.cube1X = JSON.parse(JSON.stringify(this.arrayOfCubes[this.point1.x][this.point1.z].position.x));
+			this.cube1Z = JSON.parse(JSON.stringify(this.arrayOfCubes[this.point1.x][this.point1.z].position.z));
+
+			this.plane2X = JSON.parse(JSON.stringify(this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.x));
+			this.plane2Z = JSON.parse(JSON.stringify(this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.z));
+
+			this.cube2X = JSON.parse(JSON.stringify(this.arrayOfCubes[this.point2.x][this.point2.z].position.x));
+			this.cube2Z = JSON.parse(JSON.stringify(this.arrayOfCubes[this.point2.x][this.point2.z].position.z));
+
 			this.gameVariebles.moveIndicator = true;
 		}
 	}
@@ -610,6 +682,7 @@ export default class Draw {
 		this.gameVariebles.arrayOfStepEnablePlane.forEach((coord) => {
 			this.arrayOfPlane[coord.x][coord.z].stepEnable = false;
 			this.arrayOfPlane[coord.x][coord.z].material.color.setHex(tools.COLORS.PLANE_COLOR);
+			this.arrayOfPlane[coord.x][coord.z].material.opacity = 0;
 		});
 	}
 }

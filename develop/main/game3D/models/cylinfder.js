@@ -14,33 +14,24 @@ export default class Cylinder {
 		let geometry2 = new THREE.CylinderGeometry(
 			2.5,
 			2,
-			13.5,
+			35,
 			32
 		);
 		this.material = new THREE.MeshLambertMaterial({
 			color: tools.PLAYER_COLORS[0],
 			side: THREE.DoubleSide,
 			transparent: true,
-			opacity: 0.5
+			opacity: 0
 		});
-		let mesh1 = new THREE.Mesh(geometry1);
-		mesh1.position.set(
-			x * tools.PLANE_XX - 6,
+
+		geometry1.merge(geometry2, geometry2.matrix);
+
+		this.mesh = new THREE.Mesh(geometry1, this.material);
+		this.mesh.position.set(
+			x * tools.PLANE_XX + 8,
 			17.5,
-			z * tools.PLANE_XX - 10
+			z * tools.PLANE_XX + 8
 		);
-
-		let mesh2 = new THREE.Mesh(geometry2);
-		mesh2.position.set(
-			x * tools.PLANE_XX - 5.5,
-			27,
-			z * tools.PLANE_XX - 11
-		);
-
-		THREE.GeometryUtils.merge(combined, mesh1);
-		THREE.GeometryUtils.merge(combined, mesh2);
-
-		this.mesh = new THREE.Mesh(combined, this.material);
 
 		this.x = x;
 		this.z = z;
