@@ -34,7 +34,8 @@ export const PLAYER_COLORS_MOVE = [
 	0xe87386    //светло-светло-красный
 ];
 
-export const SPEED = 0.1;
+export const SPEED = 0.5;
+export const SPEED_Y = 0.03;
 
 export const GAME_VARIABLES = {
 	distance: 0,
@@ -51,5 +52,8 @@ export const GAME_VARIABLES = {
 	angle: 0,
 	angleIndicator: false,
 	cameraRotateIndicator: false,
-	stepID: 0
-}
+	stepID: 0,
+	moveUpIndicator: false,
+	moveDownIndicator: false,
+	changeFigureIndicator: false,
+};
