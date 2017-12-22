@@ -8,11 +8,12 @@ import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
-import GrootFactoryBlue from "./models/BabyGrootBlue";
-import GrootFactoryMagenta from "./models/BabyGrootMagenta";
-import GrootFactoryRed from "./models/BabyGrootRed";
-import GrootFactoryYellow from "./models/BabyGrootYellow";
+import GrootFactoryBlue from './models/BabyGrootBlue';
+import GrootFactoryMagenta from './models/BabyGrootMagenta';
+import GrootFactoryRed from './models/BabyGrootRed';
+import GrootFactoryYellow from './models/BabyGrootYellow';
 import PlatformFactory from "./models/Platform";
+import PlayerCone from './models/playerCone';
 
 export default class Draw {
 
@@ -53,7 +54,7 @@ export default class Draw {
 		this.controls.dampingFactor = 0.2;
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
-		this.controls.rotateSpeed = 0.3;
+		this.controls.rotateSpeed = 0.2;
 
 		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('mousemove', this.onDocumentMouseMove.bind(this), false);
@@ -154,7 +155,7 @@ export default class Draw {
 	}
 
 	addMeshes() {
-		this.light = new Three.AmbientLight(tools.COLORS.LIGHT, 0.75, 100, Math.PI);
+		this.light = new Three.AmbientLight(tools.COLORS.LIGHT, 0.9);
 		this.light.position.set(0, 0, 0);
 		this.scene.add(this.light);
 
@@ -166,6 +167,7 @@ export default class Draw {
 		this.cellContainer = new Three.Object3D();
 		this.cylinderContainer = new Three.Object3D();
 		this.cubeContainer = new Three.Object3D();
+		this.coneContainer = new Three.Object3D();
 
 		this.addPlaneByStart();
 		this.addAllPlayers();
@@ -174,6 +176,7 @@ export default class Draw {
 		this.scene.add(this.playerContainer);
 		this.scene.add(this.cylinderContainer);
 		this.scene.add(this.cubeContainer);
+		this.scene.add(this.coneContainer);
 	}
 
 	addPlaneByStart() {
@@ -265,6 +268,16 @@ export default class Draw {
 				this.controls.maxDistance = 500;
 				this.controls.minDistance = 100;
 				this.gameVariebles.cameraRotateIndicator = false;
+				for (let i = 0; i < this.planeSize; i++) {
+					for (let j = 0; j < this.planeSize; j++) {
+						if (this.arrayOfPlane[i][j].figure === this.figureType + 1) {
+							let cone = new PlayerCone();
+							cone.mesh.position.x = i * 22 + 8;
+							cone.mesh.position.z = j * 22 + 8;
+							this.coneContainer.add(cone.mesh);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -414,6 +427,7 @@ export default class Draw {
 	moveUp() {
 		if (this.gameVariebles.moveUpIndicator) {
 			if (!Object.isFrozen(this.point1) && this.point1.x > -1) {
+				this.scene.remove(this.coneContainer);
 				if (this.arrayOfFigure[this.point1.x][this.point1.z].position.y < 25) {
 					this.arrayOfFigure[this.point1.x][this.point1.z].position.y += tools.SPEED;
 					this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y += tools.SPEED;
@@ -448,7 +462,7 @@ export default class Draw {
 					this.gameVariebles.grow, this.gameVariebles.grow, this.gameVariebles.grow);
 				this.gameVariebles.grow += 0.08;
 			} else {
-				this.gameVariebles.grow = 0.01;
+				this.gameVariebles.grow = 1;
 				this.gameVariebles.scaleIndicator = false;
 				delete this.point1;
 				this.point1 = new Point();

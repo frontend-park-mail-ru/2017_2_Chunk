@@ -23,6 +23,7 @@ export default class ThreeView extends CommonView {
 		});
 		this.bus.on('endOfGame', () => {
 			setTimeout(() => {
+				this.playersDiv.setText('');
 				this.playersDiv.hide();
 				this.bus.emit('goToLobby');//точка выхода из игры в меню
 			}, 3000);

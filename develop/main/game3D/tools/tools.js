@@ -42,7 +42,7 @@ export const GAME_VARIABLES = {
 	distance: 0,
 	end: false,
 	diff: 0,
-	grow: 0.01,
+	grow: 1,
 	moveIndicator: false,
 	scaleIndicator: false,
 	stepIndicator: false,
