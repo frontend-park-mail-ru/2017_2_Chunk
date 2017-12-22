@@ -44,7 +44,7 @@ main {
     display: grid !important;
     grid-template-areas: "place1 place2 place3" "place4 place5 place6" "place7 place8 place9";
     grid-template-columns: 1fr 3fr 1fr;
-    grid-template-rows: 100px 100px auto;
+    grid-template-rows: 100px 50px auto;
     transition: filter 0.1s;
     transition-delay: 0s;
 }

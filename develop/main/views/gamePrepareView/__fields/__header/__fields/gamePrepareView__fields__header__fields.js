@@ -74,7 +74,7 @@ export default class headerFields {
 
 	changeCreator() {
 		eventBus.on('response136', (data) => {
-			this.fields.creator.el.innerHTML = `Creator: ${data.mastername}`;
+			this.fields.creator.el.innerHTML = `Creator: ${data.masterName}`;
 		});
 	}
 

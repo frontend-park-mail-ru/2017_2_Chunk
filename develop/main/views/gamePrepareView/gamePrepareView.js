@@ -162,8 +162,8 @@ export default class gamePrepareView extends View {
 			this.showMasterFields();
 		});
 		eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.changeMaster.code}`, (data) => {
-			if (data.userID === this.userID) {
-				eventBus.emit('showMasterFields', (data.userID));
+			if (data.masterID === this.userID) {
+				eventBus.emit('showMasterFields', (data.masterID));
 			}
 		})
 	}
