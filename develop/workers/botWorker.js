@@ -213,6 +213,23 @@ const offBot = new class BotWorker {
 			reason: "The player left active",
 			userID: 1
 		};
+		this.clearGame();
+		return request;
+	}
+
+	backFromGame() {
+		let request = {
+			code: 209,
+			player: {
+				email: "player@com",
+				online: true,
+				playerID: 1,
+				userID: 1,
+				username: "Player"
+			},
+			reason: "Player is offline"
+		};
+		this.clearGame();
 		return request;
 	}
 
@@ -413,6 +430,9 @@ self.onmessage = (workerRequest) => {
 			break;
 		case '201':
 			offBot.playerStep(data);
+			break;
+		case '209':
+			workerResponse = offBot.backFromGame();
 			break;
 		default:
 			console.log('Error');

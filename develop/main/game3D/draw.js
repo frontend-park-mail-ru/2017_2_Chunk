@@ -64,6 +64,7 @@ export default class Draw {
 		this.raycasterClick = new Three.Raycaster();
 
 		this.bus.on('deleteTree', () => {
+			this.scene.remove(this.light);
 			this.scene.remove(this.spotLight);
 			this.scene.remove(this.cellContainer);
 			this.scene.remove(this.playerContainer);
@@ -149,7 +150,6 @@ export default class Draw {
 	gameClose(response) {
 		const request = response.win;
 		this.bus.emit('endOfGame', request);
-		this.scene.remove(this.light);
 		this.gameVariebles.lightIndicator = false;
 		this.gameVariebles.cameraRotateIndicator = false;
 	}

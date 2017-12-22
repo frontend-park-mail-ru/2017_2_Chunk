@@ -31,7 +31,7 @@ export default class internalWorker {
 			this.bus.emit(`${gameWorkerMessage.requestEventName}`, (data));
 		};
 		this.bus.on('workerClose', () => {
-			this.worker.close();
+			this.worker.terminate();
 		});
 	}
 }
