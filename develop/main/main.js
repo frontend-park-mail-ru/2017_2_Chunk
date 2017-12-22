@@ -183,13 +183,15 @@ if ('serviceWorker' in navigator) {
 			.append(gamePrepareView)
 			.append(validationInfoView)
 			.append(gameContainer);
-		const body = document.body;
+
+
+		const main = document.body.getElementsByTagName('main')[0];
 
 
 		function fullScreenOn() {
 			document.body.addEventListener('keydown', function (e) {
 				if (e.keyCode == 70) {
-					body.requestFullscreen();
+					main.requestFullscreen();
 				}
 			}, true);
 		}
@@ -198,7 +200,7 @@ if ('serviceWorker' in navigator) {
 		function fullScreenOff() {
 			document.addEventListener('keydown', function (e) {
 				if (e.keyCode == 27) {
-					body.cancelFullscreen();
+					main.cancelFullscreen();
 				}
 			});
 		}

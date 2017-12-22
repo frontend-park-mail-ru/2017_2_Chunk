@@ -32,6 +32,7 @@ export default class gamePrepareView extends View {
 		this.addBot();
 		this.removePLayer();
 		this.removeBot();
+		this.kickPLayer();
 		this.buttonsEvents();
 		this.gameStatusEvents();
 		this.exitFromGame();
@@ -86,6 +87,8 @@ export default class gamePrepareView extends View {
 
 	addPlayers(players) {
 		players.forEach((player) => {
+			this.playersData = this.playersData || {};
+			this.playersData[player.userID] = player.username;
 			this.fields.playersList.addPlayer(player);
 			this.clear = false;
 		});
@@ -111,7 +114,6 @@ export default class gamePrepareView extends View {
 	updateGameData() {
 		this.addPlayer();
 		this.removePLayer();
-		this.kickPLayer();
 		this.addBot();
 		this.removeBot();
 	};
@@ -130,6 +132,7 @@ export default class gamePrepareView extends View {
 
 	kickPLayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.kickPlayer.code}`, (response) => {
+			debugger;
 			response.username = this.playersData[response.userID];
 			eventBus.emit(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.internalKickPlayer.code}`,
 			response);
