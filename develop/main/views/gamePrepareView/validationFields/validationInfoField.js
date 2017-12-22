@@ -12,6 +12,7 @@ export default class ValidationInfo extends Block {
 		this.validationInfo = validationInfo;
 		this.onValidationEvent();
 		this.onHideEvent();
+		this.onOfflineEvent();
 		this.whoIsIt();
 	}
 
@@ -32,15 +33,28 @@ export default class ValidationInfo extends Block {
 			eventBus.on(`${gamePrepareCodes.responseEventName}${validationCodes[error].code}`, (event) => {
 				if (+event.code === 134 && location.pathname === '/lobby') {
 					if (+this.userID === +event.userID)
-						console.log(event);
+						this.validationInfo.setText(`You was kicked by master of the game`);
 				}
-				this.validationInfo.setText(`${event.reason}`);
+				else if (+event.code === 134 && location.pathname === '/waiting-hall') {
+					this.validationInfo.setText(`PLayer ${event.username} was kicked`);
+				}
+				else {
+					this.validationInfo.setText(`${event.reason}`);
+				}
 				setTimeout(() => {
 					this.hide();
 				}, 5000);
 				this.show();
 			})
 		}
+	}
+
+
+	onOfflineEvent() {
+		eventBus.on('workerLogic', () => {
+			this.validationInfo.setText(`Only singleplayer is available in offline mode`);
+			this.show();
+		})
 	}
 
 

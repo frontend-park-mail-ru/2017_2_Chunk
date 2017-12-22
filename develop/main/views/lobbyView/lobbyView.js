@@ -46,6 +46,7 @@ export default class LobbyView extends View {
 		} else {
 			if (!this.botWorker) {
 				this.botWorker = new commonWorker('./botWorker.js');
+				eventBus.emit('workerLogic');
 			}
 			else
 				this.bus.emit('addSocketEvents');
