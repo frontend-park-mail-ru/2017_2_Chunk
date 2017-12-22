@@ -5,7 +5,7 @@ import ThemeButtonVideo from './__themeButtonVideo/videoEvents__themeButtonVideo
 export default class videoEvents {
 	constructor() {
 		eventBus.on('JSReady', () => {
-			this.themeButtonVideoEvent()
+			this.themeButtonVideoEvent();
 		});
 	};
 
