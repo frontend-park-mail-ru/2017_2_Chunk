@@ -76,6 +76,8 @@ self.addEventListener('fetch', (event) => {
 	event.respondWith(
 		caches.match(event.request)
 			.then((cachedResponse) => {
+				// if (cachedResponse)
+				// 	return cachedResponse;
 				return fetch(event.request)
 					.then((response) => {
 						return caches.open(version)
@@ -85,7 +87,6 @@ self.addEventListener('fetch', (event) => {
 							})
 					})
 					.catch((error) => {
-						console.log(error);
 						return cachedResponse;
 					})
 			})

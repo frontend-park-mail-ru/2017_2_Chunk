@@ -28,6 +28,9 @@ export default class ValidationInfo extends Block {
 		for (let error in validationCodes) {
 			eventBus.on(`${gamePrepareCodes.responseEventName}${validationCodes[error].code}`, (event) => {
 				this.validationInfo.setText(`${event.reason}`);
+				setTimeout(() => {
+					this.hide();
+				}, 5000);
 				this.show();
 			})
 		}

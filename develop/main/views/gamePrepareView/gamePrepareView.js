@@ -127,10 +127,10 @@ export default class gamePrepareView extends View {
 
 	removePLayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removePlayer.code}`, (response) => {
-			if (this.userID === response.userID)
+			if (this.userID === response.player.userID)
 				this.exitToLobby();
 			else {
-				this.fields.playersList.removePlayer(response.userID);
+				this.fields.playersList.removePlayer(response.player.userID);
 				this.fields.header.removePlayer();
 			}
 		});

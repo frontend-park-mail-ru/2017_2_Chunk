@@ -81,7 +81,6 @@ export default class PlayersListString extends Block {
 			this.fields.kickButton.el.style.setProperty('display', 'none');
 
 		eventBus.on('showMasterFields', (masterID) => {
-			debugger;
 			if (this.userID != masterID)
 				this.fields.kickButton.el.style.setProperty('display', 'inline');
 		});
