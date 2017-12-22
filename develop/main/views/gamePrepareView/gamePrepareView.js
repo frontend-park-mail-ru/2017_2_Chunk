@@ -127,10 +127,10 @@ export default class gamePrepareView extends View {
 
 	removePLayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.removePlayer.code}`, (response) => {
-			if (this.userID === response.player.userID)
+			if (this.userID === response.userID)
 				this.exitToLobby();
 			else {
-				this.fields.playersList.removePlayer(response.player.userID);
+				this.fields.playersList.removePlayer(response.userID);
 				this.fields.header.removePlayer();
 			}
 		});
@@ -221,7 +221,7 @@ export default class gamePrepareView extends View {
 
 	exitFromGame() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gameCodes.playerOffline.code}`, (response) => {
-			if (this.userID === response.userID)
+			if (this.userID === response.player.userID)
 				this.exitToLobby();
 		})
 	}
