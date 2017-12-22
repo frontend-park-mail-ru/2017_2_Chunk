@@ -1,6 +1,6 @@
 import factory from './ModelFactory.js'
 
-export default new class GrootFactoryRed extends factory {
+export default new class GrootFactoryBlue extends factory {
 	constructor() {
 
 		// Путь до модели

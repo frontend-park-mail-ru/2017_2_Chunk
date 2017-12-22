@@ -31,6 +31,7 @@ export default class Game3D {
 		this.gameEnd();
 		this.rotate();
 		this.getGameInfo();
+		this.timeout();
 	}
 
 	getGameInfo() {
@@ -63,6 +64,12 @@ export default class Game3D {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameStep.code}`, (response) => {
 			const request = response;
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
+		});
+	}
+
+	timeout() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.timeout.code}`, () => {
+			this.draw.timeout();
 		});
 	}
 

@@ -27,9 +27,9 @@ const gameWorker = new class GameWorker {
 		}
 		let playerString = '';
 		if (win) {
-			playerString = this.playerString() + 'You win! :)';
+			playerString = this.playerString() + '\n' + 'You win! :)';
 		} else {
-			playerString = this.playerString() + 'You lose! :(';
+			playerString = this.playerString() + '\n' + 'You lose! :(';
 		}
 		let request = {
 			func: 'winnerOrLooser',
@@ -192,7 +192,7 @@ const gameWorker = new class GameWorker {
 		for (let key in this.gamers) {
 			playerString += `${this.gamers[key].username}` + ': ' + `${countFigure[key-1]}` + '\n';
 		}
-		playerString += 'Now moving: ' + `${this.gamers[this.currentPlayer].username}`;
+		playerString += 'Now moving: ' + `${this.gamers[this.currentPlayer].username}` + '\n';
 		this.currentPlayer = this.returnNextPlayer(this.currentPlayer);
 		return playerString;
 	}

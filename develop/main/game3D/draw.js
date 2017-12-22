@@ -14,6 +14,7 @@ import GrootFactoryRed from './models/BabyGrootRed';
 import GrootFactoryYellow from './models/BabyGrootYellow';
 import PlatformFactory from "./models/Platform";
 import PlayerCone from './models/playerCone';
+import Visibility from 'visibilityjs';
 
 export default class Draw {
 
@@ -74,6 +75,8 @@ export default class Draw {
 			cancelAnimationFrame(this.gameVariebles.animation);
 		});
 
+		this.bus.emit('clockStop');
+
 		this.plane1X = 0;
 		this.plane1Z = 0;
 		this.plane2X = 0;
@@ -89,6 +92,7 @@ export default class Draw {
 		this.makeStepEnable();
 		this.azimuthAngle();
 		this.playerDivStart();
+		this.timeout();
 	}
 
 	startGame(response) {
@@ -140,6 +144,10 @@ export default class Draw {
 		this.bus.on('figureType', (response) => {
 			this.figureType = response.figureType;
 			this.username = response.username;
+
+			if (this.username === this.nowUsername) {
+				this.bus.emit('clockStart');
+			}
 		});
 	}
 
@@ -150,6 +158,10 @@ export default class Draw {
 		});
 	}
 
+	timeout() {
+		this.bus.emit('clockStop');
+	}
+
 	gameEnd() {
 		this.bus.on('winnerOrLooser', (response) => {
 			this.gameVariebles.queue.push(response);
@@ -158,6 +170,11 @@ export default class Draw {
 
 	gameClose(response) {
 		const request = response.win;
+		if (request) {
+			if (Visibility.hidden()) {
+				this.bus.emit('youWin');
+			}
+		}
 		this.bus.emit('endOfGame', request);
 		this.gameVariebles.lightIndicator = false;
 		this.gameVariebles.cameraRotateIndicator = false;
@@ -307,6 +324,14 @@ export default class Draw {
 			this.stepObject = this.gameVariebles.queue.shift();
 			this.bus.emit('changePlayerDiv', this.stepObject.playerString);
 			this.nowUsername = this.stepObject.nowUsername;
+
+			if (this.username === this.nowUsername) {
+				this.bus.emit('clockStart');
+				if (Visibility.hidden()) {
+					this.bus.emit('yourStep', 'Your step');
+				}
+			}
+
 			if (this.stepObject.func === 'winnerOrLooser') {
 				this.gameClose(this.stepObject);
 			} else {
@@ -391,6 +416,9 @@ export default class Draw {
 							},
 							stepID: this.gameVariebles.stepID
 						};
+
+						this.bus.emit('clockStop');
+
 						this.bus.emit(`${gameCodes.gameStep.request}`, request);
 					} else {
 						this.deleteAllStepEnable();

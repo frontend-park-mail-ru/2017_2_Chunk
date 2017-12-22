@@ -15,6 +15,10 @@ const gameCodes = {
 		code: 201,
 		request: 'request'
 	},
+	timeout: {
+		code: 202,
+		request: 'request'
+	},
 	gameEnd: {
 		code: 204,
 		request: 'request'

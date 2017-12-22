@@ -9,7 +9,7 @@ export default class ThreeView extends CommonView {
 		const gameContainer = Block.create('div');
 		const playersDiv = Block.create('div', {}, ['gameDiv'], '');
 		const clockDiv = Block.create('div', {}, ['clock'], '');
-		const secondHand = Block.create('div', {}, ['button25'], '');
+		const secondHand = Block.create('div', {}, ['timer', 'timer_animation'], '');
 		super([gameContainer, playersDiv, clockDiv, secondHand]);
 		this.el.style.setProperty('border', 'none');
 		this.el.classList.add('treeView');
@@ -21,6 +21,7 @@ export default class ThreeView extends CommonView {
 		this.secondHand = secondHand;
 		this.bus = eventBus;
 		this.clear = true;
+
 		this.bus.on('beginPlaying', () => {
 			this.playersDiv.show();
 		});
@@ -36,6 +37,12 @@ export default class ThreeView extends CommonView {
 		});
 		this.bus.on('beginClock', () => {
 			this.clockDiv.show();
+		});
+		this.bus.on('clockStop', () => {
+			this.secondHand.el.classList.remove('timer_animation');
+		});
+		this.bus.on('clockStart', () => {
+			this.secondHand.el.classList.add('timer_animation');
 		});
 		super.hide();
 	}

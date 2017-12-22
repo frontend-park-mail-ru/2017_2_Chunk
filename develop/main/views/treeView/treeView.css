@@ -19,22 +19,6 @@
     color: #00a9ff;
 }
 
-.player1 {
-    color: #00a9ff;
-}
-
-.player2 {
-    color: darkmagenta;
-}
-
-.player3 {
-    color: red;
-}
-
-.player4 {
-    color: yellow;
-}
-
 .clock {
     transition: all .12s;
     z-index: 2;
@@ -43,12 +27,12 @@
     height: 100px;
     border-radius: 50%;
     border: 5px double white;
-    background: -webkit-radial-gradient(#8983ff, #514faf);
-    background: radial-gradient(#8a84ff, #5350b4);
+    background: -webkit-radial-gradient(#a9b0ff, #6b67e9);
+    background: radial-gradient(#a9b0ff, #6b67e9);
     margin: 2rem auto;
 }
 
-.button25 {
+.timer {
     position: absolute;
     display: inline-block;
     width: 50px;
@@ -58,23 +42,29 @@
     border-radius: 100px;
     outline: none;
     overflow: hidden;
-    -webkit-animation: background1 0s linear infinite;
-    animation: background1 0s linear infinite;
 }
-.button25:before {
+
+.timer_animation {
+    animation: background1 60s linear infinite;
+}
+
+.timer:before {
     content: "";
     position: absolute;
     left: -50px;
     height: 100px;
     border-right: 50px solid transparent;
-    border-left: 50px solid green;
+    border-left: 50px solid #5f1b80;
     border-radius: 100px;
-    -webkit-animation: rotate1 0s linear infinite;
-    animation: rotate1 0s linear infinite;
 }
+
+.timer_animation:before {
+    animation: rotate1 60s linear infinite;
+}
+
 @-webkit-keyframes background1 {
     49.999% {border-width: 0 0 0 50px; border-color: transparent;}
-    50%, 100% {border-width: 0 50px 0 0; border-color: green;}
+    50%, 100% {border-width: 0 50px 0 0; border-color: #5f1b80;}
 }
 @-webkit-keyframes rotate1 {
     49.999% {left: -50px;}
@@ -83,7 +73,7 @@
 }
 @keyframes background1 {
     49.999% {border-width: 0 0 0 50px; border-color: transparent;}
-    50%, 100% {border-width: 0 50px 0 0; border-color: green;}
+    50%, 100% {border-width: 0 50px 0 0; border-color: #5f1b80;}
 }
 @keyframes rotate1 {
     49.999% {left: -50px;}
