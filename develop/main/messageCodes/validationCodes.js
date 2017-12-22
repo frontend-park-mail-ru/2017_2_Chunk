@@ -1,6 +1,6 @@
 const validationCodes = {
-	kickPlayer: {
-		code: 134,
+	internalKickPlayer: {
+		code: 800,
 	},
 	unexpected : {
 		code: 300,

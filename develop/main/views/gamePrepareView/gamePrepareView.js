@@ -119,6 +119,8 @@ export default class gamePrepareView extends View {
 
 	addPlayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addPlayer.code}`, (response) => {
+			this.playersData = this.playersData || {};
+			this.playersData[response.userID] = response.username;
 			this.fields.playersList.addPlayer(response);
 			this.fields.header.addPlayer();
 			this.clear = false;
@@ -128,6 +130,9 @@ export default class gamePrepareView extends View {
 
 	kickPLayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.kickPlayer.code}`, (response) => {
+			response.username = this.playersData[response.userID];
+			eventBus.emit(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.internalKickPlayer.code}`,
+			response);
 			if (this.userID === response.userID)
 				this.exitToLobby();
 			else {

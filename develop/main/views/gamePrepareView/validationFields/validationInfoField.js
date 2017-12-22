@@ -31,7 +31,7 @@ export default class ValidationInfo extends Block {
 	onValidationEvent() {
 		for (let error in validationCodes) {
 			eventBus.on(`${gamePrepareCodes.responseEventName}${validationCodes[error].code}`, (event) => {
-				if (+event.code === 134 && location.pathname === '/lobby') {
+				if (+event.code === 800 && location.pathname === '/lobby') {
 					if (+this.userID === +event.userID)
 						this.validationInfo.setText(`You was kicked by master of the game`);
 				}
@@ -51,8 +51,12 @@ export default class ValidationInfo extends Block {
 
 
 	onOfflineEvent() {
-		eventBus.on('workerLogic', () => {
-			this.validationInfo.setText(`Only singleplayer is available in offline mode`);
+		eventBus.on('workerLogic', (data) => {
+			if (!data.auth) {
+				this.validationInfo.setText(`Only singleplayer is available. You have to login`);
+			}
+			else
+				this.validationInfo.setText(`Only singleplayer is available in offline mode`);
 			this.show();
 		})
 	}
