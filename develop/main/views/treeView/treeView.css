@@ -2,22 +2,35 @@
 }
 
 .gameDiv {
-    background-color: rgb(105, 63, 149);
+    background-color: white;
     transition: all .12s;
     z-index: 2;
-
     text-align: center;
-    font-size: calc(10px + 2vh);
-    color: white;
     opacity: 0.8;
-    border: 0.1em solid transparent;
-
+    border: 0.1em solid rgb(105, 63, 149);
     position: fixed;
-    max-width: 600px;
     padding: 0.2em;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    border-radius: 0.4em;
+    border-radius: 15px;
     box-shadow: none;
     white-space: pre-wrap;
+    font-size: 3vh;
+
+    color: #00a9ff;
 }
+
+.player1 {
+    color: #00a9ff;
+}
+
+.player2 {
+    color: darkmagenta;
+}
+
+.player3 {
+    color: red;
+}
+
+.player4 {
+    color: yellow;
+}
+

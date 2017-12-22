@@ -3,7 +3,7 @@
 import OrbitControl from 'three-orbitcontrols';
 import * as Three from 'three';
 import PlaneCell from './models/plane.js';
-import Cylinder from './models/cylinfder';
+import Cylinder from './models/cylinder';
 import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
@@ -258,8 +258,8 @@ export default class Draw {
 		if (this.gameVariebles.cameraRotateIndicator) {
 			if (this.controls.minDistance > 200) {
 				this.controls.autoRotate = true;
-				this.controls.minDistance -= 2;
-				this.controls.maxDistance -= 2;
+				this.controls.minDistance -= 4;
+				this.controls.maxDistance -= 4;
 			} else {
 				this.controls.autoRotate = false;
 				this.controls.maxDistance = 500;
@@ -430,10 +430,10 @@ export default class Draw {
 		if (this.gameVariebles.moveDownIndicator) {
 			if (this.firstChoiceObject.x > -1) {
 				if (this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y > 13.5) {
-					this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED;
-					this.arrayOfCylinder[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED;
-					this.arrayOfCubes[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED;
-					this.arrayOfPlane[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED;
+					this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED_DOWN;
+					this.arrayOfCylinder[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED_DOWN;
+					this.arrayOfCubes[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED_DOWN;
+					this.arrayOfPlane[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED_DOWN;
 				} else {
 					this.gameVariebles.moveDownIndicator = false;
 				}
@@ -498,8 +498,8 @@ export default class Draw {
 
 				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y = y + 13.5;
 				this.arrayOfFigure[this.point1.x][this.point1.z].position.y = y + 13.5;
-				this.arrayOfCubes[this.point1.x][this.point1.z].position.y = y;
-				this.arrayOfCubes[this.point2.x][this.point2.z].position.y = -y;
+				this.arrayOfCubes[this.point1.x][this.point1.z].position.y = y + 10;
+				this.arrayOfCubes[this.point2.x][this.point2.z].position.y = -y - 10;
 				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.y = y + 13.5;
 				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.y = -y;
 

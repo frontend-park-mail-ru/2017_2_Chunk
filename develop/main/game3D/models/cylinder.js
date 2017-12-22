@@ -4,7 +4,6 @@ import * as tools from '../tools/tools.js';
 
 export default class Cylinder {
 	constructor(x = 0, z = 0) {
-		let combined = new THREE.Geometry();
 		let geometry1 = new THREE.CylinderGeometry(
 			4.2,
 			4.2,
