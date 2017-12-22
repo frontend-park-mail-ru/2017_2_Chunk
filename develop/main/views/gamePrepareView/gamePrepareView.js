@@ -230,6 +230,7 @@ export default class gamePrepareView extends View {
 	whoIsItEvent() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, (response) => {
 			this.userID = response.userID;
+			eventBus.emit('IAm', this.userID);
 		});
 		const request = {
 			code: `${gamePrepareCodes.whoIsIt.code}`,

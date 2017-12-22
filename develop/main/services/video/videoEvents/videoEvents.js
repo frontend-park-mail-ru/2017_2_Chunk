@@ -19,8 +19,8 @@ export default class videoEvents {
 
 
 	buttonOnClick(button) {
-		// button.addEventListener('click', (event) => {
-		// 	this.themeButtonVideo.play();
-		// });
+		button.addEventListener('click', (event) => {
+			this.themeButtonVideo.play();
+		});
 	};
 }

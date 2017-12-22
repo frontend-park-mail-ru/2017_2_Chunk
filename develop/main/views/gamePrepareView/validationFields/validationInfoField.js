@@ -1,9 +1,9 @@
 'use strict';
-
 import validationCodes from '../../../messageCodes/validationCodes';
 import gamePrepareCodes from '../../../messageCodes/gamePrepareCodes';
 import eventBus from '../../../modules/eventBus';
 import Block from '../../../blocks/block/block';
+
 
 export default class ValidationInfo extends Block {
 	constructor() {
@@ -12,7 +12,9 @@ export default class ValidationInfo extends Block {
 		this.validationInfo = validationInfo;
 		this.onValidationEvent();
 		this.onHideEvent();
+		this.whoIsIt();
 	}
+
 
 	hide() {
 		super.hide();
@@ -24,9 +26,14 @@ export default class ValidationInfo extends Block {
 		super.show();
 	}
 
+
 	onValidationEvent() {
 		for (let error in validationCodes) {
 			eventBus.on(`${gamePrepareCodes.responseEventName}${validationCodes[error].code}`, (event) => {
+				if (+event.code === 134 && location.pathname === '/lobby') {
+					if (+this.userID === +event.userID)
+						console.log(event);
+				}
 				this.validationInfo.setText(`${event.reason}`);
 				setTimeout(() => {
 					this.hide();
@@ -35,6 +42,7 @@ export default class ValidationInfo extends Block {
 			})
 		}
 	}
+
 
 	onHideEvent() {
 		eventBus.on('hideValidationInfo', () => {
@@ -45,5 +53,12 @@ export default class ValidationInfo extends Block {
 
 	clear() {
 		this.validationInfo.setText('');
+	}
+
+
+	whoIsIt() {
+		eventBus.on('iAm', (userID) => {
+			this.userID = +userID;
+		});
 	}
 }

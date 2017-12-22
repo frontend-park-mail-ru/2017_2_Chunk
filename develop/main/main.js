@@ -42,7 +42,6 @@ if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.ready
 		.then(() =>
 	{
-		console.log('SW ready');
 		const gameNameView = new GameNameView();
 		const eventBus = EventBus;
 		document.body.classList.add('main_theme-black-orange');
@@ -211,7 +210,6 @@ if ('serviceWorker' in navigator) {
 // 	return "Вы уверены, что хотите покинут страницу?";
 // };
 		router.start();
-		console.log('end main');
 		})
 }
 
