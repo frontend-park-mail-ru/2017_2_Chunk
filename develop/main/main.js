@@ -133,6 +133,7 @@ function hideAllView() {
 		if (!view.hidden)
 			view.hide();
 	});
+	eventBus.emit('hideValidationInfo');
 }
 
 
