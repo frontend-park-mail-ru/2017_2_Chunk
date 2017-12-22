@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import OBJLoader from 'three-obj-loader';
 import FBXLoader from 'three-fbx-loader';
-import ColladaLoader from 'three-collada-loader';
+import ColladaLoader from '../tools/CustomColladaLoader';
 
 export default new class Loader {
 
