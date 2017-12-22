@@ -28,6 +28,7 @@ import SoundsEvents from './services/sound/soundEvents/soundEvents';
 import VideoEvents from './services/video/videoEvents/videoEvents';
 import MusicPlayer from './services/sound/musicPlayer/musicPlayer';
 import TabBlink from './views/tabBlink/tabBlink';
+import BackendWaitingAnimation from './services/loaders/backendWaitingAnimation/backendWaitingAnimation';
 
 
 if ('serviceWorker' in navigator) {
@@ -69,6 +70,7 @@ if ('serviceWorker' in navigator) {
 		const videoEvents = new VideoEvents();
 		const musicPlayer = new MusicPlayer();
 		const tabBlink = new TabBlink();
+		const backendWaitingAnimation = new BackendWaitingAnimation();
 		const Views = [];
 		Views.push(gameNameView);
 		Views.push(menuView);

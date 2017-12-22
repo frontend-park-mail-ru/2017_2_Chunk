@@ -18,7 +18,7 @@ self.addEventListener('install', (event) => {
 					// '/music/playlist/Awesome Mix Vol.2 - 8. Silver - Wham Bam Shang-A-Lang.mp3',
 					// '/music/playlist/Awesome Mix Vol.2 - 9. Looking Glass - Brandy (You\'re A Fine Girl).mp3',
 					// '/music/playlist/Awesome Mix Vol.2 - 13. Parliament - Flashlight.mp3',
-					'/music/playlist/Awesome Mix Vol.2 - 14. The Sneepers - Guardians Inferno (feat. David Hasselhoff).mp3',
+					// '/music/playlist/Awesome Mix Vol.2 - 14. The Sneepers - Guardians Inferno (feat. David Hasselhoff).mp3',
 					'music/playlist/Awesome Mix Vol.2 - 14. The Sneepers - Guardians Inferno (feat. David Hasselhoff).mp3',
 					// '/music/playlist/Awesome Mix Vol. 2 - Sam Cooke - Bring It on Home to Me.mp3',
 					// '/music/playlist/Blondie - Call Me.mp3',
@@ -72,9 +72,6 @@ self.addEventListener('install', (event) => {
 });
 
 
-self.addEventListener('activate',(event) => {
-
-});
 self.addEventListener('fetch', (event) => {
 	event.respondWith(
 		caches.match(event.request)
