@@ -3,6 +3,7 @@ import View from '../view/view';
 import GamePrepareFields from './__fields/gamePrepareView__fields';
 import eventBus from '../../modules/eventBus';
 import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
+import gameCodes from '../../messageCodes/gameCodes';
 
 
 /**
@@ -33,6 +34,7 @@ export default class gamePrepareView extends View {
 		this.removeBot();
 		this.buttonsEvents();
 		this.gameStatusEvents();
+		this.exitFromGame();
 		this.showViewEvents();
 	}
 
@@ -75,8 +77,8 @@ export default class gamePrepareView extends View {
 			this.fields.header.updateGameData(response.game);
 			this.whoIsItEvent();
 			// eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.whoIsIt.code}`, () => {
-				this.addPlayers(response.game.realPlayers);
-				this.addBots(response.game.botPlayers);
+			this.addPlayers(response.game.realPlayers);
+			this.addBots(response.game.botPlayers);
 			// })
 		})
 	}
@@ -88,6 +90,7 @@ export default class gamePrepareView extends View {
 			this.clear = false;
 		});
 	}
+
 
 	addBots(bots) {
 		bots.forEach((bot) => {
@@ -116,6 +119,7 @@ export default class gamePrepareView extends View {
 	addPlayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.addPlayer.code}`, (response) => {
 			this.fields.playersList.addPlayer(response);
+			this.fields.header.addPlayer();
 			this.clear = false;
 		});
 	}
@@ -157,6 +161,11 @@ export default class gamePrepareView extends View {
 		eventBus.on('showMasterFields', () => {
 			this.showMasterFields();
 		});
+		eventBus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.changeMaster.code}`, (data) => {
+			if (data.masterID === this.userID) {
+				eventBus.emit('showMasterFields', (data.masterID));
+			}
+		})
 	}
 
 
@@ -207,6 +216,14 @@ export default class gamePrepareView extends View {
 	exitToLobby() {
 		eventBus.emit('goToLobby');
 		eventBus.emit('backendResponseReceived');
+	}
+
+
+	exitFromGame() {
+		this.bus.on(`${gamePrepareCodes.responseEventName}${gameCodes.playerOffline.code}`, (response) => {
+			if (this.userID === response.userID)
+				this.exitToLobby();
+		})
 	}
 
 

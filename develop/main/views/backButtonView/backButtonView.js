@@ -2,6 +2,7 @@
 import Block from '../../blocks/block/block.js';
 import eventBus from '../../modules/eventBus';
 import gamePrepareCodes from '../../messageCodes/gamePrepareCodes';
+import gameCodes from '../../messageCodes/gameCodes';
 
 
 /**
@@ -18,13 +19,27 @@ export default class backButtonView extends Block {
 		super(backButton.el);
 		this.button = backButton;
 		this.hide();
+		this.url = 'waiting-hall';
 		this.button.on('click', () => {
 			eventBus.emit('waitingBackend');
-			const request = {
-				code: `${gamePrepareCodes.exit.code}`,
-			};
-			console.log('request back button');
+			let request = {};
+			if (this.url === 'waiting-hall') {
+				 request = {
+					code: `${gamePrepareCodes.exit.code}`,
+				};
+			}
+			else {
+				request = {
+					code: `${gameCodes.playerOffline.code}`,
+				};
+			}
 			eventBus.emit(`${gamePrepareCodes.requestEventName}`, request);
 		});
+	}
+
+
+	show(url) {
+		this.url = url;
+		super.show();
 	}
 }

@@ -23,11 +23,11 @@ new class StartLoader {
 
 	loadBackgroundImage() {
 		const img = new Image();
-		img.src = './images/galaxy.jpg';
+		img.src = './images/opt_galaxy.jpg';
 		img.onload = () => {
 			this.loadMainScript();
 		};
-		document.body.style.backgroundImage = 'url(./images/galaxy.jpg)';
+		document.body.style.backgroundImage = 'url(./images/opt_galaxy.jpg)';
 		document.body.style.setProperty('background-size', 'cover');
 		document.body.style.setProperty('background-position', 'center');
 		document.body.style.setProperty('display', 'block');

@@ -394,6 +394,7 @@ const loaderHtml = '<svg version="1.1" id="guardians" xmlns="http://www.w3.org/2
 	'        c-0.2-0.2-0.4-0.5-0.5-0.8C1346.7,844,1346.7,843.6,1346.7,843.3z M1351.3,821v9.7c0,1-0.1,2-0.2,3c-0.1,1-0.2,2-0.4,3.2h-2.8\n' +
 	'        c-0.2-1.1-0.3-2.2-0.4-3.2c-0.1-1-0.2-2-0.2-3V821H1351.3z"/>\n' +
 	'</g>\n' +
+	'Hello!' +
 	'</svg>';
 
 export default loaderHtml;

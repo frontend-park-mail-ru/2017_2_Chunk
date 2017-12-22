@@ -4,7 +4,7 @@ import Block from '../../../blocks/block/block';
 import backendWaitingAnimationHtml from './starLord/starLordHtml'
 
 
-new class BackendWaitingAnimation {
+export default class BackendWaitingAnimation {
 	constructor() {
 		this.animationContainer = Block.create('div', {'id': 'starlord'}, ['stripe']);
 		this.animationContainer.el.innerHTML = backendWaitingAnimationHtml;
