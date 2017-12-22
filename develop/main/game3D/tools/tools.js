@@ -57,4 +57,5 @@ export const GAME_VARIABLES = {
 	moveUpIndicator: false,
 	moveDownIndicator: false,
 	changeFigureIndicator: false,
+	firstStep: true
 };

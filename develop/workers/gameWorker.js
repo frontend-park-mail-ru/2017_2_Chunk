@@ -12,7 +12,8 @@ const gameWorker = new class GameWorker {
 		this.figureType = this.detectFigureByUserID(this.userID);
 		const request = {
 			func: 'figureType',
-			figureType: this.figureType
+			figureType: this.figureType,
+			username: this.gamers[this.figureType+1].username
 		};
 		return request;
 	}
@@ -66,6 +67,7 @@ const gameWorker = new class GameWorker {
 	}
 
 	startArray(data) {
+		this.currentPlayer = 1;
 		this.fieldSize = data.game.field.maxX;
 		this.arrayOfField = data.game.field.field;
 		this.gamers = data.game.gamers;
@@ -73,7 +75,22 @@ const gameWorker = new class GameWorker {
 		for (let key in this.gamers) {
 			this.countPlayers++;
 		}
+
+		let request = {
+			func: 'startDiv',
+			playerString: this.playerString(),
+			nowUsername: this.gamers[this.currentPlayer-1].username
+		};
+		self.postMessage(request);
+
 		this.fullStep();
+	}
+
+	returnNextPlayer(currentPlayer) {
+		currentPlayer++;
+		if (currentPlayer > this.countPlayers)
+			currentPlayer = 1;
+		return currentPlayer;
 	}
 
 	step(data) {
@@ -143,7 +160,8 @@ const gameWorker = new class GameWorker {
 				clone: clone,
 				step: step,
 				figureForPaint: figureForPaint,
-				playerString: this.playerString()
+				nowUsername: this.gamers[this.currentPlayer].username,
+				playerString: this.playerString(),
 			};
 			this.stepIndicator = true;
 			self.postMessage(request);
@@ -174,6 +192,8 @@ const gameWorker = new class GameWorker {
 		for (let key in this.gamers) {
 			playerString += `${this.gamers[key].username}` + ': ' + `${countFigure[key-1]}` + '\n';
 		}
+		playerString += 'Now moving: ' + `${this.gamers[this.currentPlayer].username}`;
+		this.currentPlayer = this.returnNextPlayer(this.currentPlayer);
 		return playerString;
 	}
 

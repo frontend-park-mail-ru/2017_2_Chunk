@@ -88,6 +88,7 @@ export default class Draw {
 		this.gameStep();
 		this.makeStepEnable();
 		this.azimuthAngle();
+		this.playerDivStart();
 	}
 
 	startGame(response) {
@@ -108,9 +109,16 @@ export default class Draw {
 		this.controls.maxDistance = 500.0;
 
 		this.bus.emit('beginPlaying');
-		// this.bus.emit('changePlayerDiv', 'HELLO');
+		this.bus.emit('beginClock');
 
 		this.animate();
+	}
+
+	playerDivStart() {
+		this.bus.on('startDiv', (text) => {
+			this.bus.emit('changePlayerDiv', text.playerString);
+			this.nowUsername = text.nowUsername;
+		})
 	}
 
 	loadBackgroundCube() {
@@ -131,6 +139,7 @@ export default class Draw {
 	getGameInfo() {
 		this.bus.on('figureType', (response) => {
 			this.figureType = response.figureType;
+			this.username = response.username;
 		});
 	}
 
@@ -268,6 +277,7 @@ export default class Draw {
 				this.controls.maxDistance = 500;
 				this.controls.minDistance = 100;
 				this.gameVariebles.cameraRotateIndicator = false;
+
 				for (let i = 0; i < this.planeSize; i++) {
 					for (let j = 0; j < this.planeSize; j++) {
 						if (this.arrayOfPlane[i][j].figure === this.figureType + 1) {
@@ -289,8 +299,14 @@ export default class Draw {
 			!this.gameVariebles.stepIndicator &&
 			!Object.isFrozen(this.point1)
 		) {
+			if (this.gameVariebles.firstStep) {
+				this.scene.remove(this.coneContainer);
+				this.gameVariebles.firstStep = false;
+			}
+
 			this.stepObject = this.gameVariebles.queue.shift();
 			this.bus.emit('changePlayerDiv', this.stepObject.playerString);
+			this.nowUsername = this.stepObject.nowUsername;
 			if (this.stepObject.func === 'winnerOrLooser') {
 				this.gameClose(this.stepObject);
 			} else {
@@ -308,8 +324,6 @@ export default class Draw {
 		const intersects = this.raycasterClick.intersectObjects(
 			this.cylinderContainer.children.concat(this.cellContainer.children)
 		);
-		console.log("INTERSECTS");
-		console.log(intersects);
 		if (intersects.length && !this.gameVariebles.moveIndicator && !this.gameVariebles.scaleIndicator) {
 			if (this.IntersectedClick !== intersects[0].object) {
 				if (this.IntersectedClick) {
@@ -318,7 +332,8 @@ export default class Draw {
 				}
 
 				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-					!Object.isFrozen(this.point1)) {
+					!Object.isFrozen(this.point1) &&
+					this.username === this.nowUsername) {
 					this.deleteAllStepEnable();
 					let id1x = 0;
 					let id1z = 0;
@@ -332,6 +347,11 @@ export default class Draw {
 
 						this.point1.x = id1x;
 						this.point1.z = id1z;
+
+						if (this.gameVariebles.firstStep) {
+							this.scene.remove(this.coneContainer);
+							this.gameVariebles.firstStep = false;
+						}
 
 						this.getAzimuthAngle();
 						this.getStepEnable();
@@ -427,7 +447,6 @@ export default class Draw {
 	moveUp() {
 		if (this.gameVariebles.moveUpIndicator) {
 			if (!Object.isFrozen(this.point1) && this.point1.x > -1) {
-				this.scene.remove(this.coneContainer);
 				if (this.arrayOfFigure[this.point1.x][this.point1.z].position.y < 25) {
 					this.arrayOfFigure[this.point1.x][this.point1.z].position.y += tools.SPEED;
 					this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y += tools.SPEED;
@@ -522,7 +541,6 @@ export default class Draw {
 					this.gameVariebles.diff = 0;
 				}
 			} else {
-				console.log("END");
 				this.gameVariebles.moveIndicator = false;
 				this.gameVariebles.end = false;
 
@@ -645,7 +663,6 @@ export default class Draw {
 	fullStep(stepObject) {
 		this.vector = stepObject.vector;
 		this.gameVariebles.distance = this.calculateDistance(this.point1, this.point2);
-		console.log(this.gameVariebles.distance);
 		this.moveOrClone(stepObject);
 		this.deleteAllStepEnable();
 	}

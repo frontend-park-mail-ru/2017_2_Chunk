@@ -10,6 +10,7 @@
     border: 0.1em solid rgb(105, 63, 149);
     position: fixed;
     padding: 0.2em;
+    margin-left: 30%;
     border-radius: 15px;
     box-shadow: none;
     white-space: pre-wrap;
@@ -32,5 +33,61 @@
 
 .player4 {
     color: yellow;
+}
+
+.clock {
+    transition: all .12s;
+    z-index: 2;
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 5px double white;
+    background: -webkit-radial-gradient(#8983ff, #514faf);
+    background: radial-gradient(#8a84ff, #5350b4);
+    margin: 2rem auto;
+}
+
+.button25 {
+    position: absolute;
+    display: inline-block;
+    width: 50px;
+    height: 100px;
+    border: solid transparent;
+    border-width: 0 0 0 50px;
+    border-radius: 100px;
+    outline: none;
+    overflow: hidden;
+    -webkit-animation: background1 0s linear infinite;
+    animation: background1 0s linear infinite;
+}
+.button25:before {
+    content: "";
+    position: absolute;
+    left: -50px;
+    height: 100px;
+    border-right: 50px solid transparent;
+    border-left: 50px solid green;
+    border-radius: 100px;
+    -webkit-animation: rotate1 0s linear infinite;
+    animation: rotate1 0s linear infinite;
+}
+@-webkit-keyframes background1 {
+    49.999% {border-width: 0 0 0 50px; border-color: transparent;}
+    50%, 100% {border-width: 0 50px 0 0; border-color: green;}
+}
+@-webkit-keyframes rotate1 {
+    49.999% {left: -50px;}
+    50% {left: 0px;}
+    100% {-webkit-transform: rotate(360deg); left: 0px;}
+}
+@keyframes background1 {
+    49.999% {border-width: 0 0 0 50px; border-color: transparent;}
+    50%, 100% {border-width: 0 50px 0 0; border-color: green;}
+}
+@keyframes rotate1 {
+    49.999% {left: -50px;}
+    50% {left: 0px;}
+    100% {transform: rotate(360deg); left: 0px;}
 }
 
