@@ -25,6 +25,7 @@ export default class Game3D {
 
 	gameEvents() {
 		this.startGame();
+		this.backFromLobby();
 		this.figureClick();
 		this.gameStep();
 		this.gameEnd();
@@ -48,6 +49,13 @@ export default class Game3D {
 			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
 			this.draw.startGame(response);
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, response);
+		});
+	}
+
+	backFromLobby() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.backFromLobby.code}`, (response) => {
+			const request = response;
+			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
 		});
 	}
 

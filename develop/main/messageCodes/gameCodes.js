@@ -3,6 +3,10 @@ const gameCodes = {
 		code: 103,
 		request: 'request'
 	},
+	backFromLobby: {
+		code: 132,
+		request: 'request'
+	},
 	startGame: {
 		code: 200,
 		request: 'request'

@@ -210,6 +210,7 @@ const offBot = new class BotWorker {
 	backBotton() {
 		let request = {
 			code: 132,
+			reason: "The player left active",
 			userID: 1
 		};
 		return request;
