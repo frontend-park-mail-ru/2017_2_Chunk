@@ -19,6 +19,7 @@ self.addEventListener('install', (event) => {
 					// '/music/playlist/Awesome Mix Vol.2 - 9. Looking Glass - Brandy (You\'re A Fine Girl).mp3',
 					// '/music/playlist/Awesome Mix Vol.2 - 13. Parliament - Flashlight.mp3',
 					'/music/playlist/Awesome Mix Vol.2 - 14. The Sneepers - Guardians Inferno (feat. David Hasselhoff).mp3',
+					'music/playlist/Awesome Mix Vol.2 - 14. The Sneepers - Guardians Inferno (feat. David Hasselhoff).mp3',
 					// '/music/playlist/Awesome Mix Vol. 2 - Sam Cooke - Bring It on Home to Me.mp3',
 					// '/music/playlist/Blondie - Call Me.mp3',
 					// '/music/playlist/David Bowie - Fame.mp3',
@@ -28,25 +29,28 @@ self.addEventListener('install', (event) => {
 					// '/music/playlist/Perry Como - The Best Of Times.mp3',
 					// '/music/playlist/Richard Cheese - Beat It (Michael Jackson).mp3',
 					// '/music/playlist/Вячеслав Макаров - Hot and Cold.mp3',
-					// '/music/serviceSounds/button.mp3',
-					// '/music/serviceSounds/button1.mp3',
-					// '/music/serviceSounds/button2.mp3',
-					// '/music/serviceSounds/ihaveaplan.mp3',
-					// '/music/serviceSounds/red_button.mp3',
+					'music/serviceSounds/button.mp3',
+					'music/serviceSounds/button1.mp3',
+					'music/serviceSounds/button2.mp3',
+					'music/serviceSounds/ihaveaplan.mp3',
+					'/music/serviceSounds/red_button.mp3',
 					'/video/dont_push_this_button.mp4',
 					'/images/opt-galaxy.jpg',
 					'/images/buttons/buttonTape0.jpg',
 					'/images/buttons/buttonTape1.jpg',
 					'/images/buttons/buttonTape2.jpg',
 					'/images/buttons/buttonTape3.jpg',
-					'/images/buttons/buttonTape4.jpg',
-					'/images/buttons/buttonTape5.jpg',
-					'/botWorker.js',
-					'/gameWorker.js',
-					'/audioWorker.js',
-					'/fonts/Road_Rage.otf',
-					'/fonts/roboto.ttf',
-					'/fonts/Guardians.ttf',
+					'images/buttons/buttonTape4.jpg',
+					'images/buttons/buttonTape5.jpg',
+					'models/dae/BabyGrootBlue/model/Baby_Groot.jpg',
+					'botWorker.js',
+					'gameWorker.js',
+					'gameWorker.js',
+					'audioWorker.js',
+					'loading.js',
+					'fonts/Road_Rage.otf',
+					'fonts/roboto.ttf',
+					'fonts/Guardians.ttf',
 					'menu',
 					'login',
 					'signup',
@@ -65,6 +69,11 @@ self.addEventListener('install', (event) => {
 				console.log('service Worker err: ', err);
 			})
 	)
+});
+
+
+self.addEventListener('activate',(event) => {
+
 });
 self.addEventListener('fetch', (event) => {
 	event.respondWith(

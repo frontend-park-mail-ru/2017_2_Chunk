@@ -23,7 +23,7 @@ new class StartLoader {
 
 	loadBackgroundImage() {
 		const img = new Image();
-		img.src = './images/galaxy.jpg';
+		img.src = './images/opt_galaxy.jpg';
 		img.onload = () => {
 			this.loadMainScript();
 		};
