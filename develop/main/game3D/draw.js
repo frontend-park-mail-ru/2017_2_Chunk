@@ -173,9 +173,7 @@ export default class Draw {
 	gameClose(response) {
 		const request = response.win;
 		if (request) {
-			if (Visibility.hidden()) {
 				this.bus.emit('youWin');
-			}
 		}
 		this.bus.emit('endOfGame', request);
 		this.gameVariebles.lightIndicator = false;
