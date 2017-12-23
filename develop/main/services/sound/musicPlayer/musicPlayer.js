@@ -94,7 +94,7 @@ export default class MusicPlayer {
 				localStorage.setItem('audioCurrentTime', `${audioTime}`);
 				const currentDate = new Date().getTime();
 				localStorage.setItem('lastDateModified', `${currentDate}`);
-			}, 2000);
+			}, 800);
 			this.interval = true;
 		}
 		if (configure) {
