@@ -231,9 +231,9 @@ export default class MusicPlayer {
 
 
 	nextSong() {
-		this.setSongByNumber(this.songNumber);
 		this.songNumber++;
 		this.songNumber = this.songNumber % this.numberOfSongs;
+		this.setSongByNumber(this.songNumber);
 	}
 
 
