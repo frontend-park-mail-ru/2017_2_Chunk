@@ -50,7 +50,7 @@ export default class MusicPlayer {
 		this.audioControlsSettings();
 		this.getLastConfiguration();
 		this.audio.type = 'audio/mpeg';
-		this.audio.autoplay = 'autoplay';
+		// this.audio.autoplay = 'autoplay';
 		this.backgroundaudio.appendChild(this.audio);
 		this.audio.onended = () => {
 			this.onEndedSong();
@@ -250,6 +250,10 @@ export default class MusicPlayer {
 				this.audio.pause();
 				this.audio.src = songUrl;
 				this.audio.load();
+				this.audio.oncanplaythrough = () => {
+					this.audio.play();
+					this.advertisingCounter++;
+				}
 			}
 		}
 		else {
@@ -258,7 +262,10 @@ export default class MusicPlayer {
 			this.audio.pause();
 			this.audio.src = songUrl;
 			this.audio.load();
-			this.advertisingCounter++;
+			this.audio.oncanplaythrough = () => {
+				this.audio.play();
+				this.advertisingCounter++;
+			}
 		}
 	}
 
