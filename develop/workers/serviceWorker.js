@@ -35,13 +35,14 @@ self.addEventListener('install', (event) => {
 					'music/serviceSounds/ihaveaplan.mp3',
 					'/music/serviceSounds/red_button.mp3',
 					// '/video/dont_push_this_button.mp4',
-					'/images/opt-galaxy.jpg',
+					'/images/opt_galaxy.jpg',
 					'/images/buttons/buttonTape0.jpg',
 					'/images/buttons/buttonTape1.jpg',
 					'/images/buttons/buttonTape2.jpg',
 					'/images/buttons/buttonTape3.jpg',
 					'images/buttons/buttonTape4.jpg',
 					'images/buttons/buttonTape5.jpg',
+					'models/dae/BabyGrootBlue/model/Baby_Groot.jpg',
 					'models/dae/BabyGrootBlue/model/Baby_Groot.jpg',
 					'botWorker.js',
 					'gameWorker.js',
@@ -76,8 +77,8 @@ self.addEventListener('fetch', (event) => {
 	event.respondWith(
 		caches.match(event.request)
 			.then((cachedResponse) => {
-				// if (cachedResponse)
-				// 	return cachedResponse;
+				if (cachedResponse)
+					return cachedResponse;
 				return fetch(event.request)
 					.then((response) => {
 						return caches.open(version)
