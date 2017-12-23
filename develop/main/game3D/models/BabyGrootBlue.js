@@ -11,7 +11,7 @@ export default new class GrootFactoryBlue extends factory {
 		function setOrientation(model) {
 			model.scale.set(2, 2, 2);
 			model.position.y = 13.5;
-			model.rotation.y = Math.PI;
+			model.rotation.y = 0;
 		}
 
 		super(path, setOrientation);

@@ -71,7 +71,9 @@ export default class Draw {
 			this.scene.remove(this.playerContainer);
 			this.scene.remove(this.cylinderContainer);
 			this.scene.remove(this.cubeContainer);
+			this.scene.remove(this.coneContainer);
 			this.gameVariebles.stepID = 0;
+			this.gameVariebles.firstStep = true;
 			cancelAnimationFrame(this.gameVariebles.animation);
 		});
 
@@ -226,19 +228,29 @@ export default class Draw {
 		switch (figure) {
 			case 1:
 				this.arrayOfFigure[i][j] = GrootFactoryBlue.getNew();
+				this.arrayOfFigure[i][j].position.x = i * 22 + 1;
+				this.arrayOfFigure[i][j].position.z = j * 22 + 12;
+				this.arrayOfFigure[i][j].color = 'blue';
 				break;
 			case 2:
 				this.arrayOfFigure[i][j] = GrootFactoryMagenta.getNew();
+				this.arrayOfFigure[i][j].position.x = i * 22 + 15;
+				this.arrayOfFigure[i][j].position.z = j * 22 + 4;
+				this.arrayOfFigure[i][j].color = 'magenta';
 				break;
 			case 3:
 				this.arrayOfFigure[i][j] = GrootFactoryRed.getNew();
+				this.arrayOfFigure[i][j].position.x = i * 22 + 4;
+				this.arrayOfFigure[i][j].position.z = j * 22 + 1;
+				this.arrayOfFigure[i][j].color = 'red';
 				break;
 			case 4:
 				this.arrayOfFigure[i][j] = GrootFactoryYellow.getNew();
+				this.arrayOfFigure[i][j].position.x = i * 22 + 12;
+				this.arrayOfFigure[i][j].position.z = j * 22 + 15;
+				this.arrayOfFigure[i][j].color = 'yellow';
 				break;
 		}
-		this.arrayOfFigure[i][j].position.x = i * 22 + 15;
-		this.arrayOfFigure[i][j].position.z = j * 22 + 4;
 		this.playerContainer.add(this.arrayOfFigure[i][j]);
 		this.arrayOfCylinder[i][j] = new Cylinder(i, j);
 		this.cylinderContainer.add(this.arrayOfCylinder[i][j].mesh);
@@ -419,7 +431,7 @@ export default class Draw {
 
 						this.bus.emit('clockStop');
 
-						this.bus.emit(`${gameCodes.gameStep.request}`, request);
+						this.bus.emit(`${gameCodes.requestEventName}`, request);
 					} else {
 						this.deleteAllStepEnable();
 					}
@@ -474,6 +486,10 @@ export default class Draw {
 
 	moveUp() {
 		if (this.gameVariebles.moveUpIndicator) {
+			if (this.gameVariebles.firstStep) {
+				this.scene.remove(this.coneContainer);
+				this.gameVariebles.firstStep = false;
+			}
 			if (!Object.isFrozen(this.point1) && this.point1.x > -1) {
 				if (this.arrayOfFigure[this.point1.x][this.point1.z].position.y < 25) {
 					this.arrayOfFigure[this.point1.x][this.point1.z].position.y += tools.SPEED;
@@ -489,7 +505,8 @@ export default class Draw {
 
 	moveDown() {
 		if (this.gameVariebles.moveDownIndicator) {
-			if (this.firstChoiceObject.x > -1) {
+			if (this.firstChoiceObject.x > -1 &&
+				this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z] !== undefined) {
 				if (this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y > 13.5) {
 					this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED_DOWN;
 					this.arrayOfCylinder[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED_DOWN;
@@ -557,11 +574,11 @@ export default class Draw {
 				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.z -=
 					tools.SPEED * (this.vector.z + ((0.5 * this.vector.z) / 2));
 
-				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y = y + 13.5;
-				this.arrayOfFigure[this.point1.x][this.point1.z].position.y = y + 13.5;
+				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y = y;
+				this.arrayOfFigure[this.point1.x][this.point1.z].position.y = y + 23.5;
 				this.arrayOfCubes[this.point1.x][this.point1.z].position.y = y + 10;
 				this.arrayOfCubes[this.point2.x][this.point2.z].position.y = -y - 10;
-				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.y = y + 13.5;
+				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.y = y;
 				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.y = -y;
 
 				if (this.gameVariebles.diff >= this.gameVariebles.distance) {
@@ -576,9 +593,26 @@ export default class Draw {
 				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y = 17.5;
 				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.z = this.plane2Z;
 
-				this.arrayOfFigure[this.point1.x][this.point1.z].position.x = this.plane2X + 7;
 				this.arrayOfFigure[this.point1.x][this.point1.z].position.y = 13.5;
-				this.arrayOfFigure[this.point1.x][this.point1.z].position.z = this.plane2Z - 4;
+				console.log(this.arrayOfFigure[this.point1.x][this.point1.z]);
+				switch (this.arrayOfFigure[this.point1.x][this.point1.z].color) {
+					case 'blue':
+						this.arrayOfFigure[this.point1.x][this.point1.z].position.x = this.point2.x * 22 + 1;
+						this.arrayOfFigure[this.point1.x][this.point1.z].position.z = this.point2.z * 22 + 12;
+						break;
+					case 'magenta':
+						this.arrayOfFigure[this.point1.x][this.point1.z].position.x = this.point2.x * 22 + 15;
+						this.arrayOfFigure[this.point1.x][this.point1.z].position.z = this.point2.z * 22 + 4;
+						break;
+					case 'red':
+						this.arrayOfFigure[this.point1.x][this.point1.z].position.x = this.point2.x * 22 + 4;
+						this.arrayOfFigure[this.point1.x][this.point1.z].position.z = this.point2.z * 22 + 1;
+						break;
+					case 'yellow':
+						this.arrayOfFigure[this.point1.x][this.point1.z].position.x = this.point2.x * 22 + 12;
+						this.arrayOfFigure[this.point1.x][this.point1.z].position.z = this.point2.z * 22 + 15;
+						break;
+				}
 
 				this.arrayOfCubes[this.point1.x][this.point1.z].position.x = this.cube2X;
 				this.arrayOfCubes[this.point1.x][this.point1.z].position.y = 0;
@@ -625,6 +659,7 @@ export default class Draw {
 		this.arrayOfPlane[this.point1.x][this.point1.z] = plane2;
 		this.arrayOfPlane[this.point2.x][this.point2.z] = plane1;
 
+
 		this.arrayOfFigure[this.point2.x][this.point2.z] = this.arrayOfFigure[this.point1.x][this.point1.z];
 		this.arrayOfFigure[this.point1.x][this.point1.z] = undefined;
 
@@ -659,19 +694,29 @@ export default class Draw {
 			switch (figure.color) {
 				case 1:
 					this.arrayOfFigure[figure.x][figure.z] = GrootFactoryBlue.getNew();
+					this.arrayOfFigure[figure.x][figure.z].position.x = figure.x * 22 + 1;
+					this.arrayOfFigure[figure.x][figure.z].position.z = figure.z * 22 + 12;
+					this.arrayOfFigure[figure.x][figure.z].color = 'blue';
 					break;
 				case 2:
 					this.arrayOfFigure[figure.x][figure.z] = GrootFactoryMagenta.getNew();
+					this.arrayOfFigure[figure.x][figure.z].position.x = figure.x * 22 + 15;
+					this.arrayOfFigure[figure.x][figure.z].position.z = figure.z * 22 + 4;
+					this.arrayOfFigure[figure.x][figure.z].color = 'magenta';
 					break;
 				case 3:
 					this.arrayOfFigure[figure.x][figure.z] = GrootFactoryRed.getNew();
+					this.arrayOfFigure[figure.x][figure.z].position.x = figure.x * 22 + 4;
+					this.arrayOfFigure[figure.x][figure.z].position.z = figure.z * 22 + 1;
+					this.arrayOfFigure[figure.x][figure.z].color = 'red';
 					break;
 				case 4:
 					this.arrayOfFigure[figure.x][figure.z] = GrootFactoryYellow.getNew();
+					this.arrayOfFigure[figure.x][figure.z].position.x = figure.x * 22 + 12;
+					this.arrayOfFigure[figure.x][figure.z].position.z = figure.z * 22 + 15;
+					this.arrayOfFigure[figure.x][figure.z].color = 'yellow';
 					break;
 			}
-			this.arrayOfFigure[figure.x][figure.z].position.x = figure.x * 22 + 15;
-			this.arrayOfFigure[figure.x][figure.z].position.z = figure.z * 22 + 4;
 			this.playerContainer.add(this.arrayOfFigure[figure.x][figure.z]);
 			this.arrayOfPlane[figure.x][figure.z].figure = figure.color;
 		});

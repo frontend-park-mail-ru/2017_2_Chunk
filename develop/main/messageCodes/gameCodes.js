@@ -1,31 +1,27 @@
 const gameCodes = {
 	getGameInfo: {
-		code: 103,
-		request: 'request'
+		code: 103
 	},
 	backFromLobby: {
-		code: 132,
-		request: 'request'
+		code: 132
 	},
 	startGame: {
-		code: 200,
-		request: 'request'
+		code: 200
 	},
 	gameStep: {
-		code: 201,
-		request: 'request'
+		code: 201
 	},
 	timeout: {
-		code: 202,
-		request: 'request'
+		code: 202
+	},
+	playerBlocked: {
+		code: 203
 	},
 	gameEnd: {
-		code: 204,
-		request: 'request'
+		code: 204
 	},
 	playerOffline: {
-		code: 209,
-		request: 'request'
+		code: 209
 	},
 	responseEventName: 'response',
 	requestEventName: 'request',

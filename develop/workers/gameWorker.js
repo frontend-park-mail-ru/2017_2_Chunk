@@ -5,6 +5,7 @@ const gameWorker = new class GameWorker {
 		this.bus = eventBus;
 		this.queue = [];
 		this.stepIndicator = true;
+
 	}
 
 	getUserID(data) {
@@ -27,9 +28,9 @@ const gameWorker = new class GameWorker {
 		}
 		let playerString = '';
 		if (win) {
-			playerString = this.playerString() + '\n' + 'You win! :)';
+			playerString = this.playerString(1) + '\n' + 'You win! :)';
 		} else {
-			playerString = this.playerString() + '\n' + 'You lose! :(';
+			playerString = this.playerString(1) + '\n' + 'You lose! :(';
 		}
 		let request = {
 			func: 'winnerOrLooser',
@@ -67,7 +68,7 @@ const gameWorker = new class GameWorker {
 	}
 
 	startArray(data) {
-		this.currentPlayer = 1;
+		this.currentPlayer = 2;
 		this.fieldSize = data.game.field.maxX;
 		this.arrayOfField = data.game.field.field;
 		this.gamers = data.game.gamers;
@@ -78,19 +79,12 @@ const gameWorker = new class GameWorker {
 
 		let request = {
 			func: 'startDiv',
-			playerString: this.playerString(),
+			playerString: this.playerString('start'),
 			nowUsername: this.gamers[this.currentPlayer-1].username
 		};
 		self.postMessage(request);
 
 		this.fullStep();
-	}
-
-	returnNextPlayer(currentPlayer) {
-		currentPlayer++;
-		if (currentPlayer > this.countPlayers)
-			currentPlayer = 1;
-		return currentPlayer;
 	}
 
 	step(data) {
@@ -154,6 +148,12 @@ const gameWorker = new class GameWorker {
 					}
 				}
 			}
+			if (this.gamers[this.currentPlayer] === undefined) {
+				this.currentPlayer = this.returnNextPlayer(this.currentPlayer);
+			}
+			if (this.gamers[this.currentPlayer] === undefined) {
+				this.currentPlayer = this.returnNextPlayer(this.currentPlayer);
+			}
 			const request = {
 				func: 'coordinatesForStep',
 				vector: vector,
@@ -163,13 +163,13 @@ const gameWorker = new class GameWorker {
 				nowUsername: this.gamers[this.currentPlayer].username,
 				playerString: this.playerString(),
 			};
+			this.currentPlayer = this.returnNextPlayer(this.currentPlayer);
 			this.stepIndicator = true;
 			self.postMessage(request);
 		}
 
 		setTimeout(this.fullStep.bind(this), 800);
 	}
-
 
 	countFigure(array) {
 		const countFigure = [];
@@ -186,15 +186,41 @@ const gameWorker = new class GameWorker {
 		return countFigure;
 	}
 
-	playerString() {
+	playerString(param) {
 		let playerString = '';
 		let countFigure = this.countFigure(this.arrayOfField);
 		for (let key in this.gamers) {
 			playerString += `${this.gamers[key].username}` + ': ' + `${countFigure[key-1]}` + '\n';
 		}
-		playerString += 'Now moving: ' + `${this.gamers[this.currentPlayer].username}` + '\n';
-		this.currentPlayer = this.returnNextPlayer(this.currentPlayer);
+		if (!param)
+			playerString += '\n' + 'Now moving: ' + `${this.gamers[this.currentPlayer].username}` + '\n';
+		if (param === 'start')
+			playerString += '\n' + 'Now moving: ' + `${this.gamers[this.currentPlayer-1].username}` + '\n';
 		return playerString;
+	}
+
+	playerBlocked(data) {
+		let username = data.player.username;
+		console.log('username Blocked: ' + username);
+		for (let key in this.gamers) {
+			if (this.gamers[key].username === username) {
+				console.log("KEY DELETED");
+				console.log(key);
+				delete this.gamers[key];
+			}
+		}
+		console.log("BLOCKED");
+	}
+
+	returnNextPlayer(currentPlayer) {
+		currentPlayer++;
+		if (currentPlayer > this.countPlayers)
+			currentPlayer = 1;
+
+		console.log("CURRENTPLAYER");
+		console.log(currentPlayer);
+
+		return currentPlayer;
 	}
 
 	findMaxFiguresCount(array) {
@@ -208,7 +234,6 @@ const gameWorker = new class GameWorker {
 		}
 		return maxI;
 	}
-
 
 	detectFigureByUserID(userID) {
 		for (let key in this.gamers) {
@@ -284,6 +309,9 @@ self.onmessage = (workerRequest) => {
 			break;
 		case '200':
 			gameWorker.startArray(data);
+			break;
+		case '203':
+			gameWorker.playerBlocked(data);
 			break;
 		case '103':
 			if (gameWorker.gamers !== undefined)
