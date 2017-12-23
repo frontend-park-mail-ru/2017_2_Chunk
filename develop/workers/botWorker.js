@@ -271,8 +271,16 @@ const offBot = new class BotWorker {
 
 		for (let i = 0; i < this.addBot.botsCount; i++) {
 			if (this.isGameOver()) { return; }
-			if (this.countFigure[i+1] === 0)
+			if (this.countFigure[i+1] === 0) {
+				let request = {
+					code: 203,
+					player: {
+						username: `bot${i+1}`
+					}
+				};
+				self.postMessage(request);
 				continue;
+			}
 			this.botStep(i+2);
 			this.moveOrClone(this.stepObject.step);
 			this.step(this.stepObject.step);

@@ -7,16 +7,37 @@
     z-index: 2;
     text-align: center;
     opacity: 0.8;
-    border: 0.1em solid rgb(105, 63, 149);
+    border: 0.1em solid #5f1b80;
     position: fixed;
     padding: 0.2em;
-    margin-left: 30%;
     border-radius: 15px;
     box-shadow: none;
     white-space: pre-wrap;
     font-size: 3vh;
+    width: 350px;
 
     color: #00a9ff;
+}
+
+.gameDiv_right {
+    margin-left: 33%;
+    margin-top: 2%;
+}
+
+.gameDiv_center {
+    margin-left: 0;
+    margin-top: 18%;
+    transition: 1s;
+    animation: border1 0.5s linear infinite;
+}
+
+@-webkit-keyframes border1 {
+    from {border: 0.3vw solid #5f1b80;}
+    to {border: 0.3vw solid #ba37ff;}
+}
+@keyframes border1 {
+    from {border: 0.3vw solid #5f1b80;}
+    to {border: 0.3vw solid #ba37ff;}
 }
 
 .clock {

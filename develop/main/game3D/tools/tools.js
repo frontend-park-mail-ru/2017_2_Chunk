@@ -34,7 +34,7 @@ export const PLAYER_COLORS_MOVE = [
 	0xe87386    //светло-светло-красный
 ];
 
-export const SPEED = 0.5;
+export const SPEED = 0.6;
 export const SPEED_Y = 0.03;
 export const SPEED_DOWN = 1.5;
 

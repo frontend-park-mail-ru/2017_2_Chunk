@@ -32,6 +32,7 @@ export default class Game3D {
 		this.rotate();
 		this.getGameInfo();
 		this.timeout();
+		this.playerBlocked();
 	}
 
 	getGameInfo() {
@@ -47,9 +48,16 @@ export default class Game3D {
 				code: `${gameCodes.getGameInfo.code}`
 			};
 			this.gameID = response.game.gameID;
-			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
+			this.bus.emit(`${gameCodes.requestEventName}`, request);
 			this.draw.startGame(response);
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, response);
+		});
+	}
+
+	playerBlocked() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.playerBlocked.code}`, (response) => {
+			const request = response;
+			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
 		});
 	}
 

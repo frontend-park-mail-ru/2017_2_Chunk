@@ -20,7 +20,7 @@ export default new class Loader {
 
 	load(modelPath) {
 
-		console.log("Loading model from " + modelPath);
+		//console.log("Loading model from " + modelPath);
 
 		const extension = modelPath.substr(modelPath.length - 4, modelPath.length);
 		let resolve, reject;
