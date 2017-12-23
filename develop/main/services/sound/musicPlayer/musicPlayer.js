@@ -90,7 +90,8 @@ export default class MusicPlayer {
 		this.setCurrentTrackDot();
 		if (!this.interval) {
 			setInterval(() => {
-				localStorage.setItem('audioCurrentTime', `${this.audio.currentTime}`);
+				let audioTime =  Math.round(this.audio.currentTime);
+				localStorage.setItem('audioCurrentTime', `${audioTime}`);
 				const currentDate = new Date().getTime();
 				localStorage.setItem('lastDateModified', `${currentDate}`);
 			}, 2000);
