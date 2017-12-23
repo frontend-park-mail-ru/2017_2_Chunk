@@ -89,7 +89,7 @@ export default class MusicPlayer {
 	setConfiguration(configure) {
 		this.setCurrentTrackDot();
 		if (!this.interval) {
-			setInterval(() => {
+			this.timer = setInterval(() => {
 				let audioTime =  Math.round(this.audio.currentTime);
 				localStorage.setItem('audioCurrentTime', `${audioTime}`);
 				const currentDate = new Date().getTime();
@@ -370,6 +370,8 @@ export default class MusicPlayer {
 		});
 		eventBus.on('Mute', () => {
 			this.mute();
+			clearInterval(this.timer);
+			this.interval = false;
 		})
 	}
 
