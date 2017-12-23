@@ -88,11 +88,14 @@ export default class MusicPlayer {
 
 	setConfiguration(configure) {
 		this.setCurrentTrackDot();
-		setInterval(() => {
-			localStorage.setItem('audioCurrentTime', `${this.audio.currentTime}`);
-			const currentDate = new Date().getTime();
-			localStorage.setItem('lastDateModified', `${currentDate}`);
-		}, 2000);
+		if (!this.interval) {
+			setInterval(() => {
+				localStorage.setItem('audioCurrentTime', `${this.audio.currentTime}`);
+				const currentDate = new Date().getTime();
+				localStorage.setItem('lastDateModified', `${currentDate}`);
+			}, 2000);
+			this.interval = true;
+		}
 		if (configure) {
 			if (this.volume) {
 				this.audio.volume = this.maxAudioVolume;
