@@ -50,7 +50,7 @@ export default class MusicPlayer {
 		this.audioControlsSettings();
 		this.getLastConfiguration();
 		this.audio.type = 'audio/mpeg';
-		// this.audio.autoplay = 'autoplay';
+		this.audio.autoplay = false;
 		this.backgroundaudio.appendChild(this.audio);
 		this.audio.onended = () => {
 			this.onEndedSong();
