@@ -23,7 +23,7 @@
 }
 
 body {
-    background: black url(../../public/images/galaxy.jpg) no-repeat;
+    /*background: black url(../../public/images/opt_galaxy.jpg) no-repeat;*/
     background-size: cover;
     font-family: Road_Rage, "Comic Sans MS";
     box-sizing: border-box;
