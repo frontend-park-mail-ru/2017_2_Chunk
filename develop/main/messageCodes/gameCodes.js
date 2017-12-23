@@ -3,12 +3,20 @@ const gameCodes = {
 		code: 103,
 		request: 'request'
 	},
+	backFromLobby: {
+		code: 132,
+		request: 'request'
+	},
 	startGame: {
 		code: 200,
 		request: 'request'
 	},
 	gameStep: {
 		code: 201,
+		request: 'request'
+	},
+	timeout: {
+		code: 202,
 		request: 'request'
 	},
 	gameEnd: {

@@ -3,16 +3,18 @@
 import OrbitControl from 'three-orbitcontrols';
 import * as Three from 'three';
 import PlaneCell from './models/plane.js';
-import Cylinder from './models/cylinfder';
+import Cylinder from './models/cylinder';
 import * as tools from './tools/tools.js';
 import Point from './models/point.js';
 import eventBus from '../modules/eventBus';
 import gameCodes from '../messageCodes/gameCodes';
-import GrootFactoryBlue from "./models/BabyGrootBlue";
-import GrootFactoryMagenta from "./models/BabyGrootMagenta";
-import GrootFactoryRed from "./models/BabyGrootRed";
-import GrootFactoryYellow from "./models/BabyGrootYellow";
+import GrootFactoryBlue from './models/BabyGrootBlue';
+import GrootFactoryMagenta from './models/BabyGrootMagenta';
+import GrootFactoryRed from './models/BabyGrootRed';
+import GrootFactoryYellow from './models/BabyGrootYellow';
 import PlatformFactory from "./models/Platform";
+import PlayerCone from './models/playerCone';
+import Visibility from 'visibilityjs';
 
 export default class Draw {
 
@@ -53,7 +55,7 @@ export default class Draw {
 		this.controls.dampingFactor = 0.2;
 		this.controls.autoRotate = false;
 		this.controls.enableKeys = false;
-		this.controls.rotateSpeed = 0.3;
+		this.controls.rotateSpeed = 0.2;
 
 		container.getElement().addEventListener('click', this.onDocumentMouseMove.bind(this), false);
 		container.getElement().addEventListener('mousemove', this.onDocumentMouseMove.bind(this), false);
@@ -63,6 +65,7 @@ export default class Draw {
 		this.raycasterClick = new Three.Raycaster();
 
 		this.bus.on('deleteTree', () => {
+			this.scene.remove(this.light);
 			this.scene.remove(this.spotLight);
 			this.scene.remove(this.cellContainer);
 			this.scene.remove(this.playerContainer);
@@ -71,6 +74,8 @@ export default class Draw {
 			this.gameVariebles.stepID = 0;
 			cancelAnimationFrame(this.gameVariebles.animation);
 		});
+
+		this.bus.emit('clockStop');
 
 		this.plane1X = 0;
 		this.plane1Z = 0;
@@ -86,6 +91,8 @@ export default class Draw {
 		this.gameStep();
 		this.makeStepEnable();
 		this.azimuthAngle();
+		this.playerDivStart();
+		this.timeout();
 	}
 
 	startGame(response) {
@@ -106,9 +113,16 @@ export default class Draw {
 		this.controls.maxDistance = 500.0;
 
 		this.bus.emit('beginPlaying');
-		// this.bus.emit('changePlayerDiv', 'HELLO');
+		this.bus.emit('beginClock');
 
 		this.animate();
+	}
+
+	playerDivStart() {
+		this.bus.on('startDiv', (text) => {
+			this.bus.emit('changePlayerDiv', text.playerString);
+			this.nowUsername = text.nowUsername;
+		})
 	}
 
 	loadBackgroundCube() {
@@ -129,6 +143,11 @@ export default class Draw {
 	getGameInfo() {
 		this.bus.on('figureType', (response) => {
 			this.figureType = response.figureType;
+			this.username = response.username;
+
+			if (this.username === this.nowUsername) {
+				this.bus.emit('clockStart');
+			}
 		});
 	}
 
@@ -139,6 +158,10 @@ export default class Draw {
 		});
 	}
 
+	timeout() {
+		this.bus.emit('clockStop');
+	}
+
 	gameEnd() {
 		this.bus.on('winnerOrLooser', (response) => {
 			this.gameVariebles.queue.push(response);
@@ -147,14 +170,18 @@ export default class Draw {
 
 	gameClose(response) {
 		const request = response.win;
+		if (request) {
+			if (Visibility.hidden()) {
+				this.bus.emit('youWin');
+			}
+		}
 		this.bus.emit('endOfGame', request);
-		this.scene.remove(this.light);
 		this.gameVariebles.lightIndicator = false;
 		this.gameVariebles.cameraRotateIndicator = false;
 	}
 
 	addMeshes() {
-		this.light = new Three.AmbientLight(tools.COLORS.LIGHT, 0.75, 100, Math.PI);
+		this.light = new Three.AmbientLight(tools.COLORS.LIGHT, 0.9);
 		this.light.position.set(0, 0, 0);
 		this.scene.add(this.light);
 
@@ -166,6 +193,7 @@ export default class Draw {
 		this.cellContainer = new Three.Object3D();
 		this.cylinderContainer = new Three.Object3D();
 		this.cubeContainer = new Three.Object3D();
+		this.coneContainer = new Three.Object3D();
 
 		this.addPlaneByStart();
 		this.addAllPlayers();
@@ -174,6 +202,7 @@ export default class Draw {
 		this.scene.add(this.playerContainer);
 		this.scene.add(this.cylinderContainer);
 		this.scene.add(this.cubeContainer);
+		this.scene.add(this.coneContainer);
 	}
 
 	addPlaneByStart() {
@@ -258,13 +287,24 @@ export default class Draw {
 		if (this.gameVariebles.cameraRotateIndicator) {
 			if (this.controls.minDistance > 200) {
 				this.controls.autoRotate = true;
-				this.controls.minDistance -= 2;
-				this.controls.maxDistance -= 2;
+				this.controls.minDistance -= 4;
+				this.controls.maxDistance -= 4;
 			} else {
 				this.controls.autoRotate = false;
 				this.controls.maxDistance = 500;
 				this.controls.minDistance = 100;
 				this.gameVariebles.cameraRotateIndicator = false;
+
+				for (let i = 0; i < this.planeSize; i++) {
+					for (let j = 0; j < this.planeSize; j++) {
+						if (this.arrayOfPlane[i][j].figure === this.figureType + 1) {
+							let cone = new PlayerCone();
+							cone.mesh.position.x = i * 22 + 8;
+							cone.mesh.position.z = j * 22 + 8;
+							this.coneContainer.add(cone.mesh);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -276,8 +316,22 @@ export default class Draw {
 			!this.gameVariebles.stepIndicator &&
 			!Object.isFrozen(this.point1)
 		) {
+			if (this.gameVariebles.firstStep) {
+				this.scene.remove(this.coneContainer);
+				this.gameVariebles.firstStep = false;
+			}
+
 			this.stepObject = this.gameVariebles.queue.shift();
 			this.bus.emit('changePlayerDiv', this.stepObject.playerString);
+			this.nowUsername = this.stepObject.nowUsername;
+
+			if (this.username === this.nowUsername) {
+				this.bus.emit('clockStart');
+				if (Visibility.hidden()) {
+					this.bus.emit('yourStep', 'Your step');
+				}
+			}
+
 			if (this.stepObject.func === 'winnerOrLooser') {
 				this.gameClose(this.stepObject);
 			} else {
@@ -295,8 +349,6 @@ export default class Draw {
 		const intersects = this.raycasterClick.intersectObjects(
 			this.cylinderContainer.children.concat(this.cellContainer.children)
 		);
-		console.log("INTERSECTS");
-		console.log(intersects);
 		if (intersects.length && !this.gameVariebles.moveIndicator && !this.gameVariebles.scaleIndicator) {
 			if (this.IntersectedClick !== intersects[0].object) {
 				if (this.IntersectedClick) {
@@ -305,7 +357,8 @@ export default class Draw {
 				}
 
 				if (intersects[0].object.geometry.type === 'CylinderGeometry' &&
-					!Object.isFrozen(this.point1)) {
+					!Object.isFrozen(this.point1) &&
+					this.username === this.nowUsername) {
 					this.deleteAllStepEnable();
 					let id1x = 0;
 					let id1z = 0;
@@ -319,6 +372,11 @@ export default class Draw {
 
 						this.point1.x = id1x;
 						this.point1.z = id1z;
+
+						if (this.gameVariebles.firstStep) {
+							this.scene.remove(this.coneContainer);
+							this.gameVariebles.firstStep = false;
+						}
 
 						this.getAzimuthAngle();
 						this.getStepEnable();
@@ -358,6 +416,9 @@ export default class Draw {
 							},
 							stepID: this.gameVariebles.stepID
 						};
+
+						this.bus.emit('clockStop');
+
 						this.bus.emit(`${gameCodes.gameStep.request}`, request);
 					} else {
 						this.deleteAllStepEnable();
@@ -430,10 +491,10 @@ export default class Draw {
 		if (this.gameVariebles.moveDownIndicator) {
 			if (this.firstChoiceObject.x > -1) {
 				if (this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y > 13.5) {
-					this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED;
-					this.arrayOfCylinder[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED;
-					this.arrayOfCubes[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED;
-					this.arrayOfPlane[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED;
+					this.arrayOfFigure[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED_DOWN;
+					this.arrayOfCylinder[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED_DOWN;
+					this.arrayOfCubes[this.firstChoiceObject.x][this.firstChoiceObject.z].position.y -= tools.SPEED_DOWN;
+					this.arrayOfPlane[this.firstChoiceObject.x][this.firstChoiceObject.z].mesh.position.y -= tools.SPEED_DOWN;
 				} else {
 					this.gameVariebles.moveDownIndicator = false;
 				}
@@ -448,7 +509,7 @@ export default class Draw {
 					this.gameVariebles.grow, this.gameVariebles.grow, this.gameVariebles.grow);
 				this.gameVariebles.grow += 0.08;
 			} else {
-				this.gameVariebles.grow = 0.01;
+				this.gameVariebles.grow = 1;
 				this.gameVariebles.scaleIndicator = false;
 				delete this.point1;
 				this.point1 = new Point();
@@ -498,8 +559,8 @@ export default class Draw {
 
 				this.arrayOfCylinder[this.point1.x][this.point1.z].mesh.position.y = y + 13.5;
 				this.arrayOfFigure[this.point1.x][this.point1.z].position.y = y + 13.5;
-				this.arrayOfCubes[this.point1.x][this.point1.z].position.y = y;
-				this.arrayOfCubes[this.point2.x][this.point2.z].position.y = -y;
+				this.arrayOfCubes[this.point1.x][this.point1.z].position.y = y + 10;
+				this.arrayOfCubes[this.point2.x][this.point2.z].position.y = -y - 10;
 				this.arrayOfPlane[this.point1.x][this.point1.z].mesh.position.y = y + 13.5;
 				this.arrayOfPlane[this.point2.x][this.point2.z].mesh.position.y = -y;
 
@@ -508,7 +569,6 @@ export default class Draw {
 					this.gameVariebles.diff = 0;
 				}
 			} else {
-				console.log("END");
 				this.gameVariebles.moveIndicator = false;
 				this.gameVariebles.end = false;
 
@@ -631,7 +691,6 @@ export default class Draw {
 	fullStep(stepObject) {
 		this.vector = stepObject.vector;
 		this.gameVariebles.distance = this.calculateDistance(this.point1, this.point2);
-		console.log(this.gameVariebles.distance);
 		this.moveOrClone(stepObject);
 		this.deleteAllStepEnable();
 	}

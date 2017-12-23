@@ -25,11 +25,13 @@ export default class Game3D {
 
 	gameEvents() {
 		this.startGame();
+		this.backFromLobby();
 		this.figureClick();
 		this.gameStep();
 		this.gameEnd();
 		this.rotate();
 		this.getGameInfo();
+		this.timeout();
 	}
 
 	getGameInfo() {
@@ -51,10 +53,23 @@ export default class Game3D {
 		});
 	}
 
+	backFromLobby() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.backFromLobby.code}`, (response) => {
+			const request = response;
+			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
+		});
+	}
+
 	gameStep() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameStep.code}`, (response) => {
 			const request = response;
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
+		});
+	}
+
+	timeout() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.timeout.code}`, () => {
+			this.draw.timeout();
 		});
 	}
 

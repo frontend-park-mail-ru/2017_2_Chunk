@@ -36,12 +36,13 @@ export const PLAYER_COLORS_MOVE = [
 
 export const SPEED = 0.5;
 export const SPEED_Y = 0.03;
+export const SPEED_DOWN = 1.5;
 
 export const GAME_VARIABLES = {
 	distance: 0,
 	end: false,
 	diff: 0,
-	grow: 0.01,
+	grow: 1,
 	moveIndicator: false,
 	scaleIndicator: false,
 	stepIndicator: false,
@@ -56,4 +57,5 @@ export const GAME_VARIABLES = {
 	moveUpIndicator: false,
 	moveDownIndicator: false,
 	changeFigureIndicator: false,
+	firstStep: true
 };

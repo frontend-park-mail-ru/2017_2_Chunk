@@ -2,22 +2,82 @@
 }
 
 .gameDiv {
-    background-color: rgb(105, 63, 149);
+    background-color: white;
     transition: all .12s;
     z-index: 2;
-
     text-align: center;
-    font-size: calc(10px + 2vh);
-    color: white;
     opacity: 0.8;
-    border: 0.1em solid transparent;
-
+    border: 0.1em solid rgb(105, 63, 149);
     position: fixed;
-    max-width: 600px;
     padding: 0.2em;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    border-radius: 0.4em;
+    margin-left: 30%;
+    border-radius: 15px;
     box-shadow: none;
     white-space: pre-wrap;
+    font-size: 3vh;
+
+    color: #00a9ff;
 }
+
+.clock {
+    transition: all .12s;
+    z-index: 2;
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 5px double white;
+    background: -webkit-radial-gradient(#a9b0ff, #6b67e9);
+    background: radial-gradient(#a9b0ff, #6b67e9);
+    margin: 2rem auto;
+}
+
+.timer {
+    position: absolute;
+    display: inline-block;
+    width: 50px;
+    height: 100px;
+    border: solid transparent;
+    border-width: 0 0 0 50px;
+    border-radius: 100px;
+    outline: none;
+    overflow: hidden;
+}
+
+.timer_animation {
+    animation: background1 60s linear infinite;
+}
+
+.timer:before {
+    content: "";
+    position: absolute;
+    left: -50px;
+    height: 100px;
+    border-right: 50px solid transparent;
+    border-left: 50px solid #5f1b80;
+    border-radius: 100px;
+}
+
+.timer_animation:before {
+    animation: rotate1 60s linear infinite;
+}
+
+@-webkit-keyframes background1 {
+    49.999% {border-width: 0 0 0 50px; border-color: transparent;}
+    50%, 100% {border-width: 0 50px 0 0; border-color: #5f1b80;}
+}
+@-webkit-keyframes rotate1 {
+    49.999% {left: -50px;}
+    50% {left: 0px;}
+    100% {-webkit-transform: rotate(360deg); left: 0px;}
+}
+@keyframes background1 {
+    49.999% {border-width: 0 0 0 50px; border-color: transparent;}
+    50%, 100% {border-width: 0 50px 0 0; border-color: #5f1b80;}
+}
+@keyframes rotate1 {
+    49.999% {left: -50px;}
+    50% {left: 0px;}
+    100% {transform: rotate(360deg); left: 0px;}
+}
+

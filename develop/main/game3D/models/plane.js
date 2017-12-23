@@ -11,6 +11,7 @@ export default class PlaneCell {
 		);
 		this.material = new THREE.MeshLambertMaterial({
 			color: tools.COLORS.PLANE_COLOR,
+			emissive: 0x938c1f,
 			side: THREE.DoubleSide,
 			transparent: true,
 			opacity: 0
