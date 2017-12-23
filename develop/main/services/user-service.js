@@ -56,6 +56,7 @@ export default new class UserService {
 		const resp = await Http.fetchPost('/user/sign_up', {username, email, password});
 		response.json = await resp.json();
 		eventBus.emit('backendResponseReceived');
+		eventBus.emit('hideOfflineInfo');
 
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
@@ -95,6 +96,8 @@ export default new class UserService {
 		const resp = await Http.fetchPost('/user/sign_in', {login, password});
 		response.json = await resp.json();
 		eventBus.emit('backendResponseReceived');
+		eventBus.emit('hideOfflineInfo');
+
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;
 			return response;
@@ -131,6 +134,8 @@ export default new class UserService {
 		const resp = await Http.fetchPost('/user/update', {username, email, password, oldPassword});
 		response.json = await resp.json();
 		eventBus.emit('backendResponseReceived');
+		eventBus.emit('hideOfflineInfo');
+
 
 		if (resp.status >= 400) {
 			response.message = response.json.errorMessage;

@@ -58,7 +58,11 @@ export default class ValidationInfo extends Block {
 			else
 				this.validationInfo.setText(`Only singleplayer is available in offline mode`);
 			this.show();
+		});
+		eventBus.on('hideOfflineInfo', () => {
+			this.hide();
 		})
+
 	}
 
 
