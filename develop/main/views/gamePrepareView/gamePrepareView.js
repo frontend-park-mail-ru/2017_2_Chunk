@@ -132,7 +132,6 @@ export default class gamePrepareView extends View {
 
 	kickPLayer() {
 		this.bus.on(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.kickPlayer.code}`, (response) => {
-			debugger;
 			response.username = this.playersData[response.userID];
 			eventBus.emit(`${gamePrepareCodes.responseEventName}${gamePrepareCodes.internalKickPlayer.code}`,
 			response);
@@ -256,5 +255,10 @@ export default class gamePrepareView extends View {
 			code: `${gamePrepareCodes.whoIsIt.code}`,
 		};
 		this.bus.emit(`${gamePrepareCodes.requestEventName}`, request);
+	}
+
+
+	tourStep() {
+		eventBus.on(`${gameCodes}`)
 	}
 }

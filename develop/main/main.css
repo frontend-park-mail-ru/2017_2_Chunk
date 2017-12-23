@@ -23,8 +23,7 @@
 }
 
 body {
-    /*background: black url(../../public/images/galaxy.jpg) no-repeat;*/
-    background-color: black;
+    background: black url(../../public/images/galaxy.jpg) no-repeat;
     background-size: cover;
     font-family: Road_Rage, "Comic Sans MS";
     box-sizing: border-box;
@@ -47,6 +46,11 @@ main {
     grid-template-rows: 100px 50px auto;
     transition: filter 0.1s;
     transition-delay: 0s;
+}
+
+:-webkit-full-screen {
+    background: url('../../public/images/opt_galaxy.jpg');
+    z-index: -1 !important;
 }
 
 @media screen and (min-width: 640px) and (max-width: 1100px) and (orientation: landscape) {

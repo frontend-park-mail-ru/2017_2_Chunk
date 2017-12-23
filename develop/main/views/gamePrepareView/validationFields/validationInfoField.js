@@ -31,9 +31,9 @@ export default class ValidationInfo extends Block {
 	onValidationEvent() {
 		for (let error in validationCodes) {
 			eventBus.on(`${gamePrepareCodes.responseEventName}${validationCodes[error].code}`, (event) => {
-				if (+event.code === 800 && location.pathname === '/lobby') {
-					if (+this.userID === +event.userID)
-						this.validationInfo.setText(`You was kicked by master of the game`);
+				if (+event.code === 134 && +this.userID === +event.userID) {
+					this.validationInfo.setText(`You was kicked by master of the game`);
+
 				}
 				else if (+event.code === 134 && location.pathname === '/waiting-hall') {
 					this.validationInfo.setText(`PLayer ${event.username} was kicked`);
@@ -43,7 +43,7 @@ export default class ValidationInfo extends Block {
 				}
 				setTimeout(() => {
 					this.hide();
-				}, 5000);
+				}, 3000);
 				this.show();
 			})
 		}
@@ -75,7 +75,7 @@ export default class ValidationInfo extends Block {
 
 
 	whoIsIt() {
-		eventBus.on('iAm', (userID) => {
+		eventBus.on('IAm', (userID) => {
 			this.userID = +userID;
 		});
 	}

@@ -21,7 +21,13 @@ export default new class visibilityViewer {
 
 	hiddenCallback() {
 		sessionStorage.setItem('isPageActive', '0');
-		this.hiddenEvent = eventBus.on(`${tabMessage.newGame.name}`, (messageText) => {
+		this.hiddenEvent = this.hiddenEvent || {};
+		this.hiddenEvent[`${tabMessage.newGame.name}`]
+			= eventBus.on(`${tabMessage.newGame.name}`, (messageText) => {
+			this.blink(messageText);
+		});
+		this.hiddenEvent[`${tabMessage.yourStep.name}`]
+			= eventBus.on(`${tabMessage.yourStep.name}`, (messageText) => {
 			this.blink(messageText);
 		});
 	}
@@ -31,13 +37,13 @@ export default new class visibilityViewer {
 		eventBus.emit('pageActive');
 		sessionStorage.setItem('isPageActive', '1');
 		this.stop();
-		eventBus.remove(`${tabMessage.newGame.name}`, this.hiddenEvent);
+		for (let event in this.hiddenEvent)
+			eventBus.remove(event, this.hiddenEvent[event]);
 	}
 
 
 	blink(messageText) {
 		this.messageBlink(messageText);
-		// this.grootBlink();
 	}
 
 	messageBlink(messageText) {
@@ -47,30 +53,11 @@ export default new class visibilityViewer {
 		this.focusTimer = setInterval(() => {
 			document.title = this.show[j++ % 2];
 		}, 1000);
+		setTimeout(this.stop, 15000);
 	}
 
 
-	grootBlink() {
-		var i = 1;
-		var saveNode = undefined;
-		var grootTimer = undefined;
-		let stop = false;
-		const nodeList = Array.from(document.getElementsByTagName('link'));
-		nodeList.forEach((node) => {
-			if (node.rel === 'shortcut icon') {
-				saveNode = node;
-				grootTimer = setInterval(nextIco, 500);
-			}
-		});
 
-
-		eventBus.on('grootStop', () => clearInterval(grootTimer));
-
-		function nextIco() {
-				saveNode.href = `./images/dancing-groot/groot-${i % 11}.gif`;
-				i++;
-			}
-	}
 
 	stop() {
 		if (this.blinkWork) {
@@ -78,6 +65,5 @@ export default new class visibilityViewer {
 			document.title = this.show[1];
 			this.blinkWork = false;
 		}
-		// eventBus.emit('grootStop');
 	}
 }

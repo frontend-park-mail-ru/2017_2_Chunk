@@ -119,7 +119,7 @@ export default class MusicPlayer {
 			localStorage.setItem('audioCurrentTime', `${this.audio.currentTime}`);
 			const currentDate = new Date().getTime();
 			localStorage.setItem('lastDateModified', `${currentDate}`);
-		}, 2000);
+		}, 1000);
 	}
 
 
@@ -240,6 +240,7 @@ export default class MusicPlayer {
 			this.audio.src = songUrl;
 			this.audio.load();
 			this.audio.onended = () => {
+				this.advertisingCounter++;
 				localStorage.setItem('songNumber', `${this.songNumber}`);
 				const songUrl = this.playlist[songNumber].url;
 				this.audio.pause();
@@ -253,8 +254,8 @@ export default class MusicPlayer {
 			this.audio.pause();
 			this.audio.src = songUrl;
 			this.audio.load();
+			this.advertisingCounter++;
 		}
-		// this.advertisingCounter++;
 	}
 
 
@@ -374,10 +375,7 @@ export default class MusicPlayer {
 		if (localStorage.getItem('lastDateModified')) {
 			const lastDateModified = +localStorage.getItem('lastDateModified');
 			const diff = date - lastDateModified;
-			// console.log('last date: ', lastDateModified);
-			// console.log('current date: ', date);
-			// console.log('Difference: ', diff);
-			if (diff / (1000) > 10) {
+			if (diff / (1000) > 20) {
 				localStorage.removeItem('lastConfiguration');
 			}
 		}

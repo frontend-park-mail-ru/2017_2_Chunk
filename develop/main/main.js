@@ -44,8 +44,8 @@ if ('serviceWorker' in navigator) {
 	{
 		const gameNameView = new GameNameView();
 		const eventBus = EventBus;
-		document.body.classList.add('main_theme-black-orange');
 		const app = Block.create('main', {}, [, 'main']);
+		app.el.classList.add('main_theme-black-orange');
 		document.body.appendChild(app.el);
 		const router = new Router();
 		const menuView = new MenuView();
@@ -85,7 +85,6 @@ if ('serviceWorker' in navigator) {
 		Views.push(gameCreateView);
 		Views.push(gamePrepareView);
 		Views.push(gameContainer);
-		Views.push(validationInfoView);
 
 
 		function hideAllView() {
@@ -93,7 +92,6 @@ if ('serviceWorker' in navigator) {
 				if (!view.hidden)
 					view.hide();
 			});
-			eventBus.emit('hideValidationInfo');
 		}
 
 
@@ -143,24 +141,18 @@ if ('serviceWorker' in navigator) {
 			backMenuButtonView.show();
 		});
 		eventBus.on('openGame', () => {
-			Views.forEach((view) => {
-				view.hide();
-			});
+			hideAllView();
 			backButtonView.show('game');
 			gameContainer.show();
 		});
 		eventBus.on('openLobby', function () {
-			Views.forEach((view) => {
-				view.hide();
-			});
+			hideAllView();
 			gameNameView.show();
 			backMenuButtonView.show();
 			lobbyView.show();
 		});
 		eventBus.on('openWaitingHall', function () {
-			Views.forEach((view) => {
-				view.hide();
-			});
+			hideAllView();
 			gameNameView.show();
 			backButtonView.show('waiting-hall');
 			gamePrepareView.show();
@@ -185,7 +177,7 @@ if ('serviceWorker' in navigator) {
 			.append(gameContainer);
 
 
-		const main = document.body.getElementsByTagName('main')[0];
+		const main = document.body;
 
 
 		function fullScreenOn() {
