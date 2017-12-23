@@ -88,6 +88,11 @@ export default class MusicPlayer {
 
 	setConfiguration(configure) {
 		this.setCurrentTrackDot();
+		setInterval(() => {
+			localStorage.setItem('audioCurrentTime', `${this.audio.currentTime}`);
+			const currentDate = new Date().getTime();
+			localStorage.setItem('lastDateModified', `${currentDate}`);
+		}, 2000);
 		if (configure) {
 			if (this.volume) {
 				this.audio.volume = this.maxAudioVolume;
@@ -115,11 +120,6 @@ export default class MusicPlayer {
 			this.setPlay();
 		else
 			this.setPause();
-		setInterval(() => {
-			localStorage.setItem('audioCurrentTime', `${this.audio.currentTime}`);
-			const currentDate = new Date().getTime();
-			localStorage.setItem('lastDateModified', `${currentDate}`);
-		}, 1000);
 	}
 
 
@@ -227,9 +227,9 @@ export default class MusicPlayer {
 
 
 	nextSong() {
+		this.setSongByNumber(this.songNumber);
 		this.songNumber++;
 		this.songNumber = this.songNumber % this.numberOfSongs;
-		this.setSongByNumber(this.songNumber);
 	}
 
 
@@ -271,8 +271,8 @@ export default class MusicPlayer {
 
 	previousSong() {
 		if (this.currentSongPosition) {
-			this.currentSongPosition--;
 			this.setSongByNumber(this.previousSongs[this.currentSongPosition]);
+			this.currentSongPosition--;
 		}
 	}
 
