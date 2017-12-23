@@ -245,7 +245,7 @@ export default class MusicPlayer {
 			this.audio.load();
 			this.audio.onended = () => {
 				this.advertisingCounter++;
-				localStorage.setItem('songNumber', `${this.songNumber}`);
+				localStorage.setItem('songNumber', `${songNumber}`);
 				const songUrl = this.playlist[songNumber].url;
 				this.audio.pause();
 				this.audio.src = songUrl;
@@ -253,7 +253,7 @@ export default class MusicPlayer {
 			}
 		}
 		else {
-			localStorage.setItem('songNumber', `${this.songNumber}`);
+			localStorage.setItem('songNumber', `${songNumber}`);
 			const songUrl = this.playlist[songNumber].url;
 			this.audio.pause();
 			this.audio.src = songUrl;
