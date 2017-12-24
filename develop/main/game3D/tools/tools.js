@@ -3,6 +3,7 @@
 export const BACKGROUND_COLOR = 0xEEEEEE;
 export const HOVER_COLOR = 0xFF0000;
 export const PLANE_X = 5;
+export const PLANE_XX = 22;
 export const PLANE_Z = 5;
 export const PLAYER_HEIGHT = 7;
 
@@ -33,13 +34,15 @@ export const PLAYER_COLORS_MOVE = [
 	0xe87386    //светло-светло-красный
 ];
 
-export const SPEED = 0.1;
+export const SPEED = 0.6;
+export const SPEED_Y = 0.03;
+export const SPEED_DOWN = 1.5;
 
 export const GAME_VARIABLES = {
 	distance: 0,
 	end: false,
 	diff: 0,
-	grow: 0.01,
+	grow: 1,
 	moveIndicator: false,
 	scaleIndicator: false,
 	stepIndicator: false,
@@ -49,5 +52,10 @@ export const GAME_VARIABLES = {
 	animation: 0,
 	angle: 0,
 	angleIndicator: false,
-	cameraRotateIndicator: false
+	cameraRotateIndicator: false,
+	stepID: 0,
+	moveUpIndicator: false,
+	moveDownIndicator: false,
+	changeFigureIndicator: false,
+	firstStep: true
 };

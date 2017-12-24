@@ -148,7 +148,7 @@ const offBot = new class BotWorker {
 			return request;
 		}
 
-		this.addBot.botlvl = data.lvlbot;
+		this.addBot.botlvl = data.botlvl;
 		this.addBot.botsCount++;
 		this.addBot.botID = this.addBot.botsCount+1;
 		this.addBot.botname = `bot${this.addBot.botsCount}`;
@@ -210,8 +210,26 @@ const offBot = new class BotWorker {
 	backBotton() {
 		let request = {
 			code: 132,
+			reason: "The player left active",
 			userID: 1
 		};
+		this.clearGame();
+		return request;
+	}
+
+	backFromGame() {
+		let request = {
+			code: 209,
+			player: {
+				email: "player@com",
+				online: true,
+				playerID: 1,
+				userID: 1,
+				username: "Player"
+			},
+			reason: "Player is offline"
+		};
+		this.clearGame();
 		return request;
 	}
 
@@ -253,8 +271,16 @@ const offBot = new class BotWorker {
 
 		for (let i = 0; i < this.addBot.botsCount; i++) {
 			if (this.isGameOver()) { return; }
-			if (this.countFigure[i+1] === 0)
+			if (this.countFigure[i+1] === 0) {
+				let request = {
+					code: 203,
+					player: {
+						username: `bot${i+1}`
+					}
+				};
+				self.postMessage(request);
 				continue;
+			}
 			this.botStep(i+2);
 			this.moveOrClone(this.stepObject.step);
 			this.step(this.stepObject.step);
@@ -412,6 +438,9 @@ self.onmessage = (workerRequest) => {
 			break;
 		case '201':
 			offBot.playerStep(data);
+			break;
+		case '209':
+			workerResponse = offBot.backFromGame();
 			break;
 		default:
 			console.log('Error');

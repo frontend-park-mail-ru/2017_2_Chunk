@@ -5,6 +5,7 @@ import gameCodes from '../messageCodes/gameCodes';
 import gameWorkerMessage from '../messageCodes/gameWorkerMessage';
 import InternalWorker from '../modules/internalWorker';
 
+
 import Draw from './draw';
 
 export default class Game3D {
@@ -24,17 +25,14 @@ export default class Game3D {
 
 	gameEvents() {
 		this.startGame();
+		this.backFromLobby();
 		this.figureClick();
 		this.gameStep();
 		this.gameEnd();
-		this.coordinatesForStep();
-		this.figureType();
-		this.winDetected();
-		// this.exitGame();
-		this.stepEnable();
-		this.azimuthAngle();
 		this.rotate();
 		this.getGameInfo();
+		this.timeout();
+		this.playerBlocked();
 	}
 
 	getGameInfo() {
@@ -50,25 +48,36 @@ export default class Game3D {
 				code: `${gameCodes.getGameInfo.code}`
 			};
 			this.gameID = response.game.gameID;
-			this.bus.emit(`${gameCodes.getGameInfo.request}`, request);
+			this.bus.emit(`${gameCodes.requestEventName}`, request);
 			this.draw.startGame(response);
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, response);
 		});
 	}
 
-	// exitGame() {
-	// 	this.bus.on(`${gameCodes.responseEventName}${gameCodes.exitFromPreparingGame.code}`, (response) => {
-	// 		const request = {
-	// 			gameID: this.gameID
-	// 		};
-	// 		this.bus.emit(`${gameCodes.deleteGame.request}`, request);
-	// 	});
-	// }
+	playerBlocked() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.playerBlocked.code}`, (response) => {
+			const request = response;
+			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
+		});
+	}
+
+	backFromLobby() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.backFromLobby.code}`, (response) => {
+			const request = response;
+			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
+		});
+	}
 
 	gameStep() {
 		this.bus.on(`${gameCodes.responseEventName}${gameCodes.gameStep.code}`, (response) => {
 			const request = response;
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
+		});
+	}
+
+	timeout() {
+		this.bus.on(`${gameCodes.responseEventName}${gameCodes.timeout.code}`, () => {
+			this.draw.timeout();
 		});
 	}
 
@@ -90,36 +99,6 @@ export default class Game3D {
 		this.bus.on('rotate', (response) => {
 			const request = response;
 			this.bus.emit(`${gameWorkerMessage.responseEventName}`, request);
-		});
-	}
-
-	figureType() {
-		this.bus.on('figureType', (response) => {
-			this.draw.getGameInfo(response);
-		});
-	}
-
-	winDetected() {
-		this.bus.on('winnerOrLooser', (response) => {
-			this.draw.gameEnd(response);
-		});
-	}
-
-	coordinatesForStep() {
-		this.bus.on('coordinatesForStep', (response) => {
-			this.draw.gameStep(response);
-		});
-	}
-
-	stepEnable() {
-		this.bus.on('stepEnable', (response) => {
-			this.draw.makeStepEnable(response);
-		});
-	}
-
-	azimuthAngle() {
-		this.bus.on('azimuthAngle', (response) => {
-			this.draw.azimuthAngle(response);
 		});
 	}
 }

@@ -1,9 +1,8 @@
 'use strict';
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// const NODE_ENV = process.env.NODE_ENV || 'development';
-const NODE_ENV = 'travis';
-
+const NODE_ENV = process.env.NODE_ENV || 'development';
+// const NODE_ENV = 'travis';
 
 const extractPlugin = new ExtractTextPlugin({
 	filename: '[name].css',
@@ -16,6 +15,7 @@ module.exports = {
 		loading: './loading/loading.js',
 		botWorker: './workers/botWorker',
 		gameWorker: './workers/gameWorker',
+		audioWorker: './workers/audioWorker',
 		serviceWorker: './workers/serviceWorker',
 	},
 	output: {
@@ -35,13 +35,13 @@ module.exports = {
 		}, {
 			test: /\.scss$/,
 			use: [{
-				loader: "style-loader"
+				loader: 'style-loader'
 			}, {
-				loader: "css-loader", options: {
+				loader: 'css-loader', options: {
 					sourceMap: true
 				}
 			}, {
-				loader: "sass-loader", options: {
+				loader: 'sass-loader', options: {
 					sourceMap: true
 				}
 			}]
@@ -60,11 +60,13 @@ module.exports = {
 		}, {
 			test: /\.json$/,
 			loader: 'json-loader'
-		},
-			// 	{
-			// 	test: /\.pug$/,
-			// 	loader: 'pug-loader'
-			// }
+		}, {
+			test: /\.pug$/,
+			loader: 'pug-loader',
+			options: {
+				pretty: true,
+			}
+		}
 		],
 	},
 	plugins: [
@@ -75,7 +77,7 @@ module.exports = {
 			}
 		}),
 		new webpack.optimize.UglifyJsPlugin({
-			compress: { warnings: false },
+			compress: {warnings: false},
 			include: '/public' + /\.min\.js$/,
 			minimize: true
 		}),

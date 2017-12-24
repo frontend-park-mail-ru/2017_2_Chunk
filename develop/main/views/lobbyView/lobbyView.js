@@ -46,9 +46,10 @@ export default class LobbyView extends View {
 		} else {
 			if (!this.botWorker) {
 				this.botWorker = new commonWorker('./botWorker.js');
+				eventBus.emit('workerLogic', {auth: this.auth, online: navigator.onLine});
 			}
 			else
-				this.bus.emit('addBotWorkerEvents');
+				this.bus.emit('addSocketEvents');
 		}
 	}
 
@@ -147,7 +148,7 @@ export default class LobbyView extends View {
 	updateGame() {
 		this.socketListeners[`${lobbyCodes.responseEventName}${lobbyCodes.updateGame.code}`]
 			= this.bus.on(`${lobbyCodes.responseEventName}${lobbyCodes.updateGame.code}`, (response) => {
-			this.updateGameNode(response);
+			this.updateGameNode(response.game);
 		});
 	}
 

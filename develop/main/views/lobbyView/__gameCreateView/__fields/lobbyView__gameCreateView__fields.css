@@ -1,11 +1,14 @@
 .lobbyView__gameCreateView__fields {
+    font-family: RobotoRegular;
     margin: 1em auto !important;
     padding: 0.1em 0.4em;
+    color: white;
 }
 
 .lobbyView__gameCreateView__fields__header {
     color: #ff8700;
     text-align: center;
+    font-family: Road_Rage !important;
 }
 
 .lobbyView__gameCreateView__fields__playButton {

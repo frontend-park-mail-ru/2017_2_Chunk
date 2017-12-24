@@ -40,7 +40,6 @@ export default class webSocket {
 	keepAliveEvent() {
 		const emitKeepAlive = () => {
 			this.bus.emit(lobbyCodes.requestEventName, lobbyCodes.keepAlive);
-			console.log('keepAlive');
 		};
 		this.interval = setInterval(emitKeepAlive, 30000);
 	}
@@ -53,7 +52,7 @@ export default class webSocket {
 
 
 	socketCloseEvent() {
-		this.socketListeners['openMenu'] = this.bus.on('openMenu', () => {
+		this.socketListeners.openMenu = this.bus.on('openMenu', () => {
 			this.bus.emit(`${lobbyCodes.responseEventName}${lobbyCodes.close}`);
 		});
 	}

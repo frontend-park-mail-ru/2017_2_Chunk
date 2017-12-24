@@ -1,0 +1,38 @@
+.scoreboardViewText {
+  color: inherit;
+  font-family: RobotoRegular;
+  font-size: 18px;
+  width: 400px;
+  padding: 0 10px;
+  overflow: auto;
+
+  .scoreboardString {
+    display: grid;
+    grid-template-areas: 'username score';
+    grid-template-columns: 200px 200px;
+    box-sizing: border-box;
+    .username {
+    }
+
+    .score {
+    }
+
+    .usernameHeader {
+      font-family: Road_Rage;
+      font-size: 18px;
+    }
+
+    .scoreHeader {
+      font-family: Road_Rage;
+      font-size: 18px;
+    }
+  }
+}
+
+.scoreboardViewText > .user {
+  grid-area: user;
+}
+
+.scoreboardViewText > .score {
+  grid-area: score;
+}

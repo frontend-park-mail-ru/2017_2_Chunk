@@ -4,21 +4,24 @@ import * as tools from '../tools/tools.js';
 
 export default class PlaneCell {
 	constructor(x = 0, z = 0) {
-		const y = 0;
+		this.y = 13.5;
 		this.geometry = new THREE.PlaneGeometry(
-			tools.PLANE_X - 1,
-			tools.PLANE_Z - 1
+			tools.PLANE_XX - 11,
+			tools.PLANE_XX - 11
 		);
 		this.material = new THREE.MeshLambertMaterial({
 			color: tools.COLORS.PLANE_COLOR,
-			side: THREE.DoubleSide
+			emissive: 0x938c1f,
+			side: THREE.DoubleSide,
+			transparent: true,
+			opacity: 0
 		});
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.rotation.x = -Math.PI / 2;
 		this.mesh.position.set(
-			(x + 0.5) * tools.PLANE_X,
-			y,
-			(z + 0.5) * tools.PLANE_Z
+			x * tools.PLANE_XX + 8,
+			this.y,
+			z * tools.PLANE_XX + 8
 		);
 
 		this.x = x;

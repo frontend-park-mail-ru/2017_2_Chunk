@@ -1,4 +1,4 @@
 .main_theme-white-black {
     background-color: white;
-    background-image: none;
+    background-image: none !important;
 }

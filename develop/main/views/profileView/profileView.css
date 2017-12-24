@@ -4,6 +4,7 @@
     color: #ff9f00;
     max-width: 300px;
     margin: auto;
+    margin-bottom: 0;
 }
 
 @media screen and (min-width: 360px) and (max-width: 1200px) {

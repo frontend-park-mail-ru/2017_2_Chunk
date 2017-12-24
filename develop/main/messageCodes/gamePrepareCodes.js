@@ -23,8 +23,14 @@ const gamePrepareCodes = {
 	kickPlayer: {
 		code: 134,
 	},
+	internalKickPlayer: {
+		code: 800,
+	},
 	startGame: {
 		code: 135,
+	},
+	changeMaster: {
+		code: 136,
 	},
 	exit: {
 		code: 132,

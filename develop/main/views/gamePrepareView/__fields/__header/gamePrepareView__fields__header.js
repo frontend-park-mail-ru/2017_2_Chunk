@@ -37,7 +37,7 @@ export default class GamePrepareViewHeader extends Block {
 	}
 
 	removePlayer() {
-		this.headerFields.removePlayer();
+		this.headerFields.removePLayer();
 	}
 	removeBot() {
 		this.headerFields.removeBot();

@@ -65,7 +65,7 @@ export default class SignUpView extends View {
 			this.message.clear();
 			this.message.hide();
 			this.bus.emit('auth', resp.json.username);
-			this.router.goTo('/menu');
+			this.bus.emit('goToMenu');
 		} else {
 			this.setErrorText(resp);
 		}
