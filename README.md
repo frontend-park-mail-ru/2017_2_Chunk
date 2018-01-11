@@ -8,6 +8,7 @@
 Посмотреть работу приложения можно на:
 - [heroku](https://chunk-frontend.herokuapp.com)<br>
 - [guardians-game](https://guardians-game.ru)<br>
+
 Репозиторий github серверной части можно увидить [здесь](https://github.com/java-park-mail-ru/Chunk-09-2017)
 
 ## Travis deploy status [![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
