@@ -4,16 +4,8 @@
 > ***Поглощай или будь поглощен<br>***
 > (авторизируйся и посмотри на плейсхолдеры)
 
-
-Посмотреть работу приложения можно на:
-- [heroku](https://chunk-frontend.herokuapp.com)<br>
-- [guardians-game](https://guardians-game.ru)<br>
-
-Репозиторий github серверной части можно увидить [здесь](https://github.com/java-park-mail-ru/Chunk-09-2017)
-
-## Travis deploy status [![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
-
 ## Application features:
+- проект разработан для Google Chrome
 - работа игры без интернета
 - использование мгопоточности: 
   - основной поток используется для работы с window
@@ -24,6 +16,16 @@
 - возмоность запоминания состояния музыки при помощи local storage и session storage
 - многократная возможность смены темы
 - привлечение внимания к владке, если вкладка неактивна, при событии создания игры
+
+Посмотреть работу приложения можно на:
+- [heroku](https://chunk-frontend.herokuapp.com)<br>
+- [guardians-game](https://guardians-game.ru)<br>
+
+Репозиторий github серверной части можно увидить [здесь](https://github.com/java-park-mail-ru/Chunk-09-2017)
+
+## Travis deploy status [![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
+
+
 
 ## How to install localy
 ### 1
