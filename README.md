@@ -16,6 +16,12 @@
 - возмоность запоминания состояния музыки при помощи local storage и session storage
 - многократная возможность смены темы
 - привлечение внимания к владке, если вкладка неактивна, при событии создания игры
+- travis:
+  - project building
+  - server deployment
+- VDS:
+   - https
+   - http2
 
 Посмотреть работу приложения можно на:
 - [heroku](https://chunk-frontend.herokuapp.com)<br>
