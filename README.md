@@ -13,7 +13,7 @@
 
 ## Travis deploy status [![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
 
-## Особенности проекта:
+## Application features:
 - работа игры без интернета
 - использование мгопоточности: 
   - основной поток используется для работы с window
