@@ -10,6 +10,18 @@
 
 ## Travis deploy status [![Build Status](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk.svg?branch=travis)](https://travis-ci.org/frontend-park-mail-ru/2017_2_Chunk)
 
+## Особенности проекта:
+- работа игры без интернета
+- использование мгопоточности: 
+  - основной поток используется для работы с window
+  - поток логики хода бота
+  - поток обработки данных хода
+- использование shared workers для синхронизации вкладок
+- список создаваемых
+- возмоность запоминания состояния музыки при помощи local storage и session storage
+- многократная возможность смены темы
+- привлечение внимания к владке, если вкладка неактивна, при событии создания игры
+
 ## How to install localy
 ### 1
 - clone or download [repository](https://github.com/frontend-park-mail-ru/2017_2_Chunk/tree/drujinin)
